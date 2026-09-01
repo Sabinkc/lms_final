@@ -70,6 +70,26 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  assets:
+    - assets/fonts/
+
+  # Inter, vendored locally (docs/design_system.md §2's recommendation) —
+  # a single variable-font file covering the whole weight axis, referenced
+  # once per weight entry so `FontWeight.w400`..`w700` all resolve without
+  # a runtime network fetch (no google_fonts/CDN dependency, works fully
+  # offline — important for a school app on unreliable wifi).
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Variable.ttf
+          weight: 400
+        - asset: assets/fonts/Inter-Variable.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-Variable.ttf
+          weight: 600
+        - asset: assets/fonts/Inter-Variable.ttf
+          weight: 700
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

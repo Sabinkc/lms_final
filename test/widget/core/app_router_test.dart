@@ -25,6 +25,8 @@ const _adminSession = AuthSession(
 /// context) rather than passing `authProvider` straight to
 /// `buildAppRouter` — `SplashScreen`/`LoginScreen`/`PlaceholderScreen` all
 /// read it via `context.watch`/`context.read`, same as in the real app.
+/// (`RoleHomeScreen` replaced `PlaceholderScreen` for the 4 dashboards —
+/// `PlaceholderScreen` itself is only used for `/unauthorized` now.)
 Widget _appWith(AuthProvider authProvider) => ChangeNotifierProvider<AuthProvider>.value(
       value: authProvider,
       child: Builder(
@@ -93,8 +95,9 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.widgetWithText(AppBar, 'Admin Dashboard'), findsOneWidget);
 
-    await tester.ensureVisible(find.text('Log out'));
-    await tester.tap(find.text('Log out'));
+    // The dashboard's logout action is an icon button (tooltip 'Log out'),
+    // not a labeled button — see `RoleHomeScreen`.
+    await tester.tap(find.byTooltip('Log out'));
     await tester.pumpAndSettle();
 
     expect(find.byType(LoginScreen), findsOneWidget);

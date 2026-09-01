@@ -11,6 +11,14 @@ class AppRoutes {
   static const String studentHome = '/student';
   static const String parentHome = '/parent';
 
+  // "More" screens — the catch-all destination list for whatever didn't get
+  // promoted to a bottom-nav tab in that role's shell (see `role_shell.dart`
+  // / `role_dashboard_config.dart`).
+  static const String adminMore = '/admin/more';
+  static const String teacherMore = '/teacher/more';
+  static const String studentMore = '/student/more';
+  static const String parentMore = '/parent/more';
+
   static const String unauthorized = '/unauthorized';
 
   // Admin management (docs/production_roadmap.md Phase B).

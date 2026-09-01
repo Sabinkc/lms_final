@@ -60,6 +60,23 @@ class AppTheme {
           borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xl2)),
         ),
       ),
+      navigationBarTheme: NavigationBarThemeData(
+        elevation: 0,
+        backgroundColor: isDark ? AppColors.darkElevated2 : AppColors.lightElevated,
+        indicatorColor: colorScheme.primary.withValues(alpha: isDark ? 0.24 : 0.16),
+        labelTextStyle: WidgetStateProperty.resolveWith(
+          (states) => TextStyle(
+            fontSize: 12,
+            fontWeight: states.contains(WidgetState.selected) ? FontWeight.w700 : FontWeight.w500,
+            color: states.contains(WidgetState.selected) ? colorScheme.primary : colorScheme.onSurfaceVariant,
+          ),
+        ),
+        iconTheme: WidgetStateProperty.resolveWith(
+          (states) => IconThemeData(
+            color: states.contains(WidgetState.selected) ? colorScheme.primary : colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ),
     );
   }
 }

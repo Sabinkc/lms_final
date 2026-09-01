@@ -43,8 +43,11 @@ import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/backup/presentation/screens/backup_screen.dart';
+import '../../features/dashboard/presentation/screens/more_screen.dart';
+import '../../features/dashboard/presentation/screens/role_home_screen.dart';
 import '../../shared/widgets/placeholder_screen.dart';
 import 'app_routes.dart';
+import 'role_shell.dart';
 
 /// Single `GoRouter` for the whole app (docs/architecture.md §4: "not four
 /// separate app shells"). Role-based guarding lives entirely in [redirect]
@@ -67,33 +70,24 @@ GoRouter buildAppRouter(AuthProvider authProvider) {
     routes: [
       GoRoute(path: AppRoutes.splash, builder: (context, state) => const SplashScreen()),
       GoRoute(path: AppRoutes.login, builder: (context, state) => const LoginScreen()),
-      GoRoute(
-        path: AppRoutes.adminHome,
-        builder: (context, state) => PlaceholderScreen(
-          title: 'Admin Dashboard',
-          subtitle: 'Real dashboard is feature work — this proves role-based routing.',
-          showLogout: true,
-          links: [
-            ('Manage Classes', () => context.push(AppRoutes.adminClasses)),
-            ('Manage Teachers', () => context.push(AppRoutes.adminTeachers)),
-            ('Manage Students', () => context.push(AppRoutes.adminStudents)),
-            ('Manage Parents', () => context.push(AppRoutes.adminParents)),
-            ('Departments', () => context.push(AppRoutes.adminDepartments)),
-            ('Attendance Overview', () => context.push(AppRoutes.adminAttendanceOverview)),
-            ('Attendance Corrections', () => context.push(AppRoutes.adminAttendanceCorrections)),
-            ('Assignments', () => context.push(AppRoutes.assignments)),
-            ('Notices', () => context.push(AppRoutes.notices)),
-            ('Exams', () => context.push(AppRoutes.exams)),
-            ('Fees', () => context.push(AppRoutes.adminFees)),
-            ('Payroll', () => context.push(AppRoutes.adminPayroll)),
-            ('Notifications', () => context.push(AppRoutes.notifications)),
-            ('Reports', () => context.push(AppRoutes.adminReports)),
-            ('Backup & Data', () => context.push(AppRoutes.adminBackup)),
-            ('Timetable', () => context.push(AppRoutes.adminTimetable)),
-            ('Student Follow-ups', () => context.push(AppRoutes.adminStudentFollowups)),
-            ('ID Cards', () => context.push(AppRoutes.adminIdCards)),
-          ],
-        ),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) => RoleShell(role: AppRole.admin, navigationShell: navigationShell),
+        branches: [
+          StatefulShellBranch(
+            routes: [GoRoute(path: AppRoutes.adminHome, builder: (context, state) => const RoleHomeScreen(role: AppRole.admin))],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(path: AppRoutes.adminAttendanceOverview, builder: (context, state) => const AdminAttendanceOverviewScreen()),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: AppRoutes.adminFees, builder: (context, state) => const AdminFeesScreen())],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: AppRoutes.adminMore, builder: (context, state) => const MoreScreen(role: AppRole.admin))],
+          ),
+        ],
       ),
       GoRoute(
         path: AppRoutes.adminClasses,
@@ -122,16 +116,8 @@ GoRouter buildAppRouter(AuthProvider authProvider) {
         builder: (context, state) => const DepartmentsListScreen(),
       ),
       GoRoute(
-        path: AppRoutes.adminAttendanceOverview,
-        builder: (context, state) => const AdminAttendanceOverviewScreen(),
-      ),
-      GoRoute(
         path: AppRoutes.adminAttendanceCorrections,
         builder: (context, state) => const AttendanceCorrectionsScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.adminFees,
-        builder: (context, state) => const AdminFeesScreen(),
       ),
       GoRoute(
         path: AppRoutes.adminFeePayments,
@@ -161,28 +147,22 @@ GoRouter buildAppRouter(AuthProvider authProvider) {
         path: AppRoutes.adminIdCards,
         builder: (context, state) => const AdminIdCardScreen(),
       ),
-      GoRoute(
-        path: AppRoutes.teacherHome,
-        builder: (context, state) => PlaceholderScreen(
-          title: 'Teacher Dashboard',
-          subtitle: 'Real dashboard is feature work — this proves role-based routing.',
-          showLogout: true,
-          links: [
-            ('Mark Attendance', () => context.push(AppRoutes.teacherMarkAttendance)),
-            ('Attendance History', () => context.push(AppRoutes.teacherAttendanceHistory)),
-            ('Assignments', () => context.push(AppRoutes.assignments)),
-            ('Notices', () => context.push(AppRoutes.notices)),
-            ('Exams', () => context.push(AppRoutes.exams)),
-            ('My Payslips', () => context.push(AppRoutes.teacherPayroll)),
-            ('Chat', () => context.push(AppRoutes.chat)),
-            ('Notifications', () => context.push(AppRoutes.notifications)),
-            ('My Timetable', () => context.push(AppRoutes.teacherTimetable)),
-          ],
-        ),
-      ),
-      GoRoute(
-        path: AppRoutes.teacherMarkAttendance,
-        builder: (context, state) => const MarkAttendanceScreen(),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) => RoleShell(role: AppRole.teacher, navigationShell: navigationShell),
+        branches: [
+          StatefulShellBranch(
+            routes: [GoRoute(path: AppRoutes.teacherHome, builder: (context, state) => const RoleHomeScreen(role: AppRole.teacher))],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: AppRoutes.teacherMarkAttendance, builder: (context, state) => const MarkAttendanceScreen())],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: AppRoutes.teacherTimetable, builder: (context, state) => const TeacherTimetableScreen())],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: AppRoutes.teacherMore, builder: (context, state) => const MoreScreen(role: AppRole.teacher))],
+          ),
+        ],
       ),
       GoRoute(
         path: AppRoutes.teacherAttendanceHistory,
@@ -192,69 +172,47 @@ GoRouter buildAppRouter(AuthProvider authProvider) {
         path: AppRoutes.teacherPayroll,
         builder: (context, state) => const MyPayslipsScreen(),
       ),
-      GoRoute(
-        path: AppRoutes.teacherTimetable,
-        builder: (context, state) => const TeacherTimetableScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.studentHome,
-        builder: (context, state) => PlaceholderScreen(
-          title: 'Student Dashboard',
-          subtitle: 'Real dashboard is feature work — this proves role-based routing.',
-          showLogout: true,
-          links: [
-            ('My Attendance', () => context.push(AppRoutes.studentMyAttendance)),
-            ('Assignments', () => context.push(AppRoutes.assignments)),
-            ('Notices', () => context.push(AppRoutes.notices)),
-            ('Exams', () => context.push(AppRoutes.exams)),
-            ('My Fees', () => context.push(AppRoutes.studentFees)),
-            ('Chat', () => context.push(AppRoutes.chat)),
-            ('Notifications', () => context.push(AppRoutes.notifications)),
-            ('My Timetable', () => context.push(AppRoutes.studentTimetable)),
-            ('My ID Card', () => context.push(AppRoutes.studentIdCard)),
-          ],
-        ),
-      ),
-      GoRoute(
-        path: AppRoutes.studentMyAttendance,
-        builder: (context, state) => const MyAttendanceScreen(),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) => RoleShell(role: AppRole.student, navigationShell: navigationShell),
+        branches: [
+          StatefulShellBranch(
+            routes: [GoRoute(path: AppRoutes.studentHome, builder: (context, state) => const RoleHomeScreen(role: AppRole.student))],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: AppRoutes.studentMyAttendance, builder: (context, state) => const MyAttendanceScreen())],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: AppRoutes.studentTimetable, builder: (context, state) => const StudentTimetableScreen())],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: AppRoutes.studentMore, builder: (context, state) => const MoreScreen(role: AppRole.student))],
+          ),
+        ],
       ),
       GoRoute(
         path: AppRoutes.studentFees,
         builder: (context, state) => const MyFeesScreen(),
       ),
       GoRoute(
-        path: AppRoutes.studentTimetable,
-        builder: (context, state) => const StudentTimetableScreen(),
-      ),
-      GoRoute(
         path: AppRoutes.studentIdCard,
         builder: (context, state) => const StudentIdCardScreen(),
       ),
-      GoRoute(
-        path: AppRoutes.parentHome,
-        builder: (context, state) => PlaceholderScreen(
-          title: 'Parent Dashboard',
-          subtitle: 'Real dashboard is feature work — this proves role-based routing.',
-          showLogout: true,
-          links: [
-            ("Child's Attendance", () => context.push(AppRoutes.parentChildAttendance)),
-            ('Assignments', () => context.push(AppRoutes.assignments)),
-            ('Notices', () => context.push(AppRoutes.notices)),
-            ('Exams', () => context.push(AppRoutes.exams)),
-            ("Child's Fees", () => context.push(AppRoutes.parentFees)),
-            ('Notifications', () => context.push(AppRoutes.notifications)),
-            ('Dual Calendar', () => context.push(AppRoutes.parentDualCalendar)),
-          ],
-        ),
-      ),
-      GoRoute(
-        path: AppRoutes.parentChildAttendance,
-        builder: (context, state) => const ChildAttendanceScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.parentFees,
-        builder: (context, state) => const ChildFeesScreen(),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) => RoleShell(role: AppRole.parent, navigationShell: navigationShell),
+        branches: [
+          StatefulShellBranch(
+            routes: [GoRoute(path: AppRoutes.parentHome, builder: (context, state) => const RoleHomeScreen(role: AppRole.parent))],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: AppRoutes.parentChildAttendance, builder: (context, state) => const ChildAttendanceScreen())],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: AppRoutes.parentFees, builder: (context, state) => const ChildFeesScreen())],
+          ),
+          StatefulShellBranch(
+            routes: [GoRoute(path: AppRoutes.parentMore, builder: (context, state) => const MoreScreen(role: AppRole.parent))],
+          ),
+        ],
       ),
       GoRoute(
         path: AppRoutes.parentDualCalendar,
