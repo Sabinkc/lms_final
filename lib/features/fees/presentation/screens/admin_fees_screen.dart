@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/router/app_routes.dart';
-import '../../../../shared/utils/file_download.dart';
+import '../../../../shared/utils/download_helper.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
@@ -191,7 +191,7 @@ Future<void> _confirmDelete(BuildContext context, FeeProvider provider, Fee fee)
 Future<void> _downloadExport(BuildContext context, FeeProvider provider, String? status) async {
   final bytes = await provider.exportFees(status: status);
   if (bytes != null) {
-    saveBytesAsFile(bytes, 'fees.xlsx');
+    if (context.mounted) await saveBytesOrNotify(context, bytes, 'fees.xlsx');
   } else if (context.mounted) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(provider.downloadError?.message ?? 'Failed to export fees')),

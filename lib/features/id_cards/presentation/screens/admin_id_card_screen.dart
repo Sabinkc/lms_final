@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../shared/utils/file_download.dart';
+import '../../../../shared/utils/download_helper.dart';
 import '../../../admin_management/data/models/student.dart';
 import '../providers/admin_id_card_provider.dart';
 
@@ -32,7 +32,7 @@ class _AdminIdCardScreenState extends State<AdminIdCardScreen> {
     final bytes = await provider.generateStudentIdCard(_selectedStudent!.id);
     if (!context.mounted) return;
     if (bytes != null) {
-      saveBytesAsFile(bytes, 'id-card-${_selectedStudent!.admissionNumber}.pdf');
+      await saveBytesOrNotify(context, bytes, 'id-card-${_selectedStudent!.admissionNumber}.pdf');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(provider.generateError?.message ?? 'Failed to generate ID card')),

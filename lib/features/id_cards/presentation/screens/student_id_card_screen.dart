@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../shared/utils/file_download.dart';
+import '../../../../shared/utils/download_helper.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../providers/student_id_card_provider.dart';
 
@@ -16,7 +16,7 @@ class StudentIdCardScreen extends StatelessWidget {
     final bytes = await provider.downloadMyIdCard();
     if (!context.mounted) return;
     if (bytes != null) {
-      saveBytesAsFile(bytes, 'my-id-card.pdf');
+      await saveBytesOrNotify(context, bytes, 'my-id-card.pdf');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(provider.error?.message ?? 'Failed to download ID card')),

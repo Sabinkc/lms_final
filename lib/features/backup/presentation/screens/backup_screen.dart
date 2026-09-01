@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../shared/utils/file_download.dart';
+import '../../../../shared/utils/download_helper.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../providers/backup_provider.dart';
 
@@ -17,7 +17,7 @@ class BackupScreen extends StatelessWidget {
     if (!context.mounted) return;
     if (bytes != null) {
       final timestamp = DateTime.now().toIso8601String().replaceAll(RegExp(r'[:.]'), '-');
-      saveBytesAsFile(bytes, 'school-backup-$timestamp.zip');
+      await saveBytesOrNotify(context, bytes, 'school-backup-$timestamp.zip');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(provider.error?.message ?? 'Failed to download backup')),

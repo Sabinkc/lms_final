@@ -2,7 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../shared/utils/file_download.dart';
+import '../../../../shared/utils/download_helper.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
@@ -399,7 +399,9 @@ Future<void> _showBulkImportDialog(BuildContext context, StudentProvider provide
                 label: const Text('Download template'),
                 onPressed: () async {
                   final bytes = await provider.downloadImportTemplate();
-                  if (bytes != null) saveBytesAsFile(bytes, 'student_import_template.xlsx');
+                  if (bytes != null && dialogContext.mounted) {
+                    await saveBytesOrNotify(dialogContext, bytes, 'student_import_template.xlsx');
+                  }
                 },
               ),
               const SizedBox(height: 12),
@@ -442,7 +444,7 @@ Future<void> _showBulkImportDialog(BuildContext context, StudentProvider provide
 Future<void> _downloadExport(BuildContext context, StudentProvider provider) async {
   final bytes = await provider.exportStudents();
   if (bytes != null) {
-    saveBytesAsFile(bytes, 'student_roster.xlsx');
+    if (context.mounted) await saveBytesOrNotify(context, bytes, 'student_roster.xlsx');
   } else if (context.mounted) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(provider.downloadError?.message ?? 'Failed to export students')),
