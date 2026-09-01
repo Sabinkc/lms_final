@@ -1,0 +1,90 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../shared/widgets/empty_state_view.dart';
+import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
+import '../providers/self_attendance_provider.dart';
+import '../widgets/attendance_history_body.dart';
+
+/// docs/screens.md "Child's Attendance" (Parent) — history + a child
+/// selector when the Parent has more than one linked child. Reuses the same
+/// `GET /api/attendance/student/:studentId` endpoint the Student screen
+/// uses — confirmed authorized for a linked parent too
+/// (`Attendance.service.js`'s `isAuthorizedForStudent`).
+class ChildAttendanceScreen extends StatefulWidget {
+  const ChildAttendanceScreen({super.key});
+
+  @override
+  State<ChildAttendanceScreen> createState() => _ChildAttendanceScreenState();
+}
+
+class _ChildAttendanceScreenState extends State<ChildAttendanceScreen> {
+  @override
+  void initState() {
+    super.initState();
+    final provider = context.read<SelfAttendanceProvider>();
+    Future.microtask(() => provider.loadChildren());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = context.watch<SelfAttendanceProvider>();
+
+    return Scaffold(
+      appBar: AppBar(title: const Text("Child's Attendance")),
+      body: Column(
+        children: [
+          if (provider.childrenStatus == LoadStatus.success && provider.children.length > 1)
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: SizedBox(
+                height: 40,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    for (final child in provider.children)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: ChoiceChip(
+                          label: Text(child.fullName),
+                          selected: provider.selectedChildId == child.id,
+                          onSelected: (_) => provider.selectChild(child.id),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          Expanded(
+            child: switch (provider.childrenStatus) {
+              LoadStatus.initial || LoadStatus.loading =>
+                const Center(child: CircularProgressIndicator()),
+              LoadStatus.error => Center(
+                  child: Text(
+                    provider.childrenError!.message,
+                    style: TextStyle(color: Theme.of(context).colorScheme.error),
+                  ),
+                ),
+              LoadStatus.success => provider.children.isEmpty
+                  ? const Center(child: Text('No children linked to your account yet'))
+                  : provider.selectedChildId == null
+                      ? const EmptyStateView(
+                          message: 'Select a child above to view their attendance',
+                          icon: Icons.family_restroom_outlined,
+                        )
+                      : AttendanceHistoryBody(
+                          status: provider.historyStatus,
+                          history: provider.history,
+                          error: provider.historyError,
+                          onRetry: () {
+                            final id = provider.selectedChildId;
+                            if (id != null) provider.selectChild(id);
+                          },
+                        ),
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
