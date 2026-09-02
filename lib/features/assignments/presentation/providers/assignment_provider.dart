@@ -251,7 +251,8 @@ class AssignmentProvider extends ChangeNotifier {
     final result = await _repository.gradeSubmission(submissionId: submissionId, marks: marks, remarks: remarks);
     final succeeded = result.isSuccess;
     result.when(
-      success: (updated) => _submissions = [for (final s in _submissions) if (s.id == updated.id) updated else s],
+      success: (updated) =>
+          _submissions = [for (final s in _submissions) if (s.id == updated.id) s.mergeGraded(updated) else s],
       failure: (error) => _gradeError = error,
     );
 

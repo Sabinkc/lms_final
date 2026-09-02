@@ -156,4 +156,50 @@ void main() {
     expect(provider.submissions.single.graded, isTrue);
     expect(provider.submissions.single.marks, 85);
   });
+
+  test(
+      'gradeSubmission(): keeps the pre-existing studentName/studentAdmissionNumber '
+      "instead of wiping them with the grade endpoint's unpopulated response", () async {
+    const submissionWithStudent = AssignmentSubmission(
+      id: 'sub1',
+      assignmentId: 'a1',
+      submissionText: 'My work',
+      attachments: [],
+      submittedAt: '2026-08-25T00:00:00.000Z',
+      marks: null,
+      remarks: '',
+      graded: false,
+      studentName: 'Sam Student',
+      studentAdmissionNumber: 'ADM001',
+    );
+    when(() => repository.getSubmissionsForAssignment(any()))
+        .thenAnswer((_) async => const Result.success([submissionWithStudent]));
+    await provider.loadSubmissionsForAssignment('a1');
+
+    // The real grade endpoint returns `studentId` unpopulated, so this response has no name/admission number.
+    const gradedUnpopulated = AssignmentSubmission(
+      id: 'sub1',
+      assignmentId: 'a1',
+      submissionText: 'My work',
+      attachments: [],
+      submittedAt: '2026-08-25T00:00:00.000Z',
+      marks: 92,
+      remarks: 'Great work!',
+      graded: true,
+    );
+    when(() => repository.gradeSubmission(
+          submissionId: any(named: 'submissionId'),
+          marks: any(named: 'marks'),
+          remarks: any(named: 'remarks'),
+        )).thenAnswer((_) async => const Result.success(gradedUnpopulated));
+
+    await provider.gradeSubmission(submissionId: 'sub1', marks: 92, remarks: 'Great work!');
+
+    final updated = provider.submissions.single;
+    expect(updated.graded, isTrue);
+    expect(updated.marks, 92);
+    expect(updated.remarks, 'Great work!');
+    expect(updated.studentName, 'Sam Student');
+    expect(updated.studentAdmissionNumber, 'ADM001');
+  });
 }

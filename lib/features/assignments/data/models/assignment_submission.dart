@@ -86,4 +86,28 @@ class AssignmentSubmission {
       assignmentStatus: assignmentRef is Map<String, dynamic> ? assignmentRef['status'] as String? : null,
     );
   }
+
+  /// Merges only the fields the grade endpoint's response actually carries
+  /// (`marks`/`remarks`/`graded`) onto this submission, keeping the rest —
+  /// notably `studentName`/`studentAdmissionNumber` — from whichever list
+  /// endpoint originally populated them. The grade endpoint returns
+  /// `studentId` unpopulated, so replacing the whole object with its
+  /// response wipes those display fields until the next refetch.
+  AssignmentSubmission mergeGraded(AssignmentSubmission graded) {
+    return AssignmentSubmission(
+      id: id,
+      assignmentId: assignmentId,
+      submissionText: submissionText,
+      attachments: attachments,
+      submittedAt: submittedAt,
+      marks: graded.marks,
+      remarks: graded.remarks,
+      graded: graded.graded,
+      studentName: studentName,
+      studentAdmissionNumber: studentAdmissionNumber,
+      assignmentTitle: assignmentTitle,
+      assignmentDueDate: assignmentDueDate,
+      assignmentStatus: assignmentStatus,
+    );
+  }
 }
