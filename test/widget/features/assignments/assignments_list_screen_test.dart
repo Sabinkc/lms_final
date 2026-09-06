@@ -113,7 +113,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Algebra Homework'), findsOneWidget);
-    expect(find.textContaining('Math'), findsOneWidget);
+    expect(find.text('Math · Class 10 A · Due 1 Sep 2026'), findsOneWidget);
   });
 
   testWidgets('error state shows ErrorView with a working retry', (tester) async {

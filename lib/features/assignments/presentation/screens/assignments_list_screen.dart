@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/router/app_routes.dart';
+import '../../../../shared/utils/display_date.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
@@ -66,7 +67,7 @@ class _AssignmentsListScreenState extends State<AssignmentsListScreen> {
                   return ListTile(
                     title: Text(assignment.title),
                     subtitle: Text(
-                      '${assignment.subject} · ${assignment.className} ${assignment.section} · Due ${assignment.dueDate}',
+                      '${assignment.subject} · ${assignment.className} ${assignment.section} · Due ${formatDisplayDate(assignment.dueDate)}',
                     ),
                     trailing: _RowTrailing(assignment: assignment, isTeacher: isTeacher, provider: provider),
                     onTap: () => context.push(AppRoutes.assignmentDetail(assignment.id)),

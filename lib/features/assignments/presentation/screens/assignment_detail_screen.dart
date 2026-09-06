@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../shared/utils/display_date.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
@@ -82,7 +83,7 @@ class _DetailBody extends StatelessWidget {
         Text(assignment.title, style: Theme.of(context).textTheme.headlineSmall),
         const SizedBox(height: 8),
         Text('${assignment.subject} · ${assignment.className} ${assignment.section}'),
-        Text('Due: ${assignment.dueDate}'),
+        Text('Due: ${formatDisplayDate(assignment.dueDate)}'),
         if (assignment.status == 'closed')
           const Padding(
             padding: EdgeInsets.only(top: 4),

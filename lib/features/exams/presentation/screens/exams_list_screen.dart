@@ -6,6 +6,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
+import '../../../../shared/utils/display_date.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../../../auth/data/models/app_role.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
@@ -92,7 +93,7 @@ class _ExamTile extends StatelessWidget {
     return ExpansionTile(
       title: Text(exam.title),
       subtitle: Text(
-        'Class ${exam.className}${exam.section != null ? ' ${exam.section}' : ''} · Due ${exam.examDate}'
+        '${exam.className}${exam.section != null ? ' ${exam.section}' : ''} · Due ${formatDisplayDate(exam.examDate)}'
         '${exam.status == 'published' ? ' · Published' : ''}',
       ),
       children: [
@@ -100,7 +101,7 @@ class _ExamTile extends StatelessWidget {
           ListTile(
             dense: true,
             title: Text(subject.name),
-            subtitle: Text('${subject.examDate}${subject.examTime != null ? ' at ${subject.examTime}' : ''}'
+            subtitle: Text('${formatDisplayDate(subject.examDate)}${subject.examTime != null ? ' at ${subject.examTime}' : ''}'
                 '${subject.room != null ? ' · Room ${subject.room}' : ''}'),
             trailing: Text('${subject.fullMarks} marks'),
           ),

@@ -94,6 +94,17 @@ void main() {
     verifyNever(() => repository.getExamsAsAdmin());
   });
 
+  testWidgets('row subtitle shows a readable date and does not double up "Class"', (tester) async {
+    when(() => repository.getMyExams()).thenAnswer((_) async => const Result.success([_exam1]));
+    final provider = ExamProvider(repository);
+    final authProvider = _authAs(authRepository, AppRole.student);
+
+    await tester.pumpWidget(_wrap(provider, authProvider));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Class 10 A · Due 1 Sep 2026'), findsOneWidget);
+  });
+
   testWidgets('expanding a row shows its subjects', (tester) async {
     when(() => repository.getMyExams()).thenAnswer((_) async => const Result.success([_exam1]));
     final provider = ExamProvider(repository);
