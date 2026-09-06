@@ -72,6 +72,7 @@ Future<void> showGeneratePayrollDialog(BuildContext context, PayrollProvider pro
                   Expanded(
                     child: DropdownButtonFormField<int>(
                       initialValue: month,
+                      isExpanded: true,
                       decoration: const InputDecoration(labelText: 'Month'),
                       items: [for (var m = 1; m <= 12; m++) DropdownMenuItem(value: m, child: Text(_monthNames[m]))],
                       onChanged: (value) {
@@ -86,6 +87,7 @@ Future<void> showGeneratePayrollDialog(BuildContext context, PayrollProvider pro
                   Expanded(
                     child: DropdownButtonFormField<int>(
                       initialValue: year,
+                      isExpanded: true,
                       decoration: const InputDecoration(labelText: 'Year'),
                       items: [for (var y = now.year - 1; y <= now.year + 1; y++) DropdownMenuItem(value: y, child: Text('$y'))],
                       onChanged: (value) {
