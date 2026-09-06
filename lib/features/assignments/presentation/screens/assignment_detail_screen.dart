@@ -235,6 +235,23 @@ class _StudentSubmissionState extends State<_StudentSubmission> {
   Widget build(BuildContext context) {
     final provider = context.watch<AssignmentProvider>();
 
+    if (provider.submissionsStatus == LoadStatus.error) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            provider.submissionsError!.message,
+            style: TextStyle(color: Theme.of(context).colorScheme.error),
+          ),
+          const SizedBox(height: 8),
+          OutlinedButton(
+            onPressed: () => provider.loadMySubmissions(),
+            child: const Text('Retry'),
+          ),
+        ],
+      );
+    }
+
     if (provider.submissionsStatus != LoadStatus.success) {
       return const Center(child: CircularProgressIndicator());
     }

@@ -1,3 +1,4 @@
+import 'package:cloud_lms/core/error/app_exception.dart';
 import 'package:cloud_lms/core/error/result.dart';
 import 'package:cloud_lms/features/assignments/data/models/assignment.dart';
 import 'package:cloud_lms/features/assignments/data/models/assignment_submission.dart';
@@ -139,6 +140,27 @@ void main() {
 
     verify(() => repository.submitAssignment(assignmentId: 'a1', submissionText: 'My answer', files: []))
         .called(1);
+  });
+
+  testWidgets('Student whose submissions fetch fails sees an error and a retry, not a stuck spinner',
+      (tester) async {
+    when(() => repository.getMySubmissions())
+        .thenAnswer((_) async => const Result.failure(ForbiddenException('Only teachers can view submissions')));
+    final provider = AssignmentProvider(repository);
+    final authProvider = _authAs(authRepository, AppRole.student);
+
+    await tester.pumpWidget(_wrap(provider, authProvider));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Only teachers can view submissions'), findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+    expect(find.text('Retry'), findsOneWidget);
+
+    when(() => repository.getMySubmissions()).thenAnswer((_) async => const Result.success([]));
+    await tester.tap(find.text('Retry'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Submit your work'), findsOneWidget);
   });
 
   testWidgets('Student with an already-graded submission sees the grade, not a submit form', (tester) async {
