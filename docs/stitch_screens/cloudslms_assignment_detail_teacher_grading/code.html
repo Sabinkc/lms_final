@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "inverse-primary": "#83d7b1", "tertiary-fixed": "#ffddb8", "outline": "#6f7a73", "error-container": "#ffdad6", "on-primary-fixed-variant": "#005139", "on-tertiary-fixed": "#2a1700", "surface-tint": "#056c4d", "on-primary-fixed": "#002115", "surface-container-high": "#e2e7ff", "tertiary": "#684000", "tertiary-container": "#885500", "secondary-container": "#6cf8bb", "on-secondary-fixed": "#002113", "secondary-fixed": "#6ffbbe", "on-surface-variant": "#3f4943", "on-secondary-container": "#00714d", "outline-variant": "#bec9c1", "error": "#ba1a1a", "on-primary": "#ffffff", "inverse-on-surface": "#eef0ff", "surface-container-low": "#f2f3ff", "primary-fixed": "#9ff4cc", "surface-bright": "#faf8ff", "on-error": "#ffffff", "primary-fixed-dim": "#83d7b1", "primary": "#00543b", "secondary-fixed-dim": "#4edea3", "surface-container-lowest": "#ffffff", "secondary": "#006c49", "surface-container": "#eaedff", "on-secondary": "#ffffff", "on-primary-container": "#98edc6", "primary-container": "#0b6e4f", "on-secondary-fixed-variant": "#005236", "tertiary-fixed-dim": "#ffb95f", "on-tertiary-container": "#ffd4a4", "on-error-container": "#93000a", "on-tertiary": "#ffffff", "surface-variant": "#dae2fd", "on-background": "#131b2e", "on-tertiary-fixed-variant": "#653e00", "inverse-surface": "#283044", "surface-dim": "#d2d9f4", "surface-container-highest": "#dae2fd", "background": "#faf8ff", "on-surface": "#131b2e", "surface": "#faf8ff" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-sm": "0.5rem", "space-md": "1rem", "space-xs": "0.25rem", "margin-md": "1.5rem", "gutter": "1rem", "gutter-sm": "0.75rem", "margin": "1rem", "space-lg": "1.5rem", "space-xl": "2rem" }, fontFamily: { "headline-lg-mobile": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "title-sm": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "display-lg": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"] }, fontSize: { "headline-lg-mobile": ["26px", { lineHeight: "34px", letterSpacing: "-0.015em", fontWeight: "700" }], "body-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "400" }], "headline-sm": ["18px", { lineHeight: "24px", letterSpacing: "-0.005em", fontWeight: "600" }], "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.04em", fontWeight: "600" }], "body-md": ["14px", { lineHeight: "20px", letterSpacing: "0em", fontWeight: "400" }], "title-sm": ["14px", { lineHeight: "20px", letterSpacing: "0em", fontWeight: "600" }], "headline-md": ["22px", { lineHeight: "28px", letterSpacing: "-0.01em", fontWeight: "600" }], "body-lg": ["16px", { lineHeight: "24px", letterSpacing: "0em", fontWeight: "400" }], "display-lg": ["36px", { lineHeight: "44px", letterSpacing: "-0.02em", fontWeight: "700" }], "title-md": ["16px", { lineHeight: "22px", letterSpacing: "0em", fontWeight: "600" }], "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "500" }], "headline-lg": ["30px", { lineHeight: "38px", letterSpacing: "-0.02em", fontWeight: "700" }], "label-lg": ["14px", { lineHeight: "20px", letterSpacing: "0.01em", fontWeight: "600" }] } } } }</script><style>@layer base{html,body{width:100%;margin:0;padding:0;}body{overscroll-behavior-y:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style></head><body class="bg-surface text-on-surface min-h-screen flex flex-col antialiased selection:bg-secondary-container selection:text-on-secondary-container"><header class="fixed top-0 inset-x-0 z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_12px_rgba(11,110,79,0.06)] pt-safe"><div class="h-16 px-space-sm flex items-center justify-between"><div class="flex items-center gap-space-xs min-w-0"><button aria-label="Go Back" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface hover:bg-surface-container transition-colors" onclick="history.back()"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><h1 class="font-title-md text-title-md text-on-surface truncate">Class Attendance Session</h1></div><div class="flex items-center gap-space-xs pr-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-safe bg-surface px-margin"><div class="flex flex-col w-full pb-20 space-y-space-md">
+<!-- Top Context Action Strip -->
+<div class="flex items-center justify-between py-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">school</span>
+        Term 1 Assessment
+      </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">verified</span>
+        Published
+      </span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button aria-label="Export Grades" class="w-9 h-9 flex items-center justify-center rounded-full bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">ios_share</span>
+</button>
+<button aria-label="More Settings" class="w-9 h-9 flex items-center justify-center rounded-full bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Assignment Overview Hero Card -->
+<section class="rounded-xl bg-surface-container-lowest shadow-sm p-space-md flex flex-col gap-space-sm relative overflow-hidden">
+<div class="absolute -right-6 -bottom-6 w-28 h-28 rounded-full bg-primary/5 pointer-events-none"></div>
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex flex-col gap-1 min-w-0">
+<span class="font-label-sm text-label-sm text-primary font-bold tracking-wider uppercase">Section 5.2 • Algebra</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface leading-tight">Homework Chapter 5: Quadratic Equations</h2>
+</div>
+<div class="flex flex-col items-end shrink-0 bg-primary-fixed/40 px-3 py-1.5 rounded-lg text-right">
+<span class="font-label-sm text-label-sm text-on-primary-fixed-variant">Max Score</span>
+<span class="font-title-md text-title-md text-primary font-bold">100 pts</span>
+</div>
+</div>
+<!-- Metadata Grid Pills -->
+<div class="flex flex-wrap gap-2 pt-1">
+<div class="inline-flex items-center gap-1.5 bg-surface-container-low px-2.5 py-1.5 rounded-full text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">functions</span>
+<span class="font-semibold text-on-surface">Mathematics</span>
+</div>
+<div class="inline-flex items-center gap-1.5 bg-surface-container-low px-2.5 py-1.5 rounded-full text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">groups</span>
+<span>Class 10 A</span>
+</div>
+<div class="inline-flex items-center gap-1.5 bg-surface-container-low px-2.5 py-1.5 rounded-full text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-tertiary">schedule</span>
+<span>15 Sep 2026 • 11:59 PM</span>
+</div>
+</div>
+<!-- Description -->
+<p class="font-body-md text-body-md text-on-surface-variant pt-1 leading-relaxed">
+      Complete problems 1 through 15 from Section 5.2 on quadratic roots and factorization. Show all step-by-step discriminant calculations and upload either a clear handwritten scan or typed PDF.
+    </p>
+<!-- Attached Material -->
+<div class="pt-1">
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-8 h-8 rounded-lg bg-primary-container/15 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate">Quadratic_Formulas_Ref.pdf</span>
+<span class="font-body-sm text-body-sm text-outline">1.2 MB • Teacher Guide</span>
+</div>
+</div>
+<button aria-label="Download Attachment" class="w-8 h-8 flex items-center justify-center rounded-full text-primary hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[20px]">download</span>
+</button>
+</div>
+</div>
+<!-- Progress Track Snapshot -->
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-2">
+<div class="w-2.5 h-2.5 rounded-full bg-secondary"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Review Status</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-semibold">66% Completed (2/3)</span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 66.6%;"></div>
+</div>
+</section>
+<!-- Submissions Section Header & Quick Status Strip -->
+<section class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Submissions</h3>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">3 Total</span>
+</div>
+<div class="flex items-center gap-1.5">
+<button class="flex items-center gap-1 px-3 py-1 rounded-full bg-primary text-on-primary font-label-sm text-label-sm shadow-sm">
+          All
+        </button>
+<button class="flex items-center gap-1 px-3 py-1 rounded-full bg-surface-container-low text-on-surface-variant hover:bg-surface-container font-label-sm text-label-sm transition-colors">
+          Graded (2)
+        </button>
+<button class="flex items-center gap-1 px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-semibold">
+          Pending (1)
+        </button>
+</div>
+</div>
+</section>
+<!-- Submission Cards Stack -->
+<div class="flex flex-col space-y-3">
+<!-- Card 1: Graded -->
+<article class="rounded-xl bg-surface-container-lowest p-space-md shadow-sm flex flex-col gap-2.5 transition-all">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-3 min-w-0">
+<img class="w-10 h-10 rounded-full object-cover shrink-0" data-alt="Portrait avatar of female high school mathematics student Anita Sharma with cheerful friendly expression, bright mint studio background, modern clean lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYPTn9bVRdaA0bgCENTQKQD4MKThHRpPlgGTrLJmvMDPKV1yxJxPjQgsSe_8WA2v_NwJWD17myY-Z_ikpU7WDxq9_mBU6tSzwFtifahd3t5Y1D31J37E7hm2smnV2ww6aQ8TZ0KIJc7BHtgQPM4H5UecQuSJBK00dCEmMlgxheOxvpONdUxelNsmdyZWT-Kp7nIU_7y4MaligpXYGMxNCtYS3D39AgUJYkQvwtgPB0BKIWRrKrXKRiQg"/>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-title-sm text-title-sm text-on-surface truncate">Anita Sharma</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-[10px]">#01</span>
+</div>
+<span class="font-body-sm text-body-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">check_circle</span>
+              14 Sep 2026, 08:30 PM
+            </span>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">task_alt</span>
+            92 / 100
+          </span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+        Attached solutions for Q1-Q15. Used quadratic formula for Q12-14.
+      </p>
+<!-- Attachment chip -->
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-low max-w-fit">
+<span class="material-symbols-outlined text-[16px] text-primary">description</span>
+<span class="font-label-sm text-label-sm text-on-surface truncate max-w-[200px]">anita_math_ch5.pdf</span>
+<span class="font-body-sm text-body-sm text-outline">1.8 MB</span>
+</div>
+<!-- Feedback Preview Box -->
+<div class="mt-1 p-2.5 rounded-lg bg-surface-container-low flex items-start gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary shrink-0 mt-0.5">comment</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-primary font-bold">Feedback provided</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant italic">"Excellent step-by-step factorization in Q10."</span>
+</div>
+</div>
+</article>
+<!-- Card 2: Pending (Active Evaluation Target) -->
+<article class="rounded-xl bg-surface-container-lowest p-space-md shadow-md flex flex-col gap-2.5 relative">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-3 min-w-0">
+<img class="w-10 h-10 rounded-full object-cover shrink-0" data-alt="Portrait avatar of teenage student Aarav Patel with confident smile wearing navy collared shirt, soft ambient classroom lighting in green tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1Dmk8jmQHpKP4A_EMOV-Sz71PA_cAFyXwsDay3B9f1vGg1cHk6Cs0Y7520A6pe1V8o4TjV1EItRWJMBwBGOP6MYzaGV7yUmfTusnikyW9OKTKuvbvBVb1jCzbWdRwXid8u4Kau9FuV2bH5ntITkcl0CeknIOM0P_-BgsdCcAadGMAqFtHTjvaUnYhfT6pycGVEIkPQo-dp3onc2ByzOBQqLjujhLciNBLC19LukQGepYBo4iG39LIgQ"/>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-title-sm text-title-sm text-on-surface truncate">Aarav Patel</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-[10px]">#02</span>
+</div>
+<span class="font-body-sm text-body-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">pending</span>
+              15 Sep 2026, 04:15 PM
+            </span>
+</div>
+</div>
+<div class="flex items-center shrink-0">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">hourglass_top</span>
+            Submitted
+          </span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+        All 15 questions solved. Please check Q8 alternative factorization method.
+      </p>
+<div class="flex items-center justify-between gap-2">
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-low max-w-fit min-w-0">
+<span class="material-symbols-outlined text-[16px] text-primary">description</span>
+<span class="font-label-sm text-label-sm text-on-surface truncate max-w-[170px]">aarav_hw5_final.pdf</span>
+<span class="font-body-sm text-body-sm text-outline">2.4 MB</span>
+</div>
+<button class="px-4 py-2 rounded-full bg-primary text-on-primary font-label-md text-label-md font-semibold flex items-center gap-1.5 shadow-sm hover:brightness-105 active:scale-95 transition-transform" id="openGradeModalBtn">
+<span class="material-symbols-outlined text-[18px]">rate_review</span>
+          Grade
+        </button>
+</div>
+</article>
+<!-- Card 3: Graded -->
+<article class="rounded-xl bg-surface-container-lowest p-space-md shadow-sm flex flex-col gap-2.5 transition-all">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-3 min-w-0">
+<img class="w-10 h-10 rounded-full object-cover shrink-0" data-alt="Portrait avatar of diligent student Sita Karki wearing round spectacles and warm ochre cardigan, soft daylight bokeh background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPrDEitb8AjD-vX2NeTjpESFtwQnU5ZmA8Y4HaYOysNE9qtg6iahLOkHcupXZzX7eA8tBkR0GV73WFDZoUIHJ87fUgE1PCGrLxnvzFV5YiR3ZnEoDmj_uWp87Rj1ImnO99f-qvVWNC64zJozlrIIOrEYz-N4Ea3YGoK-h_-1rKdlISOHykHd5TTiRkxL0bk-wbLWm8Bq8zCymCQNA5ZB04IZ5rxQeIQiFeqLBrwoy0sCw2Ea7FMYEecQ"/>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<span class="font-title-sm text-title-sm text-on-surface truncate">Sita Karki</span>
+<span class="px-1.5 py-0.2 rounded bg-surface-container-high text-on-surface-variant font-label-sm text-[10px]">#04</span>
+</div>
+<span class="font-body-sm text-body-sm text-outline flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">check_circle</span>
+              15 Sep 2026, 09:10 AM
+            </span>
+</div>
+</div>
+<div class="flex flex-col items-end shrink-0">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[14px]">task_alt</span>
+            88 / 100
+          </span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+        Submitted PDF with all work shown. Completed optional challenge problem.
+      </p>
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-low max-w-fit">
+<span class="material-symbols-outlined text-[16px] text-primary">description</span>
+<span class="font-label-sm text-label-sm text-on-surface truncate max-w-[200px]">sita_k_quadratics.pdf</span>
+<span class="font-body-sm text-body-sm text-outline">1.5 MB</span>
+</div>
+</article>
+</div>
+<!-- Interactive Floating Grade Modal Container & Backdrop Mock -->
+<div class="fixed inset-0 z-50 bg-inverse-surface/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-3 transition-opacity duration-200" id="gradeModalScrim">
+<div class="w-full max-w-md bg-surface-container-lowest rounded-2xl shadow-xl flex flex-col overflow-hidden max-h-[90vh]">
+<!-- Header -->
+<div class="px-space-md pt-space-md pb-space-sm flex items-start justify-between bg-surface-container-low">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined text-[22px]">draw</span>
+</div>
+<div class="flex flex-col">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Grade Submission</h4>
+<div class="flex items-center gap-1 text-outline font-label-md text-label-md">
+<span class="font-semibold text-primary">Aarav Patel</span> • Roll #02
+            </div>
+</div>
+</div>
+<button aria-label="Close dialog" class="w-9 h-9 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center hover:bg-surface-container transition-colors" id="closeGradeModalBtn">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Form Body -->
+<div class="p-space-md flex flex-col space-y-space-md overflow-y-auto">
+<!-- Marks Field -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-semibold" for="marksInput">Marks Obtained (Out of 100)</label>
+<div class="flex items-center bg-surface-container-low rounded-xl px-3 py-2.5 focus-within:bg-surface-container-lowest focus-within:shadow-sm">
+<input class="w-full bg-transparent font-headline-md text-headline-md font-bold text-primary focus:outline-none" id="marksInput" max="100" min="0" type="number" value="95"/>
+<span class="font-title-md text-title-md text-outline font-semibold">/ 100</span>
+</div>
+</div>
+<!-- Quick Feedback Presets -->
+<div class="flex flex-col gap-1.5">
+<span class="font-label-sm text-label-sm text-outline">Quick Feedback Suggestions</span>
+<div class="flex flex-wrap gap-1.5">
+<button class="quick-preset px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold hover:brightness-95 active:scale-95 transition-all" type="button">
+              + Excellent!
+            </button>
+<button class="quick-preset px-3 py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm hover:bg-surface-container transition-all" type="button">
+              + Well Done
+            </button>
+<button class="quick-preset px-3 py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm hover:bg-surface-container transition-all" type="button">
+              + Needs Revision
+            </button>
+<button class="quick-preset px-3 py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm hover:bg-surface-container transition-all" type="button">
+              + Check Discriminant
+            </button>
+</div>
+</div>
+<!-- Feedback Textarea -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-on-surface font-semibold" for="feedbackText">Teacher Remarks / Feedback</label>
+<span class="font-label-sm text-label-sm text-outline">Optional</span>
+</div>
+<textarea class="w-full rounded-xl bg-surface-container-low p-3 font-body-md text-body-md text-on-surface focus:bg-surface-container-lowest focus:outline-none resize-none leading-relaxed" id="feedbackText" rows="3">Great execution on the quadratic formula. Clean presentation of alternate solutions.</textarea>
+</div>
+<!-- Rubric Insight Note -->
+<div class="flex items-center gap-2.5 p-2.5 rounded-lg bg-primary-fixed/20 text-on-primary-fixed-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[18px] text-primary shrink-0">info</span>
+<span>Grading will notify Aarav and update class gradebook statistics immediately.</span>
+</div>
+</div>
+<!-- Modal Actions -->
+<div class="px-space-md py-space-sm bg-surface-container-low flex items-center justify-end gap-2">
+<button class="px-5 py-2.5 rounded-full bg-surface-container-highest text-on-surface font-label-lg text-label-lg font-semibold hover:bg-surface-container transition-colors" id="cancelGradeModalBtn">
+          Cancel
+        </button>
+<button class="px-6 py-2.5 rounded-full bg-primary text-on-primary font-label-lg text-label-lg font-semibold flex items-center gap-1.5 shadow-sm hover:brightness-105 active:scale-95 transition-all" id="saveGradeBtn">
+<span class="material-symbols-outlined text-[18px]">done_all</span>
+          Save Grade
+        </button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    const scrim = document.getElementById('gradeModalScrim');
+    const openBtn = document.getElementById('openGradeModalBtn');
+    const closeBtn = document.getElementById('closeGradeModalBtn');
+    const cancelBtn = document.getElementById('cancelGradeModalBtn');
+    const saveBtn = document.getElementById('saveGradeBtn');
+    const feedbackText = document.getElementById('feedbackText');
+    const presetBtns = document.querySelectorAll('.quick-preset');
+
+    function closeModal() {
+      if (scrim) {
+        scrim.classList.add('opacity-0', 'pointer-events-none');
+        setTimeout(() => {
+          scrim.classList.add('hidden');
+        }, 200);
+      }
+    }
+
+    function openModal() {
+      if (scrim) {
+        scrim.classList.remove('hidden');
+        scrim.offsetHeight; // trigger reflow
+        scrim.classList.remove('opacity-0', 'pointer-events-none');
+      }
+    }
+
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+    if (openBtn) openBtn.addEventListener('click', openModal);
+
+    presetBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const textToAppend = btn.textContent.trim().replace(/^\+\s*/, '');
+        if (feedbackText) {
+          if (feedbackText.value.trim().length > 0) {
+            feedbackText.value += ' ' + textToAppend;
+          } else {
+            feedbackText.value = textToAppend;
+          }
+          feedbackText.focus();
+        }
+      });
+    });
+
+    if (saveBtn) {
+      saveBtn.addEventListener('click', () => {
+        saveBtn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">refresh</span> Saving...';
+        setTimeout(() => {
+          closeModal();
+          saveBtn.innerHTML = '<span class="material-symbols-outlined text-[18px]">done_all</span> Save Grade';
+        }, 600);
+      });
+    }
+  })();
+</script></main></body></html>

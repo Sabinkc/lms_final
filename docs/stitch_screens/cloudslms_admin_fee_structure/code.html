@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><title>CloudsLMS Admin</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "surface-container-low": "#f2f3ff", "surface-container": "#eaedff", "on-tertiary-fixed-variant": "#653e00", "on-tertiary-fixed": "#2a1700", "secondary-fixed": "#6ffbbe", "on-secondary-fixed": "#002113", "tertiary-fixed-dim": "#ffb95f", "outline-variant": "#bec9c1", "surface-variant": "#dae2fd", "inverse-surface": "#283044", "surface-container-lowest": "#ffffff", "on-primary-fixed-variant": "#005139", "on-surface-variant": "#3f4943", "surface-bright": "#faf8ff", "on-tertiary-container": "#ffd4a4", "on-secondary-fixed-variant": "#005236", "primary-fixed": "#9ff4cc", "outline": "#6f7a73", "error": "#ba1a1a", "on-error-container": "#93000a", "primary-container": "#0b6e4f", "on-secondary": "#ffffff", "error-container": "#ffdad6", "primary-fixed-dim": "#83d7b1", "on-surface": "#131b2e", "background": "#faf8ff", "surface": "#faf8ff", "tertiary-fixed": "#ffddb8", "on-secondary-container": "#00714d", "primary": "#00543b", "on-tertiary": "#ffffff", "secondary": "#006c49", "secondary-fixed-dim": "#4edea3", "tertiary-container": "#885500", "on-primary": "#ffffff", "tertiary": "#684000", "on-primary-fixed": "#002115", "inverse-on-surface": "#eef0ff", "surface-container-highest": "#dae2fd", "surface-container-high": "#e2e7ff", "inverse-primary": "#83d7b1", "on-background": "#131b2e", "secondary-container": "#6cf8bb", "surface-tint": "#056c4d", "surface-dim": "#d2d9f4", "on-error": "#ffffff", "on-primary-container": "#98edc6" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-sm": "0.5rem", "space-xs": "0.25rem", "space-md": "1rem", "gutter": "1rem", "space-xl": "2rem", "margin": "1rem", "gutter-sm": "0.75rem", "space-lg": "1.5rem", "margin-md": "1.5rem" }, fontFamily: { "label-md": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "title-sm": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "display-lg": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"] }, fontSize: { "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "500" }], "headline-lg-mobile": ["26px", { lineHeight: "34px", letterSpacing: "-0.015em", fontWeight: "700" }], "title-sm": ["14px", { lineHeight: "20px", letterSpacing: "0em", fontWeight: "600" }], "title-md": ["16px", { lineHeight: "22px", letterSpacing: "0em", fontWeight: "600" }], "body-lg": ["16px", { lineHeight: "24px", letterSpacing: "0em", fontWeight: "400" }], "body-md": ["14px", { lineHeight: "20px", letterSpacing: "0em", fontWeight: "400" }], "display-lg": ["36px", { lineHeight: "44px", letterSpacing: "-0.02em", fontWeight: "700" }], "label-lg": ["14px", { lineHeight: "20px", letterSpacing: "0.01em", fontWeight: "600" }], "headline-sm": ["18px", { lineHeight: "24px", letterSpacing: "-0.005em", fontWeight: "600" }], "headline-md": ["22px", { lineHeight: "28px", letterSpacing: "-0.01em", fontWeight: "600" }], "body-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "400" }], "headline-lg": ["30px", { lineHeight: "38px", letterSpacing: "-0.02em", fontWeight: "700" }], "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.04em", fontWeight: "600" }] } } } };</script><style>@layer base { html, body { margin: 0; padding: 0; min-height: 100%; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } } ::-webkit-scrollbar { display: none; }</style></head><body class="bg-surface text-on-surface font-body-md text-body-md antialiased min-h-screen flex flex-col"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center justify-between px-space-md h-6 text-on-surface select-none"><span class="font-label-sm text-label-sm font-semibold tracking-tight">9:41</span><div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px]">signal_cellular_alt</span><span class="material-symbols-outlined text-[14px]">wifi</span><span class="material-symbols-outlined text-[16px]">battery_full</span></div></div><div class="h-16 px-space-md flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="Brand logo. - Primary color: #0b6e4f - Font: plusJakartaSans - Mode: light - Roundness: rounded-md" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VyqBli3HMbhQU8BdAyKPo1qki4g1m66dEwutS9-rdlq-HcUaDtHUzAIevM85Sd8L9bU8EVek0bk26rpfHike25tYcJq6HpuJ-XtpVyrBQT7H2ZVOt40y9yVdE9bvQHBDSFs6aTNF8EG8x6Vhb_W-Ae4DbpRY-gK_s0_JesSWYcA5oylh6U-KescrDrvS5um_3PKkw1lh0rw_BS7x1gu4HqvpAcCsdpb6x0OcV9cgZcZNvgm7GNb2lY0WE"/><div class="flex flex-col"><span class="font-label-sm text-label-sm text-primary uppercase font-bold tracking-wider">CloudsLMS Admin</span><h1 class="font-title-md text-title-md text-on-surface leading-tight">Admin Fee Structure</h1></div></div><div class="flex items-center gap-space-xs"><button class="w-11 h-11 rounded-full flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-20 bg-surface"><div class="flex flex-col w-full pb-10">
+<!-- Sub-Header & Quick Navigation Action Row -->
+<div class="px-space-md py-space-sm flex items-center justify-between">
+<div class="flex items-center gap-2">
+<button aria-label="Go back" class="w-9 h-9 rounded-full bg-surface-container-lowest shadow-sm flex items-center justify-center text-on-surface hover:bg-surface-container transition-all active:scale-95">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</button>
+<div class="flex flex-col">
+<h2 class="font-headline-sm text-headline-sm text-on-surface leading-tight">Fees Overview</h2>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-normal">Fee Structure &amp; Invoicing</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<button class="relative flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-semibold hover:bg-surface-variant transition-all active:scale-95 shadow-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">rate_review</span>
+<span class="hidden sm:inline">Review</span>
+<span class="w-5 h-5 rounded-full bg-tertiary-fixed-dim text-on-tertiary-fixed font-bold text-[10px] flex items-center justify-center">7</span>
+</button>
+<button class="flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary text-on-primary font-label-sm text-label-sm font-semibold shadow-sm hover:opacity-95 transition-all active:scale-95" id="addFeeBtn">
+<span class="material-symbols-outlined text-[16px]">add</span>
+<span>Add Fee</span>
+</button>
+</div>
+</div>
+<!-- Metric Summary: Tactile Mini Stats Horizontal Flow -->
+<div class="px-space-md mt-2">
+<div class="grid grid-cols-3 gap-2">
+<!-- Total Billed Card -->
+<div class="bg-surface-container-lowest p-2.5 rounded-xl shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-[10px] uppercase font-bold text-on-surface-variant tracking-wider">Billed</span>
+<span class="material-symbols-outlined text-primary text-[15px]">request_quote</span>
+</div>
+<p class="font-title-md text-title-md font-bold text-on-surface leading-none">Rs. 8.4L</p>
+<span class="font-label-sm text-[10px] text-secondary font-medium mt-1">100% target</span>
+</div>
+<!-- Total Collected Card -->
+<div class="bg-surface-container-lowest p-2.5 rounded-xl shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-[10px] uppercase font-bold text-secondary font-semibold tracking-wider">Collected</span>
+<span class="material-symbols-outlined text-secondary text-[15px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<p class="font-title-md text-title-md font-bold text-secondary leading-none">Rs. 6.1L</p>
+<div class="w-full bg-surface-container h-1.5 rounded-full mt-1.5 overflow-hidden">
+<div class="bg-secondary h-full rounded-full w-[72%]"></div>
+</div>
+</div>
+<!-- Outstanding / Due Card -->
+<div class="bg-surface-container-lowest p-2.5 rounded-xl shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-[10px] uppercase font-bold text-error font-semibold tracking-wider">Due</span>
+<span class="material-symbols-outlined text-error text-[15px]">pending_actions</span>
+</div>
+<p class="font-title-md text-title-md font-bold text-error leading-none">Rs. 2.3L</p>
+<span class="font-label-sm text-[10px] text-error font-medium mt-1">28 students</span>
+</div>
+</div>
+</div>
+<!-- Search and Quick Filter Bar -->
+<div class="px-space-md mt-3 flex items-center gap-2">
+<div class="relative flex-1">
+<span class="material-symbols-outlined text-outline text-[18px] absolute left-3.5 top-1/2 -translate-y-1/2">search</span>
+<input class="w-full h-11 pl-10 pr-4 rounded-full bg-surface-container-lowest text-on-surface placeholder:text-outline font-body-md text-body-md focus:outline-none shadow-sm transition-all" id="feeSearchInput" placeholder="Search student, roll, or invoice..." type="text"/>
+</div>
+<button aria-label="Filter parameters" class="w-11 h-11 rounded-full bg-surface-container-lowest shadow-sm flex items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-95">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+</button>
+</div>
+<!-- Scrollable Filter Chips -->
+<div class="px-space-md mt-3 flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
+<button class="filter-chip active flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-primary text-on-primary font-label-md text-label-md font-medium shadow-sm transition-all whitespace-nowrap active:scale-95" data-filter="all">
+<span>All Fees</span>
+<span class="w-4 h-4 rounded-full bg-primary-fixed text-on-primary-fixed text-[10px] font-bold flex items-center justify-center">46</span>
+</button>
+<button class="filter-chip flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md font-medium shadow-sm transition-all whitespace-nowrap active:scale-95" data-filter="pending">
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span>
+<span>Pending</span>
+<span class="text-label-sm text-outline font-normal">18</span>
+</button>
+<button class="filter-chip flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md font-medium shadow-sm transition-all whitespace-nowrap active:scale-95" data-filter="overdue">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span>Overdue</span>
+<span class="text-label-sm text-outline font-normal">10</span>
+</button>
+<button class="filter-chip flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md font-medium shadow-sm transition-all whitespace-nowrap active:scale-95" data-filter="paid">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span>Paid</span>
+<span class="text-label-sm text-outline font-normal">18</span>
+</button>
+</div>
+<!-- Fee Card Listings -->
+<div class="px-space-md mt-3 flex flex-col gap-3" id="feeListContainer">
+<!-- Card 1: Pending Tuition Fee -->
+<div class="fee-card bg-surface-container-lowest p-3.5 rounded-2xl shadow-sm flex flex-col gap-2.5 transition-all" data-name="Amy Patel" data-roll="14" data-status="pending">
+<!-- Card Header: Student Info & Status Pill -->
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2.5">
+<div class="relative w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Warm studio portrait of a high school student Amy Patel smiling gently, dressed in school uniform with a soft mint background, natural warm light, photorealistic high resolution." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCi_X4Gwupiw58M7EkK19FWYISbHPpHxhn6zkmF8bfZKe7W1MpFh7GbSz_XKI_sLy2Xd6vq7s74U4VYmVtaxWbvRVZ7rG2DoDhPW3lvOX0cq05RZdxscIskZt1ooRHvYiYhkuWm662l8_Bc4k-pRv0GjjGiQGvOvv0mSN2DSpyy9hR1wMHMa8y5IPXW86clZsImeR7Sqt055OWV7APlQ8NCYsX50GYaLni4nycOkmvHEjAkED7oDDEHGQ"/>
+</div>
+<div class="flex flex-col min-w-0">
+<h3 class="font-title-sm text-title-sm text-on-surface font-bold truncate">Amy Patel</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Class 10-A • Roll #14</span>
+</div>
+</div>
+<!-- Status Pill -->
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-[11px] font-bold">
+<span class="material-symbols-outlined text-[13px]">schedule</span>
+          Pending
+        </span>
+</div>
+<!-- Fee Category & NPR Amount -->
+<div class="bg-surface-container-low p-2.5 rounded-xl flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-[11px] text-on-surface-variant">Fee Title &amp; Category</span>
+<span class="font-title-sm text-title-sm font-semibold text-on-surface">Tuition Fee — Term 2</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-label-sm text-[11px] text-on-surface-variant">Amount</span>
+<span class="font-title-md text-title-md font-bold text-primary">Rs. 15,000</span>
+</div>
+</div>
+<!-- Due Date & Actions Footer -->
+<div class="flex items-center justify-between pt-0.5">
+<div class="flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-tertiary">calendar_today</span>
+<span>Due: Nov 10, 2025</span>
+</div>
+<div class="flex items-center gap-1.5">
+<button class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-95" title="Edit Fee Entry">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-error transition-colors active:scale-95" title="Delete Entry">
+<span class="material-symbols-outlined text-[16px]">delete</span>
+</button>
+<button class="send-reminder-btn flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm font-bold shadow-sm active:scale-95 hover:bg-primary-fixed-dim transition-all">
+<span class="material-symbols-outlined text-[14px]">send</span>
+<span>Remind</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 2: Overdue Transportation Fee -->
+<div class="fee-card bg-surface-container-lowest p-3.5 rounded-2xl shadow-sm flex flex-col gap-2.5 transition-all" data-name="Rohan Shrestha" data-roll="22" data-status="overdue">
+<!-- Card Header: Student Info & Status Pill -->
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-10 h-10 rounded-full bg-surface-container text-primary font-title-sm font-bold flex items-center justify-center flex-shrink-0">
+            RS
+          </div>
+<div class="flex flex-col min-w-0">
+<h3 class="font-title-sm text-title-sm text-on-surface font-bold truncate">Rohan Shrestha</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Class 9-B • Roll #22</span>
+</div>
+</div>
+<!-- Status Pill -->
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-[11px] font-bold">
+<span class="material-symbols-outlined text-[13px]">warning</span>
+          Overdue
+        </span>
+</div>
+<!-- Fee Category & NPR Amount -->
+<div class="bg-surface-container-low p-2.5 rounded-xl flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-[11px] text-on-surface-variant">Fee Title &amp; Category</span>
+<span class="font-title-sm text-title-sm font-semibold text-on-surface">Transportation Fee — Q2</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-label-sm text-[11px] text-on-surface-variant">Amount</span>
+<span class="font-title-md text-title-md font-bold text-error">Rs. 4,200</span>
+</div>
+</div>
+<!-- Due Date & Actions Footer -->
+<div class="flex items-center justify-between pt-0.5">
+<div class="flex items-center gap-1 text-error font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[16px]">priority_high</span>
+<span>Overdue by 5 days</span>
+</div>
+<div class="flex items-center gap-1.5">
+<button class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-error transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[16px]">delete</span>
+</button>
+<button class="send-reminder-btn flex items-center gap-1 px-2.5 py-1 rounded-full bg-error text-on-error font-label-sm text-label-sm font-bold shadow-sm active:scale-95 hover:opacity-90 transition-all">
+<span class="material-symbols-outlined text-[14px]">notifications_active</span>
+<span>Alert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 3: Paid Annual Examination Fee -->
+<div class="fee-card bg-surface-container-lowest p-3.5 rounded-2xl shadow-sm flex flex-col gap-2.5 transition-all" data-name="Bikash Thapa" data-roll="03" data-status="paid">
+<!-- Card Header: Student Info & Status Pill -->
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2.5">
+<div class="relative w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Natural portrait of a smiling South Asian teen boy Bikash Thapa with glasses and dark blazer on a softly blurred leafy green campus setting, bright ambient daylight." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjbSc8t9faQFRQ22pDhvLhEUk6wuduk4tRN9lqe0r-dXxqDNuldVHW2QJxwBDOhxCUWreiBK2NbYud3dISL5V89g5Qx4Zi7R35jgUUAVdCq1MIu0ATPSkwb4li1ic4X-D9u9RyGUmg2_A9JRKcdckmkEqo7q2UtZ3QO3s8voRe1h179fWxCjWR6-OYhfTpmTMr-sw-h3ZE2Do3-RvDJEPZT28JyQbOCdT5C6ptCpY2d_-EpyK5BPBx4Q"/>
+</div>
+<div class="flex flex-col min-w-0">
+<h3 class="font-title-sm text-title-sm text-on-surface font-bold truncate">Bikash Thapa</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Class 10-A • Roll #03</span>
+</div>
+</div>
+<!-- Status Pill -->
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-[11px] font-bold">
+<span class="material-symbols-outlined text-[13px]" style="font-variation-settings: 'FILL' 1;">check</span>
+          Paid
+        </span>
+</div>
+<!-- Fee Category & NPR Amount -->
+<div class="bg-surface-container-low p-2.5 rounded-xl flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-[11px] text-on-surface-variant">Fee Title &amp; Category</span>
+<span class="font-title-sm text-title-sm font-semibold text-on-surface">Annual Examination Fee</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-label-sm text-[11px] text-on-surface-variant">Amount</span>
+<span class="font-title-md text-title-md font-bold text-secondary">Rs. 5,000</span>
+</div>
+</div>
+<!-- Due Date & Actions Footer -->
+<div class="flex items-center justify-between pt-0.5">
+<div class="flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary">task_alt</span>
+<span>Paid on: Oct 28, 2025</span>
+</div>
+<div class="flex items-center gap-1.5">
+<button class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-error transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[16px]">delete</span>
+</button>
+<button class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-semibold shadow-sm active:scale-95 hover:text-primary transition-all">
+<span class="material-symbols-outlined text-[14px]">receipt_long</span>
+<span>Invoice</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 4: Pending Computer Lab & Tech Fee -->
+<div class="fee-card bg-surface-container-lowest p-3.5 rounded-2xl shadow-sm flex flex-col gap-2.5 transition-all" data-name="Sita Karki" data-roll="08" data-status="pending">
+<!-- Card Header: Student Info & Status Pill -->
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2.5">
+<div class="relative w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Portrait photo of a focused South Asian student Sita Karki wearing a neat emerald green collar shirt with warm soft bokeh indoor classroom background, cheerful mood." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCd_fc2uNMRzsXJP6YbK_tOjnIkb6xOEK9OWgckCeRS0TtGHm8BP7W6nzFG7lRbAaq6ZCcda3GWyzw2lY-jD2UUR0dhpyYzr2lqcstZiB95YWwgJVrTo5adyqO9_FCFU4JEGnn9kuBhy-h1mFwahk8IVVlOYN1r-ozKKCSuYM9pnK8VtpttiY-Mq02ZRsyKHa6AmKNBp1w02Bs-KHQKiVXTyYB_GEX-WMDTkRNj58ttYXBJKxYCSbY_Eg"/>
+</div>
+<div class="flex flex-col min-w-0">
+<h3 class="font-title-sm text-title-sm text-on-surface font-bold truncate">Sita Karki</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Class 8-C • Roll #08</span>
+</div>
+</div>
+<!-- Status Pill -->
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-[11px] font-bold">
+<span class="material-symbols-outlined text-[13px]">schedule</span>
+          Pending
+        </span>
+</div>
+<!-- Fee Category & NPR Amount -->
+<div class="bg-surface-container-low p-2.5 rounded-xl flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-[11px] text-on-surface-variant">Fee Title &amp; Category</span>
+<span class="font-title-sm text-title-sm font-semibold text-on-surface">Computer Lab &amp; Tech Fee</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-label-sm text-[11px] text-on-surface-variant">Amount</span>
+<span class="font-title-md text-title-md font-bold text-primary">Rs. 3,500</span>
+</div>
+</div>
+<!-- Due Date & Actions Footer -->
+<div class="flex items-center justify-between pt-0.5">
+<div class="flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-tertiary">calendar_today</span>
+<span>Due: Nov 15, 2025</span>
+</div>
+<div class="flex items-center gap-1.5">
+<button class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-error transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[16px]">delete</span>
+</button>
+<button class="send-reminder-btn flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm font-bold shadow-sm active:scale-95 hover:bg-primary-fixed-dim transition-all">
+<span class="material-symbols-outlined text-[14px]">send</span>
+<span>Remind</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 5: Overdue Tuition Fee -->
+<div class="fee-card bg-surface-container-lowest p-3.5 rounded-2xl shadow-sm flex flex-col gap-2.5 transition-all" data-name="Aarav Gautam" data-roll="19" data-status="overdue">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-10 h-10 rounded-full bg-primary-fixed text-primary font-title-sm font-bold flex items-center justify-center flex-shrink-0">
+            AG
+          </div>
+<div class="flex flex-col min-w-0">
+<h3 class="font-title-sm text-title-sm text-on-surface font-bold truncate">Aarav Gautam</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Class 10-A • Roll #19</span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-[11px] font-bold">
+<span class="material-symbols-outlined text-[13px]">warning</span>
+          Overdue
+        </span>
+</div>
+<div class="bg-surface-container-low p-2.5 rounded-xl flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-[11px] text-on-surface-variant">Fee Title &amp; Category</span>
+<span class="font-title-sm text-title-sm font-semibold text-on-surface">Tuition Fee — Term 2</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-label-sm text-[11px] text-on-surface-variant">Amount</span>
+<span class="font-title-md text-title-md font-bold text-error">Rs. 15,000</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-0.5">
+<div class="flex items-center gap-1 text-error font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[16px]">priority_high</span>
+<span>Overdue by 12 days</span>
+</div>
+<div class="flex items-center gap-1.5">
+<button class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-error transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[16px]">delete</span>
+</button>
+<button class="send-reminder-btn flex items-center gap-1 px-2.5 py-1 rounded-full bg-error text-on-error font-label-sm text-label-sm font-bold shadow-sm active:scale-95 hover:opacity-90 transition-all">
+<span class="material-symbols-outlined text-[14px]">notifications_active</span>
+<span>Alert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 6: Paid Transportation Fee -->
+<div class="fee-card bg-surface-container-lowest p-3.5 rounded-2xl shadow-sm flex flex-col gap-2.5 transition-all" data-name="Prisha Sharma" data-roll="05" data-status="paid">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed text-on-secondary-fixed font-title-sm font-bold flex items-center justify-center flex-shrink-0">
+            PS
+          </div>
+<div class="flex flex-col min-w-0">
+<h3 class="font-title-sm text-title-sm text-on-surface font-bold truncate">Prisha Sharma</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Class 9-A • Roll #05</span>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-[11px] font-bold">
+<span class="material-symbols-outlined text-[13px]" style="font-variation-settings: 'FILL' 1;">check</span>
+          Paid
+        </span>
+</div>
+<div class="bg-surface-container-low p-2.5 rounded-xl flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-[11px] text-on-surface-variant">Fee Title &amp; Category</span>
+<span class="font-title-sm text-title-sm font-semibold text-on-surface">Transportation Fee — Q2</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="font-label-sm text-[11px] text-on-surface-variant">Amount</span>
+<span class="font-title-md text-title-md font-bold text-secondary">Rs. 4,200</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-0.5">
+<div class="flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary">task_alt</span>
+<span>Paid on: Nov 01, 2025</span>
+</div>
+<div class="flex items-center gap-1.5">
+<button class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-error transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[16px]">delete</span>
+</button>
+<button class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-semibold shadow-sm active:scale-95 hover:text-primary transition-all">
+<span class="material-symbols-outlined text-[14px]">receipt_long</span>
+<span>Invoice</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty State (Hidden by default, triggered when search has 0 results) -->
+<div class="hidden px-space-md py-12 flex-col items-center justify-center text-center" id="noResultsState">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center mb-3 text-primary">
+<span class="material-symbols-outlined text-[32px]">manage_search</span>
+</div>
+<h4 class="font-title-md text-title-md font-bold text-on-surface">No fee records found</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-xs mt-1">Try refining your search keyword or selecting a different status filter.</p>
+</div>
+<!-- Quick Feedback Toast Notification Container -->
+<div class="fixed bottom-24 left-1/2 -translate-x-1/2 px-4 py-2.5 rounded-full bg-inverse-surface text-inverse-on-surface font-label-sm text-label-sm shadow-xl flex items-center gap-2 transition-all duration-300 opacity-0 pointer-events-none z-50" id="toastNotification">
+<span class="material-symbols-outlined text-secondary-container text-[18px]">check_circle</span>
+<span id="toastMsg">Reminder sent to guardian!</span>
+</div>
+</div>
+<script>
+  (function initFeeInteractions() {
+    const searchInput = document.getElementById('feeSearchInput');
+    const filterChips = document.querySelectorAll('.filter-chip');
+    const cards = document.querySelectorAll('.fee-card');
+    const emptyState = document.getElementById('noResultsState');
+    const toast = document.getElementById('toastNotification');
+    const toastMsg = document.getElementById('toastMsg');
+    const reminderBtns = document.querySelectorAll('.send-reminder-btn');
+    const addFeeBtn = document.getElementById('addFeeBtn');
+
+    let currentFilter = 'all';
+    let searchQuery = '';
+
+    function showToast(message) {
+      if (!toast) return;
+      toastMsg.textContent = message;
+      toast.classList.remove('opacity-0', 'pointer-events-none');
+      toast.classList.add('opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('opacity-100');
+        toast.classList.add('opacity-0', 'pointer-events-none');
+      }, 2500);
+    }
+
+    function applyFilterAndSearch() {
+      let visibleCount = 0;
+      const q = searchQuery.toLowerCase().trim();
+
+      cards.forEach(card => {
+        const cardStatus = card.getAttribute('data-status') || '';
+        const cardName = (card.getAttribute('data-name') || '').toLowerCase();
+        const cardRoll = (card.getAttribute('data-roll') || '').toLowerCase();
+        const cardText = card.innerText.toLowerCase();
+
+        const matchesFilter = (currentFilter === 'all') || (cardStatus === currentFilter);
+        const matchesQuery = !q || cardName.includes(q) || cardRoll.includes(q) || cardText.includes(q);
+
+        if (matchesFilter && matchesQuery) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      if (visibleCount === 0) {
+        emptyState.classList.remove('hidden');
+        emptyState.classList.add('flex');
+      } else {
+        emptyState.classList.add('hidden');
+        emptyState.classList.remove('flex');
+      }
+    }
+
+    // Filter chip clicks
+    filterChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        filterChips.forEach(c => {
+          c.classList.remove('bg-primary', 'text-on-primary', 'active');
+          c.classList.add('bg-surface-container-lowest', 'text-on-surface-variant');
+        });
+        chip.classList.remove('bg-surface-container-lowest', 'text-on-surface-variant');
+        chip.classList.add('bg-primary', 'text-on-primary', 'active');
+
+        currentFilter = chip.getAttribute('data-filter') || 'all';
+        applyFilterAndSearch();
+      });
+    });
+
+    // Search input
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        searchQuery = e.target.value;
+        applyFilterAndSearch();
+      });
+    }
+
+    // Reminder button actions
+    reminderBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const card = btn.closest('.fee-card');
+        const name = card ? card.getAttribute('data-name') : 'Student';
+        showToast('Reminder notification sent to ' + name + '\'s guardian');
+      });
+    });
+
+    if (addFeeBtn) {
+      addFeeBtn.addEventListener('click', () => {
+        showToast('Opening Fee Structure Builder...');
+      });
+    }
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(11,110,79,0.06)]" data-active-classes="text-primary font-bold"><div class="flex justify-around items-center h-16 px-space-xs"><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-0.5 text-on-surface-variant hover:text-on-surface transition-colors" data-path="admin-home" href="#"><span class="material-symbols-outlined text-[24px]">dashboard</span><span class="font-label-sm text-label-sm">Home</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-0.5 text-on-surface-variant hover:text-on-surface transition-colors" data-path="admin-attendance" href="#"><span class="material-symbols-outlined text-[24px]">how_to_reg</span><span class="font-label-sm text-label-sm">Attendance</span></a><a aria-current="page" class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-0.5 transition-colors text-primary font-bold" data-path="admin-fee-structure" href="#"><span class="material-symbols-outlined text-[24px]">payments</span><span class="font-label-sm text-label-sm">Fees</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-0.5 text-on-surface-variant hover:text-on-surface transition-colors" data-path="admin-more" href="#"><span class="material-symbols-outlined text-[24px]">grid_view</span><span class="font-label-sm text-label-sm">More</span></a></div></nav></body></html>

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><title>CloudsLMS</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100%;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "inverse-surface": "#283044", "surface-container-high": "#e2e7ff", "on-secondary": "#ffffff", "surface-dim": "#d2d9f4", "on-primary": "#ffffff", "background": "#faf8ff", "secondary-fixed-dim": "#4edea3", "primary-fixed": "#9ff4cc", "on-primary-fixed": "#002115", "error-container": "#ffdad6", "on-primary-container": "#98edc6", "on-tertiary-fixed": "#2a1700", "surface-container-low": "#f2f3ff", "primary-fixed-dim": "#83d7b1", "outline-variant": "#bec9c1", "surface-container-lowest": "#ffffff", "on-error": "#ffffff", "secondary": "#006c49", "inverse-primary": "#83d7b1", "surface-container": "#eaedff", "error": "#ba1a1a", "tertiary": "#684000", "primary-container": "#0b6e4f", "on-error-container": "#93000a", "secondary-fixed": "#6ffbbe", "outline": "#6f7a73", "on-surface-variant": "#3f4943", "surface-variant": "#dae2fd", "secondary-container": "#6cf8bb", "inverse-on-surface": "#eef0ff", "on-background": "#131b2e", "tertiary-fixed": "#ffddb8", "tertiary-fixed-dim": "#ffb95f", "on-secondary-fixed-variant": "#005236", "surface-tint": "#056c4d", "on-primary-fixed-variant": "#005139", "on-secondary-fixed": "#002113", "on-secondary-container": "#00714d", "on-surface": "#131b2e", "on-tertiary-container": "#ffd4a4", "primary": "#00543b", "surface": "#faf8ff", "surface-bright": "#faf8ff", "on-tertiary-fixed-variant": "#653e00", "on-tertiary": "#ffffff", "surface-container-highest": "#dae2fd", "tertiary-container": "#885500" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "gutter": "1rem", "space-lg": "1.5rem", "margin": "1rem", "space-xl": "2rem", "gutter-sm": "0.75rem", "space-xs": "0.25rem", "margin-md": "1.5rem", "space-md": "1rem", "space-sm": "0.5rem" }, "fontFamily": { "display-lg": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "title-sm": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"] }, "fontSize": { "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "title-md": ["16px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }], "title-sm": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "600" }], "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "400" }], "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }] } } } }</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-gutter flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="Brand logo. - Primary color: #0b6e4f
+- Font: plusJakartaSans
+- Mode: light
+- Roundness: rounded-md
+" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UY5xhGFQeJY9cYdXh7xaUM-ranC2DUtvfKp6HupbVVeWnNhYkkxDyjaqitKWDrEdKNuyYoDU14CK4SbsMMxj-bMiPcQb9WTSuTgjsfqr1zhmOHJzUmUMyMSOUI1csW_yoPWSfxYtOVAPZYlb1GTmxzTwABUjyW-r4bWdT6D0i-Dc5H_X4pOlnNvkISTlgW-0nUBmrWaUX7xYOejjdIE2gG4a1l-xMMUHNOGLUxki6zo4knDO6akPn9fb8"/><span class="font-title-md text-title-md text-primary-container tracking-tight">CloudsLMS</span><span class="font-title-sm text-title-sm text-outline hidden">Admin Settings</span></div><div class="flex items-center gap-space-xs"><button aria-label="Notifications" class="w-11 h-11 relative flex items-center justify-center rounded-full text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[24px]">notifications</span><span class="absolute top-2 right-2 w-4 h-4 bg-error text-on-error font-label-sm text-[10px] leading-none rounded-full flex items-center justify-center font-bold">3</span></button><div aria-label="Admin Profile" class="w-9 h-9 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-label-md text-label-md font-bold ring-2 ring-primary-container/20">AS</div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-space-xs"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-16 pb-24 min-h-screen bg-surface"><div class="flex flex-col w-full px-gutter space-y-space-md pb-12">
+<!-- Top Context Header & Actions -->
+<div class="flex items-center justify-between pt-space-xs">
+<div class="flex items-center gap-space-sm">
+<button aria-label="Go Back" class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface hover:bg-surface-container transition-all active:scale-95 shadow-sm" type="button">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</button>
+<div>
+<h1 class="font-headline-sm text-headline-sm text-on-surface leading-tight">School Profile</h1>
+<p class="font-label-sm text-label-sm text-outline">Manage Institution Identity &amp; Details</p>
+</div>
+</div>
+<button class="inline-flex items-center gap-1.5 px-4 h-9 rounded-full bg-primary-container text-on-primary font-label-lg text-label-lg shadow-sm hover:opacity-95 active:scale-95 transition-all" id="topSaveBtn" type="button">
+<span class="material-symbols-outlined text-[18px]">check</span>
+<span>Save</span>
+</button>
+</div>
+<!-- Hero Card: Campus Cover & Crest -->
+<section class="relative rounded-2xl overflow-hidden bg-surface-container-lowest shadow-sm flex flex-col">
+<!-- Campus Cover Banner -->
+<div class="relative w-full h-36 bg-surface-container-high overflow-hidden">
+<img class="w-full h-full object-cover object-center" data-alt="Expansive view of a contemporary glass and stone international academy building with green manicured lawns, tall sunny trees, and students walking along stone pavers in bright daylight." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCB5yxFzph2pZCBGdngf1nn9TB6Cw2aQnSuHHKI2hYHxcj25zrb9OvMKDi46ZhgDwskpVbepTi_APi-LgzbqgemoLpc062NzvMyDFCYDt7nxApTmZBF96ZTDfb3ccgNwmdxZBYW0GolQmrWerCtm3Y20L6AYNxd8JjbK5e2TSzicbUlWWJ4JYb6fee43Flkj9MCJK4uo_CmBFaeM3tnZRdYRqZ2wIigKVpeHqanaoozHwDb57oZs5mK1w"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+<!-- Edit Cover Button -->
+<button class="absolute top-3 right-3 inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-on-surface font-label-sm text-label-sm shadow-sm hover:bg-surface-container-lowest transition-all" type="button">
+<span class="material-symbols-outlined text-[16px] text-primary">photo_camera</span>
+<span>Edit Cover</span>
+</button>
+<!-- Active Status Badge -->
+<div class="absolute bottom-3 right-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-fixed/90 backdrop-blur-md text-on-secondary-fixed font-label-sm text-label-sm shadow-sm">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+<span class="font-semibold">Active Institution</span>
+</div>
+</div>
+<!-- Crest / Identity Row -->
+<div class="px-space-md pt-0 pb-space-md">
+<div class="relative -mt-11 flex items-end justify-between">
+<!-- School Crest Badge -->
+<div class="relative group">
+<div class="w-20 h-20 rounded-2xl bg-surface-container-lowest p-1 shadow-md ring-4 ring-surface-container-lowest">
+<div class="w-full h-full rounded-xl bg-secondary-container/40 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-contain p-1.5" data-alt="Stylized academic emblem displaying a graduation cap resting atop an open textbook framed by a clean circular cloud motif in rich forest green and golden yellow tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfaXV5KRhiNaPre72JggCtBz2ljyhHHYIAxXlcrh-dOFFVkbwGUnjeoKHQYTOJYcfSYrAXETLN9TuefnLpiuvzjzRiOkqjV4ibomg_2nj_9JrtqIzEd_XJpbhpteY1taNFxKVcOsU5S9pAn1rlF1WFtGq_cQQ7Lj5nFeJ2zrli4cFHJtoBsW4E2ZN3peOFySCHpcl0qpxnNXeCGr-wsou6J-3RceIgK5mKrmMwSHb22NNzJCccmVKApQ"/>
+</div>
+</div>
+<button aria-label="Change Logo" class="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-primary-container text-on-primary flex items-center justify-center shadow-md active:scale-90 transition-transform" type="button">
+<span class="material-symbols-outlined text-[15px]">edit</span>
+</button>
+</div>
+<!-- Quick Logo Actions -->
+<div class="flex items-center gap-2 mb-1">
+<button class="px-3 py-1.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold hover:opacity-90 active:scale-95 transition-all" type="button">
+            Change Logo
+          </button>
+<button class="px-2.5 py-1.5 rounded-full text-outline hover:text-error text-label-sm font-label-sm transition-colors" type="button">
+            Remove
+          </button>
+</div>
+</div>
+<!-- School Identity Titles -->
+<div class="mt-3">
+<div class="flex items-center gap-2">
+<h2 class="font-headline-sm text-headline-sm text-on-surface tracking-tight">Greenwood International Academy</h2>
+<span class="material-symbols-outlined text-primary-container text-[20px]" title="Verified Educational Partner">verified</span>
+</div>
+<div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-on-surface-variant font-label-sm text-label-sm">
+<span class="inline-flex items-center gap-1 font-mono text-outline">
+<span class="material-symbols-outlined text-[14px]">tag</span>SCH-2025-9042
+          </span>
+<span class="inline-flex items-center gap-1 text-outline">
+<span class="material-symbols-outlined text-[14px]">history_edu</span>Estd. 1998
+          </span>
+<span class="inline-flex items-center gap-1 text-primary-container font-medium">
+<span class="material-symbols-outlined text-[14px]">verified_user</span>CBSE &amp; NEB Accredited
+          </span>
+</div>
+</div>
+</div>
+</section>
+<!-- Segmented Navigation Chips (Horizontal Scrollable) -->
+<div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+<button class="tab-btn px-4 py-2 rounded-full bg-primary-container text-on-primary font-label-md text-label-md whitespace-nowrap shadow-sm transition-all" data-section="basic" type="button">
+      Basic Info
+    </button>
+<button class="tab-btn px-4 py-2 rounded-full bg-surface-container-low text-on-surface-variant font-label-md text-label-md whitespace-nowrap hover:bg-surface-container transition-all" data-section="contact" type="button">
+      Contact &amp; Address
+    </button>
+<button class="tab-btn px-4 py-2 rounded-full bg-surface-container-low text-on-surface-variant font-label-md text-label-md whitespace-nowrap hover:bg-surface-container transition-all" data-section="academic" type="button">
+      Academic Affiliation
+    </button>
+<button class="tab-btn px-4 py-2 rounded-full bg-surface-container-low text-on-surface-variant font-label-md text-label-md whitespace-nowrap hover:bg-surface-container transition-all" data-section="settings" type="button">
+      Billing &amp; Settings
+    </button>
+</div>
+<!-- Forms Container -->
+<form class="space-y-space-md" id="schoolProfileForm">
+<!-- Card 1: Basic Information -->
+<section class="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm space-y-space-sm">
+<div class="flex items-center justify-between pb-1">
+<div class="flex items-center gap-2">
+<span class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">account_balance</span>
+</span>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface">Basic Information</h3>
+<p class="font-body-sm text-body-sm text-outline">Official registration credentials &amp; naming</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline text-[18px]">lock_open</span>
+</div>
+<!-- Full Name -->
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant block" for="schoolName">Institution Full Name</label>
+<div class="relative">
+<input class="w-full h-12 px-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary-container transition-all" id="schoolName" name="schoolName" type="text" value="Greenwood International Academy"/>
+<span class="material-symbols-outlined absolute right-3 top-3 text-outline-variant text-[20px]">edit_note</span>
+</div>
+</div>
+<!-- Short Name & Estd Year (2 Columns) -->
+<div class="grid grid-cols-2 gap-space-sm">
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant block" for="shortCode">Short Name / Code</label>
+<input class="w-full h-12 px-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary-container transition-all" id="shortCode" name="shortCode" type="text" value="GIA / SCH-8941"/>
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant block" for="estdYear">Established Year</label>
+<input class="w-full h-12 px-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary-container transition-all" id="estdYear" name="estdYear" type="number" value="1998"/>
+</div>
+</div>
+<!-- School Type Dropdown -->
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant block" for="schoolType">Institution Type</label>
+<div class="relative">
+<select class="w-full h-12 px-3.5 pr-10 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md outline-none appearance-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary-container transition-all" id="schoolType" name="schoolType">
+<option selected="" value="k12">K-12 Private Comprehensive Institution</option>
+<option value="secondary">Secondary School (Grades 1-10)</option>
+<option value="higher">Higher Secondary College (10+2 / A-Levels)</option>
+<option value="preschool">Primary &amp; Montessori Foundation</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-3 text-outline pointer-events-none text-[20px]">expand_more</span>
+</div>
+</div>
+<!-- Motto / Tagline -->
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant block" for="schoolMotto">Institution Motto / Tagline</label>
+<div class="relative">
+<input class="w-full h-12 pl-9 pr-3 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary-container transition-all" id="schoolMotto" name="schoolMotto" type="text" value="Learn • Manage • Lead with Excellence"/>
+<span class="material-symbols-outlined absolute left-2.5 top-3 text-outline text-[18px]">format_quote</span>
+</div>
+</div>
+</section>
+<!-- Card 2: Contact & Location Details -->
+<section class="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm space-y-space-sm">
+<div class="flex items-center gap-2 pb-1">
+<span class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+</span>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface">Contact &amp; Location</h3>
+<p class="font-body-sm text-body-sm text-outline">Public contact details &amp; campus coordinates</p>
+</div>
+</div>
+<!-- Email -->
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant block" for="officialEmail">Official Institution Email</label>
+<div class="relative">
+<input class="w-full h-12 pl-10 pr-3 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary-container transition-all" id="officialEmail" name="officialEmail" type="email" value="admin@greenwoodacademy.edu.np"/>
+<span class="material-symbols-outlined absolute left-3 top-3 text-outline text-[20px]">mail</span>
+</div>
+</div>
+<!-- Phones (Grid) -->
+<div class="grid grid-cols-2 gap-space-sm">
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant block" for="phonePrimary">Office Landline</label>
+<div class="relative">
+<input class="w-full h-12 pl-9 pr-2 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary-container transition-all" id="phonePrimary" name="phonePrimary" type="tel" value="+977 1 4421090"/>
+<span class="material-symbols-outlined absolute left-2.5 top-3 text-outline text-[18px]">call</span>
+</div>
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant block" for="phoneHotline">Hotline / Mobile</label>
+<div class="relative">
+<input class="w-full h-12 pl-9 pr-2 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary-container transition-all" id="phoneHotline" name="phoneHotline" type="tel" value="+977 9801122330"/>
+<span class="material-symbols-outlined absolute left-2.5 top-3 text-outline text-[18px]">smartphone</span>
+</div>
+</div>
+</div>
+<!-- Website URL -->
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant block" for="websiteUrl">Official Portal / Website</label>
+<div class="relative">
+<input class="w-full h-12 pl-10 pr-3 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary-container transition-all" id="websiteUrl" name="websiteUrl" type="url" value="https://greenwood.edu.np"/>
+<span class="material-symbols-outlined absolute left-3 top-3 text-outline text-[20px]">language</span>
+</div>
+</div>
+<!-- Address & PIN -->
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant block" for="physicalAddress">Physical Campus Address</label>
+<textarea class="w-full p-3 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary-container transition-all resize-none" id="physicalAddress" name="physicalAddress" rows="2">Bagbazar Marg, Ward 28, Kathmandu, Bagmati Province, Nepal</textarea>
+</div>
+<div class="flex items-center justify-between gap-space-sm">
+<div class="flex-1 space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant block" for="pinCode">Postal Code</label>
+<input class="w-full h-11 px-3.5 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md outline-none focus:ring-2 focus:ring-primary-container" id="pinCode" name="pinCode" type="text" value="44600"/>
+</div>
+<div class="flex-1 space-y-1">
+<span class="font-label-md text-label-md text-on-surface-variant block">Map Verification</span>
+<div class="h-11 px-3 rounded-xl bg-surface-container-low flex items-center justify-between text-on-surface">
+<span class="font-label-sm text-label-sm truncate">Kathmandu, NP</span>
+<span class="material-symbols-outlined text-primary-container text-[18px]">share_location</span>
+</div>
+</div>
+</div>
+<!-- Static Map Preview Component -->
+<div class="relative w-full h-28 rounded-xl overflow-hidden shadow-inner mt-1">
+<div class="w-full h-full bg-cover bg-center" data-location="Bagbazar Marg, Kathmandu, Nepal" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDPtLWUbg265Kgx2vJKOHmmPJIYwOAcv-ofqiOn-XhAMnUhTUQX7yG_gt9CHh7aX2hpwRYQ18_tzrerX2rr3bP81lauiQVqQ4PjBp1Ae0JxauxGbRL0JzWSivLCId7FCmH-OtBCNgTGqk4gwK8BlbSW4QDEfaC_gffIzRjsKPtuHaYuNaspbSTEj50A4Sga1V5mvJE4x-XA8YanCtXPBgp-kl-qCRoFNL8eP-IvAKZm5cC_4kIvHSLhVQ')"></div>
+<div class="absolute bottom-2 left-2 right-2 px-2.5 py-1.5 rounded-lg bg-surface-container-lowest/90 backdrop-blur-sm flex items-center justify-between text-on-surface">
+<div class="flex items-center gap-1.5 min-w-0">
+<span class="material-symbols-outlined text-error text-[18px] shrink-0">pin_drop</span>
+<span class="font-label-sm text-label-sm truncate">Ward 28, Bagbazar Campus Center</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary-container font-semibold shrink-0 cursor-pointer">Update Pin</span>
+</div>
+</div>
+</section>
+<!-- Card 3: Institutional & Accreditation Details -->
+<section class="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm space-y-space-sm">
+<div class="flex items-center gap-2 pb-1">
+<span class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">workspace_premium</span>
+</span>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface">Institutional Accreditation</h3>
+<p class="font-body-sm text-body-sm text-outline">Board affiliations &amp; administrative leadership</p>
+</div>
+</div>
+<!-- Affiliation Board -->
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant block" for="affiliationBoard">Affiliation Board</label>
+<div class="relative">
+<input class="w-full h-12 pl-10 pr-3 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary-container transition-all" id="affiliationBoard" name="affiliationBoard" type="text" value="National Examination Board (NEB) / Cambridge IGCSE"/>
+<span class="material-symbols-outlined absolute left-3 top-3 text-outline text-[20px]">school</span>
+</div>
+</div>
+<!-- License / Registration Number -->
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant block" for="licenseNo">Government Registration / License No.</label>
+<div class="relative">
+<input class="w-full h-12 pl-10 pr-3 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary-container transition-all" id="licenseNo" name="licenseNo" type="text" value="ED-REG-2045-88"/>
+<span class="material-symbols-outlined absolute left-3 top-3 text-outline text-[20px]">badge</span>
+</div>
+</div>
+<!-- Principal Name & Direct Email -->
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant block" for="principalName">Principal / Head of Institution</label>
+<div class="relative">
+<input class="w-full h-12 pl-10 pr-3 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary-container transition-all" id="principalName" name="principalName" type="text" value="Dr. Sunita Adhikari, Ph.D."/>
+<span class="material-symbols-outlined absolute left-3 top-3 text-outline text-[20px]">person</span>
+</div>
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant block" for="principalEmail">Principal Official Email</label>
+<div class="relative">
+<input class="w-full h-12 pl-10 pr-3 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary-container transition-all" id="principalEmail" name="principalEmail" type="email" value="principal@cloudslms.school"/>
+<span class="material-symbols-outlined absolute left-3 top-3 text-outline text-[20px]">alternate_email</span>
+</div>
+</div>
+</section>
+<!-- Card 4: School Preferences & Settings -->
+<section class="bg-surface-container-lowest rounded-2xl p-space-md shadow-sm space-y-space-md">
+<div class="flex items-center gap-2 pb-1">
+<span class="w-8 h-8 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</span>
+<div>
+<h3 class="font-title-md text-title-md text-on-surface">Preferences &amp; Defaults</h3>
+<p class="font-body-sm text-body-sm text-outline">Locale, fiscal year format &amp; privacy controls</p>
+</div>
+</div>
+<!-- Currency & Timezone -->
+<div class="space-y-space-sm">
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant block" for="primaryCurrency">Primary Billing Currency</label>
+<div class="relative">
+<select class="w-full h-12 px-3.5 pr-10 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md outline-none appearance-none focus:ring-2 focus:ring-primary-container" id="primaryCurrency" name="primaryCurrency">
+<option selected="" value="NPR">NPR (Rs.) - Nepalese Rupee</option>
+<option value="USD">USD ($) - US Dollar</option>
+<option value="INR">INR (₹) - Indian Rupee</option>
+<option value="GBP">GBP (£) - British Pound</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-3 text-outline pointer-events-none text-[20px]">expand_more</span>
+</div>
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant block" for="schoolTimezone">System Timezone</label>
+<div class="relative">
+<select class="w-full h-12 px-3.5 pr-10 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md outline-none appearance-none focus:ring-2 focus:ring-primary-container" id="schoolTimezone" name="schoolTimezone">
+<option selected="" value="Asia/Kathmandu">(GMT+5:45) Kathmandu, Nepal</option>
+<option value="Asia/Kolkata">(GMT+5:30) New Delhi, India</option>
+<option value="Europe/London">(GMT+0:00) London, United Kingdom</option>
+<option value="America/New_York">(GMT-5:00) Eastern Time, USA</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-3 text-outline pointer-events-none text-[20px]">schedule</span>
+</div>
+</div>
+<div class="space-y-1">
+<label class="font-label-md text-label-md text-on-surface-variant block" for="sessionFormat">Academic Calendar Cycle</label>
+<div class="relative">
+<select class="w-full h-12 px-3.5 pr-10 rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md outline-none appearance-none focus:ring-2 focus:ring-primary-container" id="sessionFormat" name="sessionFormat">
+<option selected="" value="baisakh">Bikram Sambat Annual (Baisakh - Chaitra)</option>
+<option value="standard">Gregorian Academic (August - May)</option>
+<option value="trimester">Trimester Cycle (Term 1, Term 2, Term 3)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-3 text-outline pointer-events-none text-[20px]">date_range</span>
+</div>
+</div>
+</div>
+<!-- Toggles Sub-Card -->
+<div class="space-y-3 pt-2">
+<!-- Toggle 1: Admission Portal -->
+<label class="flex items-center justify-between p-3 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container transition-colors">
+<div class="pr-3">
+<span class="font-label-lg text-label-lg text-on-surface block">Public Online Admission Portal</span>
+<span class="font-body-sm text-body-sm text-outline">Allow new student registration via public URL</span>
+</div>
+<div class="relative shrink-0">
+<input checked="" class="sr-only peer" id="toggleAdmission" type="checkbox"/>
+<div class="w-12 h-7 bg-surface-dim peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary-container"></div>
+</div>
+</label>
+<!-- Toggle 2: School Crest on Reports -->
+<label class="flex items-center justify-between p-3 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container transition-colors">
+<div class="pr-3">
+<span class="font-label-lg text-label-lg text-on-surface block">Display Crest on ID Cards &amp; Grade Sheets</span>
+<span class="font-body-sm text-body-sm text-outline">Embed official seal on exportable PDFs</span>
+</div>
+<div class="relative shrink-0">
+<input checked="" class="sr-only peer" id="toggleCrestOnDocs" type="checkbox"/>
+<div class="w-12 h-7 bg-surface-dim peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary-container"></div>
+</div>
+</label>
+<!-- Toggle 3: SMS Alerts -->
+<label class="flex items-center justify-between p-3 rounded-xl bg-surface-container-low cursor-pointer hover:bg-surface-container transition-colors">
+<div class="pr-3">
+<span class="font-label-lg text-label-lg text-on-surface block">Broadcast Attendance SMS to Parents</span>
+<span class="font-body-sm text-body-sm text-outline">Automatic notifications for absent students</span>
+</div>
+<div class="relative shrink-0">
+<input checked="" class="sr-only peer" id="toggleSmsAlert" type="checkbox"/>
+<div class="w-12 h-7 bg-surface-dim peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary-container"></div>
+</div>
+</label>
+</div>
+</section>
+<!-- Bottom Action Controls -->
+<div class="pt-2 space-y-2">
+<button class="w-full h-12 rounded-full bg-primary-container text-on-primary font-label-lg text-label-lg flex items-center justify-center gap-2 shadow-md hover:opacity-95 active:scale-[0.99] transition-all" id="mainSaveBtn" type="submit">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+<span>Save Profile Changes</span>
+</button>
+<button class="w-full h-11 rounded-full bg-surface-container-low text-on-surface-variant font-label-md text-label-md flex items-center justify-center hover:bg-surface-container active:scale-[0.99] transition-all" type="reset">
+        Discard Unsaved Changes
+      </button>
+</div>
+</form>
+<!-- Delightful Floating Feedback Toast (Hidden by default) -->
+<div class="fixed bottom-20 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 pointer-events-none opacity-0 translate-y-4 max-w-[90%] w-max" id="saveToast">
+<div class="flex items-center gap-2 px-4 py-2.5 rounded-full bg-inverse-surface text-inverse-on-surface shadow-xl text-body-md font-label-md">
+<span class="material-symbols-outlined text-secondary-fixed text-[20px]">task_alt</span>
+<span>School profile updated successfully!</span>
+</div>
+</div>
+<script>
+    (function () {
+      const form = document.getElementById('schoolProfileForm');
+      const topSaveBtn = document.getElementById('topSaveBtn');
+      const toast = document.getElementById('saveToast');
+      const tabButtons = document.querySelectorAll('.tab-btn');
+
+      // Tab switcher micro-interaction
+      tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabButtons.forEach(b => {
+            b.classList.remove('bg-primary-container', 'text-on-primary', 'shadow-sm');
+            b.classList.add('bg-surface-container-low', 'text-on-surface-variant');
+          });
+          btn.classList.add('bg-primary-container', 'text-on-primary', 'shadow-sm');
+          btn.classList.remove('bg-surface-container-low', 'text-on-surface-variant');
+        });
+      });
+
+      // Show temporary save toast
+      function triggerSavedState() {
+        if (!toast) return;
+        toast.classList.remove('opacity-0', 'translate-y-4');
+        toast.classList.add('opacity-100', 'translate-y-0');
+        setTimeout(() => {
+          toast.classList.remove('opacity-100', 'translate-y-0');
+          toast.classList.add('opacity-0', 'translate-y-4');
+        }, 2800);
+      }
+
+      if (form) {
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          triggerSavedState();
+        });
+      }
+
+      if (topSaveBtn && form) {
+        topSaveBtn.addEventListener('click', () => {
+          triggerSavedState();
+        });
+      }
+    })();
+  </script>
+</div></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.05)]" data-active-classes="text-primary-container font-semibold"><div class="flex justify-around items-center h-16 px-gutter"><a class="flex flex-col items-center justify-center min-w-[48px] h-12 text-on-surface-variant hover:text-on-surface transition-colors" data-path="home" href="#"><span class="material-symbols-outlined text-[22px]">dashboard</span><span class="font-label-sm text-label-sm mt-0.5">Home</span></a><a class="flex flex-col items-center justify-center min-w-[48px] h-12 text-on-surface-variant hover:text-on-surface transition-colors" data-path="students" href="#"><span class="material-symbols-outlined text-[22px]">school</span><span class="font-label-sm text-label-sm mt-0.5">Students</span></a><a class="flex flex-col items-center justify-center min-w-[48px] h-12 text-on-surface-variant hover:text-on-surface transition-colors" data-path="attendance" href="#"><span class="material-symbols-outlined text-[22px]">fact_check</span><span class="font-label-sm text-label-sm mt-0.5">Attendance</span></a><a class="flex flex-col items-center justify-center min-w-[48px] h-12 text-on-surface-variant hover:text-on-surface transition-colors" data-path="fees" href="#"><span class="material-symbols-outlined text-[22px]">payments</span><span class="font-label-sm text-label-sm mt-0.5">Fees</span></a><a aria-current="page" class="flex flex-col items-center justify-center min-w-[48px] h-12 transition-colors text-primary-container font-semibold" data-path="admin-settings" href="#"><span class="material-symbols-outlined text-[22px]">more_horiz</span><span class="font-label-sm text-label-sm mt-0.5">More</span></a></div></nav></body></html>

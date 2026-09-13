@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CloudsLMS - Exam Results</title>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 with Forms & Container Queries plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              DEFAULT: '#0b6e4f',
+              dark: '#08533c',
+              light: '#e8f5f0',
+              accent: '#10b981',
+              muted: '#f0fdf4'
+            },
+            surface: '#f4f6fa',
+            card: '#ffffff',
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+<!-- Custom Styles for Scrollbars & iOS Viewport Fitting -->
+<style data-purpose="viewport-and-scroll">
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background-color: #f1f4f8;
+      -webkit-font-smoothing: antialiased;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="flex justify-center items-start min-h-screen p-0 sm:p-4 bg-slate-200">
+<!-- BEGIN: MobileDeviceFrame -->
+<div class="w-full max-w-[420px] bg-[#f8fafd] min-h-screen sm:min-h-[890px] sm:rounded-[36px] sm:shadow-2xl overflow-hidden flex flex-col relative pb-8" data-purpose="mobile-viewport-container">
+<!-- BEGIN: StatusBar -->
+<div class="w-full pt-3 px-7 pb-2 flex items-center justify-between text-slate-900 text-[13px] font-semibold tracking-tight z-30 select-none" data-purpose="ios-status-bar">
+<span class="tracking-normal font-bold">9:41</span>
+<div class="flex items-center space-x-2">
+<!-- Cellular Icon -->
+<svg class="w-4 h-4 fill-current" viewbox="0 0 24 24">
+<path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 18.23C2.88 16.48 2 14.34 2 12c0-5.52 4.48-10 10-10s10 4.48 10 10c0 2.34-.88 4.48-2.35 6.23l-.62-.62C20.26 16.07 21 14.12 21 12c0-4.97-4.03-9-9-9zm0 4c-2.76 0-5 2.24-5 5 0 1.25.46 2.39 1.22 3.28l.71-.71C8.35 13.93 8 13.01 8 12c0-2.21 1.79-4 4-4s4 1.79 4 4c0 1.01-.35 1.93-.93 2.57l.71.71C16.54 14.39 17 13.25 17 12c0-2.76-2.24-5-5-5zm0 8c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z"></path>
+</svg>
+<!-- Wifi Icon -->
+<svg class="w-4 h-4 fill-current" viewbox="0 0 24 24">
+<path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4zm0 3.5c3.67 0 7.02 1.41 9.54 3.73l-2.02 2.03C17.65 11.66 14.99 10.5 12 10.5c-2.99 0-5.65 1.16-7.52 2.76L2.46 11.23C4.98 8.91 8.33 7.5 12 7.5zm0 5c1.94 0 3.72.77 5.06 2.02L12 19.64 6.94 14.52C8.28 13.27 10.06 12.5 12 12.5z"></path>
+</svg>
+<!-- Battery Icon -->
+<svg class="w-6 h-3.5 fill-current" viewbox="0 0 24 12">
+<rect fill="none" height="10" rx="3" stroke="currentColor" stroke-width="1.8" width="19" x="1" y="1"></rect>
+<rect fill="currentColor" height="7" rx="1.5" width="14" x="2.5" y="2.5"></rect>
+<path d="M21 4.5v3a1.5 1.5 0 0 0 1.5-1.5 1.5 1.5 0 0 0-1.5-1.5z"></path>
+</svg>
+</div>
+</div>
+<!-- END: StatusBar -->
+<!-- BEGIN: TopBar -->
+<header class="px-5 pt-2 pb-3 flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<!-- Back Button -->
+<button aria-label="Go back" class="w-10 h-10 rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-700 hover:bg-slate-50 transition active:scale-95" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24">
+<path d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+<!-- Title & Subtitle Hierarchy -->
+<div>
+<span class="text-[11px] uppercase tracking-wider font-extrabold text-brand block leading-tight">Assessment Ledger</span>
+<h1 class="text-xl font-bold text-slate-900 tracking-tight leading-tight">Exam Results</h1>
+</div>
+</div>
+<!-- Right Action Overflow -->
+<div class="flex items-center space-x-2">
+<button aria-label="Options" class="w-10 h-10 rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-50 transition active:scale-95" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24">
+<circle cx="12" cy="12" fill="currentColor" r="1.5"></circle>
+<circle cx="6" cy="12" fill="currentColor" r="1.5"></circle>
+<circle cx="18" cy="12" fill="currentColor" r="1.5"></circle>
+</svg>
+</button>
+</div>
+</header>
+<!-- END: TopBar -->
+<!-- Main Content Scroll Area -->
+<main class="px-5 space-y-4 flex-1">
+<!-- BEGIN: ExamContextCard -->
+<section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100/90 relative overflow-hidden" data-purpose="exam-header-card">
+<div class="flex items-start justify-between mb-3">
+<div class="flex items-center space-x-3">
+<div class="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
+<!-- Exam Paper Icon -->
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div>
+<h2 class="text-base font-bold text-slate-900 leading-tight">Mid-Term Examination 2025</h2>
+<p class="text-xs text-slate-500 font-medium mt-0.5">Grade 10 • Sections A &amp; B</p>
+</div>
+</div>
+<!-- Published Status Pill -->
+<span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>
+            Published
+          </span>
+</div>
+<div class="flex items-center justify-between pt-2.5 border-t border-slate-100 text-xs">
+<div class="flex items-center space-x-1.5 text-slate-500">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 9v7.5" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="font-medium text-slate-600">Oct 12 – Oct 18, 2025</span>
+</div>
+<span class="font-bold text-brand bg-brand-muted/70 px-2 py-0.5 rounded text-[11px]">500 Total Marks</span>
+</div>
+</section>
+<!-- END: ExamContextCard -->
+<!-- BEGIN: StatCardsRow -->
+<section class="grid grid-cols-3 gap-2.5" data-purpose="class-performance-stats">
+<!-- Passed Card -->
+<div class="bg-emerald-50/70 border border-emerald-100 rounded-2xl p-3 flex flex-col justify-between">
+<span class="text-[11px] font-semibold text-emerald-800">Passed</span>
+<div class="my-1">
+<span class="text-2xl font-extrabold text-emerald-900 leading-none">36</span>
+</div>
+<span class="text-[10px] font-medium text-emerald-700">90% of students</span>
+</div>
+<!-- Failed Card -->
+<div class="bg-rose-50/70 border border-rose-100 rounded-2xl p-3 flex flex-col justify-between">
+<span class="text-[11px] font-semibold text-rose-800">Needs Review</span>
+<div class="my-1">
+<span class="text-2xl font-extrabold text-rose-900 leading-none">4</span>
+</div>
+<span class="text-[10px] font-medium text-rose-700">10% failed/retest</span>
+</div>
+<!-- Average Card -->
+<div class="bg-blue-50/70 border border-blue-100 rounded-2xl p-3 flex flex-col justify-between">
+<span class="text-[11px] font-semibold text-blue-800">Class Avg.</span>
+<div class="my-1">
+<span class="text-2xl font-extrabold text-blue-900 leading-none">78.4%</span>
+</div>
+<span class="text-[10px] font-medium text-blue-700">392/500 Marks</span>
+</div>
+</section>
+<!-- END: StatCardsRow -->
+<!-- BEGIN: SearchAndFilters -->
+<section class="space-y-3" data-purpose="filter-and-search">
+<!-- Search Input -->
+<div class="relative">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24">
+<circle cx="11" cy="11" r="8"></circle>
+<line x1="21" x2="16.65" y1="21" y2="16.65"></line>
+</svg>
+</div>
+<input class="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200/80 rounded-xl text-xs font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand transition shadow-sm" placeholder="Search student name, roll number..." type="text"/>
+</div>
+<!-- Filter Chips Scrollable -->
+<div class="flex items-center space-x-2 overflow-x-auto no-scrollbar py-0.5">
+<button class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-brand text-white shadow-sm flex-shrink-0" type="button">
+            All (40)
+          </button>
+<button class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 flex-shrink-0 transition" type="button">
+            Top 10
+          </button>
+<button class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 flex-shrink-0 transition" type="button">
+            Passed (36)
+          </button>
+<button class="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 flex-shrink-0 transition" type="button">
+            Needs Retest (4)
+          </button>
+</div>
+</section>
+<!-- END: SearchAndFilters -->
+<!-- BEGIN: ResultsLedgerList -->
+<section class="space-y-3 pt-1" data-purpose="student-rankings-list">
+<!-- Section Subtitle & Count -->
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<h3 class="text-sm font-bold text-slate-900">Student Rankings &amp; Marks</h3>
+<span class="px-2 py-0.5 rounded-full bg-slate-200/80 text-[11px] font-bold text-slate-700">40</span>
+</div>
+<!-- Sort Indicator/Filter -->
+<button class="text-xs font-semibold text-brand flex items-center space-x-1 hover:underline" type="button">
+<span>By Rank</span>
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24">
+<path d="M19.5 8.25l-7.5 7.5-7.5-7.5" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+<!-- Student Cards Container -->
+<div class="space-y-2.5">
+<!-- Rank #1: Aarav Sharma -->
+<div class="bg-white rounded-2xl p-3.5 border border-amber-200/80 shadow-sm relative overflow-hidden">
+<!-- Rank #1 Indicator Glow / Accent -->
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-amber-400"></div>
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-3 pl-1.5">
+<!-- Avatar AS -->
+<div class="w-10 h-10 rounded-full bg-emerald-100 text-brand font-bold text-xs flex items-center justify-center border-2 border-white shadow-sm">
+                  AS
+                </div>
+<div>
+<h4 class="text-sm font-bold text-slate-900 leading-snug">Aarav Sharma</h4>
+<p class="text-[11px] text-slate-500 font-medium">Roll 01 • STU1042</p>
+</div>
+</div>
+<!-- Rank 1 Badge -->
+<div class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-extrabold bg-amber-100 text-amber-900 border border-amber-300">
+<svg class="w-3.5 h-3.5 mr-1 text-amber-600 fill-amber-500" viewbox="0 0 24 24">
+<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+</svg>
+                Rank #1
+              </div>
+</div>
+<!-- Marks & Grade Meta Row -->
+<div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs pl-1.5">
+<div class="flex items-center space-x-2">
+<span class="font-extrabold text-brand bg-brand-light px-2 py-0.5 rounded text-[11px]">Grade A+</span>
+<span class="text-slate-500 font-semibold">94.2%</span>
+</div>
+<div class="text-right">
+<span class="font-bold text-slate-900">471</span>
+<span class="text-slate-400 font-normal text-[11px]">/500 Marks</span>
+</div>
+</div>
+</div>
+<!-- Rank #2: Prisha Karki -->
+<div class="bg-white rounded-2xl p-3.5 border border-slate-200/90 shadow-sm relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-slate-400"></div>
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-3 pl-1.5">
+<!-- Avatar PK -->
+<div class="w-10 h-10 rounded-full bg-teal-100 text-teal-800 font-bold text-xs flex items-center justify-center border-2 border-white shadow-sm">
+                  PK
+                </div>
+<div>
+<h4 class="text-sm font-bold text-slate-900 leading-snug">Prisha Karki</h4>
+<p class="text-[11px] text-slate-500 font-medium">Roll 04 • STU1088</p>
+</div>
+</div>
+<!-- Rank 2 Badge -->
+<div class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800 border border-slate-300">
+                🥈 Rank #2
+              </div>
+</div>
+<!-- Marks & Grade Meta Row -->
+<div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs pl-1.5">
+<div class="flex items-center space-x-2">
+<span class="font-extrabold text-brand bg-brand-light px-2 py-0.5 rounded text-[11px]">Grade A+</span>
+<span class="text-slate-500 font-semibold">91.8%</span>
+</div>
+<div class="text-right">
+<span class="font-bold text-slate-900">459</span>
+<span class="text-slate-400 font-normal text-[11px]">/500 Marks</span>
+</div>
+</div>
+</div>
+<!-- Rank #3: Rohan Thapa -->
+<div class="bg-white rounded-2xl p-3.5 border border-amber-100 shadow-sm relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-amber-600/70"></div>
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-3 pl-1.5">
+<!-- Avatar RT -->
+<div class="w-10 h-10 rounded-full bg-blue-100 text-blue-700 font-bold text-xs flex items-center justify-center border-2 border-white shadow-sm">
+                  RT
+                </div>
+<div>
+<h4 class="text-sm font-bold text-slate-900 leading-snug">Rohan Thapa</h4>
+<p class="text-[11px] text-slate-500 font-medium">Roll 18 • STU1105</p>
+</div>
+</div>
+<!-- Rank 3 Badge -->
+<div class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200">
+                🥉 Rank #3
+              </div>
+</div>
+<!-- Marks & Grade Meta Row -->
+<div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs pl-1.5">
+<div class="flex items-center space-x-2">
+<span class="font-extrabold text-brand bg-brand-light px-2 py-0.5 rounded text-[11px]">Grade A</span>
+<span class="text-slate-500 font-semibold">86.4%</span>
+</div>
+<div class="text-right">
+<span class="font-bold text-slate-900">432</span>
+<span class="text-slate-400 font-normal text-[11px]">/500 Marks</span>
+</div>
+</div>
+</div>
+<!-- Rank #4: Sita Adhikari -->
+<div class="bg-white rounded-2xl p-3.5 border border-slate-100 shadow-sm relative overflow-hidden">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<!-- Avatar SA -->
+<div class="w-10 h-10 rounded-full bg-purple-100 text-purple-700 font-bold text-xs flex items-center justify-center border-2 border-white shadow-sm">
+                  SA
+                </div>
+<div>
+<h4 class="text-sm font-bold text-slate-900 leading-snug">Sita Adhikari</h4>
+<p class="text-[11px] text-slate-500 font-medium">Roll 11 • STU1145</p>
+</div>
+</div>
+<!-- Rank 4 Badge -->
+<div class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-semibold bg-slate-50 text-slate-600 border border-slate-200">
+                Rank #4
+              </div>
+</div>
+<!-- Marks & Grade Meta Row -->
+<div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
+<div class="flex items-center space-x-2">
+<span class="font-extrabold text-brand bg-brand-light px-2 py-0.5 rounded text-[11px]">Grade A</span>
+<span class="text-slate-500 font-semibold">82.0%</span>
+</div>
+<div class="text-right">
+<span class="font-bold text-slate-900">410</span>
+<span class="text-slate-400 font-normal text-[11px]">/500 Marks</span>
+</div>
+</div>
+</div>
+<!-- Rank #5: Nabin Rai -->
+<div class="bg-white rounded-2xl p-3.5 border border-slate-100 shadow-sm relative overflow-hidden">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<!-- Avatar NR -->
+<div class="w-10 h-10 rounded-full bg-amber-100 text-amber-800 font-bold text-xs flex items-center justify-center border-2 border-white shadow-sm">
+                  NR
+                </div>
+<div>
+<h4 class="text-sm font-bold text-slate-900 leading-snug">Nabin Rai</h4>
+<p class="text-[11px] text-slate-500 font-medium">Roll 22 • STU1094</p>
+</div>
+</div>
+<!-- Rank 5 Badge -->
+<div class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-semibold bg-slate-50 text-slate-600 border border-slate-200">
+                Rank #5
+              </div>
+</div>
+<!-- Marks & Grade Meta Row -->
+<div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
+<div class="flex items-center space-x-2">
+<span class="font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded text-[11px]">Grade B+</span>
+<span class="text-slate-500 font-semibold">74.6%</span>
+</div>
+<div class="text-right">
+<span class="font-bold text-slate-900">373</span>
+<span class="text-slate-400 font-normal text-[11px]">/500 Marks</span>
+</div>
+</div>
+</div>
+<!-- Rank #6: Bipin Gurung -->
+<div class="bg-white rounded-2xl p-3.5 border border-slate-100 shadow-sm relative overflow-hidden">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<!-- Avatar BG -->
+<div class="w-10 h-10 rounded-full bg-rose-100 text-rose-700 font-bold text-xs flex items-center justify-center border-2 border-white shadow-sm">
+                  BG
+                </div>
+<div>
+<h4 class="text-sm font-bold text-slate-900 leading-snug">Bipin Gurung</h4>
+<p class="text-[11px] text-slate-500 font-medium">Roll 09 • STU1067</p>
+</div>
+</div>
+<!-- Rank 6 Badge -->
+<div class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-semibold bg-slate-50 text-slate-600 border border-slate-200">
+                Rank #6
+              </div>
+</div>
+<!-- Marks & Grade Meta Row -->
+<div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs">
+<div class="flex items-center space-x-2">
+<span class="font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded text-[11px]">Grade B</span>
+<span class="text-slate-500 font-semibold">68.2%</span>
+</div>
+<div class="text-right">
+<span class="font-bold text-slate-900">341</span>
+<span class="text-slate-400 font-normal text-[11px]">/500 Marks</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: ResultsLedgerList -->
+<!-- BEGIN: BottomActionBanner -->
+<section class="pt-2" data-purpose="export-action-banner">
+<div class="bg-brand rounded-2xl p-4 text-white shadow-md flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-white flex-shrink-0">
+<!-- PDF Download Ledger Icon -->
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m.75 12l3 3m0 0l3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div>
+<h4 class="text-xs font-bold leading-tight">Consolidated Marksheet</h4>
+<p class="text-[11px] text-white/80 mt-0.5">Download full PDF Grade Ledger</p>
+</div>
+</div>
+<!-- Download Button -->
+<button class="px-3.5 py-2 bg-white text-brand font-bold text-xs rounded-xl shadow hover:bg-white/90 active:scale-95 transition flex-shrink-0" type="button">
+            Export PDF
+          </button>
+</div>
+</section>
+<!-- END: BottomActionBanner -->
+</main>
+<!-- iOS Home Bar Indicator -->
+<div class="w-full flex justify-center mt-4" data-purpose="ios-home-indicator">
+<div class="w-32 h-1 bg-slate-300 rounded-full"></div>
+</div>
+</div>
+<!-- END: MobileDeviceFrame -->
+</body></html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-primary-container": "#98edc6", "surface": "#faf8ff", "secondary-fixed": "#6ffbbe", "tertiary-fixed": "#ffddb8", "outline-variant": "#bec9c1", "surface-container-highest": "#dae2fd", "on-secondary-fixed-variant": "#005236", "error": "#ba1a1a", "on-surface": "#131b2e", "surface-container-high": "#e2e7ff", "outline": "#6f7a73", "on-error-container": "#93000a", "primary-container": "#0b6e4f", "primary-fixed": "#9ff4cc", "tertiary": "#684000", "on-background": "#131b2e", "on-error": "#ffffff", "surface-container-lowest": "#ffffff", "error-container": "#ffdad6", "surface-bright": "#faf8ff", "on-secondary-fixed": "#002113", "on-surface-variant": "#3f4943", "surface-variant": "#dae2fd", "inverse-primary": "#83d7b1", "secondary-fixed-dim": "#4edea3", "on-tertiary": "#ffffff", "primary-fixed-dim": "#83d7b1", "on-tertiary-fixed-variant": "#653e00", "on-primary": "#ffffff", "on-secondary-container": "#00714d", "on-primary-fixed": "#002115", "surface-container": "#eaedff", "tertiary-fixed-dim": "#ffb95f", "on-tertiary-container": "#ffd4a4", "surface-container-low": "#f2f3ff", "tertiary-container": "#885500", "on-tertiary-fixed": "#2a1700", "background": "#faf8ff", "surface-dim": "#d2d9f4", "on-primary-fixed-variant": "#005139", "on-secondary": "#ffffff", "surface-tint": "#056c4d", "secondary-container": "#6cf8bb", "inverse-on-surface": "#eef0ff", "inverse-surface": "#283044", "secondary": "#006c49", "primary": "#00543b" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-sm": "0.5rem", "space-md": "1rem", "space-lg": "1.5rem", "margin-md": "1.5rem", "gutter": "1rem", "space-xs": "0.25rem", "margin": "1rem", "space-xl": "2rem", "gutter-sm": "0.75rem" }, fontFamily: { "headline-lg-mobile": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "title-sm": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "display-lg": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"] }, fontSize: { "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }], "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }], "title-sm": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "600" }], "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "400" }], "title-md": ["16px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "600" }], "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }] } } } };</script><style>@layer base { html, body { width: 100vw; margin: 0; padding: 0; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.03)]"><div class="w-full flex items-center justify-between px-gutter pt-safe h-6 text-on-surface"><span class="font-label-sm text-label-sm font-semibold tracking-tight">9:41</span><div class="flex items-center gap-1.5 text-on-surface"><span class="material-symbols-outlined text-[16px] leading-none">signal_cellular_alt</span><span class="material-symbols-outlined text-[16px] leading-none">wifi</span><span class="material-symbols-outlined text-[18px] leading-none">battery_full</span></div></div><div class="h-16 px-gutter flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="Brand logo. - Primary color: #0b6e4f
+- Font: plusJakartaSans
+- Mode: light
+- Roundness: rounded-md
+" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UY5xhGFQeJY9cYdXh7xaUM-ranC2DUtvfKp6HupbVVeWnNhYkkxDyjaqitKWDrEdKNuyYoDU14CK4SbsMMxj-bMiPcQb9WTSuTgjsfqr1zhmOHJzUmUMyMSOUI1csW_yoPWSfxYtOVAPZYlb1GTmxzTwABUjyW-r4bWdT6D0i-Dc5H_X4pOlnNvkISTlgW-0nUBmrWaUX7xYOejjdIE2gG4a1l-xMMUHNOGLUxki6zo4knDO6akPn9fb8"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary tracking-tight">CloudsLMS</span><span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Home</span></div></div><div class="flex items-center gap-space-xs"><button aria-label="Notifications" class="w-11 h-11 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-22 pb-24 bg-surface"><div class="flex flex-col w-full px-gutter space-y-space-md">
+<!-- Top Header -->
+<div class="flex flex-col w-full pt-1">
+<div class="flex items-center justify-between gap-space-sm mb-1.5">
+<div class="flex items-center gap-space-sm min-w-0">
+<button aria-label="Go Back" class="w-10 h-10 -ml-1.5 rounded-full flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors shrink-0">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<div class="flex items-center gap-2 truncate">
+<h1 class="font-headline-md text-headline-md text-on-surface font-bold tracking-tight">Teachers</h1>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-fixed-variant font-label-sm text-label-sm font-semibold shrink-0">
+            48 Active
+          </span>
+</div>
+</div>
+<button class="flex items-center gap-1.5 px-3.5 py-2.5 rounded-full bg-primary text-on-primary font-label-lg text-label-lg shadow-sm active:scale-95 transition-all shrink-0">
+<span class="material-symbols-outlined text-[18px]">person_add</span>
+<span>+ Add Teacher</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant pl-9">
+      Manage faculty directory &amp; academic assignments
+    </p>
+</div>
+<!-- Search & Microphone Field -->
+<div class="relative w-full">
+<div class="flex items-center w-full h-12 px-4 rounded-full bg-surface-container-lowest shadow-[0_2px_12px_rgba(11,110,79,0.04)]">
+<span class="material-symbols-outlined text-outline text-[20px] mr-2.5 shrink-0">search</span>
+<input class="w-full bg-transparent border-none outline-none font-body-md text-body-md text-on-surface placeholder:text-outline" placeholder="Search teachers by name or department" type="text"/>
+<button aria-label="Voice Search" class="text-outline hover:text-primary transition-colors ml-2 shrink-0">
+<span class="material-symbols-outlined text-[20px]">mic</span>
+</button>
+</div>
+</div>
+<!-- Department Filter Chips (Horizontally Scrollable) -->
+<div class="-mx-gutter px-gutter overflow-x-auto no-scrollbar flex items-center gap-2 py-0.5">
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-primary text-on-primary font-label-sm text-label-sm font-semibold shadow-sm shrink-0">
+      All Departments (48)
+    </button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant hover:text-primary font-label-sm text-label-sm font-medium shrink-0">
+      Science (12)
+    </button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant hover:text-primary font-label-sm text-label-sm font-medium shrink-0">
+      Mathematics (8)
+    </button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant hover:text-primary font-label-sm text-label-sm font-medium shrink-0">
+      English (7)
+    </button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant hover:text-primary font-label-sm text-label-sm font-medium shrink-0">
+      Computer Science (6)
+    </button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant hover:text-primary font-label-sm text-label-sm font-medium shrink-0">
+      Humanities (9)
+    </button>
+<button class="whitespace-nowrap px-4 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant hover:text-primary font-label-sm text-label-sm font-medium shrink-0">
+      Social Studies (6)
+    </button>
+</div>
+<!-- Sub-bar: Counter & Sort Dropdown -->
+<div class="flex items-center justify-between pt-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold">
+      SHOWING 8 TEACHERS
+    </span>
+<button class="flex items-center gap-1 font-label-sm text-label-sm text-on-surface-variant hover:text-primary font-medium transition-colors">
+<span>Sort by: <strong class="text-on-surface font-semibold">Employee ID</strong></span>
+<span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+</div>
+<!-- Teachers Directory Cards List -->
+<div class="flex flex-col space-y-3">
+<!-- Teacher 1: Dr. Rameshwar Shrestha -->
+<div class="w-full bg-surface-container-lowest rounded-xl p-4 shadow-[0_4px_16px_-2px_rgba(11,110,79,0.05)] transition-all">
+<div class="flex items-start gap-3">
+<div class="relative shrink-0">
+<div class="w-12 h-12 rounded-full bg-primary-container/10 flex items-center justify-center text-primary font-headline-sm text-headline-sm font-bold">
+            RS
+          </div>
+<span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-secondary ring-2 ring-surface-container-lowest" title="Active on duty"></span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<h2 class="font-title-md text-title-md text-on-surface font-bold truncate">Dr. Rameshwar Shrestha</h2>
+<span class="inline-flex items-center px-2 py-0.5 rounded-md bg-surface-container-low text-primary font-label-sm text-label-sm font-semibold">
+              M.Sc. Physics
+            </span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant font-body-sm text-body-sm mt-0.5">
+<span class="material-symbols-outlined text-[15px] text-primary">menu_book</span>
+<span>Science • Senior HOD</span>
+</div>
+<div class="flex items-center gap-2 flex-wrap mt-2.5">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[13px]">badge</span> EMP2001
+            </span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[13px]">school</span> Grade 10-A, 12-Sci
+            </span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-fixed-variant font-label-sm text-label-sm font-medium">
+              Optimal: 22h/wk
+            </span>
+</div>
+</div>
+<button aria-label="More Options" class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface shrink-0 -mr-1">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Teacher 2: Sunita Joshi -->
+<div class="w-full bg-surface-container-lowest rounded-xl p-4 shadow-[0_4px_16px_-2px_rgba(11,110,79,0.05)] transition-all">
+<div class="flex items-start gap-3">
+<div class="relative shrink-0">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed/30 flex items-center justify-center text-tertiary font-headline-sm text-headline-sm font-bold">
+            SJ
+          </div>
+<span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-secondary ring-2 ring-surface-container-lowest"></span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<h2 class="font-title-md text-title-md text-on-surface font-bold truncate">Sunita Joshi</h2>
+<span class="inline-flex items-center px-2 py-0.5 rounded-md bg-surface-container-low text-primary font-label-sm text-label-sm font-semibold">
+              M.A. English Lit
+            </span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant font-body-sm text-body-sm mt-0.5">
+<span class="material-symbols-outlined text-[15px] text-primary">auto_stories</span>
+<span>English • Senior Faculty</span>
+</div>
+<div class="flex items-center gap-2 flex-wrap mt-2.5">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[13px]">badge</span> EMP2005
+            </span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[13px]">school</span> Grade 9-B, 10-A
+            </span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-fixed-variant font-label-sm text-label-sm font-medium">
+              20h/wk
+            </span>
+</div>
+</div>
+<button aria-label="More Options" class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface shrink-0 -mr-1">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Teacher 3: Er. Pradeep Sharma (With Active Popup Menu visible) -->
+<div class="relative w-full bg-surface-container-lowest rounded-xl p-4 shadow-[0_6px_20px_-2px_rgba(11,110,79,0.08)]">
+<div class="flex items-start gap-3">
+<div class="relative shrink-0">
+<div class="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-headline-sm text-headline-sm font-bold">
+            PS
+          </div>
+<span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-secondary ring-2 ring-surface-container-lowest"></span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<h2 class="font-title-md text-title-md text-on-surface font-bold truncate">Er. Pradeep Sharma</h2>
+<span class="inline-flex items-center px-2 py-0.5 rounded-md bg-surface-container-low text-primary font-label-sm text-label-sm font-semibold">
+              M.Tech / MCA
+            </span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant font-body-sm text-body-sm mt-0.5">
+<span class="material-symbols-outlined text-[15px] text-primary">terminal</span>
+<span>Computer Science • Department Lead</span>
+</div>
+<div class="flex items-center gap-2 flex-wrap mt-2.5">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[13px]">badge</span> EMP2012
+            </span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[13px]">school</span> Grade 11-Sci, 12-Sci
+            </span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-fixed-variant font-label-sm text-label-sm font-medium">
+              24h/wk
+            </span>
+</div>
+</div>
+<button aria-label="Menu Open" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary shrink-0 -mr-1">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<!-- Action Popover Menu (Tier 3 elevation style) -->
+<div class="absolute right-3 top-12 z-20 w-44 rounded-xl bg-surface-container-lowest p-1.5 shadow-[0_12px_28px_-4px_rgba(15,23,42,0.18)]">
+<button class="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left text-on-surface hover:bg-surface-container-low transition-colors font-body-sm text-body-sm font-medium">
+<span class="material-symbols-outlined text-[18px] text-primary">edit</span>
+<span>Edit Profile</span>
+</button>
+<button class="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left text-on-surface hover:bg-surface-container-low transition-colors font-body-sm text-body-sm font-medium">
+<span class="material-symbols-outlined text-[18px] text-secondary">calendar_clock</span>
+<span>Assign Schedule</span>
+</button>
+<div class="h-px bg-surface-container my-1"></div>
+<button class="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-left text-error hover:bg-error-container/20 transition-colors font-body-sm text-body-sm font-semibold">
+<span class="material-symbols-outlined text-[18px] text-error">person_off</span>
+<span>Deactivate</span>
+</button>
+</div>
+</div>
+<!-- Teacher 4: Prof. Aris Thorne -->
+<div class="w-full bg-surface-container-lowest rounded-xl p-4 shadow-[0_4px_16px_-2px_rgba(11,110,79,0.05)] transition-all">
+<div class="flex items-start gap-3">
+<div class="relative shrink-0">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center text-primary font-headline-sm text-headline-sm font-bold">
+            AT
+          </div>
+<span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-secondary ring-2 ring-surface-container-lowest"></span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<h2 class="font-title-md text-title-md text-on-surface font-bold truncate">Prof. Aris Thorne</h2>
+<span class="inline-flex items-center px-2 py-0.5 rounded-md bg-surface-container-low text-primary font-label-sm text-label-sm font-semibold">
+              Ph.D. Mathematics
+            </span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant font-body-sm text-body-sm mt-0.5">
+<span class="material-symbols-outlined text-[15px] text-primary">functions</span>
+<span>Mathematics • HOD</span>
+</div>
+<div class="flex items-center gap-2 flex-wrap mt-2.5">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[13px]">badge</span> EMP2018
+            </span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[13px]">school</span> Grade 10-A, 10-B
+            </span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-fixed-variant font-label-sm text-label-sm font-medium">
+              18h/wk
+            </span>
+</div>
+</div>
+<button aria-label="More Options" class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface shrink-0 -mr-1">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Teacher 5: Dr. Narayan Ray -->
+<div class="w-full bg-surface-container-lowest rounded-xl p-4 shadow-[0_4px_16px_-2px_rgba(11,110,79,0.05)] transition-all">
+<div class="flex items-start gap-3">
+<div class="relative shrink-0">
+<div class="w-12 h-12 rounded-full bg-secondary-container/60 flex items-center justify-center text-on-secondary-fixed-variant font-headline-sm text-headline-sm font-bold">
+            NR
+          </div>
+<span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-secondary ring-2 ring-surface-container-lowest"></span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<h2 class="font-title-md text-title-md text-on-surface font-bold truncate">Dr. Narayan Ray</h2>
+<span class="inline-flex items-center px-2 py-0.5 rounded-md bg-surface-container-low text-primary font-label-sm text-label-sm font-semibold">
+              Ph.D. Organic Chem
+            </span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant font-body-sm text-body-sm mt-0.5">
+<span class="material-symbols-outlined text-[15px] text-primary">science</span>
+<span>Science • Associate Prof.</span>
+</div>
+<div class="flex items-center gap-2 flex-wrap mt-2.5">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[13px]">badge</span> EMP2024
+            </span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[13px]">school</span> Grade 11-A, 12-B
+            </span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-fixed-variant font-label-sm text-label-sm font-medium">
+              Optimal: 21h/wk
+            </span>
+</div>
+</div>
+<button aria-label="More Options" class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface shrink-0 -mr-1">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Teacher 6: Manisha Karki -->
+<div class="w-full bg-surface-container-lowest rounded-xl p-4 shadow-[0_4px_16px_-2px_rgba(11,110,79,0.05)] transition-all">
+<div class="flex items-start gap-3">
+<div class="relative shrink-0">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed-dim/40 flex items-center justify-center text-tertiary-container font-headline-sm text-headline-sm font-bold">
+            MK
+          </div>
+<span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-secondary ring-2 ring-surface-container-lowest"></span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<h2 class="font-title-md text-title-md text-on-surface font-bold truncate">Manisha Karki</h2>
+<span class="inline-flex items-center px-2 py-0.5 rounded-md bg-surface-container-low text-primary font-label-sm text-label-sm font-semibold">
+              M.A. Sociology
+            </span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant font-body-sm text-body-sm mt-0.5">
+<span class="material-symbols-outlined text-[15px] text-primary">public</span>
+<span>Humanities • Lecturer</span>
+</div>
+<div class="flex items-center gap-2 flex-wrap mt-2.5">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[13px]">badge</span> EMP2031
+            </span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[13px]">school</span> Grade 8-A, 9-A
+            </span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-fixed-variant font-label-sm text-label-sm font-medium">
+              16h/wk
+            </span>
+</div>
+</div>
+<button aria-label="More Options" class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface shrink-0 -mr-1">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Teacher 7: Bikram Adhikari -->
+<div class="w-full bg-surface-container-lowest rounded-xl p-4 shadow-[0_4px_16px_-2px_rgba(11,110,79,0.05)] transition-all">
+<div class="flex items-start gap-3">
+<div class="relative shrink-0">
+<div class="w-12 h-12 rounded-full bg-primary-fixed-dim/50 flex items-center justify-center text-primary font-headline-sm text-headline-sm font-bold">
+            BA
+          </div>
+<span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-secondary ring-2 ring-surface-container-lowest"></span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<h2 class="font-title-md text-title-md text-on-surface font-bold truncate">Bikram Adhikari</h2>
+<span class="inline-flex items-center px-2 py-0.5 rounded-md bg-surface-container-low text-primary font-label-sm text-label-sm font-semibold">
+              M.Sc. Botany
+            </span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant font-body-sm text-body-sm mt-0.5">
+<span class="material-symbols-outlined text-[15px] text-primary">eco</span>
+<span>Science • Biology Faculty</span>
+</div>
+<div class="flex items-center gap-2 flex-wrap mt-2.5">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[13px]">badge</span> EMP2045
+            </span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[13px]">school</span> Grade 9-A, 10-B
+            </span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-fixed-variant font-label-sm text-label-sm font-medium">
+              19h/wk
+            </span>
+</div>
+</div>
+<button aria-label="More Options" class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface shrink-0 -mr-1">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Teacher 8: Sarita Dahal -->
+<div class="w-full bg-surface-container-lowest rounded-xl p-4 shadow-[0_4px_16px_-2px_rgba(11,110,79,0.05)] transition-all">
+<div class="flex items-start gap-3">
+<div class="relative shrink-0">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-primary font-headline-sm text-headline-sm font-bold">
+            SD
+          </div>
+<span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-secondary ring-2 ring-surface-container-lowest"></span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-1.5 flex-wrap">
+<h2 class="font-title-md text-title-md text-on-surface font-bold truncate">Sarita Dahal</h2>
+<span class="inline-flex items-center px-2 py-0.5 rounded-md bg-surface-container-low text-primary font-label-sm text-label-sm font-semibold">
+              M.Ed. Pure Math
+            </span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant font-body-sm text-body-sm mt-0.5">
+<span class="material-symbols-outlined text-[15px] text-primary">calculate</span>
+<span>Mathematics • Middle School Lead</span>
+</div>
+<div class="flex items-center gap-2 flex-wrap mt-2.5">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[13px]">badge</span> EMP2052
+            </span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[13px]">school</span> Grade 8-B, 9-B
+            </span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container/40 text-on-secondary-fixed-variant font-label-sm text-label-sm font-medium">
+              20h/wk
+            </span>
+</div>
+</div>
+<button aria-label="More Options" class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface shrink-0 -mr-1">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom Action Card: Faculty Timetable Sync -->
+<div class="w-full bg-surface-container-lowest rounded-2xl p-4 shadow-[0_4px_16px_-2px_rgba(11,110,79,0.06)] relative overflow-hidden">
+<div class="flex items-center justify-between gap-3">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-11 h-11 rounded-xl bg-primary-container/10 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[24px]">calendar_month</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md text-on-surface font-bold truncate">Faculty Timetable Sync</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Term II matrix active &amp; verified</span>
+</div>
+</div>
+<button class="flex items-center gap-1 px-3.5 py-2 rounded-full bg-secondary-container text-on-secondary-fixed-variant font-label-sm text-label-sm font-semibold shrink-0 hover:bg-secondary-fixed transition-colors">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+<span>Export Schedule</span>
+</button>
+</div>
+</div>
+</div></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_-4px_20px_-2px_rgba(11,110,79,0.06)]" data-active-classes="text-primary font-semibold"><div class="flex justify-around items-center h-16 px-gutter"><a aria-current="page" class="flex flex-col items-center justify-center min-w-[56px] h-12 transition-colors text-primary font-semibold" data-path="home" href="#"><span class="material-symbols-outlined text-[24px]">dashboard</span><span class="font-label-sm text-label-sm mt-0.5">Home</span></a><a class="flex flex-col items-center justify-center min-w-[56px] h-12 text-on-surface-variant transition-colors" data-path="attendance" href="#"><span class="material-symbols-outlined text-[24px]">fact_check</span><span class="font-label-sm text-label-sm mt-0.5">Attendance</span></a><a class="flex flex-col items-center justify-center min-w-[56px] h-12 text-on-surface-variant transition-colors" data-path="fees" href="#"><span class="material-symbols-outlined text-[24px]">payments</span><span class="font-label-sm text-label-sm mt-0.5">Fees</span></a><a class="flex flex-col items-center justify-center min-w-[56px] h-12 text-on-surface-variant transition-colors" data-path="more" href="#"><span class="material-symbols-outlined text-[24px]">grid_view</span><span class="font-label-sm text-label-sm mt-0.5">More</span></a></div></nav></body></html>

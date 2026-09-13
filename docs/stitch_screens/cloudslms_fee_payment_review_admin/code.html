@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-secondary-fixed": "#002113", "on-secondary-container": "#00714d", "error-container": "#ffdad6", "surface-dim": "#d2d9f4", "on-tertiary-fixed-variant": "#653e00", "surface-tint": "#056c4d", "on-surface": "#131b2e", "tertiary-fixed": "#ffddb8", "inverse-on-surface": "#eef0ff", "on-primary-container": "#98edc6", "surface-bright": "#faf8ff", "background": "#faf8ff", "surface": "#faf8ff", "secondary-fixed-dim": "#4edea3", "outline-variant": "#bec9c1", "inverse-primary": "#83d7b1", "on-tertiary-fixed": "#2a1700", "on-primary-fixed-variant": "#005139", "secondary": "#006c49", "on-secondary-fixed-variant": "#005236", "tertiary": "#684000", "primary-fixed-dim": "#83d7b1", "secondary-container": "#6cf8bb", "on-tertiary-container": "#ffd4a4", "primary-container": "#0b6e4f", "on-error": "#ffffff", "surface-container-low": "#f2f3ff", "tertiary-container": "#885500", "surface-container-high": "#e2e7ff", "on-primary": "#ffffff", "primary": "#00543b", "on-background": "#131b2e", "on-primary-fixed": "#002115", "tertiary-fixed-dim": "#ffb95f", "on-surface-variant": "#3f4943", "on-secondary": "#ffffff", "primary-fixed": "#9ff4cc", "secondary-fixed": "#6ffbbe", "surface-variant": "#dae2fd", "on-tertiary": "#ffffff", "surface-container-lowest": "#ffffff", "surface-container-highest": "#dae2fd", "inverse-surface": "#283044", "outline": "#6f7a73", "surface-container": "#eaedff", "on-error-container": "#93000a", "error": "#ba1a1a" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-lg": "1.5rem", "space-sm": "0.5rem", "space-md": "1rem", "space-xs": "0.25rem", "margin-md": "1.5rem", "margin": "1rem", "space-xl": "2rem", "gutter": "1rem", "gutter-sm": "0.75rem" }, fontFamily: { "body-sm": ["Plus Jakarta Sans"], "display-lg": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "title-sm": ["Plus Jakarta Sans"] }, fontSize: { "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "400" }], "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "title-md": ["16px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "600" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }], "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }], "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "title-sm": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "600" }] } } } }</script><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style></head><body class="bg-surface text-on-surface font-body-md text-body-md flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-gutter flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="Brand logo. - Primary color: #0b6e4f
+- Font: plusJakartaSans
+- Mode: light
+- Roundness: rounded-md
+" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VyqBli3HMbhQU8BdAyKPo1qki4g1m66dEwutS9-rdlq-HcUaDtHUzAIevM85Sd8L9bU8EVek0bk26rpfHike25tYcJq6HpuJ-XtpVyrBQT7H2ZVOt40y9yVdE9bvQHBDSFs6aTNF8EG8x6Vhb_W-Ae4DbpRY-gK_s0_JesSWYcA5oylh6U-KescrDrvS5um_3PKkw1lh0rw_BS7x1gu4HqvpAcCsdpb6x0OcV9cgZcZNvgm7GNb2lY0WE"/><div class="flex items-center gap-space-xs"><span class="font-title-md text-title-md text-primary tracking-tight">CloudsLMS</span><span class="bg-secondary-container text-on-secondary-fixed font-label-sm text-label-sm px-space-xs py-0.5 rounded-full">Admin</span></div></div><div class="flex items-center gap-space-xs"><button aria-label="Notifications" class="w-11 h-11 min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-16 pb-20 bg-surface flex-1"><div class="flex flex-col w-full">
+<!-- Screen Sub-Header / Back & Title Section -->
+<div class="flex items-center justify-between px-gutter py-space-sm bg-surface-container-low">
+<div class="flex items-center gap-space-sm">
+<button aria-label="Go back" class="w-10 h-10 min-w-[40px] min-h-[40px] flex items-center justify-center rounded-full bg-surface-container-highest text-on-surface hover:bg-surface-variant transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</button>
+<div class="flex flex-col">
+<h1 class="font-headline-sm text-headline-sm text-on-surface tracking-tight">Fee Payment Review</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Admin Verification Queue</p>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<button aria-label="Filter channels" class="w-10 h-10 min-w-[40px] min-h-[40px] flex items-center justify-center rounded-full bg-surface-container text-primary hover:bg-surface-container-high transition-colors" id="channelFilterTrigger" type="button">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+</button>
+<span class="inline-flex items-center justify-center w-2 h-2 rounded-full bg-tertiary-container animate-pulse"></span>
+</div>
+</div>
+<!-- Horizontal Scrollable Filter Chips -->
+<div class="w-full overflow-x-auto py-space-sm px-gutter flex gap-space-xs items-center no-scrollbar">
+<button class="filter-chip whitespace-nowrap px-space-md py-1.5 rounded-full font-label-md text-label-md bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-all" type="button">
+      All (28)
+    </button>
+<button class="filter-chip active-chip whitespace-nowrap px-space-md py-1.5 rounded-full font-label-md text-label-md bg-primary text-on-primary shadow-sm flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[14px]">pending_actions</span>
+      Pending Review (14)
+    </button>
+<button class="filter-chip whitespace-nowrap px-space-md py-1.5 rounded-full font-label-md text-label-md bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-all" type="button">
+      Verified (11)
+    </button>
+<button class="filter-chip whitespace-nowrap px-space-md py-1.5 rounded-full font-label-md text-label-md bg-surface-container-low text-on-surface-variant hover:bg-surface-container transition-all" type="button">
+      Rejected (3)
+    </button>
+</div>
+<!-- Dynamic Summary Card -->
+<div class="px-gutter pt-space-xs pb-space-sm">
+<div class="relative overflow-hidden rounded-xl bg-gradient-to-br from-primary-container via-primary to-primary text-on-primary p-space-md shadow-md">
+<div class="absolute -right-6 -bottom-6 w-28 h-28 rounded-full bg-secondary-container/10 pointer-events-none blur-xl"></div>
+<div class="relative z-10 flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-secondary-container text-[18px]">account_balance_wallet</span>
+<span class="font-label-sm text-label-sm text-on-primary-container uppercase tracking-wider">Awaiting Verification</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-lowest/15 font-label-sm text-label-sm text-on-primary backdrop-blur-sm">
+            14 Unverified
+          </span>
+</div>
+<div class="flex items-baseline justify-between pt-1">
+<div>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-on-primary font-bold tracking-tight">
+              Rs. 78,500
+            </div>
+<p class="font-body-sm text-body-sm text-on-primary-container pt-0.5">
+              Across 14 digital transactions &amp; wire slips
+            </p>
+</div>
+<button class="flex items-center gap-1 px-space-sm py-1.5 rounded-full bg-surface-container-lowest/20 hover:bg-surface-container-lowest/30 text-on-primary font-label-sm text-label-sm transition-colors" id="channelFilterBtn" type="button">
+<span class="material-symbols-outlined text-[15px]">filter_list</span>
+<span>Channel</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Channel Pill Filter Drawer / Sub-bar (Collapsible via JS) -->
+<div class="hidden px-gutter pb-space-sm" id="channelFilterBar">
+<div class="p-space-sm bg-surface-container rounded-xl flex items-center gap-1.5 overflow-x-auto text-on-surface">
+<span class="font-label-sm text-label-sm text-on-surface-variant pl-1">Channel:</span>
+<button class="px-2.5 py-1 rounded-full bg-surface-container-lowest text-primary font-label-sm text-label-sm shadow-sm whitespace-nowrap">All Channels</button>
+<button class="px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm whitespace-nowrap">eSewa</button>
+<button class="px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm whitespace-nowrap">ConnectIPS</button>
+<button class="px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm whitespace-nowrap">Khalti</button>
+<button class="px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm whitespace-nowrap">Bank Slip</button>
+</div>
+</div>
+<!-- Main Verification Queue Cards List -->
+<div class="flex flex-col gap-space-md px-gutter pb-6">
+<!-- Card 1: Amy Patel -->
+<div class="payment-card rounded-xl bg-surface-container-lowest shadow-sm p-space-md flex flex-col gap-space-sm transition-all" id="card-txn-1">
+<!-- Top Row: Student & Status -->
+<div class="flex items-start justify-between gap-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-primary flex items-center justify-center font-title-md text-title-md font-bold">
+            AP
+          </div>
+<div>
+<h2 class="font-title-md text-title-md text-on-surface font-bold">Amy Patel</h2>
+<div class="flex items-center gap-1.5 font-label-sm text-label-sm text-on-surface-variant">
+<span>Class 10-A</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span>Guardian: Rajesh Patel</span>
+</div>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-ping"></span>
+          Pending Review
+        </span>
+</div>
+<!-- Mid Details: Fee breakdown & Payment info -->
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Tuition Fee — Term 2</span>
+<span class="font-title-md text-title-md text-primary font-bold">Rs. 5,000</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant pt-0.5">
+<div class="flex items-center gap-1">
+<span class="px-2 py-0.5 rounded-md bg-secondary-container text-on-secondary-fixed font-label-sm text-label-sm font-semibold">eSewa</span>
+<span class="font-label-sm text-label-sm font-mono text-on-surface">TXN-2026-98214</span>
+</div>
+<span class="font-label-sm text-label-sm">Today, 09:15 AM</span>
+</div>
+</div>
+<!-- Receipt Slip Preview Tile -->
+<div class="flex items-center justify-between bg-surface-container rounded-lg p-space-xs pr-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="relative w-12 h-12 rounded-md overflow-hidden flex-shrink-0 bg-surface-container-high cursor-pointer receipt-thumb-btn" data-receipt-title="eSewa Digital Transfer Slip #TXN-2026-98214" data-student="Amy Patel">
+<img class="w-full h-full object-cover" data-alt="A clean top-down view of a mobile banking payment receipt screen from a digital wallet showing a green successful checkmark and payment amount in a modern fintech interface with mint green accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuANtXkq7npKKj1H-GJsOAQ0jqWgZe58qg0-WXkdMvwGUwKjekjjsmSsGS7KBRDFARShqJLGxPRhD8G12deuo4LzX6qn3t7v6wWXrfRk6kQVTv8Z6R3HiKIA4DaZyQkhyNY0AsnPeETTaAnqlfsieAB8OikKg6jxtJZDI1QMak-xwbEedO9mkPLSSLZvrKZzEG7ZFxGuWg_SXNeL2N6jIGXZmsa64Tz0Cu1H4cm22ADElhDq67w9GLug1A"/>
+<div class="absolute inset-0 bg-on-surface/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-surface-bright text-[16px]">zoom_in</span>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Payment Voucher Slip</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Receipt Date: Oct 24, 2024</span>
+</div>
+</div>
+<button aria-label="View full receipt" class="w-8 h-8 rounded-full bg-surface-container-highest text-primary flex items-center justify-center hover:bg-surface-variant receipt-thumb-btn" data-receipt-title="eSewa Digital Transfer Slip #TXN-2026-98214" data-student="Amy Patel" type="button">
+<span class="material-symbols-outlined text-[18px]">fullscreen</span>
+</button>
+</div>
+<!-- Bottom Actions -->
+<div class="grid grid-cols-2 gap-space-sm pt-1">
+<button class="reject-btn flex items-center justify-center gap-1.5 py-2.5 px-space-md rounded-full bg-error-container text-on-error-container hover:bg-error/20 font-label-lg text-label-lg transition-transform active:scale-95" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+<span>Reject</span>
+</button>
+<button class="verify-btn flex items-center justify-center gap-1.5 py-2.5 px-space-md rounded-full bg-primary text-on-primary hover:bg-primary-container font-label-lg text-label-lg shadow-sm transition-transform active:scale-95" type="button">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>Verify</span>
+</button>
+</div>
+</div>
+<!-- Card 2: Rohan Shrestha -->
+<div class="payment-card rounded-xl bg-surface-container-lowest shadow-sm p-space-md flex flex-col gap-space-sm transition-all" id="card-txn-2">
+<!-- Top Row: Student & Status -->
+<div class="flex items-start justify-between gap-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-primary flex items-center justify-center font-title-md text-title-md font-bold">
+            RS
+          </div>
+<div>
+<h2 class="font-title-md text-title-md text-on-surface font-bold">Rohan Shrestha</h2>
+<div class="flex items-center gap-1.5 font-label-sm text-label-sm text-on-surface-variant">
+<span>Class 9-B</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span>Guardian: Prakash Shrestha</span>
+</div>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+          Pending Review
+        </span>
+</div>
+<!-- Mid Details -->
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Annual Examination Fee</span>
+<span class="font-title-md text-title-md text-primary font-bold">Rs. 15,000</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant pt-0.5">
+<div class="flex items-center gap-1">
+<span class="px-2 py-0.5 rounded-md bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-semibold">ConnectIPS</span>
+<span class="font-label-sm text-label-sm font-mono text-on-surface">IPS-8821034</span>
+</div>
+<span class="font-label-sm text-label-sm">Yesterday, 4:40 PM</span>
+</div>
+</div>
+<!-- Receipt Slip Preview Tile -->
+<div class="flex items-center justify-between bg-surface-container rounded-lg p-space-xs pr-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="relative w-12 h-12 rounded-md overflow-hidden flex-shrink-0 bg-surface-container-high cursor-pointer receipt-thumb-btn" data-receipt-title="ConnectIPS Settlement Slip #IPS-8821034" data-student="Rohan Shrestha">
+<img class="w-full h-full object-cover" data-alt="A photo of a crisp printed bank transfer advice slip stamped with an official violet round bank seal and signed teller confirmation on white paper." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtD8iLISO7W_rAfUlXgV0ZFAhimpNmv0p3ePxlda0Dyu3VUvoRTx0UViaf4JUdZSHtKB89WG2MRiTcXYyjwF1p6Pe7ngRKjZmhedujq0utOAC_ziQi0ry4Lv0c-CbIgq0obaV_SFGCT-Q5cCIE2dJNi_zJ-Abppb-YvtzjkBlgg2pvMvTCvDyhETC93qGGezLsyPpLafbybRFV_2M6M50pydntNHNL1uC5m9RrlQqh5fnjqfga0WUfsA"/>
+<div class="absolute inset-0 bg-on-surface/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-surface-bright text-[16px]">zoom_in</span>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Bank Counter Slip</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Receipt Date: Oct 23, 2024</span>
+</div>
+</div>
+<button aria-label="View full receipt" class="w-8 h-8 rounded-full bg-surface-container-highest text-primary flex items-center justify-center hover:bg-surface-variant receipt-thumb-btn" data-receipt-title="ConnectIPS Settlement Slip #IPS-8821034" data-student="Rohan Shrestha" type="button">
+<span class="material-symbols-outlined text-[18px]">fullscreen</span>
+</button>
+</div>
+<!-- Bottom Actions -->
+<div class="grid grid-cols-2 gap-space-sm pt-1">
+<button class="reject-btn flex items-center justify-center gap-1.5 py-2.5 px-space-md rounded-full bg-error-container text-on-error-container hover:bg-error/20 font-label-lg text-label-lg transition-transform active:scale-95" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+<span>Reject</span>
+</button>
+<button class="verify-btn flex items-center justify-center gap-1.5 py-2.5 px-space-md rounded-full bg-primary text-on-primary hover:bg-primary-container font-label-lg text-label-lg shadow-sm transition-transform active:scale-95" type="button">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>Verify</span>
+</button>
+</div>
+</div>
+<!-- Card 3: Bina Karki -->
+<div class="payment-card rounded-xl bg-surface-container-lowest shadow-sm p-space-md flex flex-col gap-space-sm transition-all" id="card-txn-3">
+<!-- Top Row -->
+<div class="flex items-start justify-between gap-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-primary flex items-center justify-center font-title-md text-title-md font-bold">
+            BK
+          </div>
+<div>
+<h2 class="font-title-md text-title-md text-on-surface font-bold">Bina Karki</h2>
+<div class="flex items-center gap-1.5 font-label-sm text-label-sm text-on-surface-variant">
+<span>Class 8-C</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span>Guardian: Maya Karki</span>
+</div>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+          Pending Review
+        </span>
+</div>
+<!-- Mid Details -->
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Science Lab &amp; Practical Fee</span>
+<span class="font-title-md text-title-md text-primary font-bold">Rs. 3,500</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant pt-0.5">
+<div class="flex items-center gap-1">
+<span class="px-2 py-0.5 rounded-md bg-tertiary-fixed-dim text-on-tertiary-fixed font-label-sm text-label-sm font-semibold">Khalti</span>
+<span class="font-label-sm text-label-sm font-mono text-on-surface">KHL-449102</span>
+</div>
+<span class="font-label-sm text-label-sm">Oct 23, 11:20 AM</span>
+</div>
+</div>
+<!-- Receipt Preview Tile -->
+<div class="flex items-center justify-between bg-surface-container rounded-lg p-space-xs pr-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="relative w-12 h-12 rounded-md overflow-hidden flex-shrink-0 bg-surface-container-high cursor-pointer receipt-thumb-btn" data-receipt-title="Khalti Wallet Success #KHL-449102" data-student="Bina Karki">
+<img class="w-full h-full object-cover" data-alt="A smartphone screen displaying a digital transaction receipt from an e-wallet with purple and emerald highlights showing verified payment details and stamp." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfneX23EuPa53-K2F1ZqRhz7EBmiXel7zQ9SxpePqmumN2SsBFewce8UUfvJ4hu2NT5nRpENAZ66snRkOGwrLnDfdOWhv9GVCof081szj2FXH23d2GugrJvZLklUi26lWMsqHF4fx7sp4y-Cw8TH0EQBT0oFero25Nmf1rXKEX0tlGnpUVmP3A3WwbUpoWOraz1BWgfR20jdfAIFLdvzQZdvPN8zzZNBMq3QSN8Ba-laM6Tgrs9XzPSw"/>
+<div class="absolute inset-0 bg-on-surface/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-surface-bright text-[16px]">zoom_in</span>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Khalti Digital Receipt</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Receipt Date: Oct 23, 2024</span>
+</div>
+</div>
+<button aria-label="View full receipt" class="w-8 h-8 rounded-full bg-surface-container-highest text-primary flex items-center justify-center hover:bg-surface-variant receipt-thumb-btn" data-receipt-title="Khalti Wallet Success #KHL-449102" data-student="Bina Karki" type="button">
+<span class="material-symbols-outlined text-[18px]">fullscreen</span>
+</button>
+</div>
+<!-- Bottom Actions -->
+<div class="grid grid-cols-2 gap-space-sm pt-1">
+<button class="reject-btn flex items-center justify-center gap-1.5 py-2.5 px-space-md rounded-full bg-error-container text-on-error-container hover:bg-error/20 font-label-lg text-label-lg transition-transform active:scale-95" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+<span>Reject</span>
+</button>
+<button class="verify-btn flex items-center justify-center gap-1.5 py-2.5 px-space-md rounded-full bg-primary text-on-primary hover:bg-primary-container font-label-lg text-label-lg shadow-sm transition-transform active:scale-95" type="button">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>Verify</span>
+</button>
+</div>
+</div>
+<!-- Card 4: Aarav Gautam -->
+<div class="payment-card rounded-xl bg-surface-container-lowest shadow-sm p-space-md flex flex-col gap-space-sm transition-all" id="card-txn-4">
+<!-- Top Row -->
+<div class="flex items-start justify-between gap-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-surface-container-high text-primary flex items-center justify-center font-title-md text-title-md font-bold">
+            AG
+          </div>
+<div>
+<h2 class="font-title-md text-title-md text-on-surface font-bold">Aarav Gautam</h2>
+<div class="flex items-center gap-1.5 font-label-sm text-label-sm text-on-surface-variant">
+<span>Class 7-A</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span>Guardian: Sunita Gautam</span>
+</div>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+          Pending Review
+        </span>
+</div>
+<!-- Mid Details -->
+<div class="bg-surface-container-low rounded-lg p-space-sm flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Bus Transportation (Q2)</span>
+<span class="font-title-md text-title-md text-primary font-bold">Rs. 4,200</span>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant pt-0.5">
+<div class="flex items-center gap-1">
+<span class="px-2 py-0.5 rounded-md bg-surface-container-highest text-on-surface font-label-sm text-label-sm font-semibold">Bank Wire Deposit</span>
+<span class="font-label-sm text-label-sm font-mono text-on-surface">NIBL-9921</span>
+</div>
+<span class="font-label-sm text-label-sm">Oct 22, 02:15 PM</span>
+</div>
+</div>
+<!-- Receipt Preview Tile -->
+<div class="flex items-center justify-between bg-surface-container rounded-lg p-space-xs pr-space-sm">
+<div class="flex items-center gap-space-sm">
+<div class="relative w-12 h-12 rounded-md overflow-hidden flex-shrink-0 bg-surface-container-high cursor-pointer receipt-thumb-btn" data-receipt-title="NIBL Bank Wire Slip #NIBL-9921" data-student="Aarav Gautam">
+<img class="w-full h-full object-cover" data-alt="A clearly scanned bank deposit voucher with Nepal Investment Bank logo showing student roll number and stamped with bank cashier verification in high resolution." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDmEEZls50nqNnQWIjnIOv_AzLC8BpVod6DBt0-t59tQFUi3z3fWT-9g_yRXj-7I1GE4T44PvR-2zQmib4PUA36gTDbFh5z2l2FwnmMkZPkjto4755KU5n4UrGPSL7BiwSHXoVz0bKDkCWDwioTSKa4ZBx4mWfjcrZZl58uAs-FSJ_3z4j_Db_hsQMzb_GK-rPOEs2X4RnvLnrIZHciRcWnVX_eJB83iWz3Tk9WxmQFA_qYqSVlgBrtA"/>
+<div class="absolute inset-0 bg-on-surface/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-surface-bright text-[16px]">zoom_in</span>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Bank Cash Deposit Slip</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Receipt Date: Oct 22, 2024</span>
+</div>
+</div>
+<button aria-label="View full receipt" class="w-8 h-8 rounded-full bg-surface-container-highest text-primary flex items-center justify-center hover:bg-surface-variant receipt-thumb-btn" data-receipt-title="NIBL Bank Wire Slip #NIBL-9921" data-student="Aarav Gautam" type="button">
+<span class="material-symbols-outlined text-[18px]">fullscreen</span>
+</button>
+</div>
+<!-- Bottom Actions -->
+<div class="grid grid-cols-2 gap-space-sm pt-1">
+<button class="reject-btn flex items-center justify-center gap-1.5 py-2.5 px-space-md rounded-full bg-error-container text-on-error-container hover:bg-error/20 font-label-lg text-label-lg transition-transform active:scale-95" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+<span>Reject</span>
+</button>
+<button class="verify-btn flex items-center justify-center gap-1.5 py-2.5 px-space-md rounded-full bg-primary text-on-primary hover:bg-primary-container font-label-lg text-label-lg shadow-sm transition-transform active:scale-95" type="button">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>Verify</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Fullscreen Modal / Drawer for Receipt Inspection -->
+<div class="fixed inset-0 z-50 flex flex-col justify-end bg-inverse-surface/60 backdrop-blur-sm transition-opacity opacity-0 pointer-events-none duration-300" id="receiptModal">
+<div class="w-full max-h-[85vh] bg-surface-container-lowest rounded-t-3xl p-space-md flex flex-col gap-space-md overflow-hidden transform translate-y-full transition-transform duration-300 shadow-2xl">
+<!-- Modal Top Bar -->
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-title-md text-title-md text-on-surface font-bold" id="modalReceiptStudent">Amy Patel</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant font-mono" id="modalReceiptTitle">TXN-2026-98214</span>
+</div>
+<button aria-label="Close image preview" class="w-9 h-9 flex items-center justify-center rounded-full bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors" id="closeReceiptModal" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Receipt Large Container -->
+<div class="relative w-full h-80 rounded-xl overflow-hidden bg-surface-container flex items-center justify-center">
+<img class="w-full h-full object-contain" data-alt="High quality detailed inspection shot of an official tuition receipt with student reference details, school stamp, payment breakdown, and authentication bar." id="modalReceiptImg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCD8EfgVpkA1vb5CZUUJMTUo6uFpEPAEb0iQ8XlMPWcdUiAzG2u7mzsHIBj-TR_IwAPghI7-lvSbB-AuVQz8A3s_FI5F4ziCT90FL95xwSFQpqE_o80MXR3e4jHdmi1PEGUdySyMaXrLclRKIX8XX5fEMccnDd5qQR3ivPlSX_GQKyL7M90H_oAB0itL5_hUAhDWfrUTb_nQdjQE4Qp42zllbvp9kI-eysoouJav0Zoy-tosIrJ6YMfkg"/>
+</div>
+<!-- Modal Quick Footer Actions -->
+<div class="flex items-center justify-between pt-1 pb-safe">
+<div class="flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">verified_user</span>
+<span>Bank Hash Certified</span>
+</div>
+<div class="flex gap-2">
+<button class="px-space-lg py-2.5 rounded-full bg-primary text-on-primary font-label-lg text-label-lg flex items-center gap-1.5 shadow-sm" id="modalVerifyAction" type="button">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+            Verify Slip
+          </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Toast Notification Feedback -->
+<div class="fixed top-20 left-1/2 -translate-x-1/2 z-50 transform -translate-y-8 opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-2 px-4 py-2.5 rounded-full bg-inverse-surface text-inverse-on-surface font-label-md text-label-md shadow-lg" id="toastNotification">
+<span class="material-symbols-outlined text-secondary-fixed text-[18px]" id="toastIcon">check</span>
+<span id="toastMessage">Payment verified successfully!</span>
+</div>
+</div>
+<script>
+  // Setup interactive behaviors
+  (function() {
+    // 1. Highlight "Fees" icon on bottom bar if found in document
+    const feesLink = document.querySelector('nav a[data-path="fees"]');
+    if (feesLink) {
+      feesLink.classList.remove('text-on-surface-variant');
+      feesLink.classList.add('text-primary');
+      const icon = feesLink.querySelector('.material-symbols-outlined');
+      if (icon) {
+        icon.style.fontVariationSettings = "'FILL' 1";
+      }
+    }
+
+    // 2. Channel Filter Toggle
+    const channelFilterTrigger = document.getElementById('channelFilterTrigger');
+    const channelFilterBtn = document.getElementById('channelFilterBtn');
+    const channelFilterBar = document.getElementById('channelFilterBar');
+
+    function toggleChannelFilter() {
+      if (channelFilterBar) {
+        channelFilterBar.classList.toggle('hidden');
+      }
+    }
+
+    if (channelFilterTrigger) channelFilterTrigger.addEventListener('click', toggleChannelFilter);
+    if (channelFilterBtn) channelFilterBtn.addEventListener('click', toggleChannelFilter);
+
+    // 3. Filter Chips Visual Interaction
+    const filterChips = document.querySelectorAll('.filter-chip');
+    filterChips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        filterChips.forEach(c => {
+          c.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+          c.classList.add('bg-surface-container-low', 'text-on-surface-variant');
+        });
+        chip.classList.remove('bg-surface-container-low', 'text-on-surface-variant');
+        chip.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+        showToast('Viewing ' + chip.textContent.trim());
+      });
+    });
+
+    // 4. Modal Interactions for Receipt Zooming
+    const receiptModal = document.getElementById('receiptModal');
+    const modalContent = receiptModal ? receiptModal.firstElementChild : null;
+    const closeReceiptModal = document.getElementById('closeReceiptModal');
+    const modalStudent = document.getElementById('modalReceiptStudent');
+    const modalTitle = document.getElementById('modalReceiptTitle');
+    const modalVerifyAction = document.getElementById('modalVerifyAction');
+
+    function openModal(student, title) {
+      if (!receiptModal || !modalContent) return;
+      if (modalStudent) modalStudent.textContent = student || 'Payment Receipt';
+      if (modalTitle) modalTitle.textContent = title || 'Verification Details';
+      receiptModal.classList.remove('opacity-0', 'pointer-events-none');
+      receiptModal.classList.add('opacity-100');
+      modalContent.classList.remove('translate-y-full');
+      modalContent.classList.add('translate-y-0');
+    }
+
+    function closeModal() {
+      if (!receiptModal || !modalContent) return;
+      receiptModal.classList.add('opacity-0', 'pointer-events-none');
+      receiptModal.classList.remove('opacity-100');
+      modalContent.classList.add('translate-y-full');
+      modalContent.classList.remove('translate-y-0');
+    }
+
+    document.querySelectorAll('.receipt-thumb-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const student = btn.getAttribute('data-student') || 'Student';
+        const title = btn.getAttribute('data-receipt-title') || 'Payment Receipt';
+        openModal(student, title);
+      });
+    });
+
+    if (closeReceiptModal) closeReceiptModal.addEventListener('click', closeModal);
+    if (receiptModal) {
+      receiptModal.addEventListener('click', (e) => {
+        if (e.target === receiptModal) closeModal();
+      });
+    }
+
+    // 5. Verification & Rejection Actions with Micro-delight
+    const toast = document.getElementById('toastNotification');
+    const toastMsg = document.getElementById('toastMessage');
+    const toastIcon = document.getElementById('toastIcon');
+    let toastTimeout = null;
+
+    function showToast(message, iconName = 'check_circle') {
+      if (!toast) return;
+      if (toastMsg) toastMsg.textContent = message;
+      if (toastIcon) toastIcon.textContent = iconName;
+      toast.classList.remove('opacity-0', '-translate-y-8', 'pointer-events-none');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('opacity-0', '-translate-y-8', 'pointer-events-none');
+        toast.classList.remove('opacity-100', 'translate-y-0');
+      }, 2600);
+    }
+
+    document.querySelectorAll('.verify-btn').forEach(button => {
+      button.addEventListener('click', (e) => {
+        const card = e.target.closest('.payment-card');
+        if (card) {
+          const student = card.querySelector('h2') ? card.querySelector('h2').innerText : 'Payment';
+          card.style.opacity = '0.3';
+          card.style.transform = 'scale(0.97)';
+          setTimeout(() => {
+            card.remove();
+            showToast(`${student}'s fee of was verified!`, 'verified');
+          }, 250);
+        }
+      });
+    });
+
+    document.querySelectorAll('.reject-btn').forEach(button => {
+      button.addEventListener('click', (e) => {
+        const card = e.target.closest('.payment-card');
+        if (card) {
+          const student = card.querySelector('h2') ? card.querySelector('h2').innerText : 'Payment';
+          card.style.opacity = '0.3';
+          card.style.transform = 'scale(0.97)';
+          setTimeout(() => {
+            card.remove();
+            showToast(`${student}'s submission rejected for review`, 'info');
+          }, 250);
+        }
+      });
+    });
+
+    if (modalVerifyAction) {
+      modalVerifyAction.addEventListener('click', () => {
+        closeModal();
+        showToast('Receipt slip confirmed and verified!', 'task_alt');
+      });
+    }
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/85 backdrop-blur-xl shadow-[0_-2px_12px_rgba(11,110,79,0.06)]" data-active-classes="text-primary font-label-lg"><div class="flex justify-around items-center h-16 px-gutter-sm"><a class="flex flex-col items-center justify-center gap-0.5 w-16 h-12 min-w-[44px] min-h-[44px] text-on-surface-variant transition-colors" data-path="home" href="#"><span class="material-symbols-outlined text-[22px]">dashboard</span><span class="font-label-sm text-label-sm">Home</span></a><a class="flex flex-col items-center justify-center gap-0.5 w-16 h-12 min-w-[44px] min-h-[44px] text-on-surface-variant transition-colors" data-path="attendance" href="#"><span class="material-symbols-outlined text-[22px]">fact_check</span><span class="font-label-sm text-label-sm">Attendance</span></a><a aria-current="page" class="flex flex-col items-center justify-center gap-0.5 w-16 h-12 min-w-[44px] min-h-[44px] transition-colors text-primary font-label-lg" data-path="fees" href="#"><span class="material-symbols-outlined text-[22px]">payments</span><span class="font-label-sm text-label-sm">Fees</span></a><a class="flex flex-col items-center justify-center gap-0.5 w-16 h-12 min-w-[44px] min-h-[44px] text-on-surface-variant transition-colors" data-path="more" href="#"><span class="material-symbols-outlined text-[22px]">menu</span><span class="font-label-sm text-label-sm">More</span></a></div></nav></body></html>

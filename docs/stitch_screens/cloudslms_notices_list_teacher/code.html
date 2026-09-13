@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "on-secondary-fixed": "#002113", "primary": "#00543b", "background": "#faf8ff", "primary-fixed-dim": "#83d7b1", "error": "#ba1a1a", "on-secondary": "#ffffff", "primary-fixed": "#9ff4cc", "on-surface-variant": "#3f4943", "surface-tint": "#056c4d", "inverse-surface": "#283044", "surface-container-high": "#e2e7ff", "on-background": "#131b2e", "on-tertiary-fixed": "#2a1700", "on-secondary-fixed-variant": "#005236", "tertiary-container": "#885500", "tertiary-fixed-dim": "#ffb95f", "surface-container": "#eaedff", "error-container": "#ffdad6", "surface-variant": "#dae2fd", "secondary": "#006c49", "inverse-primary": "#83d7b1", "tertiary-fixed": "#ffddb8", "on-error": "#ffffff", "inverse-on-surface": "#eef0ff", "on-primary": "#ffffff", "surface-container-highest": "#dae2fd", "tertiary": "#684000", "on-primary-fixed": "#002115", "on-surface": "#131b2e", "secondary-fixed-dim": "#4edea3", "outline": "#6f7a73", "on-primary-fixed-variant": "#005139", "on-primary-container": "#98edc6", "on-tertiary": "#ffffff", "surface-bright": "#faf8ff", "secondary-container": "#6cf8bb", "on-tertiary-container": "#ffd4a4", "surface-container-low": "#f2f3ff", "surface-container-lowest": "#ffffff", "primary-container": "#0b6e4f", "surface-dim": "#d2d9f4", "on-secondary-container": "#00714d", "secondary-fixed": "#6ffbbe", "on-error-container": "#93000a", "outline-variant": "#bec9c1", "on-tertiary-fixed-variant": "#653e00", "surface": "#faf8ff" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-xs": "0.25rem", "space-xl": "2rem", "gutter-sm": "0.75rem", "gutter": "1rem", "space-lg": "1.5rem", "margin-md": "1.5rem", "margin": "1rem", "space-sm": "0.5rem", "space-md": "1rem" }, "fontFamily": { "body-lg": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "display-lg": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "title-sm": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"] }, "fontSize": { "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }], "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "400" }], "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }], "title-md": ["16px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "600" }], "title-sm": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "600" }], "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }] } } } }</script><style>@layer base{html,body{width:100%;margin:0;padding:0;}body{overscroll-behavior-y:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style></head><body class="bg-surface font-body-md text-on-surface min-h-full flex flex-col antialiased selection:bg-secondary-container selection:text-on-secondary-container"><header class="fixed top-0 inset-x-0 z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="w-full h-6 px-6 flex items-center justify-between text-on-surface select-none"><span class="font-label-sm text-label-sm font-semibold tracking-tight">9:41</span><div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[15px]">signal_cellular_4_bar</span><span class="material-symbols-outlined text-[15px]">wifi</span><span class="material-symbols-outlined text-[18px]">battery_full</span></div></div><div class="h-16 px-4 flex items-center justify-between"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[22px]">school</span></div><div><span class="block font-label-sm text-label-sm text-on-surface-variant font-medium uppercase tracking-wider">CloudsLMS • Faculty</span><h1 class="font-headline-sm text-headline-sm font-bold text-on-surface leading-tight">Home</h1></div></div><div class="flex items-center gap-2"><button aria-label="Notifications" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-sm"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-[88px] pb-24 px-4 bg-surface"><div class="flex flex-col w-full gap-4">
+<!-- Context Banner & Header Section -->
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold tracking-wide">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+          Faculty Bulletins • 2026-27
+        </span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium bg-surface-container px-2.5 py-1 rounded-full">
+        Read-Only Archive
+      </span>
+</div>
+<!-- Search Capsule -->
+<div class="relative w-full">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="w-full h-12 pl-10 pr-10 bg-surface-container-lowest text-on-surface font-body-md text-body-md rounded-full shadow-[0_2px_8px_rgba(0,0,0,0.03)] placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest" id="noticeSearchInput" placeholder="Search notices, circulars..." type="search"/>
+<div class="absolute inset-y-0 right-0 pr-3.5 flex items-center">
+<span class="material-symbols-outlined text-[18px] text-outline cursor-pointer hover:text-primary transition-colors" id="clearSearchBtn">tune</span>
+</div>
+</div>
+<!-- Filter Pills Carousel -->
+<div class="flex items-center gap-2 overflow-x-auto pb-1 -mx-4 px-4 scrollbar-none" id="filterPillsContainer">
+<button class="filter-pill shrink-0 px-4 py-1.5 rounded-full font-label-md text-label-md transition-all duration-200 bg-primary text-on-primary shadow-sm active:scale-95" data-filter="all">
+        All Notices
+      </button>
+<button class="filter-pill shrink-0 px-4 py-1.5 rounded-full font-label-md text-label-md transition-all duration-200 bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-high active:scale-95 flex items-center gap-1.5" data-filter="urgent">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+        Urgent
+      </button>
+<button class="filter-pill shrink-0 px-4 py-1.5 rounded-full font-label-md text-label-md transition-all duration-200 bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-high active:scale-95 flex items-center gap-1.5" data-filter="academic">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+        Academic
+      </button>
+<button class="filter-pill shrink-0 px-4 py-1.5 rounded-full font-label-md text-label-md transition-all duration-200 bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-high active:scale-95 flex items-center gap-1.5" data-filter="administrative">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+        Administrative
+      </button>
+<button class="filter-pill shrink-0 px-4 py-1.5 rounded-full font-label-md text-label-md transition-all duration-200 bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-high active:scale-95 flex items-center gap-1.5" data-filter="events">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+        Events
+      </button>
+</div>
+</div>
+<!-- Notice Count & Sync Indicator -->
+<div class="flex items-center justify-between pt-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-semibold">
+      Showing <span class="text-on-surface" id="visibleNoticeCount">7</span> circulars
+    </span>
+<div class="flex items-center gap-1 text-outline">
+<span class="material-symbols-outlined text-[14px]">history_edu</span>
+<span class="font-label-sm text-label-sm">Updated 12m ago</span>
+</div>
+</div>
+<!-- Notice Cards Stack -->
+<div class="flex flex-col gap-3" id="noticeCardsList">
+<!-- Card 1: Urgent - Grading Deadline -->
+<article class="notice-card relative flex bg-surface-container-lowest rounded-xl shadow-[0_4px_16px_-2px_rgba(11,110,79,0.05)] overflow-hidden transition-transform duration-200 active:scale-[0.99] cursor-pointer" data-category="urgent">
+<div class="w-1.5 bg-error shrink-0"></div>
+<div class="p-3.5 flex flex-col gap-2.5 w-full min-w-0">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-xl bg-error-container text-on-error-container flex items-center justify-center shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[20px]">notification_important</span>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between gap-1">
+<span class="font-label-sm text-label-sm text-error font-bold uppercase tracking-wide">Action Required</span>
+<span class="flex items-center gap-1 font-label-sm text-label-sm text-outline">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 3 hrs ago
+              </span>
+</div>
+<h2 class="font-title-sm text-title-sm text-on-surface font-semibold truncate leading-tight">
+              Quarterly Grading Window Deadline
+            </h2>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">
+          Term 2 continuous assessments portal closes tonight at 23:59 IST. All standard subject teachers must lock report card descriptors and pending marks before final sync.
+        </p>
+<div class="flex items-center justify-between pt-1 text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-medium">
+              Teachers &amp; HODs
+            </span>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-primary font-medium">
+<span class="material-symbols-outlined text-[14px]">lock_clock</span> By 11:59 PM
+            </span>
+</div>
+<button aria-label="Bookmark Notice" class="bookmark-btn w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">bookmark</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 2: Academic - Exam Schedule -->
+<article class="notice-card relative flex bg-surface-container-lowest rounded-xl shadow-[0_4px_16px_-2px_rgba(11,110,79,0.05)] overflow-hidden transition-transform duration-200 active:scale-[0.99] cursor-pointer" data-category="academic">
+<div class="w-1.5 bg-primary shrink-0"></div>
+<div class="p-3.5 flex flex-col gap-2.5 w-full min-w-0">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">campaign</span>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between gap-1">
+<span class="font-label-sm text-label-sm text-primary font-bold uppercase tracking-wide">Examination Cell</span>
+<span class="flex items-center gap-1 font-label-sm text-label-sm text-outline">
+<span class="material-symbols-outlined text-[14px]">schedule</span> Yesterday
+              </span>
+</div>
+<h2 class="font-title-sm text-title-sm text-on-surface font-semibold truncate leading-tight">
+              Mid-Term Exam Schedule Released
+            </h2>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">
+          The finalized invigilation roster, seating charts for Blocks C &amp; D, and question paper submission protocol have been published by the Controller of Examinations.
+        </p>
+<div class="flex items-center justify-between pt-1 text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-medium">
+              All Faculty
+            </span>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-outline font-normal">
+<span class="material-symbols-outlined text-[14px]">attach_file</span> 2 PDFs attached
+            </span>
+</div>
+<button aria-label="Bookmark Notice" class="bookmark-btn w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">bookmark</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 3: Administrative - Faculty Meeting -->
+<article class="notice-card relative flex bg-surface-container-lowest rounded-xl shadow-[0_4px_16px_-2px_rgba(11,110,79,0.05)] overflow-hidden transition-transform duration-200 active:scale-[0.99] cursor-pointer" data-category="administrative">
+<div class="w-1.5 bg-tertiary-container shrink-0"></div>
+<div class="p-3.5 flex flex-col gap-2.5 w-full min-w-0">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-xl bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">groups</span>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between gap-1">
+<span class="font-label-sm text-label-sm text-tertiary font-bold uppercase tracking-wide">Principal Office</span>
+<span class="flex items-center gap-1 font-label-sm text-label-sm text-outline">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 2 days ago
+              </span>
+</div>
+<h2 class="font-title-sm text-title-sm text-on-surface font-semibold truncate leading-tight">
+              Mandatory Faculty Staff Meeting
+            </h2>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">
+          An all-hands pedagogical sync is convened in the Main Auditorium this Friday at 3:30 PM to discuss NAAC accreditation documentation workflows.
+        </p>
+<div class="flex items-center justify-between pt-1 text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-medium">
+              All Staff
+            </span>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-on-surface-variant font-medium">
+<span class="material-symbols-outlined text-[14px]">location_on</span> Auditorium
+            </span>
+</div>
+<button aria-label="Bookmark Notice" class="bookmark-btn w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">bookmark</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 4: Events - Annual Sports Day -->
+<article class="notice-card relative flex bg-surface-container-lowest rounded-xl shadow-[0_4px_16px_-2px_rgba(11,110,79,0.05)] overflow-hidden transition-transform duration-200 active:scale-[0.99] cursor-pointer" data-category="events">
+<div class="w-1.5 bg-secondary shrink-0"></div>
+<div class="p-3.5 flex flex-col gap-2.5 w-full min-w-0">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-xl bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">sports_score</span>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between gap-1">
+<span class="font-label-sm text-label-sm text-secondary font-bold uppercase tracking-wide">Sports Council</span>
+<span class="flex items-center gap-1 font-label-sm text-label-sm text-outline">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 3 days ago
+              </span>
+</div>
+<h2 class="font-title-sm text-title-sm text-on-surface font-semibold truncate leading-tight">
+              Annual Sports Day Duty Allocation
+            </h2>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">
+          House masters, track officials, and refreshment coordinators are requested to review the trackside staging grid ahead of the preliminary heats on Monday.
+        </p>
+<div class="flex items-center justify-between pt-1 text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-medium">
+              Senior Wing
+            </span>
+<span class="px-2.5 py-0.5 rounded-md bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm font-semibold">
+              Event Duty
+            </span>
+</div>
+<button aria-label="Bookmark Notice" class="bookmark-btn w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">bookmark</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 5: Academic - Library Digital Access -->
+<article class="notice-card relative flex bg-surface-container-lowest rounded-xl shadow-[0_4px_16px_-2px_rgba(11,110,79,0.05)] overflow-hidden transition-transform duration-200 active:scale-[0.99] cursor-pointer" data-category="academic">
+<div class="w-1.5 bg-primary shrink-0"></div>
+<div class="p-3.5 flex flex-col gap-2.5 w-full min-w-0">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">local_library</span>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between gap-1">
+<span class="font-label-sm text-label-sm text-primary font-bold uppercase tracking-wide">Knowledge Resource</span>
+<span class="flex items-center gap-1 font-label-sm text-label-sm text-outline">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 5 days ago
+              </span>
+</div>
+<h2 class="font-title-sm text-title-sm text-on-surface font-semibold truncate leading-tight">
+              Library Digital Portal Upgrade &amp; Access
+            </h2>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">
+          New institutional subscriptions for IEEE Xplore, JSTOR, and SpringerLink journals are now live for faculty SSO credentials without proxy configuration.
+        </p>
+<div class="flex items-center justify-between pt-1 text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-medium">
+              All Faculty
+            </span>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-outline font-normal">
+<span class="material-symbols-outlined text-[14px]">verified</span> SSO Enabled
+            </span>
+</div>
+<button aria-label="Bookmark Notice" class="bookmark-btn w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">bookmark</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 6: Urgent / Administrative - IT Maintenance -->
+<article class="notice-card relative flex bg-surface-container-lowest rounded-xl shadow-[0_4px_16px_-2px_rgba(11,110,79,0.05)] overflow-hidden transition-transform duration-200 active:scale-[0.99] cursor-pointer" data-category="urgent">
+<div class="w-1.5 bg-error shrink-0"></div>
+<div class="p-3.5 flex flex-col gap-2.5 w-full min-w-0">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-xl bg-error-container text-on-error-container flex items-center justify-center shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-[20px]">wifi_off</span>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between gap-1">
+<span class="font-label-sm text-label-sm text-error font-bold uppercase tracking-wide">IT Infrastructure</span>
+<span class="flex items-center gap-1 font-label-sm text-label-sm text-outline">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 6 days ago
+              </span>
+</div>
+<h2 class="font-title-sm text-title-sm text-on-surface font-semibold truncate leading-tight">
+              Campus Connectivity Maintenance
+            </h2>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">
+          Scheduled core network router switchover this Saturday from 18:00 to 22:00 IST. Campus Wi-Fi, LMS Cloud Sync, and smart board links will undergo intermittent reboot.
+        </p>
+<div class="flex items-center justify-between pt-1 text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-medium">
+              All Staff
+            </span>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-outline">
+<span class="material-symbols-outlined text-[14px]">dns</span> Network Lab
+            </span>
+</div>
+<button aria-label="Bookmark Notice" class="bookmark-btn w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">bookmark</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 7: Events - Science Exhibition Mentorship -->
+<article class="notice-card relative flex bg-surface-container-lowest rounded-xl shadow-[0_4px_16px_-2px_rgba(11,110,79,0.05)] overflow-hidden transition-transform duration-200 active:scale-[0.99] cursor-pointer" data-category="events">
+<div class="w-1.5 bg-secondary shrink-0"></div>
+<div class="p-3.5 flex flex-col gap-2.5 w-full min-w-0">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-xl bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">science</span>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between gap-1">
+<span class="font-label-sm text-label-sm text-secondary font-bold uppercase tracking-wide">STEM Guild</span>
+<span class="flex items-center gap-1 font-label-sm text-label-sm text-outline">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 1 week ago
+              </span>
+</div>
+<h2 class="font-title-sm text-title-sm text-on-surface font-semibold truncate leading-tight">
+              Interschool Science Expo Mentors
+            </h2>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">
+          Faculty mentors guiding Grade 9 through 12 research exhibits are requested to complete project vetting and safety approval slips by this Thursday.
+        </p>
+<div class="flex items-center justify-between pt-1 text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-0.5 rounded-md bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-medium">
+              Senior Wing
+            </span>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-outline">
+<span class="material-symbols-outlined text-[14px]">biotech</span> STEM Labs
+            </span>
+</div>
+<button aria-label="Bookmark Notice" class="bookmark-btn w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">bookmark</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+<!-- Empty State (Hidden by default, shown when filters or search yield 0) -->
+<div class="hidden flex-col items-center justify-center py-12 px-4 text-center bg-surface-container-lowest rounded-2xl shadow-sm" id="noResultsState">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center text-outline mb-3">
+<span class="material-symbols-outlined text-[32px]">folder_off</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">No circulars found</h3>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-[260px] mt-1">
+      Try adjusting your search terms or tap another category filter.
+    </p>
+<button class="mt-4 px-4 py-2 rounded-full bg-primary text-on-primary font-label-md text-label-md active:scale-95 transition-transform" id="resetSearchBtn">
+      Reset Filters
+    </button>
+</div>
+<!-- End of Archive Banner -->
+<div class="flex flex-col items-center justify-center py-6 text-outline gap-1 select-none">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+<span class="font-label-sm text-label-sm">All institutional bulletins up to date</span>
+</div>
+</div>
+<script>
+  (function() {
+    const searchInput = document.getElementById('noticeSearchInput');
+    const clearBtn = document.getElementById('clearSearchBtn');
+    const filterButtons = document.querySelectorAll('.filter-pill');
+    const noticeCards = document.querySelectorAll('.notice-card');
+    const noResults = document.getElementById('noResultsState');
+    const countDisplay = document.getElementById('visibleNoticeCount');
+    const resetSearchBtn = document.getElementById('resetSearchBtn');
+
+    let currentFilter = 'all';
+
+    function applyFilters() {
+      const query = (searchInput.value || '').trim().toLowerCase();
+      let visibleCount = 0;
+
+      noticeCards.forEach(card => {
+        const category = card.getAttribute('data-category');
+        const textContent = card.innerText.toLowerCase();
+
+        const matchesFilter = (currentFilter === 'all' || category === currentFilter);
+        const matchesQuery = query === '' || textContent.includes(query);
+
+        if (matchesFilter && matchesQuery) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      countDisplay.textContent = visibleCount;
+
+      if (visibleCount === 0) {
+        noResults.classList.remove('hidden');
+        noResults.classList.add('flex');
+      } else {
+        noResults.classList.add('hidden');
+        noResults.classList.remove('flex');
+      }
+    }
+
+    // Filter pill events
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => {
+          b.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+          b.classList.add('bg-surface-container-lowest', 'text-on-surface-variant');
+        });
+
+        btn.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+        btn.classList.remove('bg-surface-container-lowest', 'text-on-surface-variant');
+
+        currentFilter = btn.getAttribute('data-filter');
+        applyFilters();
+      });
+    });
+
+    // Search query events
+    searchInput.addEventListener('input', applyFilters);
+
+    clearBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      applyFilters();
+      searchInput.focus();
+    });
+
+    if (resetSearchBtn) {
+      resetSearchBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        currentFilter = 'all';
+        filterButtons.forEach((b, i) => {
+          if (i === 0) {
+            b.classList.add('bg-primary', 'text-on-primary', 'shadow-sm');
+            b.classList.remove('bg-surface-container-lowest', 'text-on-surface-variant');
+          } else {
+            b.classList.remove('bg-primary', 'text-on-primary', 'shadow-sm');
+            b.classList.add('bg-surface-container-lowest', 'text-on-surface-variant');
+          }
+        });
+        applyFilters();
+      });
+    }
+
+    // Bookmark toggling
+    document.querySelectorAll('.bookmark-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const icon = btn.querySelector('.material-symbols-outlined');
+        const isBookmarked = icon.getAttribute('style')?.includes("'FILL' 1");
+
+        if (isBookmarked) {
+          icon.style.fontVariationSettings = "'FILL' 0";
+          btn.classList.remove('text-primary');
+          btn.classList.add('text-outline');
+        } else {
+          icon.style.fontVariationSettings = "'FILL' 1";
+          btn.classList.remove('text-outline');
+          btn.classList.add('text-primary');
+        }
+      });
+    });
+  })();
+</script></main><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.05)]" data-active-classes="text-primary font-semibold"><div class="flex justify-around items-center h-16 px-2"><a aria-current="page" class="flex flex-col items-center justify-center gap-0.5 min-w-[64px] min-h-[44px] py-1 transition-colors text-primary font-semibold" data-path="home" href="#"><span class="material-symbols-outlined text-[22px]">home</span><span class="font-label-sm text-label-sm">Home</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[64px] min-h-[44px] py-1 text-on-surface-variant transition-colors hover:text-primary" data-path="attendance" href="#"><span class="material-symbols-outlined text-[22px]">fact_check</span><span class="font-label-sm text-label-sm">Attendance</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[64px] min-h-[44px] py-1 text-on-surface-variant transition-colors hover:text-primary" data-path="timetable" href="#"><span class="material-symbols-outlined text-[22px]">calendar_month</span><span class="font-label-sm text-label-sm">Timetable</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[64px] min-h-[44px] py-1 text-on-surface-variant transition-colors hover:text-primary" data-path="more" href="#"><span class="material-symbols-outlined text-[22px]">more_horiz</span><span class="font-label-sm text-label-sm">More</span></a></div></nav></body></html>

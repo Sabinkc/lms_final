@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-primary-container": "#98edc6", "surface": "#faf8ff", "secondary-fixed": "#6ffbbe", "tertiary-fixed": "#ffddb8", "outline-variant": "#bec9c1", "surface-container-highest": "#dae2fd", "on-secondary-fixed-variant": "#005236", "error": "#ba1a1a", "on-surface": "#131b2e", "surface-container-high": "#e2e7ff", "outline": "#6f7a73", "on-error-container": "#93000a", "primary-container": "#0b6e4f", "primary-fixed": "#9ff4cc", "tertiary": "#684000", "on-background": "#131b2e", "on-error": "#ffffff", "surface-container-lowest": "#ffffff", "error-container": "#ffdad6", "surface-bright": "#faf8ff", "on-secondary-fixed": "#002113", "on-surface-variant": "#3f4943", "surface-variant": "#dae2fd", "inverse-primary": "#83d7b1", "secondary-fixed-dim": "#4edea3", "on-tertiary": "#ffffff", "primary-fixed-dim": "#83d7b1", "on-tertiary-fixed-variant": "#653e00", "on-primary": "#ffffff", "on-secondary-container": "#00714d", "on-primary-fixed": "#002115", "surface-container": "#eaedff", "tertiary-fixed-dim": "#ffb95f", "on-tertiary-container": "#ffd4a4", "surface-container-low": "#f2f3ff", "tertiary-container": "#885500", "on-tertiary-fixed": "#2a1700", "background": "#faf8ff", "surface-dim": "#d2d9f4", "on-primary-fixed-variant": "#005139", "on-secondary": "#ffffff", "surface-tint": "#056c4d", "secondary-container": "#6cf8bb", "inverse-on-surface": "#eef0ff", "inverse-surface": "#283044", "secondary": "#006c49", "primary": "#00543b" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-sm": "0.5rem", "space-md": "1rem", "space-lg": "1.5rem", "margin-md": "1.5rem", "gutter": "1rem", "space-xs": "0.25rem", "margin": "1rem", "space-xl": "2rem", "gutter-sm": "0.75rem" }, fontFamily: { "headline-lg-mobile": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "title-sm": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "display-lg": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"] }, fontSize: { "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }], "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }], "title-sm": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "600" }], "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "400" }], "title-md": ["16px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "600" }], "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }] } } } };</script><style>@layer base { html, body { width: 100vw; margin: 0; padding: 0; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.03)]"><div class="w-full flex items-center justify-between px-gutter pt-safe h-6 text-on-surface"><span class="font-label-sm text-label-sm font-semibold tracking-tight">9:41</span><div class="flex items-center gap-1.5 text-on-surface"><span class="material-symbols-outlined text-[16px] leading-none">signal_cellular_alt</span><span class="material-symbols-outlined text-[16px] leading-none">wifi</span><span class="material-symbols-outlined text-[18px] leading-none">battery_full</span></div></div><div class="h-16 px-gutter flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="Brand logo. - Primary color: #0b6e4f
+- Font: plusJakartaSans
+- Mode: light
+- Roundness: rounded-md
+" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UY5xhGFQeJY9cYdXh7xaUM-ranC2DUtvfKp6HupbVVeWnNhYkkxDyjaqitKWDrEdKNuyYoDU14CK4SbsMMxj-bMiPcQb9WTSuTgjsfqr1zhmOHJzUmUMyMSOUI1csW_yoPWSfxYtOVAPZYlb1GTmxzTwABUjyW-r4bWdT6D0i-Dc5H_X4pOlnNvkISTlgW-0nUBmrWaUX7xYOejjdIE2gG4a1l-xMMUHNOGLUxki6zo4knDO6akPn9fb8"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-primary tracking-tight">CloudsLMS</span><span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Home</span></div></div><div class="flex items-center gap-space-xs"><button aria-label="Notifications" class="w-11 h-11 rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-22 pb-24 bg-surface"><div class="flex flex-col w-full pb-6">
+<!-- Top Context & Header Action -->
+<section class="px-gutter pt-space-xs pb-space-sm flex flex-col gap-space-sm">
+<div class="flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<button aria-label="Go back" class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-primary active:scale-95 transition-transform" type="button">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</button>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<h1 class="font-headline-sm text-headline-sm text-on-surface">Parents</h1>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold">
+              240 Registered
+            </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Guardian directory &amp; student associations</p>
+</div>
+</div>
+<button class="inline-flex items-center gap-1.5 bg-primary hover:bg-primary-container text-on-primary px-3.5 py-2 rounded-full font-label-md text-label-md shadow-sm active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">person_add</span>
+<span>Add Parent</span>
+</button>
+</div>
+<!-- Search Input Bar -->
+<div class="relative w-full mt-1">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-[20px] pointer-events-none">search</span>
+<input class="w-full h-11 pl-10 pr-10 rounded-full bg-surface-container-lowest text-on-surface placeholder:text-outline font-body-md text-body-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Search parents by name, ward, phone..." type="search"/>
+<button aria-label="Voice search or filters" class="absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full flex items-center justify-center text-outline hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</button>
+</div>
+<!-- Filter Chips (Horizontal Scrollable) -->
+<div class="flex items-center gap-2 overflow-x-auto py-1 -mx-gutter px-gutter no-scrollbar text-nowrap">
+<button class="px-3.5 py-1.5 rounded-full bg-primary text-on-primary font-label-sm text-label-sm shadow-sm" type="button">
+        All Parents (240)
+      </button>
+<button class="px-3.5 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm shadow-sm transition-colors" type="button">
+        Primary (Grade 1-5)
+      </button>
+<button class="px-3.5 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm shadow-sm transition-colors" type="button">
+        Middle (Grade 6-8)
+      </button>
+<button class="px-3.5 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm shadow-sm transition-colors" type="button">
+        High School (Grade 9-12)
+      </button>
+<button class="px-3.5 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm shadow-sm transition-colors" type="button">
+        Multiple Wards (34)
+      </button>
+</div>
+<!-- Meta / Counter Bar -->
+<div class="flex items-center justify-between pt-1">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider font-semibold">Showing 6 of 240 parents</span>
+<button class="inline-flex items-center gap-1 font-label-sm text-label-sm text-primary font-semibold" type="button">
+<span>Sort: Name (A-Z)</span>
+<span class="material-symbols-outlined text-[16px]">expand_more</span>
+</button>
+</div>
+</section>
+<!-- Directory Cards Stack -->
+<section class="px-gutter flex flex-col gap-3.5 mt-1">
+<!-- Card 1: Dr. Hemant Sharma -->
+<article class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm relative flex flex-col gap-3">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img class="w-12 h-12 rounded-full object-cover shadow-sm" data-alt="Warm studio headshot portrait of a smiling Indian male doctor in his 40s wearing a modern smart blazer in soft daylight with emerald and slate accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqA4BWMY3cAve0mrUrigTzGik6ifVoBDgLO_4F6YvMZYXb5jqCiTqZssj44fqkR7xk7r7NKzT4-B2SDOKrbztsasrAEdbe7ckOVIn6gdufxtuOiY3eI4hXXRoctfb3CK6Tq4XwiAv90FIWKoiO-7j19YBaKAEsbwiOhqToW5MoOTbWGdij2lxcByqyP5_7z5fOcdwK6xZwrYgPuQRNs6id595Zcd_fZlSfoJTLqmaGFitgXbJ9SXB_jQ"/>
+<span class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-secondary ring-2 ring-surface-container-lowest" title="Verified active"></span>
+</div>
+<div class="flex flex-col">
+<h2 class="font-title-md text-title-md text-on-surface leading-tight">Dr. Hemant Sharma</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Senior Neurosurgeon • Father</p>
+<div class="flex items-center gap-2 mt-0.5 text-outline font-label-sm text-label-sm">
+<span>PAR-2041</span>
+<span>•</span>
+<span>+977 98510-44910</span>
+</div>
+</div>
+</div>
+<button aria-label="Card actions" class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<!-- Linked Wards -->
+<div class="bg-surface-container-low rounded-xl p-2.5 flex flex-col gap-1.5">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">school</span>
+<span>Linked Children (2):</span>
+</div>
+<div class="flex flex-wrap gap-1.5">
+<span class="inline-flex items-center gap-1 bg-surface-container-lowest px-2.5 py-1 rounded-lg text-primary font-label-sm text-label-sm shadow-sm">
+<span class="font-bold">Aarav Sharma</span>
+<span class="text-on-surface-variant font-normal">Grade 10-A • Roll 01</span>
+</span>
+<span class="inline-flex items-center gap-1 bg-surface-container-lowest px-2.5 py-1 rounded-lg text-primary font-label-sm text-label-sm shadow-sm">
+<span class="font-bold">Diya Sharma</span>
+<span class="text-on-surface-variant font-normal">Grade 6-B • Roll 08</span>
+</span>
+</div>
+</div>
+<!-- Footer & Quick Actions -->
+<div class="flex items-center justify-between pt-0.5">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-fixed-variant font-label-sm text-label-sm font-semibold">Primary Contact</span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-medium">Fee Payer</span>
+</div>
+<div class="flex items-center gap-1">
+<button aria-label="Call Hemant Sharma" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">call</span>
+</button>
+<button aria-label="Message Hemant Sharma" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 2: Meera Joshi (With active popup menu state) -->
+<article class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm relative flex flex-col gap-3 z-20">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img class="w-12 h-12 rounded-full object-cover shadow-sm" data-alt="Close up professional portrait of an elegant South Asian female architect with glasses and a warm smile with green toned studio backdrop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8C-f74SgPkYtIUrvw1iu6VLWhQB3q32eV-M01uhiEP7LYX7Iuw3UaY5wZuFyZTDybmMkQa3kbDvO07YeKMTAcbE8_3JQPEesxtYLF34Bw4dTYjFP5X58mR-G4Oe6MXlZi89D8rHRKzQJCtfEMGMZUmVfssWFjxxcB9ALqKW6IisthaJ5KWFmV-AAATdloWunmsjNkLRZmolHLj_scxJotGuRpwtjkl17BxhJ4TXYN3XjbbWJRrxLr0w"/>
+<span class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-secondary ring-2 ring-surface-container-lowest" title="Verified active"></span>
+</div>
+<div class="flex flex-col">
+<h2 class="font-title-md text-title-md text-on-surface leading-tight">Meera Joshi</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Senior Architect • Mother</p>
+<div class="flex items-center gap-2 mt-0.5 text-outline font-label-sm text-label-sm">
+<span>PAR-2055</span>
+<span>•</span>
+<span>+977 98012-78221</span>
+</div>
+</div>
+</div>
+<!-- Overflow trigger + Dropdown Menu -->
+<div class="relative">
+<button aria-label="Card actions menu" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+<!-- Dropdown Popover visible -->
+<div class="absolute right-0 top-9 w-44 bg-surface-container-lowest rounded-xl shadow-xl py-1.5 z-30 flex flex-col">
+<button class="w-full px-3 py-2 text-left font-label-md text-label-md text-on-surface hover:bg-surface-container-low flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px] text-outline">edit</span>
+<span>Edit Details</span>
+</button>
+<button class="w-full px-3 py-2 text-left font-label-md text-label-md text-on-surface hover:bg-surface-container-low flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px] text-outline">chat</span>
+<span>Message Guardian</span>
+</button>
+<button class="w-full px-3 py-2 text-left font-label-md text-label-md text-on-surface hover:bg-surface-container-low flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px] text-outline">call</span>
+<span>Call Guardian</span>
+</button>
+<div class="h-px bg-surface-container my-1"></div>
+<button class="w-full px-3 py-2 text-left font-label-md text-label-md text-error hover:bg-error-container/20 flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px] text-error">delete</span>
+<span>Delete / Unlink</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Linked Wards -->
+<div class="bg-surface-container-low rounded-xl p-2.5 flex flex-col gap-1.5">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">school</span>
+<span>Linked Children (1):</span>
+</div>
+<div class="flex flex-wrap gap-1.5">
+<span class="inline-flex items-center gap-1 bg-surface-container-lowest px-2.5 py-1 rounded-lg text-primary font-label-sm text-label-sm shadow-sm">
+<span class="font-bold">Ananya Joshi</span>
+<span class="text-on-surface-variant font-normal">Grade 12-Sci • Roll 07</span>
+</span>
+</div>
+</div>
+<!-- Footer & Quick Actions -->
+<div class="flex items-center justify-between pt-0.5">
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-semibold">PTA Committee Member</span>
+</div>
+<div class="flex items-center gap-1">
+<button aria-label="Call Meera Joshi" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary" type="button">
+<span class="material-symbols-outlined text-[18px]">call</span>
+</button>
+<button aria-label="Message Meera Joshi" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary" type="button">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 3: Suresh Thapa -->
+<article class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm relative flex flex-col gap-3">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img class="w-12 h-12 rounded-full object-cover shadow-sm" data-alt="Portrait of Nepali father in a collared shirt with pleasant expression in front of soft indoor background with natural warm lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsLyzqwxgF4d0oW-PM8xFKXL3etZuQOjMlIyciT0lCcpOYUUlxBcIYQHwfUZq6EkAqV1rq0Qm5MX8iHn2BUdh6U2sbdIIg81hrdyrUqyCjgHc8TAcAn5GFU40yM_08d8qJ2jq0UrG0yxnZcP3jSUUQFwvWSbpUCffxzY5U3qNuWxsKZ4TWsQ3-GCxIMP7qoLqyxhkYsMmvz07rCVR3QmqAIQBZijOq_zzx-7Xy-SZLNuCcr503M_3pjg"/>
+<span class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-secondary ring-2 ring-surface-container-lowest"></span>
+</div>
+<div class="flex flex-col">
+<h2 class="font-title-md text-title-md text-on-surface leading-tight">Suresh Thapa</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Bank Branch Manager • Father</p>
+<div class="flex items-center gap-2 mt-0.5 text-outline font-label-sm text-label-sm">
+<span>PAR-2068</span>
+<span>•</span>
+<span>+977 98413-90112</span>
+</div>
+</div>
+</div>
+<button aria-label="Card actions" class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<!-- Linked Wards -->
+<div class="bg-surface-container-low rounded-xl p-2.5 flex flex-col gap-1.5">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">school</span>
+<span>Linked Children (1):</span>
+</div>
+<div class="flex flex-wrap gap-1.5">
+<span class="inline-flex items-center gap-1 bg-surface-container-lowest px-2.5 py-1 rounded-lg text-primary font-label-sm text-label-sm shadow-sm">
+<span class="font-bold">Rohan Thapa</span>
+<span class="text-on-surface-variant font-normal">Grade 8-B • Roll 18</span>
+</span>
+</div>
+</div>
+<!-- Footer & Quick Actions -->
+<div class="flex items-center justify-between pt-0.5">
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm font-medium">SMS Alerts Active</span>
+</div>
+<div class="flex items-center gap-1">
+<button aria-label="Call Suresh Thapa" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">call</span>
+</button>
+<button aria-label="Message Suresh Thapa" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 4: Sunita & Rajesh Adhikari -->
+<article class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm relative flex flex-col gap-3">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img class="w-12 h-12 rounded-full object-cover shadow-sm" data-alt="Portrait of friendly couple together smiling warmly in business casual attire with natural daylight and emerald accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9EBSefHGU3gukI4sPuXpcT35sBKWC7QE7ukgBbP0X4Ug8yaJ0LRyYS2suhCCcz1GzzEq0sfMuXN8XN7LcC9R60iTXz7EespSf2-ExYdYkWUmkIN0ZIsDHkkjmRyXJ9OpHahqJUwhXVwNG27TOWJsxTM7h5Igy-Dm9oWxjv3l05QZY-LjtvXNpibfX7oEM3wtS_3XULcj-1xL-vr_bBt67YrG_LbC4eLSf7KE_03e8qjy1cytLN1EaxQ"/>
+<span class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-secondary ring-2 ring-surface-container-lowest"></span>
+</div>
+<div class="flex flex-col">
+<h2 class="font-title-md text-title-md text-on-surface leading-tight">Sunita &amp; Rajesh Adhikari</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Chartered Accountant &amp; Lawyer</p>
+<div class="flex items-center gap-2 mt-0.5 text-outline font-label-sm text-label-sm">
+<span>PAR-2082</span>
+<span>•</span>
+<span>+977 98130-65234</span>
+</div>
+</div>
+</div>
+<button aria-label="Card actions" class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<!-- Linked Wards -->
+<div class="bg-surface-container-low rounded-xl p-2.5 flex flex-col gap-1.5">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">school</span>
+<span>Linked Children (2):</span>
+</div>
+<div class="flex flex-wrap gap-1.5">
+<span class="inline-flex items-center gap-1 bg-surface-container-lowest px-2.5 py-1 rounded-lg text-primary font-label-sm text-label-sm shadow-sm">
+<span class="font-bold">Sita Adhikari</span>
+<span class="text-on-surface-variant font-normal">Grade 9-A • Roll 11</span>
+</span>
+<span class="inline-flex items-center gap-1 bg-surface-container-lowest px-2.5 py-1 rounded-lg text-primary font-label-sm text-label-sm shadow-sm">
+<span class="font-bold">Karan Adhikari</span>
+<span class="text-on-surface-variant font-normal">Grade 4-C • Roll 15</span>
+</span>
+</div>
+</div>
+<!-- Footer & Quick Actions -->
+<div class="flex items-center justify-between pt-0.5">
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-semibold">Fee Payer</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-fixed-variant font-label-sm text-label-sm font-medium">Portal Active</span>
+</div>
+<div class="flex items-center gap-1">
+<button aria-label="Call Guardians" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">call</span>
+</button>
+<button aria-label="Message Guardians" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 5: Binod Rai -->
+<article class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm relative flex flex-col gap-3">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img class="w-12 h-12 rounded-full object-cover shadow-sm" data-alt="Confident South Asian man in 40s wearing aviator uniform shirt against warm natural outdoor bokeh backdrop" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0IZQFWv4LNqgWPiwQwXwhpaa-mBexxmy3A0knMc9zwo0eqqFXl_v7IZTJvntVeLahVyURvvbhU6qs6yUbcZFsGqYhHOgOKd-OTTms8ApUcetiV4dQj8c21yWrcJZBdd6F3BGa1SlWJ6a3mlsvotqs4R-6z3rjiPqrtmnM6lmajC0w8B5tVD5e7hWbfnFyETfZl547u_kUd9fWWg1F8Gyesnw9C6JMjPXQWnbZWnj_0l0FI-mBZ4aFzg"/>
+<span class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-secondary ring-2 ring-surface-container-lowest"></span>
+</div>
+<div class="flex flex-col">
+<h2 class="font-title-md text-title-md text-on-surface leading-tight">Binod Rai</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Civil Aviation Officer • Father</p>
+<div class="flex items-center gap-2 mt-0.5 text-outline font-label-sm text-label-sm">
+<span>PAR-2094</span>
+<span>•</span>
+<span>+977 98601-22941</span>
+</div>
+</div>
+</div>
+<button aria-label="Card actions" class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<!-- Linked Wards -->
+<div class="bg-surface-container-low rounded-xl p-2.5 flex flex-col gap-1.5">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">school</span>
+<span>Linked Children (1):</span>
+</div>
+<div class="flex flex-wrap gap-1.5">
+<span class="inline-flex items-center gap-1 bg-surface-container-lowest px-2.5 py-1 rounded-lg text-primary font-label-sm text-label-sm shadow-sm">
+<span class="font-bold">Nabin Rai</span>
+<span class="text-on-surface-variant font-normal">Grade 8-B • Roll 22</span>
+</span>
+</div>
+</div>
+<!-- Footer & Quick Actions -->
+<div class="flex items-center justify-between pt-0.5">
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-fixed-variant font-label-sm text-label-sm font-semibold">Primary Contact</span>
+</div>
+<div class="flex items-center gap-1">
+<button aria-label="Call Binod Rai" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">call</span>
+</button>
+<button aria-label="Message Binod Rai" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Card 6: Pabitra Gurung -->
+<article class="bg-surface-container-lowest rounded-2xl p-4 shadow-sm relative flex flex-col gap-3">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-3">
+<div class="relative">
+<img class="w-12 h-12 rounded-full object-cover shadow-sm" data-alt="Portrait of Nepali woman university lecturer wearing traditional shawl over contemporary attire, smiling in sunlit classroom" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3QpLq4uJM0XUA8lMN-LysJ2DkYsaG_p9IdmL6dirZfYGyETMLLVTuw5O5OFMlV7IKSha0K60Z-36EyulbEpVhPhRr2V_WyKw6_ti0zjlbzkOXq70B59SO5qXOym2JJTSIJQYvxyKwFR_Dx5tK4NDE1cZtRt0f8G9nmXWu2DfKoXzUWZ4FMkRexTsN3HaqfFXjHP-0apWD_Yh6gegTWaZRHMYDc-F96i7I0h6_hI6W28H2Y9pFAuocYw"/>
+<span class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-secondary ring-2 ring-surface-container-lowest"></span>
+</div>
+<div class="flex flex-col">
+<h2 class="font-title-md text-title-md text-on-surface leading-tight">Pabitra Gurung</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">College Lecturer • Mother</p>
+<div class="flex items-center gap-2 mt-0.5 text-outline font-label-sm text-label-sm">
+<span>PAR-2105</span>
+<span>•</span>
+<span>+977 98511-89304</span>
+</div>
+</div>
+</div>
+<button aria-label="Card actions" class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-on-surface" type="button">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+<!-- Linked Wards -->
+<div class="bg-surface-container-low rounded-xl p-2.5 flex flex-col gap-1.5">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">school</span>
+<span>Linked Children (2):</span>
+</div>
+<div class="flex flex-wrap gap-1.5">
+<span class="inline-flex items-center gap-1 bg-surface-container-lowest px-2.5 py-1 rounded-lg text-primary font-label-sm text-label-sm shadow-sm">
+<span class="font-bold">Sneha Gurung</span>
+<span class="text-on-surface-variant font-normal">Grade 9-B • Roll 14</span>
+</span>
+<span class="inline-flex items-center gap-1 bg-surface-container-lowest px-2.5 py-1 rounded-lg text-primary font-label-sm text-label-sm shadow-sm">
+<span class="font-bold">Ayush Gurung</span>
+<span class="text-on-surface-variant font-normal">Grade 5-A • Roll 04</span>
+</span>
+</div>
+</div>
+<!-- Footer & Quick Actions -->
+<div class="flex items-center justify-between pt-0.5">
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-semibold">Portal Verified</span>
+</div>
+<div class="flex items-center gap-1">
+<button aria-label="Call Pabitra Gurung" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">call</span>
+</button>
+<button aria-label="Message Pabitra Gurung" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+</button>
+</div>
+</div>
+</article>
+</section>
+<!-- Bottom Broadcast & Sync Banner -->
+<section class="px-gutter mt-5">
+<div class="bg-gradient-to-br from-primary to-primary-container text-on-primary p-4 rounded-2xl shadow-md flex flex-col gap-3">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-xl bg-on-primary/15 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary-fixed text-[24px]">campaign</span>
+</div>
+<div class="flex flex-col">
+<h3 class="font-title-sm text-title-sm font-semibold">Parent Portal Sync &amp; Broadcast</h3>
+<p class="font-body-sm text-body-sm text-on-primary/80 mt-0.5 leading-snug">
+            Send SMS, emergency alerts, or digital notices directly to all 240 registered guardians instantly.
+          </p>
+</div>
+</div>
+<div class="flex items-center justify-end gap-2 pt-1">
+<button class="px-3.5 py-1.5 rounded-full bg-on-primary/10 text-on-primary hover:bg-on-primary/20 font-label-sm text-label-sm font-semibold transition-colors" type="button">
+          View Templates
+        </button>
+<button class="px-4 py-1.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold shadow-sm active:scale-95 transition-all" type="button">
+          Broadcast SMS
+        </button>
+</div>
+</div>
+</section>
+</div></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_-4px_20px_-2px_rgba(11,110,79,0.06)]" data-active-classes="text-primary font-semibold"><div class="flex justify-around items-center h-16 px-gutter"><a aria-current="page" class="flex flex-col items-center justify-center min-w-[56px] h-12 transition-colors text-primary font-semibold" data-path="home" href="#"><span class="material-symbols-outlined text-[24px]">dashboard</span><span class="font-label-sm text-label-sm mt-0.5">Home</span></a><a class="flex flex-col items-center justify-center min-w-[56px] h-12 text-on-surface-variant transition-colors" data-path="attendance" href="#"><span class="material-symbols-outlined text-[24px]">fact_check</span><span class="font-label-sm text-label-sm mt-0.5">Attendance</span></a><a class="flex flex-col items-center justify-center min-w-[56px] h-12 text-on-surface-variant transition-colors" data-path="fees" href="#"><span class="material-symbols-outlined text-[24px]">payments</span><span class="font-label-sm text-label-sm mt-0.5">Fees</span></a><a class="flex flex-col items-center justify-center min-w-[56px] h-12 text-on-surface-variant transition-colors" data-path="more" href="#"><span class="material-symbols-outlined text-[24px]">grid_view</span><span class="font-label-sm text-label-sm mt-0.5">More</span></a></div></nav></body></html>

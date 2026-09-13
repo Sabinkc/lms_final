@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "primary-fixed": "#9ff4cc", "on-tertiary-container": "#ffd4a4", "tertiary-fixed-dim": "#ffb95f", "background": "#faf8ff", "error-container": "#ffdad6", "inverse-on-surface": "#eef0ff", "primary-fixed-dim": "#83d7b1", "inverse-surface": "#283044", "on-secondary-container": "#00714d", "primary": "#00543b", "outline-variant": "#bec9c1", "on-error-container": "#93000a", "secondary": "#006c49", "outline": "#6f7a73", "tertiary": "#684000", "surface-variant": "#dae2fd", "surface-tint": "#056c4d", "tertiary-container": "#885500", "inverse-primary": "#83d7b1", "surface": "#faf8ff", "surface-container-lowest": "#ffffff", "secondary-fixed-dim": "#4edea3", "on-primary-container": "#98edc6", "surface-container-low": "#f2f3ff", "on-background": "#131b2e", "tertiary-fixed": "#ffddb8", "on-tertiary-fixed": "#2a1700", "secondary-fixed": "#6ffbbe", "surface-bright": "#faf8ff", "surface-container": "#eaedff", "on-surface": "#131b2e", "surface-container-highest": "#dae2fd", "error": "#ba1a1a", "on-surface-variant": "#3f4943", "on-primary": "#ffffff", "surface-dim": "#d2d9f4", "on-secondary": "#ffffff", "on-primary-fixed": "#002115", "on-secondary-fixed": "#002113", "secondary-container": "#6cf8bb", "primary-container": "#0b6e4f", "on-tertiary": "#ffffff", "on-primary-fixed-variant": "#005139", "on-tertiary-fixed-variant": "#653e00", "surface-container-high": "#e2e7ff", "on-error": "#ffffff", "on-secondary-fixed-variant": "#005236" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "gutter": "1rem", "space-sm": "0.5rem", "space-lg": "1.5rem", "space-xs": "0.25rem", "margin": "1rem", "gutter-sm": "0.75rem", "space-xl": "2rem", "margin-md": "1.5rem", "space-md": "1rem" }, "fontFamily": { "label-lg": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "title-sm": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "display-lg": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"] }, "fontSize": { "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "400" }], "title-sm": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "600" }], "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "title-md": ["16px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "600" }], "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }], "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }] } } } }</script></head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-gutter flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="w-9 h-9 rounded-xl bg-primary-container flex items-center justify-center text-on-primary"><span class="material-symbols-outlined text-[20px]">cloud_done</span></div><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-none">CloudsLMS</span><span class="px-space-xs py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm uppercase">Admin</span></div><span class="font-label-sm text-label-sm text-on-surface-variant leading-tight">Admin Menu</span></div></div><div class="flex items-center gap-space-xs"><button aria-label="Notifications" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-16 pb-24 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- Sticky Context Header -->
+<section class="px-gutter pt-space-sm pb-space-xs flex items-center justify-between">
+<div class="flex items-center gap-space-sm min-w-0">
+<button aria-label="Go Back" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-transform active:scale-95" type="button">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</button>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs">
+<h1 class="font-headline-sm text-headline-sm text-on-surface tracking-tight truncate">Manage Teachers</h1>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<p class="font-label-sm text-label-sm text-on-surface-variant truncate">Admin Desk • 68 Faculty</p>
+</div>
+</div>
+</div>
+<button class="flex items-center gap-space-xs h-10 px-space-md rounded-full bg-primary text-on-primary font-label-lg text-label-lg shadow-[0_4px_12px_rgba(11,110,79,0.22)] active:scale-95 transition-all" id="btn-add-teacher" type="button">
+<span class="material-symbols-outlined text-[20px]">person_add</span>
+<span class="hidden sm:inline">Add</span>
+<span>Teacher</span>
+</button>
+</section>
+<!-- Search & Filter Controls -->
+<section class="px-gutter pt-space-xs pb-space-sm flex flex-col gap-space-sm">
+<div class="relative flex items-center w-full">
+<div class="absolute left-space-md flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</div>
+<input class="w-full h-12 pl-11 pr-12 rounded-full bg-surface-container-lowest text-on-surface placeholder:text-outline font-body-md text-body-md shadow-[0_2px_8px_rgba(15,23,42,0.04)] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" id="teacher-search" placeholder="Search by teacher name, emp ID, or subject..." type="search"/>
+<button aria-label="Filter Options" class="absolute right-1.5 w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-on-surface active:scale-90 transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</button>
+</div>
+<!-- Department Filter Chips (Horizontal Scroller) -->
+<div class="flex items-center gap-space-xs overflow-x-auto no-scrollbar py-0.5" id="filter-chips">
+<button class="dept-chip whitespace-nowrap h-9 px-space-md rounded-full bg-primary text-on-primary font-label-md text-label-md shadow-sm transition-all flex items-center gap-1.5" data-dept="all" type="button">
+<span class="material-symbols-outlined text-[16px]">school</span>
+<span>All (68)</span>
+</button>
+<button class="dept-chip whitespace-nowrap h-9 px-space-md rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md shadow-sm hover:bg-surface-container transition-all flex items-center gap-1.5" data-dept="science" type="button">
+<span class="material-symbols-outlined text-[16px]">biotech</span>
+<span>Science (14)</span>
+</button>
+<button class="dept-chip whitespace-nowrap h-9 px-space-md rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md shadow-sm hover:bg-surface-container transition-all flex items-center gap-1.5" data-dept="mathematics" type="button">
+<span class="material-symbols-outlined text-[16px]">calculate</span>
+<span>Mathematics (12)</span>
+</button>
+<button class="dept-chip whitespace-nowrap h-9 px-space-md rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md shadow-sm hover:bg-surface-container transition-all flex items-center gap-1.5" data-dept="english" type="button">
+<span class="material-symbols-outlined text-[16px]">menu_book</span>
+<span>English (10)</span>
+</button>
+<button class="dept-chip whitespace-nowrap h-9 px-space-md rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md shadow-sm hover:bg-surface-container transition-all flex items-center gap-1.5" data-dept="social" type="button">
+<span class="material-symbols-outlined text-[16px]">public</span>
+<span>Social (8)</span>
+</button>
+<button class="dept-chip whitespace-nowrap h-9 px-space-md rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md shadow-sm hover:bg-surface-container transition-all flex items-center gap-1.5" data-dept="computer" type="button">
+<span class="material-symbols-outlined text-[16px]">terminal</span>
+<span>Computer (6)</span>
+</button>
+</div>
+</section>
+<!-- Tally Bar -->
+<section class="px-gutter py-space-xs flex items-center justify-between text-on-surface-variant">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-primary">groups</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold">Showing 68 Faculty Members</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant font-medium">Term 2 • AY 2024</span>
+</section>
+<!-- Teacher Cards List -->
+<section class="px-gutter py-space-xs flex flex-col gap-space-sm" id="teachers-list">
+<!-- Card 1: Dr. Sunita Joshi -->
+<article class="w-full bg-surface-container-lowest rounded-xl p-space-md shadow-[0_4px_16px_-2px_rgba(11,110,79,0.06),0_2px_6px_-1px_rgba(15,23,42,0.03)] flex flex-col gap-space-sm hover:shadow-md transition-shadow">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed font-headline-sm text-headline-sm font-bold flex-shrink-0">
+            SJ
+          </div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs flex-wrap">
+<h2 class="font-title-md text-title-md text-on-surface font-semibold truncate">Dr. Sunita Joshi</h2>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                Active • Full-Time
+              </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Science Dept • T002 • sunita.joshi@school.com</p>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-1 flex-shrink-0">
+<button aria-label="Edit Dr. Sunita Joshi" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-primary hover:bg-surface-container flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button aria-label="Delete Teacher" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-error hover:bg-error-container/40 flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+<!-- Metadata Pill Row -->
+<div class="flex items-center justify-between flex-wrap gap-space-xs pt-1">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">call</span>
+<span>+977 9841234567</span>
+</div>
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface">
+<span class="material-symbols-outlined text-[15px] text-tertiary">co_present</span>
+<span>Class 10-A Homeroom</span>
+</div>
+</div>
+</article>
+<!-- Card 2: Prof. Aris Vance -->
+<article class="w-full bg-surface-container-lowest rounded-xl p-space-md shadow-[0_4px_16px_-2px_rgba(11,110,79,0.06),0_2px_6px_-1px_rgba(15,23,42,0.03)] flex flex-col gap-space-sm hover:shadow-md transition-shadow">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed font-headline-sm text-headline-sm font-bold flex-shrink-0">
+            AV
+          </div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs flex-wrap">
+<h2 class="font-title-md text-title-md text-on-surface font-semibold truncate">Prof. Aris Vance</h2>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                Active • Full-Time
+              </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Math Dept • T004 • aris.vance@school.com</p>
+</div>
+</div>
+<div class="flex items-center gap-1 flex-shrink-0">
+<button aria-label="Edit Prof. Aris Vance" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-primary hover:bg-surface-container flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button aria-label="Delete Teacher" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-error hover:bg-error-container/40 flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+<div class="flex items-center justify-between flex-wrap gap-space-xs pt-1">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">call</span>
+<span>+977 9851098762</span>
+</div>
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface">
+<span class="material-symbols-outlined text-[15px] text-tertiary">functions</span>
+<span>Grade 9 &amp; 10 Calculus</span>
+</div>
+</div>
+</article>
+<!-- Card 3: Dr. Rajeshwar Sharma -->
+<article class="w-full bg-surface-container-lowest rounded-xl p-space-md shadow-[0_4px_16px_-2px_rgba(11,110,79,0.06),0_2px_6px_-1px_rgba(15,23,42,0.03)] flex flex-col gap-space-sm hover:shadow-md transition-shadow">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed font-headline-sm text-headline-sm font-bold flex-shrink-0">
+            RS
+          </div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs flex-wrap">
+<h2 class="font-title-md text-title-md text-on-surface font-semibold truncate">Dr. Rajeshwar Sharma</h2>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+                On Leave • Sabbatical
+              </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">English Dept • T008 • rajeshwar.s@school.com</p>
+</div>
+</div>
+<div class="flex items-center gap-1 flex-shrink-0">
+<button aria-label="Edit Dr. Rajeshwar Sharma" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-primary hover:bg-surface-container flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button aria-label="Delete Teacher" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-error hover:bg-error-container/40 flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+<div class="flex items-center justify-between flex-wrap gap-space-xs pt-1">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">call</span>
+<span>+977 9803456789</span>
+</div>
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface">
+<span class="material-symbols-outlined text-[15px] text-tertiary">history_edu</span>
+<span>AP English Literature</span>
+</div>
+</div>
+</article>
+<!-- Card 4: Pradeep Karki -->
+<article class="w-full bg-surface-container-lowest rounded-xl p-space-md shadow-[0_4px_16px_-2px_rgba(11,110,79,0.06),0_2px_6px_-1px_rgba(15,23,42,0.03)] flex flex-col gap-space-sm hover:shadow-md transition-shadow">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-full bg-surface-variant flex items-center justify-center text-primary font-headline-sm text-headline-sm font-bold flex-shrink-0">
+            PK
+          </div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs flex-wrap">
+<h2 class="font-title-md text-title-md text-on-surface font-semibold truncate">Pradeep Karki</h2>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                Active • Full-Time
+              </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Computer Dept • T012 • pradeep.k@school.com</p>
+</div>
+</div>
+<div class="flex items-center gap-1 flex-shrink-0">
+<button aria-label="Edit Pradeep Karki" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-primary hover:bg-surface-container flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button aria-label="Delete Teacher" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-error hover:bg-error-container/40 flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+<div class="flex items-center justify-between flex-wrap gap-space-xs pt-1">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">call</span>
+<span>+977 9860123987</span>
+</div>
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface">
+<span class="material-symbols-outlined text-[15px] text-tertiary">devices</span>
+<span>Lab B • Python Intro</span>
+</div>
+</div>
+</article>
+<!-- Card 5: Anita Neupane -->
+<article class="w-full bg-surface-container-lowest rounded-xl p-space-md shadow-[0_4px_16px_-2px_rgba(11,110,79,0.06),0_2px_6px_-1px_rgba(15,23,42,0.03)] flex flex-col gap-space-sm hover:shadow-md transition-shadow">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed-dim flex items-center justify-center text-on-tertiary-fixed font-headline-sm text-headline-sm font-bold flex-shrink-0">
+            AN
+          </div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs flex-wrap">
+<h2 class="font-title-md text-title-md text-on-surface font-semibold truncate">Anita Neupane</h2>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                Active • Full-Time
+              </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Social Dept • T015 • anita.neupane@school.com</p>
+</div>
+</div>
+<div class="flex items-center gap-1 flex-shrink-0">
+<button aria-label="Edit Anita Neupane" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-primary hover:bg-surface-container flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button aria-label="Delete Teacher" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-error hover:bg-error-container/40 flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+<div class="flex items-center justify-between flex-wrap gap-space-xs pt-1">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">call</span>
+<span>+977 9812987654</span>
+</div>
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface">
+<span class="material-symbols-outlined text-[15px] text-tertiary">travel_explore</span>
+<span>Grade 8 World History</span>
+</div>
+</div>
+</article>
+<!-- Card 6: Suresh Bhandari -->
+<article class="w-full bg-surface-container-lowest rounded-xl p-space-md shadow-[0_4px_16px_-2px_rgba(11,110,79,0.06),0_2px_6px_-1px_rgba(15,23,42,0.03)] flex flex-col gap-space-sm hover:shadow-md transition-shadow">
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-12 h-12 rounded-full bg-primary-fixed-dim flex items-center justify-center text-on-primary-fixed-variant font-headline-sm text-headline-sm font-bold flex-shrink-0">
+            SB
+          </div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-space-xs flex-wrap">
+<h2 class="font-title-md text-title-md text-on-surface font-semibold truncate">Suresh Bhandari</h2>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+                Part-Time • Visitor
+              </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Science Dept • T019 • suresh.b@school.com</p>
+</div>
+</div>
+<div class="flex items-center gap-1 flex-shrink-0">
+<button aria-label="Edit Suresh Bhandari" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-primary hover:bg-surface-container flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button aria-label="Delete Teacher" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant hover:text-error hover:bg-error-container/40 flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+<div class="flex items-center justify-between flex-wrap gap-space-xs pt-1">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[16px] text-primary">call</span>
+<span>+977 9845012345</span>
+</div>
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface">
+<span class="material-symbols-outlined text-[15px] text-tertiary">science</span>
+<span>Grade 9 &amp; 10 Physics</span>
+</div>
+</div>
+</article>
+</section>
+<!-- Load More & Counter Footer -->
+<section class="px-gutter pt-space-md pb-space-lg flex flex-col items-center gap-space-sm text-center">
+<div class="flex items-center gap-2">
+<div class="w-16 h-1.5 rounded-full bg-primary/30"></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Showing 6 of 68 Faculty Members</span>
+<div class="w-16 h-1.5 rounded-full bg-surface-container-high"></div>
+</div>
+<button class="w-full h-12 rounded-full bg-surface-container-lowest text-primary font-label-lg text-label-lg shadow-sm hover:bg-surface-container transition-all flex items-center justify-center gap-space-xs active:scale-[0.99]" id="load-more-btn" type="button">
+<span class="material-symbols-outlined text-[20px]">expand_more</span>
+<span>Load More Teachers</span>
+</button>
+</section>
+</div>
+<script>
+  // Filter chips selection micro-interaction
+  const chips = document.querySelectorAll('.dept-chip');
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => {
+        c.classList.remove('bg-primary', 'text-on-primary');
+        c.classList.add('bg-surface-container-lowest', 'text-on-surface-variant');
+      });
+      chip.classList.add('bg-primary', 'text-on-primary');
+      chip.classList.remove('bg-surface-container-lowest', 'text-on-surface-variant');
+    });
+  });
+
+  // Client-side search simulation
+  const searchInput = document.getElementById('teacher-search');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase();
+      const cards = document.querySelectorAll('#teachers-list > article');
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        if (text.includes(term)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  }
+
+  // Load more button tap feedback
+  const loadMore = document.getElementById('load-more-btn');
+  if (loadMore) {
+    loadMore.addEventListener('click', function() {
+      const originalText = this.innerHTML;
+      this.innerHTML = '<span class="material-symbols-outlined animate-spin text-[20px]">sync</span><span>Loading records...</span>';
+      setTimeout(() => {
+        this.innerHTML = originalText;
+      }, 750);
+    });
+  }
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_8px_24px_-4px_rgba(11,110,79,0.08),0_4px_12px_-2px_rgba(15,23,42,0.04)]" data-active-classes="text-primary-container font-label-md"><div class="flex justify-around items-center h-16 px-space-xs"><a class="flex flex-col items-center justify-center gap-space-xs min-w-[56px] h-12 rounded-full text-on-surface-variant hover:text-on-surface transition-all" data-path="admin-home" href="#"><span class="material-symbols-outlined text-[22px]">dashboard</span><span class="font-label-sm text-label-sm">Home</span></a><a class="flex flex-col items-center justify-center gap-space-xs min-w-[56px] h-12 rounded-full text-on-surface-variant hover:text-on-surface transition-all" data-path="attendance-overview" href="#"><span class="material-symbols-outlined text-[22px]">fact_check</span><span class="font-label-sm text-label-sm">Attendance</span></a><a class="flex flex-col items-center justify-center gap-space-xs min-w-[56px] h-12 rounded-full text-on-surface-variant hover:text-on-surface transition-all" data-path="fees-management" href="#"><span class="material-symbols-outlined text-[22px]">payments</span><span class="font-label-sm text-label-sm">Fees</span></a><a aria-current="page" class="flex flex-col items-center justify-center gap-space-xs min-w-[56px] h-12 rounded-full transition-all text-primary-container font-label-md" data-path="admin-menu" href="#"><span class="material-symbols-outlined text-[22px]">grid_view</span><span class="font-label-sm text-label-sm">More</span></a></div></nav></body></html>

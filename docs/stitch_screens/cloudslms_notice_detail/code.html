@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Notice Detail - CloudsLMS</title>
+<!-- Tailwind CSS CDN with forms and container-queries plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              DEFAULT: '#0b6e4f',
+              dark: '#08533b',
+              light: '#e8f5f0',
+              accent: '#10b981',
+            }
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-scrollbars-and-resets">
+    body {
+      -webkit-tap-highlight-color: transparent;
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    }
+    /* Hide scrollbars for clean mobile appearance */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-[#f0f4f8] text-slate-800 font-sans min-h-screen flex justify-center items-start antialiased selection:bg-emerald-100 selection:text-emerald-900">
+<!-- BEGIN: MobileDeviceFrame -->
+<main class="w-full max-w-[430px] min-h-screen bg-[#f1f5f9] flex flex-col relative shadow-2xl overflow-hidden pb-10" data-purpose="mobile-container">
+<!-- BEGIN: iOSStatusBar -->
+<header class="w-full px-7 pt-3.5 pb-2 flex justify-between items-center text-slate-900 text-[14px] font-semibold tracking-tight z-30" data-purpose="status-bar">
+<!-- Time display -->
+<span>9:41</span>
+<!-- System status icons -->
+<div class="flex items-center space-x-2 text-slate-900">
+<!-- Cellular Signal -->
+<svg class="w-4 h-4 fill-current" viewbox="0 0 24 24">
+<path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.2.2-.2.51 0 .71.1.1.23.15.35.15s.26-.05.35-.15l1.9-1.9C8.38 19.29 10.11 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z" opacity="0.15"></path>
+<path d="M18.8 6.2C17.1 4.5 14.7 3.5 12 3.5s-5.1 1-6.8 2.7c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0C7.8 6.4 9.8 5.5 12 5.5s4.2.9 5.4 2.1c.39.39 1.02.39 1.41 0 .38-.38.38-1.01-.01-1.4z"></path>
+<path d="M16 9c-.9-.9-2.2-1.5-3.6-1.5s-2.7.6-3.6 1.5c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0 .5-.5 1.3-.9 2.2-.9s1.7.4 2.2.9c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41z"></path>
+<circle cx="12" cy="14" r="1.5"></circle>
+</svg>
+<!-- Wifi Icon -->
+<svg class="w-4 h-4 fill-current" viewbox="0 0 24 24">
+<path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4z"></path>
+</svg>
+<!-- Battery Icon -->
+<div class="flex items-center pl-0.5">
+<div class="w-5 h-2.5 border border-slate-900 rounded-[3px] p-0.5 flex items-center">
+<div class="h-full w-3 bg-slate-900 rounded-[1px]"></div>
+</div>
+<div class="w-0.5 h-1 bg-slate-900 rounded-r-sm -ml-[0.5px]"></div>
+</div>
+</div>
+</header>
+<!-- END: iOSStatusBar -->
+<!-- BEGIN: TopBarNavigation -->
+<nav class="px-5 py-3 flex items-center justify-between" data-purpose="top-navigation-bar">
+<!-- Back button and Breadcrumb / Title group -->
+<div class="flex items-center space-x-3.5">
+<button aria-label="Go back" class="w-10 h-10 rounded-full bg-white border border-slate-200/80 flex items-center justify-center text-slate-700 shadow-sm active:scale-95 transition-transform" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" viewbox="0 0 24 24">
+<path d="M19 12H5M12 19l-7-7 7-7"></path>
+</svg>
+</button>
+<div>
+<span class="block text-[11px] font-bold tracking-wider uppercase text-slate-400">Campus Announcement</span>
+<h1 class="text-xl font-bold text-slate-900 leading-tight">Notice</h1>
+</div>
+</div>
+<!-- Action overflow button -->
+<button aria-label="More options" class="w-10 h-10 rounded-full bg-white border border-slate-200/80 flex items-center justify-center text-slate-600 shadow-sm active:scale-95 transition-transform" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2.5" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="1"></circle>
+<circle cx="19" cy="12" r="1"></circle>
+<circle cx="5" cy="12" r="1"></circle>
+</svg>
+</button>
+</nav>
+<!-- END: TopBarNavigation -->
+<!-- BEGIN: NoticeDetailContent -->
+<div class="px-4 pt-2 space-y-4" data-purpose="notice-detail-card-wrapper">
+<!-- Primary Card Container -->
+<article class="bg-white rounded-3xl p-5 border border-slate-200/70 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] space-y-5" data-purpose="notice-main-card">
+<!-- Header Pill & Meta Tags -->
+<div class="space-y-3" data-purpose="card-header-tags">
+<div class="flex flex-wrap items-center gap-2">
+<!-- Urgent Badge -->
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-50 text-red-600 border border-red-200/70">
+<span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+              Urgent Notice
+            </span>
+<!-- Academic Year Pill -->
+<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">
+              AY 2025–26 • Circular #48
+            </span>
+</div>
+<!-- Notice Title -->
+<h2 class="text-xl font-extrabold text-slate-900 leading-snug tracking-tight">
+            Urgent: Unscheduled Campus Closure &amp; Immediate Shift to Synchronous Online Classes
+          </h2>
+</div>
+<!-- Meta Information Section -->
+<div class="bg-slate-50/80 rounded-2xl p-4 border border-slate-100 space-y-2.5 text-xs text-slate-600" data-purpose="notice-metadata-grid">
+<!-- Posted By Row -->
+<div class="flex items-center justify-between pb-2 border-b border-slate-200/60">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-emerald-100 text-[#0b6e4f] flex items-center justify-center font-bold">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<span class="font-medium text-slate-500">Posted by:</span>
+</div>
+<span class="font-bold text-slate-800">Aman Thakur <span class="font-normal text-slate-500">(Principal Office)</span></span>
+</div>
+<!-- Audience Row -->
+<div class="flex items-center justify-between pb-2 border-b border-slate-200/60">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.059 2.772m0 0a5.97 5.97 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<span class="font-medium text-slate-500">Target Audience:</span>
+</div>
+<span class="font-semibold text-slate-800">All Students, Parents &amp; Faculty</span>
+</div>
+<!-- Date & Department Meta -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<span class="font-medium text-slate-500">Dispatched:</span>
+</div>
+<span class="font-semibold text-slate-800">Oct 27, 2025 • 09:30 AM</span>
+</div>
+</div>
+<!-- Divider Line -->
+<hr class="border-slate-100"/>
+<!-- Notice Body / Multi-Paragraph Text -->
+<div class="space-y-3.5 text-sm text-slate-600 leading-relaxed font-normal" data-purpose="notice-body-text">
+<p>
+<strong class="text-slate-800 font-semibold">Dear Students, Respected Parents, and Faculty Members,</strong><br/>
+            Please be advised that in accordance with the latest advisory issued by the District Education Authority and adverse meteorological forecasts, the physical campus of Clouds Academy will remain closed for all standard academic and extra-curricular operations starting tomorrow, <span class="font-semibold text-slate-700">Tuesday, Oct 28, 2025</span> until further notice.
+          </p>
+<p>
+            To guarantee complete academic continuity without interruption, all Grade 6 through Grade 12 scheduled sessions will transition smoothly into synchronous virtual classrooms hosted directly through the CloudsLMS portal. Students are instructed to join their respective subject sessions strictly per their existing standard timetable beginning at <span class="font-semibold text-slate-700">08:30 AM sharp</span>. Attendance will be monitored in real time via digital roll-call.
+          </p>
+<p>
+            School transport services, physical lab examinations, and scheduled sports coaching clinics stand deferred. The administrative helpdesk and counseling helpline remain functional between 08:00 AM and 04:30 PM at <span class="font-semibold text-slate-700">+977-1-499200</span> or via <span class="text-[#0b6e4f] font-medium underline underline-offset-2">helpdesk@cloudslms.edu</span>.
+          </p>
+<!-- Signature Line -->
+<div class="pt-2">
+<p class="text-slate-700 font-semibold text-xs leading-5">
+              Warm Regards,<br/>
+<span class="text-sm font-bold text-slate-900">Aman Thakur</span><br/>
+<span class="text-slate-500 font-normal">Head of Administration &amp; School Governance<br/>CloudsLMS Institutional Network</span>
+</p>
+</div>
+</div>
+<!-- Official Attachment Box -->
+<div class="pt-1" data-purpose="attachment-section">
+<div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Verified Attachment</div>
+<div class="flex items-center justify-between p-3.5 bg-[#f8fafc] border border-slate-200/90 rounded-2xl group cursor-pointer active:bg-slate-100 transition-colors">
+<div class="flex items-center space-x-3 truncate">
+<!-- PDF File Icon Badge -->
+<div class="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200/60 text-[#0b6e4f] flex items-center justify-center flex-shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<!-- Filename and details -->
+<div class="truncate">
+<p class="text-xs font-bold text-slate-800 truncate">Official_Circular_Ref_2025_48.pdf</p>
+<p class="text-[11px] text-slate-400 font-medium">1.8 MB • Digitally Signed Circular</p>
+</div>
+</div>
+<!-- Download Action Icon -->
+<div class="text-slate-400 group-hover:text-[#0b6e4f] transition-colors p-1">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- Digital Verification Stamp Box -->
+<div class="pt-2" data-purpose="verification-stamp">
+<div class="flex items-center justify-center gap-2 py-2 px-3 bg-emerald-50/70 border border-emerald-100 rounded-xl text-center">
+<svg class="w-4 h-4 text-[#0b6e4f] flex-shrink-0" fill="currentColor" viewbox="0 0 20 20">
+<path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path>
+</svg>
+<span class="text-[11px] font-semibold text-[#0b6e4f] tracking-tight">
+              Official Institutional Circular • Verified Digital Dispatch
+            </span>
+</div>
+</div>
+</article>
+<!-- Bottom Reference Info Card -->
+<aside class="bg-white/70 backdrop-blur-sm rounded-2xl p-4 border border-slate-200/60 flex items-center justify-between text-xs text-slate-500" data-purpose="security-footnote">
+<div class="flex items-center space-x-2.5">
+<svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span>Need help? Contact School Admin Secretariat</span>
+</div>
+<span class="font-bold text-[#0b6e4f]">Helpdesk</span>
+</aside>
+</div>
+<!-- END: NoticeDetailContent -->
+</main>
+<!-- END: MobileDeviceFrame -->
+</body></html>

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><title>CloudsLMS Admin Portal</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100%;margin:0;padding:0;}body{overscroll-behavior-y:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "surface-container-lowest": "#ffffff", "on-surface-variant": "#3f4943", "outline": "#6f7a73", "surface-tint": "#056c4d", "on-secondary": "#ffffff", "on-surface": "#131b2e", "primary-fixed": "#9ff4cc", "surface-bright": "#faf8ff", "surface-container-low": "#f2f3ff", "on-tertiary-fixed": "#2a1700", "on-error": "#ffffff", "on-background": "#131b2e", "inverse-surface": "#283044", "on-tertiary-container": "#ffd4a4", "tertiary": "#684000", "on-secondary-fixed": "#002113", "on-tertiary": "#ffffff", "surface-container": "#eaedff", "on-secondary-container": "#00714d", "primary-fixed-dim": "#83d7b1", "error-container": "#ffdad6", "inverse-on-surface": "#eef0ff", "tertiary-fixed-dim": "#ffb95f", "surface": "#faf8ff", "surface-dim": "#d2d9f4", "on-primary-fixed-variant": "#005139", "surface-container-highest": "#dae2fd", "inverse-primary": "#83d7b1", "surface-variant": "#dae2fd", "tertiary-container": "#885500", "on-primary-fixed": "#002115", "primary-container": "#0b6e4f", "primary": "#00543b", "tertiary-fixed": "#ffddb8", "surface-container-high": "#e2e7ff", "background": "#faf8ff", "error": "#ba1a1a", "secondary-container": "#6cf8bb", "on-secondary-fixed-variant": "#005236", "secondary": "#006c49", "on-error-container": "#93000a", "outline-variant": "#bec9c1", "secondary-fixed-dim": "#4edea3", "on-tertiary-fixed-variant": "#653e00", "on-primary-container": "#98edc6", "secondary-fixed": "#6ffbbe", "on-primary": "#ffffff" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-xs": "0.25rem", "space-xl": "2rem", "gutter-sm": "0.75rem", "gutter": "1rem", "space-lg": "1.5rem", "margin-md": "1.5rem", "space-sm": "0.5rem", "margin": "1rem", "space-md": "1rem" }, fontFamily: { "title-sm": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "display-lg": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"] }, fontSize: { "title-sm": ["14px", { lineHeight: "20px", letterSpacing: "0em", fontWeight: "600" }], "body-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "400" }], "title-md": ["16px", { lineHeight: "22px", letterSpacing: "0em", fontWeight: "600" }], "display-lg": ["36px", { lineHeight: "44px", letterSpacing: "-0.02em", fontWeight: "700" }], "body-lg": ["16px", { lineHeight: "24px", letterSpacing: "0em", fontWeight: "400" }], "headline-lg": ["30px", { lineHeight: "38px", letterSpacing: "-0.02em", fontWeight: "700" }], "label-lg": ["14px", { lineHeight: "20px", letterSpacing: "0.01em", fontWeight: "600" }], "headline-lg-mobile": ["26px", { lineHeight: "34px", letterSpacing: "-0.015em", fontWeight: "700" }], "headline-sm": ["18px", { lineHeight: "24px", letterSpacing: "-0.005em", fontWeight: "600" }], "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.02em", fontWeight: "500" }], "headline-md": ["22px", { lineHeight: "28px", letterSpacing: "-0.01em", fontWeight: "600" }], "body-md": ["14px", { lineHeight: "20px", letterSpacing: "0em", fontWeight: "400" }], "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.04em", fontWeight: "600" }] } } } };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased min-h-full flex flex-col"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-gutter flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="w-9 h-9 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container"><span class="material-symbols-outlined text-[20px]">cloud_done</span></div><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-headline-sm text-headline-sm text-on-surface leading-none">CloudsLMS</span><span class="px-space-xs py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm uppercase tracking-wide">Admin</span></div><span class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1">Attendance</span></div></div><div class="flex items-center gap-space-xs"><button aria-label="Notifications" class="w-11 h-11 rounded-full flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-16 pb-24 px-gutter bg-surface min-h-screen"><div class="flex flex-col w-full space-y-space-md">
+<!-- Screen Sub-Header & Controls -->
+<div class="flex flex-col gap-space-sm pt-space-xs">
+<div class="flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-xs">
+<button aria-label="Go Back" class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</button>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5">
+<h1 class="font-headline-sm text-headline-sm text-on-surface leading-tight">Attendance Overview</h1>
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">School-wide Live Tracking • AY 2025–26</span>
+</div>
+</div>
+<button class="flex items-center gap-1.5 px-3 py-2 rounded-full bg-surface-container-lowest text-on-surface shadow-sm hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined text-primary text-[18px]">calendar_today</span>
+<span class="font-label-md text-label-md">16 Sep 2026 (Wed)</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">expand_more</span>
+</button>
+</div>
+</div>
+<!-- Key Institutional Metrics: 2x2 Bento Stat Tiles -->
+<div class="grid grid-cols-2 gap-space-sm">
+<!-- Total Sessions -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-md text-label-md text-on-surface-variant">Total Sessions</span>
+<span class="p-1 rounded-full bg-surface-container text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">domain_verification</span>
+</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-on-surface font-bold">34 <span class="text-on-surface-variant text-[16px] font-normal">/ 34</span></span>
+<div class="flex items-center gap-1 mt-1">
+<span class="px-1.5 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-[10px]">100% Conducted</span>
+</div>
+</div>
+</div>
+<!-- Present Rate -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-md text-label-md text-on-surface-variant">Present Rate</span>
+<span class="p-1 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">how_to_reg</span>
+</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-secondary font-bold">94.8%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-1">1,183 Students</span>
+</div>
+</div>
+<!-- Absent Rate -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-md text-label-md text-on-surface-variant">Absent Rate</span>
+<span class="p-1 rounded-full bg-error-container text-on-error-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">person_off</span>
+</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-error font-bold">3.8%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-1">47 Students</span>
+</div>
+</div>
+<!-- Late / Tardy -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-md text-label-md text-on-surface-variant">Late / Tardy</span>
+<span class="p-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">alarm_on</span>
+</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-tertiary font-bold">1.4%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-1">18 Students</span>
+</div>
+</div>
+</div>
+<!-- Real-Time Sync & Filter Bar -->
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-2">
+<h2 class="font-title-sm text-title-sm text-on-surface">Live Section Logs</h2>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-on-surface-variant font-label-sm text-[11px]">34 Sections</span>
+</div>
+<div class="flex items-center gap-1.5 font-label-sm text-label-sm text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
+<span>Synced 2m ago</span>
+</div>
+</div>
+<!-- Filter Chips Pill Bar (Horizontal Scroll) -->
+<div class="flex items-center gap-2 overflow-x-auto pb-1 -mx-gutter px-gutter no-scrollbar" id="chip-filters">
+<button class="chip-item flex-shrink-0 px-3.5 py-1.5 rounded-full bg-primary text-on-primary font-label-md text-label-md transition-all">
+        All Classes (34)
+      </button>
+<button class="chip-item flex-shrink-0 px-3.5 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low transition-all">
+        Secondary (Gr 9–10)
+      </button>
+<button class="chip-item flex-shrink-0 px-3.5 py-1.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-md text-label-md hover:bg-surface-container-low transition-all">
+        Middle (Gr 6–8)
+      </button>
+<button class="chip-item flex-shrink-0 px-3.5 py-1.5 rounded-full bg-surface-container-lowest text-error font-label-md text-label-md hover:bg-error-container/40 flex items-center gap-1 transition-all">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+        Flagged (&lt;90%)
+      </button>
+</div>
+</div>
+<!-- Session Cards List -->
+<div class="flex flex-col gap-3">
+<!-- Card 1: Class 10 - Section A -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-3 transition-transform active:scale-[0.99]">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md text-on-surface">Class 10 – Section A</span>
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-[11px] flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">check_circle</span>
+              Verified
+            </span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Science &amp; Physics (Period 2)</span>
+</div>
+<div class="text-right">
+<span class="font-title-md text-title-md text-secondary font-bold">90.5%</span>
+<span class="block font-label-sm text-[11px] text-on-surface-variant">42 Students</span>
+</div>
+</div>
+<!-- Teacher and Submission Meta -->
+<div class="flex items-center justify-between text-on-surface-variant bg-surface-container-low/70 px-3 py-2 rounded-lg">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover" data-alt="Warm portrait avatar photo of female teacher Mrs. Sunita Sharma wearing glasses, friendly academic expression, natural soft indoor school lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDN6T257rPGt5NnuAaCe0MH9hhKrYP37wJK1ZT8fmtts9WhQ9jgUW3BLHg68zSelsmM-harnGVZJ-5uABbQBoY91HxF4caH6mEVx9QGq-__l8vubuoyeJ6eeRsv65PHk0eMKqMBThrp4AZRtgAid4O9wZ04H86VY8NF0hhgb6ADGH6e0kIND8RANhMaycLce09U9fC3gyrj2zL0JL6GytaOlcOSzFJKLIZTfo-8MP1PtEWzff0NSOU7Xw"/>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Mrs. Sunita Sharma</span>
+</div>
+<div class="flex items-center gap-1 font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[15px] text-outline">schedule</span>
+<span>09:40 AM</span>
+</div>
+</div>
+<!-- Pill Breakdown -->
+<div class="flex items-center justify-between gap-2 pt-0.5">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2.5 py-1 rounded-full bg-secondary-container/60 text-on-secondary-container font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> 38 Present
+          </span>
+<span class="px-2.5 py-1 rounded-full bg-error-container/60 text-on-error-container font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> 2 Absent
+          </span>
+<span class="px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> 2 Late
+          </span>
+</div>
+<button aria-label="View Class 10-A Roster" class="p-1.5 rounded-full bg-surface-container-low text-primary hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Card 2: Class 10 - Section B -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-3 transition-transform active:scale-[0.99]">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md text-on-surface">Class 10 – Section B</span>
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-[11px] flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">check_circle</span>
+              Verified
+            </span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Mathematics (Period 1)</span>
+</div>
+<div class="text-right">
+<span class="font-title-md text-title-md text-secondary font-bold">94.7%</span>
+<span class="block font-label-sm text-[11px] text-on-surface-variant">38 Students</span>
+</div>
+</div>
+<!-- Teacher and Submission Meta -->
+<div class="flex items-center justify-between text-on-surface-variant bg-surface-container-low/70 px-3 py-2 rounded-lg">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover" data-alt="Portrait avatar photograph of male teacher Mr. Aris Vance smiling with necktie, soft academic classroom background, modern clean lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFPz_QbnZRpd0kCBu_kk5z04RBQBH4J_rP1frtRtNTip_Uci_a3Cux3yy_sM01hHEh2A38931HvJUvVGNiqFcJHc7m3OQis8RszwUuskLlcm7Ho0rtKpcj5HoDOkgQaNq7abmHeU0AhZ9GgDQXmfH9ljetUYyN3B2eICASjyqdOBr4cbrEruwr8ghLWRVHUD1qDEMfon9l6l7oK2n-ZKd9n7dT2TqJzpfiKbfdPJ29PoHLBRPNd6uMfA"/>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Mr. Aris Vance</span>
+</div>
+<div class="flex items-center gap-1 font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[15px] text-outline">schedule</span>
+<span>08:35 AM</span>
+</div>
+</div>
+<!-- Pill Breakdown -->
+<div class="flex items-center justify-between gap-2 pt-0.5">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2.5 py-1 rounded-full bg-secondary-container/60 text-on-secondary-container font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> 36 Present
+          </span>
+<span class="px-2.5 py-1 rounded-full bg-error-container/60 text-on-error-container font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> 1 Absent
+          </span>
+<span class="px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> 1 Late
+          </span>
+</div>
+<button aria-label="View Class 10-B Roster" class="p-1.5 rounded-full bg-surface-container-low text-primary hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Card 3: Class 9 - Section A -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-3 transition-transform active:scale-[0.99]">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md text-on-surface">Class 9 – Section A</span>
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-[11px] flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">check_circle</span>
+              Verified
+            </span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">English Literature (Period 3)</span>
+</div>
+<div class="text-right">
+<span class="font-title-md text-title-md text-secondary font-bold">92.1%</span>
+<span class="block font-label-sm text-[11px] text-on-surface-variant">38 Students</span>
+</div>
+</div>
+<!-- Teacher and Submission Meta -->
+<div class="flex items-center justify-between text-on-surface-variant bg-surface-container-low/70 px-3 py-2 rounded-lg">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover" data-alt="Portrait photo of senior male educator Dr. Rajeshwar Sharma with distinguished smile, scholarly bookshelves in background, soft warm lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-K1ikI8uFFzW_wXV5QQ4mvQRGDwARDOuRfodV5jzfJXeFTNYzhHx-qIjWXnl7DiUn1dAZgCvmfYuAL6C9Q9iBHxUSC48qrAxollDU0_tt58uYU0QgW60oGbSFuxhnR6XsIn7HXE5JLy5c-uB-MCkNjlYUXdqJLNzGQTDjbgEDabynyo6LUq6tNGBgTYwHJsy3ZXZvMaEfIDge8D4zjRQQT2ws7yq3Ur3gTD3RIOKeajuATgB1dOvDyw"/>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Dr. Rajeshwar Sharma</span>
+</div>
+<div class="flex items-center gap-1 font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[15px] text-outline">schedule</span>
+<span>10:45 AM</span>
+</div>
+</div>
+<!-- Pill Breakdown -->
+<div class="flex items-center justify-between gap-2 pt-0.5">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2.5 py-1 rounded-full bg-secondary-container/60 text-on-secondary-container font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> 35 Present
+          </span>
+<span class="px-2.5 py-1 rounded-full bg-error-container/60 text-on-error-container font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> 3 Absent
+          </span>
+<span class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span> 0 Late
+          </span>
+</div>
+<button aria-label="View Class 9-A Roster" class="p-1.5 rounded-full bg-surface-container-low text-primary hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Card 4: Class 8 - Section B -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-3 transition-transform active:scale-[0.99]">
+<div class="flex items-start justify-between">
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md text-on-surface">Class 8 – Section B</span>
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-[11px] flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">check_circle</span>
+              Verified
+            </span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Computer Tech &amp; Coding (Period 4)</span>
+</div>
+<div class="text-right">
+<span class="font-title-md text-title-md text-secondary font-bold">95.1%</span>
+<span class="block font-label-sm text-[11px] text-on-surface-variant">41 Students</span>
+</div>
+</div>
+<!-- Teacher and Submission Meta -->
+<div class="flex items-center justify-between text-on-surface-variant bg-surface-container-low/70 px-3 py-2 rounded-lg">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover" data-alt="Headshot of young male computer science teacher Er. Pradeep Karki in modern tech lab setting, welcoming expression, natural daylight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBv7O1NgWmz06zD8zFW0o1nstgAPcOCHQdaE95rJv922lBqJZE5kKMrssUr-Pz8cekI3VmHvMmxGNDkShJPGFAzHFQ-cPUjXQwUonxPfoD9v-zLTv8JJj-dk-WReahomhA7-BEshKvLsKMeIfZHkZtdCMplrVDN0mjrZ-PoO2anbpR4zQHmTg0EEPSUVXSxDFW2X76Q46L186-rkuVoWmWjg4P2i7jHfybnI__-yHvdESRGDq3cbsHLdQ"/>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Er. Pradeep Karki</span>
+</div>
+<div class="flex items-center gap-1 font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[15px] text-outline">schedule</span>
+<span>11:50 AM</span>
+</div>
+</div>
+<!-- Pill Breakdown -->
+<div class="flex items-center justify-between gap-2 pt-0.5">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2.5 py-1 rounded-full bg-secondary-container/60 text-on-secondary-container font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> 39 Present
+          </span>
+<span class="px-2.5 py-1 rounded-full bg-error-container/60 text-on-error-container font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> 1 Absent
+          </span>
+<span class="px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> 1 Late
+          </span>
+</div>
+<button aria-label="View Class 8-B Roster" class="p-1.5 rounded-full bg-surface-container-low text-primary hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Card 5: Class 7 - Section A (Flagged) -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-3 transition-transform active:scale-[0.99] relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-tertiary"></div>
+<div class="flex items-start justify-between pl-1">
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-title-md text-title-md text-on-surface">Class 7 – Section A</span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-[11px] flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">warning</span>
+              Flagged (&lt;85%)
+            </span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Social Studies (Period 2)</span>
+</div>
+<div class="text-right">
+<span class="font-title-md text-title-md text-tertiary font-bold">78.4%</span>
+<span class="block font-label-sm text-[11px] text-on-surface-variant">37 Students</span>
+</div>
+</div>
+<!-- Teacher and Submission Meta -->
+<div class="flex items-center justify-between text-on-surface-variant bg-surface-container-low/70 px-3 py-2 rounded-lg ml-1">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover" data-alt="Portrait photo of female teacher Ms. Anita Neupane in educational classroom setting, friendly professional demeanor, soft natural ambient lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA4oxkWhpkEKanavrZ_PK-EMlK-wDWylexeDX59Mn4EpIf2LO8RF14OjUnIi0m8vHvxQ-36GtDSQjqqEMcFGTKsl0kkK4TYd5SNpguPBYqgkufrNeLtORUx8nij09kO-wuAIr8kvurLd2OpYCxriRcve1q0J1DdUSA6Vnz8SQLIWLs9_SBQWA2_ewVlTh8Uz0tx9dIvEtFGZUBSi48biKy3waGL3mZrbRSDkPP0c9pDVuDXUHRc-LOctw"/>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Ms. Anita Neupane</span>
+</div>
+<div class="flex items-center gap-1 font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[15px] text-outline">schedule</span>
+<span>09:42 AM</span>
+</div>
+</div>
+<!-- Pill Breakdown -->
+<div class="flex items-center justify-between gap-2 pt-0.5 pl-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-2.5 py-1 rounded-full bg-secondary-container/60 text-on-secondary-container font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> 29 Present
+          </span>
+<span class="px-2.5 py-1 rounded-full bg-error-container/60 text-on-error-container font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> 5 Absent
+          </span>
+<span class="px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> 3 Late
+          </span>
+</div>
+<button aria-label="View Class 7-A Roster" class="p-1.5 rounded-full bg-surface-container-low text-tertiary hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Consolidated Report Download CTA -->
+<div class="pt-space-sm pb-space-md">
+<button class="w-full py-3.5 px-space-md rounded-full bg-primary text-on-primary font-label-lg text-label-lg shadow-md hover:bg-primary-container flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-[20px]">file_download</span>
+<span>Download Consolidated Attendance Report (PDF / Excel)</span>
+</button>
+<p class="text-center font-label-sm text-label-sm text-on-surface-variant mt-2">
+      Export includes period-wise logs, master roll numbers, &amp; excused notes.
+    </p>
+</div>
+</div>
+<script>
+  (function() {
+    // Highlight Attendance tab in the shell bottom navigation bar
+    const attendanceNav = document.querySelector('nav a[data-path="attendance"]');
+    if (attendanceNav) {
+      document.querySelectorAll('nav a').forEach(el => {
+        el.classList.remove('text-primary', 'font-title-sm');
+        el.classList.add('text-on-surface-variant');
+      });
+      attendanceNav.classList.add('text-primary', 'font-title-sm');
+      attendanceNav.classList.remove('text-on-surface-variant');
+    }
+
+    // Interactive filter chip toggle behavior
+    const chipContainer = document.getElementById('chip-filters');
+    if (chipContainer) {
+      chipContainer.querySelectorAll('.chip-item').forEach(button => {
+        button.addEventListener('click', function() {
+          chipContainer.querySelectorAll('.chip-item').forEach(b => {
+            b.classList.remove('bg-primary', 'text-on-primary');
+            b.classList.add('bg-surface-container-lowest');
+            if (b.innerText.includes('Flagged')) {
+              b.classList.add('text-error');
+            } else {
+              b.classList.add('text-on-surface-variant');
+            }
+          });
+          this.classList.remove('bg-surface-container-lowest', 'text-on-surface-variant', 'text-error');
+          this.classList.add('bg-primary', 'text-on-primary');
+        });
+      });
+    }
+  })();
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/80 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.04)]" data-active-classes="text-primary font-title-sm"><div class="flex justify-around items-center h-16 px-space-xs"><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-0.5 text-on-surface-variant hover:text-on-surface transition-all" data-path="home" href="#"><span class="material-symbols-outlined text-[24px]">dashboard</span><span class="font-label-sm text-label-sm">Home</span></a><a aria-current="page" class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-0.5 transition-all text-primary font-title-sm" data-path="attendance" href="#"><span class="material-symbols-outlined text-[24px]">co_present</span><span class="font-label-sm text-label-sm">Attendance</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-0.5 text-on-surface-variant hover:text-on-surface transition-all" data-path="fees" href="#"><span class="material-symbols-outlined text-[24px]">payments</span><span class="font-label-sm text-label-sm">Fees</span></a><a class="flex flex-col items-center justify-center min-w-[56px] min-h-[44px] gap-0.5 text-on-surface-variant hover:text-on-surface transition-all" data-path="more" href="#"><span class="material-symbols-outlined text-[24px]">widgets</span><span class="font-label-sm text-label-sm">More</span></a></div></nav></body></html>

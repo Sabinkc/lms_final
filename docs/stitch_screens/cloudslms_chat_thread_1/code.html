@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>CloudsLMS - Grade 10 Section A Chat Thread</title>
+<!-- Tailwind CSS CDN with forms and container queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Custom Configuration -->
+<script data-purpose="tailwind-config">
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#EEFDF6',
+              100: '#E1F8ED',
+              200: '#C3F2DB',
+              500: '#10B981',
+              600: '#059669',
+              700: '#0B6E4F', /* Primary Brand Emerald */
+              800: '#075039',
+              900: '#043425'
+            },
+            mint: {
+              surface: '#F2FBF6',
+              border: '#DCF5E8'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif']
+          },
+          boxShadow: {
+            'soft': '0 2px 10px rgba(11, 110, 79, 0.05)',
+            'float': '0 4px 20px -2px rgba(11, 110, 79, 0.12)'
+          }
+        }
+      }
+    };
+  </script>
+<!-- Google Font: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style data-purpose="custom-animations">
+    /* Subtle typing indicator bounce */
+    @keyframes typingDot {
+      0%, 80%, 100% {
+        transform: translateY(0);
+        opacity: 0.4;
+      }
+      40% {
+        transform: translateY(-4px);
+        opacity: 1;
+      }
+    }
+    .typing-dot-1 {
+      animation: typingDot 1.4s infinite ease-in-out 0s;
+    }
+    .typing-dot-2 {
+      animation: typingDot 1.4s infinite ease-in-out 0.2s;
+    }
+    .typing-dot-3 {
+      animation: typingDot 1.4s infinite ease-in-out 0.4s;
+    }
+    /* Hide scrollbar for clean mobile visual */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 font-sans antialiased text-slate-800 min-h-screen flex justify-center items-center sm:p-4">
+<!-- BEGIN: MobileDeviceFrame -->
+<main class="w-[390px] h-[844px] max-w-[390px] max-h-[844px] bg-mint-surface shadow-2xl rounded-[44px] overflow-hidden flex flex-col relative border-[7px] border-slate-900 border-opacity-95 ring-1 ring-black/10">
+<!-- BEGIN: iOSStatusBar -->
+<header class="w-full bg-white/95 backdrop-blur-md pt-3 px-7 pb-2 flex justify-between items-center z-30 shrink-0 select-none border-b border-slate-100">
+<!-- Time -->
+<span class="text-[14.5px] font-bold tracking-tight text-slate-900">9:41</span>
+<!-- Dynamic Island / Speaker Pill Placeholder -->
+<div class="w-24 h-4 bg-slate-900 rounded-full mx-auto -mt-1 hidden sm:block"></div>
+<!-- System Status Icons -->
+<div class="flex items-center space-x-1.5 text-slate-900">
+<!-- Cell Signal -->
+<svg class="w-4 h-4 fill-current" viewbox="0 0 24 24">
+<path d="M2 17h3v4H2v-4zm5-4h3v8H7v-8zm5-5h3v13h-3V8zm5-5h3v18h-3V3z"></path>
+</svg>
+<!-- Wifi -->
+<svg class="w-4 h-4 fill-current" viewbox="0 0 24 24">
+<path d="M12 4C7.31 4 3.07 5.9 0 8.98L12 21 24 8.98C20.93 5.9 16.69 4 12 4zm0 3.3c3.78 0 7.22 1.46 9.77 3.86L12 19.01 2.23 11.16C4.78 8.76 8.22 7.3 12 7.3z"></path>
+</svg>
+<!-- Battery with outline and charge block -->
+<div class="flex items-center pl-0.5">
+<div class="w-5 h-2.5 border border-slate-900 rounded-sm p-0.5 flex items-center">
+<div class="w-3.5 h-full bg-slate-900 rounded-2xs"></div>
+</div>
+<div class="w-0.5 h-1 bg-slate-900 rounded-r-xs ml-[0.5px]"></div>
+</div>
+</div>
+</header>
+<!-- END: iOSStatusBar -->
+<!-- BEGIN: ChatHeaderBar -->
+<section class="bg-white/95 backdrop-blur-md px-3.5 py-2.5 border-b border-emerald-100/70 shadow-soft flex items-center justify-between z-20 shrink-0">
+<!-- Left: Back Navigation and Group Avatar & Info -->
+<div class="flex items-center space-x-2.5 min-w-0">
+<!-- Back Button -->
+<button aria-label="Go back" class="p-1 -ml-1 text-slate-600 hover:text-brand-700 active:scale-95 transition-transform rounded-full" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.3" viewbox="0 0 24 24">
+<path d="M15 19l-7-7 7-7"></path>
+</svg>
+</button>
+<!-- Group Badge with Online Pulse -->
+<div class="relative shrink-0">
+<div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-700 to-brand-800 text-white flex items-center justify-center font-bold text-xs tracking-wider shadow-sm ring-2 ring-emerald-50">
+            10A
+          </div>
+<span class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full ring-1 ring-emerald-600/20"></span>
+</div>
+<!-- Group Details -->
+<div class="flex flex-col min-w-0">
+<div class="flex items-center space-x-1.5">
+<h1 class="font-bold text-slate-900 text-sm leading-tight truncate">Grade 10 - Section A</h1>
+<span class="bg-emerald-100 text-brand-800 text-[10px] font-semibold px-1.5 py-0.2 rounded tracking-tight shrink-0">Official</span>
+</div>
+<p class="text-[11.5px] text-slate-500 truncate flex items-center space-x-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+<span>34 students, 4 teachers • Active now</span>
+</p>
+</div>
+</div>
+<!-- Right Action Icons: Call, Video, Overflow -->
+<div class="flex items-center space-x-1 shrink-0 text-slate-600">
+<!-- Video Call -->
+<button aria-label="Start video call" class="p-1.5 rounded-full hover:bg-emerald-50 hover:text-brand-700 text-slate-600 transition" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<polygon points="23 7 16 12 23 17 23 7"></polygon>
+<rect height="14" rx="2" ry="2" width="15" x="1" y="5"></rect>
+</svg>
+</button>
+<!-- Audio Call -->
+<button aria-label="Start voice call" class="p-1.5 rounded-full hover:bg-emerald-50 hover:text-brand-700 text-slate-600 transition" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+</svg>
+</button>
+<!-- Manage / More Menu -->
+<button aria-label="Manage group settings" class="p-1.5 rounded-full hover:bg-emerald-50 hover:text-brand-700 text-slate-600 transition" title="Manage Group" type="button">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 20 20">
+<path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
+</svg>
+</button>
+</div>
+</section>
+<!-- END: ChatHeaderBar -->
+<!-- BEGIN: MessageThreadArea -->
+<div class="flex-1 overflow-y-auto px-3 py-3 space-y-4 no-scrollbar bg-mint-surface relative" style="background-image: radial-gradient(#d1fae5 0.75px, transparent 0.75px); background-size: 14px 14px;">
+<!-- Date Divider Chip -->
+<div class="flex justify-center my-1.5">
+<span class="bg-white/90 backdrop-blur-sm border border-emerald-100 text-slate-500 text-[11px] font-medium px-3 py-0.5 rounded-full shadow-xs">
+          Today, October 28
+        </span>
+</div>
+<!-- Incoming Message 1: Teacher (Prof. Aris Thorne) -->
+<div class="flex items-start space-x-2 max-w-[90%]">
+<!-- Teacher Avatar -->
+<div class="w-7 h-7 rounded-full bg-brand-800 text-white flex items-center justify-center font-bold text-[10px] shrink-0 ring-1 ring-brand-700/30 shadow-xs mt-0.5">
+          AT
+        </div>
+<!-- Message Content & Meta -->
+<div>
+<!-- Sender Label & Role Badge -->
+<div class="flex items-center space-x-1.5 mb-1 ml-0.5">
+<span class="text-xs font-semibold text-brand-800 leading-tight">Prof. Aris Thorne</span>
+<span class="bg-brand-100 text-brand-800 text-[9.5px] font-medium px-1.5 py-0.5 rounded-sm">Faculty</span>
+</div>
+<!-- Chat Bubble -->
+<div class="bg-white text-slate-800 text-[13px] leading-relaxed p-3 rounded-2xl rounded-tl-xs shadow-soft border border-emerald-50">
+            Good morning Grade 10! Please remember that tomorrow's Physics practical on <span class="font-medium text-brand-700">Ray Optics</span> requires everyone to bring their lab record books.
+          </div>
+<span class="text-[10px] text-slate-400 mt-1 block ml-1 font-medium">10:15 AM</span>
+</div>
+</div>
+<!-- Outgoing Message 1: Current User (Anita) -->
+<div class="flex flex-col items-end max-w-[85%] ml-auto">
+<div class="bg-brand-700 text-white text-[13px] leading-relaxed p-3 rounded-2xl rounded-tr-xs shadow-soft shadow-brand-700/10">
+          Thank you sir. Should we complete Exercise 4.2 derivations before class as well?
+        </div>
+<div class="flex items-center space-x-1 text-[10px] text-slate-400 mt-1 mr-1 font-medium">
+<span>10:18 AM</span>
+<span>•</span>
+<span class="text-brand-600 font-medium">Read</span>
+<!-- Double Checkmarks -->
+<svg class="w-3.5 h-3.5 text-brand-600" fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24">
+<path d="M4 12l4 4L18 4m-7 8l2 2 7-7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+</div>
+<!-- Incoming Message 2: Teacher with Board Diagram Attachment -->
+<div class="flex items-start space-x-2 max-w-[92%]">
+<div class="w-7 h-7 rounded-full bg-brand-800 text-white flex items-center justify-center font-bold text-[10px] shrink-0 ring-1 ring-brand-700/30 shadow-xs mt-0.5">
+          AT
+        </div>
+<div class="flex-1">
+<div class="flex items-center space-x-1.5 mb-1 ml-0.5">
+<span class="text-xs font-semibold text-brand-800 leading-tight">Prof. Aris Thorne</span>
+<span class="bg-brand-100 text-brand-800 text-[9.5px] font-medium px-1.5 py-0.5 rounded-sm">Faculty</span>
+</div>
+<!-- Bubble with embedded scientific image attachment -->
+<div class="bg-white text-slate-800 text-[13px] leading-relaxed p-2.5 rounded-2xl rounded-tl-xs shadow-soft border border-emerald-50 space-y-2">
+<p class="px-1 text-slate-800">
+              Yes Anita, here is the chalkboard reference diagram for the focal length and sign conventions we reviewed yesterday. Please review it carefully:
+            </p>
+<!-- Attachment Card Container -->
+<div class="rounded-xl overflow-hidden border border-emerald-100 bg-slate-900 relative group">
+<!-- Provided Physics Chalkboard Image -->
+<img alt="A high school physics lab blackboard diagram showing optics ray diagrams with convex and concave lenses and light focal formulas, clear clean classroom scientific diagram illustration" class="w-full h-44 object-cover hover:scale-[1.02] transition-transform duration-200 cursor-pointer" loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAssjA-bxJY5F4fWy66qTPunBsWPT958_905XPJd27mXSoxrhdPvnbpGCAmyTVfadkHo3OfUKdwsmZl7faOSwaPen4mOFADO4yQeMePEfWOqLv46WFZAeE28sBd29WuHFr950v3K3sRrTss98C9S5A0qLKUKvZD4Y7LqPlVix52faozIUDYNUFK-PihfSLiDWTbln9jmodIKw2ZMNJ2dhv_jq-fKYI7qxyHYS8wEuBZ-cXeup1jYY5xSw"/>
+<!-- Bottom Metadata Strip -->
+<div class="bg-slate-900/90 backdrop-blur-xs px-2.5 py-1.5 flex items-center justify-between text-white">
+<div class="flex items-center space-x-1.5 truncate">
+<svg class="w-3.5 h-3.5 text-brand-200 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="text-[11px] font-medium text-slate-100 truncate">Optics_Ray_Diagram_Notes.jpg</span>
+<span class="text-[9.5px] text-slate-400 shrink-0">• 1.4 MB</span>
+</div>
+<!-- Download Action Icon -->
+<button aria-label="Download ray diagram" class="p-1 hover:bg-white/20 rounded text-brand-200 transition" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+</div>
+</div>
+<span class="text-[10px] text-slate-400 mt-1 block ml-1 font-medium">10:21 AM</span>
+</div>
+</div>
+<!-- Incoming Message 3: Classmate (Aarav Sharma) -->
+<div class="flex items-start space-x-2 max-w-[88%]">
+<!-- Classmate Avatar -->
+<div class="w-7 h-7 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-[10px] shrink-0 border border-slate-300 shadow-xs mt-0.5">
+          AS
+        </div>
+<div>
+<div class="flex items-center space-x-1.5 mb-1 ml-0.5">
+<span class="text-xs font-semibold text-slate-700 leading-tight">Aarav Sharma</span>
+<span class="bg-slate-100 text-slate-600 text-[9.5px] font-medium px-1.5 py-0.5 rounded-sm">Roll 04</span>
+</div>
+<div class="bg-white text-slate-800 text-[13px] leading-relaxed p-3 rounded-2xl rounded-tl-xs shadow-soft border border-emerald-50">
+            Sir, will this also be included in next week's unit test?
+          </div>
+<span class="text-[10px] text-slate-400 mt-1 block ml-1 font-medium">10:24 AM</span>
+</div>
+</div>
+<!-- Incoming Message 4: Teacher with Reactions -->
+<div class="flex items-start space-x-2 max-w-[88%]">
+<div class="w-7 h-7 rounded-full bg-brand-800 text-white flex items-center justify-center font-bold text-[10px] shrink-0 ring-1 ring-brand-700/30 shadow-xs mt-0.5">
+          AT
+        </div>
+<div>
+<div class="flex items-center space-x-1.5 mb-1 ml-0.5">
+<span class="text-xs font-semibold text-brand-800 leading-tight">Prof. Aris Thorne</span>
+<span class="bg-brand-100 text-brand-800 text-[9.5px] font-medium px-1.5 py-0.5 rounded-sm">Faculty</span>
+</div>
+<div class="bg-white text-slate-800 text-[13px] leading-relaxed p-3 rounded-2xl rounded-tl-xs shadow-soft border border-emerald-50">
+            Only the convex lens formula and magnification problems will be tested in Term 1.
+          </div>
+<!-- Reactions row placed cleanly beneath the bubble -->
+<div class="flex items-center space-x-1.5 mt-1 ml-1">
+<button class="flex items-center space-x-1 bg-white border border-emerald-200 text-slate-700 px-2 py-0.5 rounded-full text-[11px] shadow-xs active:scale-95 transition">
+<span>👍</span>
+<span class="font-semibold text-slate-800">4</span>
+</button>
+<button class="flex items-center space-x-1 bg-white border border-emerald-200 text-slate-700 px-2 py-0.5 rounded-full text-[11px] shadow-xs active:scale-95 transition">
+<span>🙌</span>
+<span class="font-semibold text-slate-800">2</span>
+</button>
+<span class="text-[10px] text-slate-400 pl-1 font-medium">10:25 AM</span>
+</div>
+</div>
+</div>
+<!-- Outgoing Message 2: Current User Acknowledgement -->
+<div class="flex flex-col items-end max-w-[80%] ml-auto">
+<div class="bg-brand-700 text-white text-[13px] leading-relaxed px-3.5 py-2.5 rounded-2xl rounded-tr-xs shadow-soft shadow-brand-700/10">
+          Understood, thank you Professor!
+        </div>
+<div class="flex items-center space-x-1 text-[10px] text-slate-400 mt-1 mr-1 font-medium">
+<span>10:26 AM</span>
+<span>•</span>
+<span class="text-brand-600 font-medium">Sent</span>
+<svg class="w-3.5 h-3.5 text-brand-600" fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24">
+<path d="M4 12l4 4L18 4m-7 8l2 2 7-7" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+</div>
+<!-- Typing Indicator Row -->
+<div class="flex items-center space-x-2 pt-1 pb-2">
+<div class="w-6 h-6 rounded-full bg-emerald-100 text-brand-800 text-[9px] font-bold flex items-center justify-center ring-1 ring-brand-200">
+          MS
+        </div>
+<div class="flex items-center space-x-2 bg-white/90 backdrop-blur-xs px-3 py-1.5 rounded-full border border-emerald-100 shadow-2xs">
+<span class="text-[11.5px] text-slate-500 font-medium">Maya Shrestha is typing</span>
+<div class="flex items-center space-x-1">
+<span class="w-1.5 h-1.5 bg-brand-600 rounded-full typing-dot-1"></span>
+<span class="w-1.5 h-1.5 bg-brand-600 rounded-full typing-dot-2"></span>
+<span class="w-1.5 h-1.5 bg-brand-600 rounded-full typing-dot-3"></span>
+</div>
+</div>
+</div>
+</div>
+<!-- END: MessageThreadArea -->
+<!-- BEGIN: MessageComposer -->
+<footer class="bg-white border-t border-slate-100 px-3 pt-2.5 pb-2 shrink-0 z-30 shadow-float">
+<!-- Attachment and Input Row -->
+<form class="flex items-center space-x-2" onsubmit="event.preventDefault();">
+<!-- Plus / Attachment Button -->
+<button aria-label="Add attachment" class="p-2 rounded-full bg-emerald-50 hover:bg-emerald-100 text-brand-700 transition active:scale-95 shrink-0" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" viewbox="0 0 24 24">
+<line x1="12" x2="12" y1="5" y2="19"></line>
+<line x1="5" x2="19" y1="12" y2="12"></line>
+</svg>
+</button>
+<!-- Rounded Input Capsule with Internal Emoji Icon -->
+<div class="flex-1 relative flex items-center">
+<input class="w-full bg-slate-100 hover:bg-slate-100/90 focus:bg-white text-slate-800 placeholder-slate-400 text-xs rounded-full pl-3.5 pr-8 py-2 border-transparent focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition shadow-inner" placeholder="Message Grade 10 - Section A..." type="text"/>
+<!-- Inside Input: Emoji trigger -->
+<button aria-label="Insert emoji" class="absolute right-2.5 text-slate-400 hover:text-brand-700 transition" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="10"></circle>
+<path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+<line x1="9" x2="9.01" y1="9" y2="9"></line>
+<line x1="15" x2="15.01" y1="9" y2="9"></line>
+</svg>
+</button>
+</div>
+<!-- Camera / Media Button -->
+<button aria-label="Take photo" class="p-2 text-slate-400 hover:text-brand-700 transition shrink-0" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" stroke-linecap="round" stroke-linejoin="round"></path>
+<circle cx="12" cy="13" r="3" stroke-width="2"></circle>
+</svg>
+</button>
+<!-- Send Plane Button -->
+<button aria-label="Send message" class="w-9 h-9 bg-brand-700 hover:bg-brand-800 active:scale-95 text-white rounded-full flex items-center justify-center transition shadow-md shadow-brand-700/20 shrink-0" type="submit">
+<svg class="w-4 h-4 translate-x-0.5" fill="currentColor" viewbox="0 0 20 20">
+<path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
+</svg>
+</button>
+</form>
+<!-- iOS Home Bar Indicator -->
+<div class="w-32 h-1 bg-slate-900/80 rounded-full mx-auto mt-3"></div>
+</footer>
+<!-- END: MessageComposer -->
+</main>
+<!-- END: MobileDeviceFrame -->
+</body></html>

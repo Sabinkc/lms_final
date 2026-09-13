@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><title>CloudsLMS Admin</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "primary": "#00543b", "surface": "#faf8ff", "on-tertiary-fixed-variant": "#653e00", "secondary-fixed-dim": "#4edea3", "on-secondary-fixed": "#002113", "on-secondary-fixed-variant": "#005236", "surface-bright": "#faf8ff", "outline-variant": "#bec9c1", "on-tertiary": "#ffffff", "on-error-container": "#93000a", "inverse-primary": "#83d7b1", "on-surface-variant": "#3f4943", "tertiary-container": "#885500", "tertiary": "#684000", "surface-tint": "#056c4d", "surface-container-highest": "#dae2fd", "surface-dim": "#d2d9f4", "on-tertiary-fixed": "#2a1700", "inverse-surface": "#283044", "secondary-container": "#6cf8bb", "primary-container": "#0b6e4f", "primary-fixed-dim": "#83d7b1", "on-background": "#131b2e", "on-primary": "#ffffff", "primary-fixed": "#9ff4cc", "on-secondary-container": "#00714d", "tertiary-fixed": "#ffddb8", "inverse-on-surface": "#eef0ff", "surface-container-lowest": "#ffffff", "on-primary-fixed": "#002115", "error-container": "#ffdad6", "surface-container": "#eaedff", "secondary": "#006c49", "on-surface": "#131b2e", "tertiary-fixed-dim": "#ffb95f", "on-primary-fixed-variant": "#005139", "on-tertiary-container": "#ffd4a4", "error": "#ba1a1a", "background": "#faf8ff", "secondary-fixed": "#6ffbbe", "on-secondary": "#ffffff", "on-primary-container": "#98edc6", "on-error": "#ffffff", "surface-container-low": "#f2f3ff", "surface-container-high": "#e2e7ff", "outline": "#6f7a73", "surface-variant": "#dae2fd" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "gutter-sm": "0.75rem", "space-md": "1rem", "space-sm": "0.5rem", "margin-md": "1.5rem", "space-xl": "2rem", "gutter": "1rem", "space-xs": "0.25rem", "margin": "1rem", "space-lg": "1.5rem" }, "fontFamily": { "headline-md": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "title-sm": ["Plus Jakarta Sans"], "display-lg": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"] }, "fontSize": { "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "400" }], "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }], "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }], "title-md": ["16px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }], "title-sm": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "600" }], "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }] } } } }</script></head><body class="bg-surface text-on-surface font-body-md text-body-md flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-gutter flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="Brand logo. - Primary color: #0b6e4f - Font: plusJakartaSans - Mode: light - Roundness: rounded-md" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VyqBli3HMbhQU8BdAyKPo1qki4g1m66dEwutS9-rdlq-HcUaDtHUzAIevM85Sd8L9bU8EVek0bk26rpfHike25tYcJq6HpuJ-XtpVyrBQT7H2ZVOt40y9yVdE9bvQHBDSFs6aTNF8EG8x6Vhb_W-Ae4DbpRY-gK_s0_JesSWYcA5oylh6U-KescrDrvS5um_3PKkw1lh0rw_BS7x1gu4HqvpAcCsdpb6x0OcV9cgZcZNvgm7GNb2lY0WE"/><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-title-sm text-title-sm text-on-surface font-semibold tracking-tight">CloudsLMS</span><span class="bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm px-space-xs py-0.5 rounded-full uppercase tracking-wider font-semibold">Admin</span></div><span class="font-label-sm text-label-sm text-on-surface-variant line-clamp-1">More</span></div></div><div class="flex items-center gap-space-xs"><button aria-label="Notifications" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/60 transition-colors" type="button"><span class="material-symbols-outlined text-[22px]">notifications</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full px-gutter pt-16 pb-24 bg-surface flex-grow"><div class="flex flex-col w-full space-y-space-md">
+<!-- Sub-header navigation & action strip -->
+<div class="flex items-center justify-between pt-space-xs pb-space-xs">
+<div class="flex items-center gap-space-sm">
+<button aria-label="Go back" class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container hover:bg-surface-container-high transition-colors active:scale-95 text-on-surface" type="button">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</button>
+<div class="flex flex-col">
+<h1 class="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-tight">Reports</h1>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Institutional Analytics &amp; Records</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<button aria-label="Export or Share Report" class="w-10 h-10 rounded-full flex items-center justify-center bg-surface-container text-on-surface hover:bg-surface-container-high transition-colors active:scale-95" id="exportMainBtn" type="button">
+<span class="material-symbols-outlined text-[20px]">ios_share</span>
+</button>
+</div>
+</div>
+<!-- Segmented Category Pill Tabs -->
+<div class="flex items-center gap-space-xs overflow-x-auto pb-1 no-scrollbar">
+<button class="category-tab px-space-md py-2 rounded-full bg-primary text-on-primary font-label-lg text-label-lg whitespace-nowrap shadow-sm transition-all flex items-center gap-1.5" data-category="academic" type="button">
+<span class="material-symbols-outlined text-[18px]">auto_stories</span>
+<span>Academic</span>
+</button>
+<button class="category-tab px-space-md py-2 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface font-label-lg text-label-lg whitespace-nowrap transition-all flex items-center gap-1.5" data-category="attendance" type="button">
+<span class="material-symbols-outlined text-[18px]">fact_check</span>
+<span>Attendance</span>
+</button>
+<button class="category-tab px-space-md py-2 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface font-label-lg text-label-lg whitespace-nowrap transition-all flex items-center gap-1.5" data-category="financial" type="button">
+<span class="material-symbols-outlined text-[18px]">account_balance</span>
+<span>Financial</span>
+</button>
+<button class="category-tab px-space-md py-2 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface font-label-lg text-label-lg whitespace-nowrap transition-all flex items-center gap-1.5" data-category="system" type="button">
+<span class="material-symbols-outlined text-[18px]">dns</span>
+<span>System</span>
+</button>
+</div>
+<!-- Term Indicator Banner -->
+<div class="flex items-center justify-between bg-surface-container-lowest px-space-md py-space-sm rounded-xl shadow-sm">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">AY 2025–2026</span>
+<span class="text-outline-variant font-label-sm text-label-sm">•</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Term 2 Active Overview</span>
+</div>
+<span class="font-label-sm text-label-sm bg-surface-container text-on-surface-variant px-space-xs py-0.5 rounded-full font-medium">Live sync</span>
+</div>
+<!-- 2x2 Metric Grid -->
+<div class="grid grid-cols-2 gap-space-sm">
+<!-- Tile 1: Total Exams -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between relative overflow-hidden group">
+<div class="flex items-center justify-between mb-space-xs">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">assignment</span>
+</div>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded-full bg-primary-fixed-dim text-on-primary-fixed-variant font-semibold">Midterm</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant font-medium">Total Exams</p>
+<p class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-bold tracking-tight my-0.5">24</p>
+<p class="font-body-sm text-body-sm text-on-secondary-container flex items-center gap-0.5 font-medium">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span>+4 scheduled this term</span>
+</p>
+</div>
+</div>
+<!-- Tile 2: Total Students -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between relative overflow-hidden group">
+<div class="flex items-center justify-between mb-space-xs">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">school</span>
+</div>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-semibold">Enrolled</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant font-medium">Total Students</p>
+<p class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-bold tracking-tight my-0.5">1,248</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">apartment</span>
+<span>Across 12 grade tiers</span>
+</p>
+</div>
+</div>
+<!-- Tile 3: Total Teachers -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between relative overflow-hidden group">
+<div class="flex items-center justify-between mb-space-xs">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">co_present</span>
+</div>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded-full bg-tertiary-fixed-dim text-on-tertiary-fixed-variant font-semibold">Faculty</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant font-medium">Total Teachers</p>
+<p class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-bold tracking-tight my-0.5">68</p>
+<p class="font-body-sm text-body-sm text-tertiary flex items-center gap-0.5 font-medium">
+<span class="material-symbols-outlined text-[14px]">verified</span>
+<span>100% active roster</span>
+</p>
+</div>
+</div>
+<!-- Tile 4: Published Results -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between relative overflow-hidden group">
+<div class="flex items-center justify-between mb-space-xs">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">emoji_events</span>
+</div>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant font-semibold">Evaluated</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant font-medium">Published Results</p>
+<p class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-bold tracking-tight my-0.5">18</p>
+<p class="font-body-sm text-body-sm text-secondary flex items-center gap-0.5 font-medium">
+<span class="material-symbols-outlined text-[14px]">task_alt</span>
+<span>75% term results live</span>
+</p>
+</div>
+</div>
+</div>
+<!-- Performance by Grade Bar Chart Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm space-y-space-md">
+<div class="flex items-start justify-between">
+<div>
+<h2 class="font-title-md text-title-md text-on-surface font-semibold">Results by Class</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Average Pass Rate &amp; Score Distribution</p>
+</div>
+<span class="font-label-sm text-label-sm bg-surface-container-high text-on-surface px-space-xs py-1 rounded-full font-medium">Term 2</span>
+</div>
+<!-- Horizontal Bar Chart Stack -->
+<div class="space-y-space-sm pt-space-xs">
+<!-- Class 10 -->
+<div class="space-y-1">
+<div class="flex justify-between items-center text-on-surface font-label-md text-label-md">
+<span class="font-semibold flex items-center gap-1">
+            Class 10
+            <span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+</span>
+<span class="font-bold text-primary">92.4%</span>
+</div>
+<div class="h-3 w-full bg-surface-container rounded-full overflow-hidden flex">
+<div class="h-full bg-primary rounded-full transition-all duration-700 ease-out" style="width: 92.4%;"></div>
+</div>
+</div>
+<!-- Class 9 -->
+<div class="space-y-1">
+<div class="flex justify-between items-center text-on-surface font-label-md text-label-md">
+<span class="font-semibold">Class 9</span>
+<span class="font-bold text-secondary">88.6%</span>
+</div>
+<div class="h-3 w-full bg-surface-container rounded-full overflow-hidden flex">
+<div class="h-full bg-secondary-fixed-dim rounded-full transition-all duration-700 ease-out" style="width: 88.6%;"></div>
+</div>
+</div>
+<!-- Class 8 -->
+<div class="space-y-1">
+<div class="flex justify-between items-center text-on-surface font-label-md text-label-md">
+<span class="font-semibold">Class 8</span>
+<span class="font-bold text-tertiary">84.2%</span>
+</div>
+<div class="h-3 w-full bg-surface-container rounded-full overflow-hidden flex">
+<div class="h-full bg-tertiary-fixed-dim rounded-full transition-all duration-700 ease-out" style="width: 84.2%;"></div>
+</div>
+</div>
+<!-- Class 7 -->
+<div class="space-y-1">
+<div class="flex justify-between items-center text-on-surface font-label-md text-label-md">
+<span class="font-semibold flex items-center gap-1">
+            Class 7
+            <span class="material-symbols-outlined text-[14px] text-error">priority_high</span>
+</span>
+<span class="font-bold text-error">79.5%</span>
+</div>
+<div class="h-3 w-full bg-surface-container rounded-full overflow-hidden flex">
+<div class="h-full bg-error rounded-full transition-all duration-700 ease-out" style="width: 79.5%;"></div>
+</div>
+</div>
+<!-- Class 6 -->
+<div class="space-y-1">
+<div class="flex justify-between items-center text-on-surface font-label-md text-label-md">
+<span class="font-semibold">Class 6</span>
+<span class="font-bold text-primary">86.0%</span>
+</div>
+<div class="h-3 w-full bg-surface-container rounded-full overflow-hidden flex">
+<div class="h-full bg-primary-container rounded-full transition-all duration-700 ease-out" style="width: 86.0%;"></div>
+</div>
+</div>
+</div>
+<!-- Analytical Badges / Highlights -->
+<div class="grid grid-cols-2 gap-space-xs pt-space-xs">
+<div class="flex items-center gap-space-xs p-2 rounded-lg bg-surface-container-low">
+<div class="w-6 h-6 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed shrink-0">
+<span class="material-symbols-outlined text-[14px]">north_east</span>
+</div>
+<div class="min-w-0">
+<p class="font-label-sm text-label-sm text-on-surface-variant truncate">Highest</p>
+<p class="font-label-md text-label-md text-on-surface font-semibold truncate">Class 10 (92.4%)</p>
+</div>
+</div>
+<div class="flex items-center gap-space-xs p-2 rounded-lg bg-error-container/40">
+<div class="w-6 h-6 rounded-full bg-error-container flex items-center justify-center text-on-error-container shrink-0">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+</div>
+<div class="min-w-0">
+<p class="font-label-sm text-label-sm text-on-surface-variant truncate">Needs Focus</p>
+<p class="font-label-md text-label-md text-error font-semibold truncate">Class 7 (79.5%)</p>
+</div>
+</div>
+</div>
+<!-- Export Gradebook Secondary Action Button -->
+<button class="w-full mt-space-xs py-3 px-space-md rounded-full bg-surface-container hover:bg-surface-container-high active:scale-[0.98] transition-all flex items-center justify-center gap-2 text-on-surface" id="exportGradebookBtn" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary">sim_card_download</span>
+<span class="font-label-lg text-label-lg font-semibold">Export Academic Gradebook Report (PDF/Excel)</span>
+</button>
+</div>
+<!-- Notification Toast Modal Container -->
+<div class="fixed bottom-20 left-4 right-4 z-40 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300" id="toastNotification">
+<div class="bg-inverse-surface text-inverse-on-surface p-space-md rounded-xl shadow-xl flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary-fixed-dim text-[22px]">check_circle</span>
+<div>
+<p class="font-title-sm text-title-sm text-inverse-on-surface" id="toastTitle">Report Downloaded</p>
+<p class="font-body-sm text-body-sm text-inverse-on-surface/80" id="toastSubtitle">AY 2025-2026 Gradebook exported successfully.</p>
+</div>
+</div>
+<button class="text-inverse-on-surface/70 hover:text-inverse-on-surface p-1" onclick="hideToast()" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+</div>
+<script>
+  // Simple micro-interactions for tabs and download actions
+  const categoryTabs = document.querySelectorAll('.category-tab');
+  categoryTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      categoryTabs.forEach(t => {
+        t.className = 'category-tab px-space-md py-2 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface font-label-lg text-label-lg whitespace-nowrap transition-all flex items-center gap-1.5';
+      });
+      tab.className = 'category-tab px-space-md py-2 rounded-full bg-primary text-on-primary font-label-lg text-label-lg whitespace-nowrap shadow-sm transition-all flex items-center gap-1.5';
+    });
+  });
+
+  const toast = document.getElementById('toastNotification');
+  let toastTimer = null;
+
+  function showToast(title, subtitle) {
+    if (toastTimer) clearTimeout(toastTimer);
+    document.getElementById('toastTitle').textContent = title;
+    document.getElementById('toastSubtitle').textContent = subtitle;
+    toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+    toast.classList.add('translate-y-0', 'opacity-100');
+    toastTimer = setTimeout(hideToast, 3500);
+  }
+
+  function hideToast() {
+    toast.classList.remove('translate-y-0', 'opacity-100');
+    toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+  }
+
+  document.getElementById('exportGradebookBtn').addEventListener('click', () => {
+    showToast('Exporting Gradebook', 'Compiling Class 6-10 Term 2 PDF & Excel packages...');
+  });
+
+  document.getElementById('exportMainBtn').addEventListener('click', () => {
+    showToast('Share Institutional Report', 'Secure analytical link copied to clipboard.');
+  });
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-4px_20px_rgba(11,110,79,0.06)]" data-active-classes="text-primary font-semibold"><div class="flex justify-around items-center h-16 px-space-xs"><a class="flex flex-col items-center justify-center flex-1 h-full gap-0.5 text-on-surface-variant hover:text-on-surface transition-colors" data-path="home" href="#"><span class="material-symbols-outlined text-[22px]">dashboard</span><span class="font-label-sm text-label-sm">Home</span></a><a class="flex flex-col items-center justify-center flex-1 h-full gap-0.5 text-on-surface-variant hover:text-on-surface transition-colors" data-path="attendance" href="#"><span class="material-symbols-outlined text-[22px]">fact_check</span><span class="font-label-sm text-label-sm">Attendance</span></a><a class="flex flex-col items-center justify-center flex-1 h-full gap-0.5 text-on-surface-variant hover:text-on-surface transition-colors" data-path="fees" href="#"><span class="material-symbols-outlined text-[22px]">payments</span><span class="font-label-sm text-label-sm">Fees</span></a><a aria-current="page" class="flex flex-col items-center justify-center flex-1 h-full gap-0.5 transition-colors text-primary font-semibold" data-path="more" href="#"><span class="material-symbols-outlined text-[22px]">grid_view</span><span class="font-label-sm text-label-sm">More</span></a></div></nav></body></html>

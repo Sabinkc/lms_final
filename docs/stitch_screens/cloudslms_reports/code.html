@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><title>CloudsLMS</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100%;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "inverse-surface": "#283044", "surface-container-high": "#e2e7ff", "on-secondary": "#ffffff", "surface-dim": "#d2d9f4", "on-primary": "#ffffff", "background": "#faf8ff", "secondary-fixed-dim": "#4edea3", "primary-fixed": "#9ff4cc", "on-primary-fixed": "#002115", "error-container": "#ffdad6", "on-primary-container": "#98edc6", "on-tertiary-fixed": "#2a1700", "surface-container-low": "#f2f3ff", "primary-fixed-dim": "#83d7b1", "outline-variant": "#bec9c1", "surface-container-lowest": "#ffffff", "on-error": "#ffffff", "secondary": "#006c49", "inverse-primary": "#83d7b1", "surface-container": "#eaedff", "error": "#ba1a1a", "tertiary": "#684000", "primary-container": "#0b6e4f", "on-error-container": "#93000a", "secondary-fixed": "#6ffbbe", "outline": "#6f7a73", "on-surface-variant": "#3f4943", "surface-variant": "#dae2fd", "secondary-container": "#6cf8bb", "inverse-on-surface": "#eef0ff", "on-background": "#131b2e", "tertiary-fixed": "#ffddb8", "tertiary-fixed-dim": "#ffb95f", "on-secondary-fixed-variant": "#005236", "surface-tint": "#056c4d", "on-primary-fixed-variant": "#005139", "on-secondary-fixed": "#002113", "on-secondary-container": "#00714d", "on-surface": "#131b2e", "on-tertiary-container": "#ffd4a4", "primary": "#00543b", "surface": "#faf8ff", "surface-bright": "#faf8ff", "on-tertiary-fixed-variant": "#653e00", "on-tertiary": "#ffffff", "surface-container-highest": "#dae2fd", "tertiary-container": "#885500" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "gutter": "1rem", "space-lg": "1.5rem", "margin": "1rem", "space-xl": "2rem", "gutter-sm": "0.75rem", "space-xs": "0.25rem", "margin-md": "1.5rem", "space-md": "1rem", "space-sm": "0.5rem" }, "fontFamily": { "display-lg": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "title-sm": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "body-sm": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"] }, "fontSize": { "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "title-md": ["16px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }], "title-sm": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "600" }], "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "400" }], "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }] } } } }</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-body-md text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-gutter flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="Brand logo. - Primary color: #0b6e4f
+- Font: plusJakartaSans
+- Mode: light
+- Roundness: rounded-md
+" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UY5xhGFQeJY9cYdXh7xaUM-ranC2DUtvfKp6HupbVVeWnNhYkkxDyjaqitKWDrEdKNuyYoDU14CK4SbsMMxj-bMiPcQb9WTSuTgjsfqr1zhmOHJzUmUMyMSOUI1csW_yoPWSfxYtOVAPZYlb1GTmxzTwABUjyW-r4bWdT6D0i-Dc5H_X4pOlnNvkISTlgW-0nUBmrWaUX7xYOejjdIE2gG4a1l-xMMUHNOGLUxki6zo4knDO6akPn9fb8"/><span class="font-title-md text-title-md text-primary-container tracking-tight">CloudsLMS</span><span class="font-title-sm text-title-sm text-outline hidden">Admin Settings</span></div><div class="flex items-center gap-space-xs"><button aria-label="Notifications" class="w-11 h-11 relative flex items-center justify-center rounded-full text-on-surface-variant hover:text-on-surface transition-colors"><span class="material-symbols-outlined text-[24px]">notifications</span><span class="absolute top-2 right-2 w-4 h-4 bg-error text-on-error font-label-sm text-[10px] leading-none rounded-full flex items-center justify-center font-bold">3</span></button><div aria-label="Admin Profile" class="w-9 h-9 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-label-md text-label-md font-bold ring-2 ring-primary-container/20">AS</div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-space-xs"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex flex-col relative w-full pt-16 pb-24 min-h-screen bg-surface"><div class="flex flex-col w-full pb-10 space-y-space-lg">
+<!-- Simulated Mobile Status & Context Header -->
+<div class="px-gutter pt-space-xs flex flex-col space-y-space-md">
+<!-- Status Row (Mobile Top Micro-bar) -->
+<div class="flex justify-between items-center text-on-surface-variant font-label-sm text-label-sm">
+<span class="font-semibold tracking-tight text-on-surface">9:41</span>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px]">signal_cellular_alt</span>
+<span class="material-symbols-outlined text-[15px]">wifi</span>
+<span class="material-symbols-outlined text-[17px]">battery_full</span>
+</div>
+</div>
+<!-- Screen Navigation & Filters -->
+<div class="flex items-center justify-between gap-space-sm pt-space-xs">
+<div class="flex items-center gap-space-sm">
+<button aria-label="Go back" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-colors active:scale-95" type="button">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</button>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">Analytics &amp; Insights</span>
+<h1 class="font-headline-md text-headline-md text-on-surface leading-tight">Reports</h1>
+</div>
+</div>
+<!-- Date Range Selector Pill -->
+<button class="flex items-center gap-1.5 px-3 py-2 rounded-full bg-surface-container-low text-on-surface font-label-md text-label-md hover:bg-surface-container transition-all active:scale-95 shadow-sm" type="button">
+<span class="material-symbols-outlined text-primary text-[17px]">calendar_today</span>
+<span>All time</span>
+<span class="material-symbols-outlined text-outline text-[16px]">expand_more</span>
+</button>
+</div>
+</div>
+<!-- Horizontal Scrollable Segmented Filter Tabs -->
+<div class="px-gutter overflow-x-auto no-scrollbar">
+<div class="flex items-center gap-2 min-w-max pb-1">
+<button class="px-4 py-2 rounded-full bg-primary-container text-on-primary font-label-lg text-label-lg shadow-sm flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">school</span>
+<span>Academic</span>
+</button>
+<button class="px-4 py-2 rounded-full bg-surface-container-low text-on-surface-variant font-label-lg text-label-lg hover:bg-surface-container transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">fact_check</span>
+<span>Attendance</span>
+</button>
+<button class="px-4 py-2 rounded-full bg-surface-container-low text-on-surface-variant font-label-lg text-label-lg hover:bg-surface-container transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">payments</span>
+<span>Financial</span>
+</button>
+<button class="px-4 py-2 rounded-full bg-surface-container-low text-on-surface-variant font-label-lg text-label-lg hover:bg-surface-container transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span>System</span>
+</button>
+</div>
+</div>
+<!-- Executive Summary Stat Cards (2x2 Grid) -->
+<section class="px-gutter">
+<div class="grid grid-cols-2 gap-3">
+<!-- Total Exams -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">Total Exams</span>
+<div class="w-8 h-8 rounded-lg bg-surface-container-high text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">quiz</span>
+</div>
+</div>
+<div>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-bold">18</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-0.5 truncate">Active Academic Year</p>
+</div>
+</div>
+<!-- Published -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">Published</span>
+<div class="w-8 h-8 rounded-lg bg-secondary-container text-on-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+</div>
+</div>
+<div>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-bold">14</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-0.5 truncate">2 In Grading, 2 Draft</p>
+</div>
+</div>
+<!-- Total Results -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">Total Results</span>
+<div class="w-8 h-8 rounded-lg bg-surface-container-highest text-inverse-surface flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">assignment_turned_in</span>
+</div>
+</div>
+<div>
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-bold">1,420</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-0.5 truncate">Student submissions</p>
+</div>
+</div>
+<!-- Pass Rate -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-md text-label-md text-on-surface-variant font-medium">Pass Rate</span>
+<div class="w-8 h-8 rounded-lg bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">trending_up</span>
+</div>
+</div>
+<div>
+<div class="flex items-baseline gap-1.5">
+<span class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface font-bold">92.4%</span>
+</div>
+<div class="flex items-center gap-1 text-secondary mt-0.5">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+<span class="font-label-sm text-label-sm font-semibold">+3.2% vs last term</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Grade Distribution Chart Card -->
+<section class="px-gutter">
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col space-y-space-md">
+<!-- Title & Subtitle -->
+<div class="flex flex-col">
+<div class="flex items-center justify-between">
+<h2 class="font-title-md text-title-md text-on-surface font-bold">Grade Distribution</h2>
+<span class="px-2 py-0.5 bg-surface-container text-on-surface-variant rounded-full font-label-sm text-label-sm">All Classes</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Overall performance across all 14 published exams</p>
+</div>
+<!-- Legend Chips -->
+<div class="flex flex-wrap gap-1.5 py-1">
+<span class="px-2 py-1 rounded-md bg-surface-container-low text-on-surface text-label-sm font-label-sm flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+<span>A+ (90-100%)</span>
+</span>
+<span class="px-2 py-1 rounded-md bg-surface-container-low text-on-surface text-label-sm font-label-sm flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed-dim"></span>
+<span>A (80-89%)</span>
+</span>
+<span class="px-2 py-1 rounded-md bg-surface-container-low text-on-surface text-label-sm font-label-sm flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-surface-variant"></span>
+<span>B+ (70-79%)</span>
+</span>
+<span class="px-2 py-1 rounded-md bg-surface-container-low text-on-surface text-label-sm font-label-sm flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span>
+<span>B (60-69%)</span>
+</span>
+<span class="px-2 py-1 rounded-md bg-surface-container-low text-on-surface text-label-sm font-label-sm flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-error-container"></span>
+<span>&lt;60%</span>
+</span>
+</div>
+<!-- Custom Bar Visualizer with Responsive Bars -->
+<div class="space-y-2.5 pt-1">
+<!-- Grade A+ -->
+<div class="space-y-1">
+<div class="flex justify-between items-center text-label-sm font-label-sm">
+<span class="font-semibold text-on-surface">A+ <span class="font-normal text-on-surface-variant">(342 students)</span></span>
+<span class="font-bold text-primary">24%</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden flex">
+<div class="bg-primary-container h-full rounded-full transition-all duration-500" style="width: 24%"></div>
+</div>
+</div>
+<!-- Grade A -->
+<div class="space-y-1">
+<div class="flex justify-between items-center text-label-sm font-label-sm">
+<span class="font-semibold text-on-surface">A <span class="font-normal text-on-surface-variant">(485 students)</span></span>
+<span class="font-bold text-secondary">34%</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden flex">
+<div class="bg-secondary-fixed-dim h-full rounded-full transition-all duration-500" style="width: 34%"></div>
+</div>
+</div>
+<!-- Grade B+ -->
+<div class="space-y-1">
+<div class="flex justify-between items-center text-label-sm font-label-sm">
+<span class="font-semibold text-on-surface">B+ <span class="font-normal text-on-surface-variant">(312 students)</span></span>
+<span class="font-bold text-on-surface-variant">22%</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden flex">
+<div class="bg-surface-variant h-full rounded-full transition-all duration-500" style="width: 22%"></div>
+</div>
+</div>
+<!-- Grade B -->
+<div class="space-y-1">
+<div class="flex justify-between items-center text-label-sm font-label-sm">
+<span class="font-semibold text-on-surface">B <span class="font-normal text-on-surface-variant">(173 students)</span></span>
+<span class="font-bold text-tertiary">12%</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden flex">
+<div class="bg-tertiary-fixed-dim h-full rounded-full transition-all duration-500" style="width: 12%"></div>
+</div>
+</div>
+<!-- Grade C & Below -->
+<div class="space-y-1">
+<div class="flex justify-between items-center text-label-sm font-label-sm">
+<span class="font-semibold text-on-surface">C &amp; Below <span class="font-normal text-on-surface-variant">(108 students)</span></span>
+<span class="font-bold text-error">8%</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden flex">
+<div class="bg-error-container h-full rounded-full transition-all duration-500" style="width: 8%"></div>
+</div>
+</div>
+</div>
+<!-- Highlight Footer -->
+<div class="mt-2 p-3 bg-secondary-container/30 rounded-lg flex items-center gap-2 text-on-secondary-container">
+<span class="material-symbols-outlined text-[20px] text-secondary">verified</span>
+<div class="font-label-sm text-label-sm leading-snug">
+<span class="font-bold text-secondary">Median Grade: A (82.6%)</span> • Top Performing: <span class="font-semibold">Grade 10-A</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Performance by Class & Section Section -->
+<section class="px-gutter space-y-space-md">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="font-title-md text-title-md text-on-surface font-bold">Class &amp; Section Breakdown</h2>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Comparative academic index</p>
+</div>
+<div class="flex items-center gap-1.5">
+<button class="px-2.5 py-1.5 rounded-full bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm flex items-center gap-1 hover:bg-surface-container" type="button">
+<span>Sort: Avg</span>
+<span class="material-symbols-outlined text-[14px]">unfold_more</span>
+</button>
+<button aria-label="Export CSV" class="w-8 h-8 rounded-full bg-surface-container text-primary flex items-center justify-center hover:bg-surface-container-high" type="button">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+</button>
+</div>
+</div>
+<!-- Class Cards Stack -->
+<div class="space-y-3">
+<!-- Item 1: Grade 10 - Section A -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm space-y-3">
+<div class="flex justify-between items-start">
+<div class="space-y-0.5">
+<div class="flex items-center gap-2">
+<h3 class="font-title-sm text-title-sm text-on-surface font-bold">Grade 10 - Section A</h3>
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed text-[10px] font-bold">Top Cohort</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">42 Students • Class Teacher: Aarav Sharma</p>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+<div class="grid grid-cols-2 gap-2 p-2.5 bg-surface-container-low rounded-lg">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Class Average</span>
+<div class="flex items-center gap-1">
+<span class="font-title-md text-title-md font-bold text-on-surface">84.2%</span>
+<span class="text-secondary font-semibold font-label-sm text-label-sm">(Grade A)</span>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Pass Rate</span>
+<div class="flex items-center gap-1">
+<span class="font-title-md text-title-md font-bold text-primary">97.6%</span>
+<span class="text-outline font-label-sm text-label-sm">(41/42)</span>
+</div>
+</div>
+</div>
+<!-- Micro Distribution Visual Bar -->
+<div class="space-y-1">
+<div class="flex justify-between text-label-sm text-[10px] text-on-surface-variant">
+<span>Progress Index</span>
+<span class="font-medium text-secondary">98% completed</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden flex">
+<div class="bg-primary-container h-full" style="width: 48%"></div>
+<div class="bg-secondary-fixed-dim h-full" style="width: 32%"></div>
+<div class="bg-surface-variant h-full" style="width: 17%"></div>
+<div class="bg-error h-full" style="width: 3%"></div>
+</div>
+</div>
+</div>
+<!-- Item 2: Grade 10 - Section B -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm space-y-3">
+<div class="flex justify-between items-start">
+<div class="space-y-0.5">
+<h3 class="font-title-sm text-title-sm text-on-surface font-bold">Grade 10 - Section B</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">38 Students • Class Teacher: Dr. Sunita Joshi</p>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+<div class="grid grid-cols-2 gap-2 p-2.5 bg-surface-container-low rounded-lg">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Class Average</span>
+<div class="flex items-center gap-1">
+<span class="font-title-md text-title-md font-bold text-on-surface">79.8%</span>
+<span class="text-on-surface-variant font-semibold font-label-sm text-label-sm">(Grade B+)</span>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Pass Rate</span>
+<div class="flex items-center gap-1">
+<span class="font-title-md text-title-md font-bold text-primary">92.1%</span>
+<span class="text-outline font-label-sm text-label-sm">(35/38)</span>
+</div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-label-sm text-[10px] text-on-surface-variant">
+<span>Progress Index</span>
+<span class="font-medium text-on-surface">92% completed</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden flex">
+<div class="bg-primary-container h-full" style="width: 30%"></div>
+<div class="bg-secondary-fixed-dim h-full" style="width: 40%"></div>
+<div class="bg-surface-variant h-full" style="width: 22%"></div>
+<div class="bg-error h-full" style="width: 8%"></div>
+</div>
+</div>
+</div>
+<!-- Item 3: Grade 9 - Section A -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm space-y-3">
+<div class="flex justify-between items-start">
+<div class="space-y-0.5">
+<h3 class="font-title-sm text-title-sm text-on-surface font-bold">Grade 9 - Section A</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">40 Students • Class Teacher: Maya Shrestha</p>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+<div class="grid grid-cols-2 gap-2 p-2.5 bg-surface-container-low rounded-lg">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Class Average</span>
+<div class="flex items-center gap-1">
+<span class="font-title-md text-title-md font-bold text-on-surface">81.5%</span>
+<span class="text-secondary font-semibold font-label-sm text-label-sm">(Grade A)</span>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Pass Rate</span>
+<div class="flex items-center gap-1">
+<span class="font-title-md text-title-md font-bold text-primary">95.0%</span>
+<span class="text-outline font-label-sm text-label-sm">(38/40)</span>
+</div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-label-sm text-[10px] text-on-surface-variant">
+<span>Progress Index</span>
+<span class="font-medium text-on-surface">95% completed</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden flex">
+<div class="bg-primary-container h-full" style="width: 38%"></div>
+<div class="bg-secondary-fixed-dim h-full" style="width: 35%"></div>
+<div class="bg-surface-variant h-full" style="width: 22%"></div>
+<div class="bg-error h-full" style="width: 5%"></div>
+</div>
+</div>
+</div>
+<!-- Item 4: Grade 8 - Section A & B -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm space-y-3">
+<div class="flex justify-between items-start">
+<div class="space-y-0.5">
+<h3 class="font-title-sm text-title-sm text-on-surface font-bold">Grade 8 - Section A &amp; B</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">76 Students • Class Teacher: Bikram Thapa</p>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+</div>
+<div class="grid grid-cols-2 gap-2 p-2.5 bg-surface-container-low rounded-lg">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Class Average</span>
+<div class="flex items-center gap-1">
+<span class="font-title-md text-title-md font-bold text-on-surface">76.4%</span>
+<span class="text-on-surface-variant font-semibold font-label-sm text-label-sm">(Grade B+)</span>
+</div>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Pass Rate</span>
+<div class="flex items-center gap-1">
+<span class="font-title-md text-title-md font-bold text-primary">88.2%</span>
+<span class="text-outline font-label-sm text-label-sm">(67/76)</span>
+</div>
+</div>
+</div>
+<div class="space-y-1">
+<div class="flex justify-between text-label-sm text-[10px] text-on-surface-variant">
+<span>Progress Index</span>
+<span class="font-medium text-on-surface">88% completed</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden flex">
+<div class="bg-primary-container h-full" style="width: 25%"></div>
+<div class="bg-secondary-fixed-dim h-full" style="width: 32%"></div>
+<div class="bg-surface-variant h-full" style="width: 31%"></div>
+<div class="bg-error h-full" style="width: 12%"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Download Consolidated Academic Ledger Card -->
+<section class="px-gutter pb-4">
+<div class="bg-gradient-to-br from-primary-container to-primary text-on-primary p-space-md rounded-xl shadow-md space-y-space-md">
+<div class="flex items-start gap-3">
+<div class="w-11 h-11 rounded-full bg-surface-container-lowest/15 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary-fixed text-[24px]">description</span>
+</div>
+<div class="space-y-0.5">
+<h3 class="font-title-md text-title-md text-on-primary font-bold">Consolidated Academic Ledger</h3>
+<p class="font-body-sm text-body-sm text-on-primary-container leading-snug">Generate standardized multi-term performance scorecards ready for school board audit.</p>
+</div>
+</div>
+<div class="flex items-center gap-2 pt-1">
+<button class="flex-1 h-11 px-4 rounded-full bg-surface-container-lowest text-primary font-label-lg text-label-lg font-bold flex items-center justify-center gap-2 shadow-sm hover:bg-surface-container-low active:scale-98 transition-all" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span>Download PDF</span>
+</button>
+<button aria-label="Download Excel Spreadsheets" class="h-11 w-11 rounded-full bg-surface-container-lowest/15 text-on-primary flex items-center justify-center hover:bg-surface-container-lowest/25 active:scale-95 transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">table_view</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+<script>
+  // Micro-interaction for quick feedback on tab selections
+  document.querySelectorAll('section button, nav button, div[role="tab"]').forEach(btn => {
+    btn.addEventListener('click', function() {
+      this.classList.add('opacity-80');
+      setTimeout(() => this.classList.remove('opacity-80'), 150);
+    });
+  });
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl shadow-[0_-2px_12px_rgba(0,0,0,0.05)]" data-active-classes="text-primary-container font-semibold"><div class="flex justify-around items-center h-16 px-gutter"><a class="flex flex-col items-center justify-center min-w-[48px] h-12 text-on-surface-variant hover:text-on-surface transition-colors" data-path="home" href="#"><span class="material-symbols-outlined text-[22px]">dashboard</span><span class="font-label-sm text-label-sm mt-0.5">Home</span></a><a class="flex flex-col items-center justify-center min-w-[48px] h-12 text-on-surface-variant hover:text-on-surface transition-colors" data-path="students" href="#"><span class="material-symbols-outlined text-[22px]">school</span><span class="font-label-sm text-label-sm mt-0.5">Students</span></a><a class="flex flex-col items-center justify-center min-w-[48px] h-12 text-on-surface-variant hover:text-on-surface transition-colors" data-path="attendance" href="#"><span class="material-symbols-outlined text-[22px]">fact_check</span><span class="font-label-sm text-label-sm mt-0.5">Attendance</span></a><a class="flex flex-col items-center justify-center min-w-[48px] h-12 text-on-surface-variant hover:text-on-surface transition-colors" data-path="fees" href="#"><span class="material-symbols-outlined text-[22px]">payments</span><span class="font-label-sm text-label-sm mt-0.5">Fees</span></a><a aria-current="page" class="flex flex-col items-center justify-center min-w-[48px] h-12 transition-colors text-primary-container font-semibold" data-path="admin-settings" href="#"><span class="material-symbols-outlined text-[22px]">more_horiz</span><span class="font-label-sm text-label-sm mt-0.5">More</span></a></div></nav></body></html>

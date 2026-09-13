@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><title>CloudsLMS Admin Portal</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "surface-container-low": "#f2f3ff", "on-secondary-container": "#00714d", "outline-variant": "#bec9c1", "on-secondary-fixed-variant": "#005236", "surface-variant": "#dae2fd", "surface-bright": "#faf8ff", "error-container": "#ffdad6", "primary-container": "#0b6e4f", "secondary": "#006c49", "primary": "#00543b", "outline": "#6f7a73", "on-error-container": "#93000a", "surface": "#faf8ff", "tertiary-fixed-dim": "#ffb95f", "surface-tint": "#056c4d", "on-surface": "#131b2e", "secondary-fixed": "#6ffbbe", "surface-container-lowest": "#ffffff", "inverse-primary": "#83d7b1", "error": "#ba1a1a", "on-primary": "#ffffff", "surface-container-high": "#e2e7ff", "surface-container": "#eaedff", "primary-fixed": "#9ff4cc", "on-tertiary-fixed": "#2a1700", "on-secondary-fixed": "#002113", "tertiary-container": "#885500", "tertiary": "#684000", "surface-dim": "#d2d9f4", "secondary-container": "#6cf8bb", "inverse-surface": "#283044", "on-error": "#ffffff", "primary-fixed-dim": "#83d7b1", "on-background": "#131b2e", "on-secondary": "#ffffff", "surface-container-highest": "#dae2fd", "on-tertiary": "#ffffff", "background": "#faf8ff", "secondary-fixed-dim": "#4edea3", "on-tertiary-fixed-variant": "#653e00", "tertiary-fixed": "#ffddb8", "on-surface-variant": "#3f4943", "on-primary-fixed-variant": "#005139", "on-primary-container": "#98edc6", "on-tertiary-container": "#ffd4a4", "on-primary-fixed": "#002115", "inverse-on-surface": "#eef0ff" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-xl": "2rem", "space-lg": "1.5rem", "margin-md": "1.5rem", "space-md": "1rem", "gutter-sm": "0.75rem", "margin": "1rem", "space-xs": "0.25rem", "gutter": "1rem", "space-sm": "0.5rem" }, fontFamily: { "body-sm": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "headline-lg": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "label-md": ["Plus Jakarta Sans"], "display-lg": ["Plus Jakarta Sans"], "title-md": ["Plus Jakarta Sans"], "title-sm": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "body-lg": ["Plus Jakarta Sans"] }, fontSize: { "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "400" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }], "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }], "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "title-md": ["16px", { "lineHeight": "22px", "letterSpacing": "0em", "fontWeight": "600" }], "title-sm": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "600" }], "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }], "headline-md": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "headline-sm": ["18px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }] } } } };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface-container-lowest/80 backdrop-blur-xl pt-safe shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-gutter flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm"><div class="w-9 h-9 rounded-xl bg-primary-container flex items-center justify-center text-on-primary shadow-[0_2px_8px_-1px_rgba(11,110,79,0.3)]"><span class="material-symbols-outlined text-[20px]">cloud_done</span></div><div class="flex flex-col"><div class="flex items-center gap-space-xs"><span class="font-title-md text-title-md font-bold tracking-tight text-on-surface">CloudsLMS</span><span class="px-1.5 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm uppercase tracking-wider font-bold">Admin</span></div><span class="font-label-sm text-label-sm text-on-surface-variant">More</span></div></div><div class="flex items-center gap-space-xs"><button aria-label="Notifications" class="relative w-11 h-11 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-tertiary-container ring-2 ring-surface-container-lowest"></span></button><a class="flex items-center justify-center p-0.5" data-path="more" href="#"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-[0_2px_6px_rgba(0,84,59,0.25)]"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></a></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-24 bg-surface"><div class="flex flex-col w-full px-gutter pb-space-xl gap-y-space-lg">
+<!-- Admin Profile & Institution Card -->
+<section class="relative overflow-hidden bg-surface-container-lowest rounded-xl shadow-[0_4px_16px_-2px_rgba(11,110,79,0.06),0_2px_6px_-1px_rgba(15,23,42,0.03)] p-space-md mt-space-sm">
+<div class="absolute -right-10 -top-10 w-36 h-36 rounded-full bg-gradient-to-br from-tertiary-fixed/30 via-secondary-fixed/20 to-transparent blur-xl pointer-events-none"></div>
+<div class="relative flex items-start gap-space-md">
+<!-- Avatar with Amber Crown Floating Badge -->
+<div class="relative flex-shrink-0">
+<div class="w-16 h-16 rounded-full bg-surface-container-high overflow-hidden shadow-inner flex items-center justify-center">
+<img class="w-full h-full object-cover" data-alt="Close up professional portrait of Sabin Shrestha, a friendly South Asian male school administrator in his late thirties wearing modern tailored formal attire, soft studio lighting, clean warm mint and neutral studio backdrop, high aesthetic quality" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0okrOtk36siIntzrv2cck22GD5aWWAN91AwNbzqcCvrwkv5yBTBVMKfS2ucTUs5nGBDCTu9wsD5VifIOr0bkxAJYbhlrv4HbVh_fdy-m9skkSQjZgm2pm7dPzGXhOoPnt-XDfbir2phClBgMLyEawox_HCSsNw89syIJYG3WsagkVE5FWGcP0jpPlsUNbiMEBMSzKspCzbdedaC84GNkZ1ai3438jEJLJDXiJ2xub5AoDLOIOJenz-w"/>
+</div>
+<div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center shadow-[0_2px_6px_rgba(136,85,0,0.35)]" title="Super Admin Verified">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">shield_with_heart</span>
+</div>
+</div>
+<!-- Identity & Role -->
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-space-xs mb-0.5">
+<h1 class="font-headline-sm text-headline-sm text-on-surface truncate">Sabin Shrestha</h1>
+<span class="material-symbols-outlined text-secondary text-[18px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1 mb-1">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+          System Administrator • Super Admin
+        </p>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">admin@cloudslms.edu.np</p>
+</div>
+</div>
+<!-- Institution & Admin ID Meta Ribbon -->
+<div class="mt-space-md pt-space-sm flex items-center justify-between gap-space-xs bg-surface-container-low rounded-lg p-space-sm">
+<div class="flex items-center gap-1.5 min-w-0">
+<span class="material-symbols-outlined text-primary text-[18px] flex-shrink-0">account_balance</span>
+<span class="font-title-sm text-title-sm text-on-surface truncate">Oakwood Int'l Academy</span>
+</div>
+<div class="flex items-center gap-1 flex-shrink-0 px-2 py-0.5 rounded-full bg-surface-container-lowest shadow-sm">
+<span class="font-label-sm text-label-sm text-on-surface-variant">ID:</span>
+<span class="font-label-sm text-label-sm font-bold text-tertiary-container tracking-wider">ADM-2025-01</span>
+</div>
+</div>
+</section>
+<!-- Quick Health / Metric Spark Strip -->
+<section class="grid grid-cols-2 gap-space-sm">
+<div class="bg-surface-container-lowest p-space-sm rounded-xl shadow-[0_4px_16px_-2px_rgba(11,110,79,0.05)] flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-secondary-container/40 flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">school</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md font-bold text-on-surface">1,316</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant truncate">Total Campus Users</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-sm rounded-xl shadow-[0_4px_16px_-2px_rgba(11,110,79,0.05)] flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-tertiary-fixed/60 flex items-center justify-center text-on-tertiary-fixed-variant">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">pending_actions</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-md text-title-md font-bold text-on-surface">21 Actionable</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant truncate">Approvals Queue</span>
+</div>
+</div>
+</section>
+<!-- Group 1: People & Structure -->
+<section class="flex flex-col gap-space-xs">
+<div class="px-space-xs flex items-center justify-between">
+<h2 class="font-label-lg text-label-lg text-on-surface font-bold uppercase tracking-wider">People &amp; Structure</h2>
+<span class="font-label-sm text-label-sm text-on-surface-variant">5 Modules</span>
+</div>
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_16px_-2px_rgba(11,110,79,0.05)] overflow-hidden">
+<!-- Manage Classes -->
+<a class="w-full flex items-center justify-between p-space-md hover:bg-surface-container-low/60 active:bg-surface-container-low transition-colors group" href="#">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary flex-shrink-0 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">layers</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface truncate font-semibold">Manage Classes</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Sections, grades &amp; homerooms</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[20px]">chevron_right</span>
+</a>
+<!-- Manage Students -->
+<div class="h-[1px] bg-surface-container-low mx-space-md"></div>
+<a class="w-full flex items-center justify-between p-space-md hover:bg-surface-container-low/60 active:bg-surface-container-low transition-colors group" href="#">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary flex-shrink-0 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">school</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface truncate font-semibold">Manage Students</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">1,248 enrolled students</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[20px]">chevron_right</span>
+</a>
+<!-- Manage Teachers -->
+<div class="h-[1px] bg-surface-container-low mx-space-md"></div>
+<a class="w-full flex items-center justify-between p-space-md hover:bg-surface-container-low/60 active:bg-surface-container-low transition-colors group" href="#">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary flex-shrink-0 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">badge</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface truncate font-semibold">Manage Teachers</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">68 faculty members</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[20px]">chevron_right</span>
+</a>
+<!-- Manage Parents -->
+<div class="h-[1px] bg-surface-container-low mx-space-md"></div>
+<a class="w-full flex items-center justify-between p-space-md hover:bg-surface-container-low/60 active:bg-surface-container-low transition-colors group" href="#">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary flex-shrink-0 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">family_restroom</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface truncate font-semibold">Manage Parents</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Guardian portal &amp; links</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[20px]">chevron_right</span>
+</a>
+<!-- Departments -->
+<div class="h-[1px] bg-surface-container-low mx-space-md"></div>
+<a class="w-full flex items-center justify-between p-space-md hover:bg-surface-container-low/60 active:bg-surface-container-low transition-colors group" href="#">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary flex-shrink-0 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">apartment</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface truncate font-semibold">Departments</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Academic &amp; administrative wings</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[20px]">chevron_right</span>
+</a>
+</div>
+</section>
+<!-- Group 2: Attendance & Schedule -->
+<section class="flex flex-col gap-space-xs">
+<div class="px-space-xs flex items-center justify-between">
+<h2 class="font-label-lg text-label-lg text-on-surface font-bold uppercase tracking-wider">Attendance &amp; Schedule</h2>
+<span class="font-label-sm text-label-sm text-tertiary-container font-semibold">2 Flags</span>
+</div>
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_16px_-2px_rgba(11,110,79,0.05)] overflow-hidden">
+<!-- Attendance Corrections -->
+<a class="w-full flex items-center justify-between p-space-md hover:bg-surface-container-low/60 active:bg-surface-container-low transition-colors group" href="#">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-tertiary-fixed/60 flex items-center justify-center text-on-tertiary-fixed-variant flex-shrink-0 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">edit_calendar</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface truncate font-semibold">Attendance Corrections</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">2 pending staff requests</span>
+</div>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0">
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold">2 Pending</span>
+<span class="material-symbols-outlined text-outline-variant text-[20px]">chevron_right</span>
+</div>
+</a>
+<!-- Timetable -->
+<div class="h-[1px] bg-surface-container-low mx-space-md"></div>
+<a class="w-full flex items-center justify-between p-space-md hover:bg-surface-container-low/60 active:bg-surface-container-low transition-colors group" href="#">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary flex-shrink-0 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface truncate font-semibold">Timetable</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Master period schedules &amp; class routines</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[20px]">chevron_right</span>
+</a>
+</div>
+</section>
+<!-- Group 3: Academic -->
+<section class="flex flex-col gap-space-xs">
+<div class="px-space-xs flex items-center justify-between">
+<h2 class="font-label-lg text-label-lg text-on-surface font-bold uppercase tracking-wider">Academic</h2>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Active Term</span>
+</div>
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_16px_-2px_rgba(11,110,79,0.05)] overflow-hidden">
+<!-- Assignments -->
+<a class="w-full flex items-center justify-between p-space-md hover:bg-surface-container-low/60 active:bg-surface-container-low transition-colors group" href="#">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary flex-shrink-0 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">assignment</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface truncate font-semibold">Assignments</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Homework &amp; practical submissions</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[20px]">chevron_right</span>
+</a>
+<!-- Exams -->
+<div class="h-[1px] bg-surface-container-low mx-space-md"></div>
+<a class="w-full flex items-center justify-between p-space-md hover:bg-surface-container-low/60 active:bg-surface-container-low transition-colors group" href="#">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary flex-shrink-0 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">workspace_premium</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface truncate font-semibold">Exams &amp; Assessments</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Term routines &amp; gradebooks</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[20px]">chevron_right</span>
+</a>
+<!-- Student Follow-ups -->
+<div class="h-[1px] bg-surface-container-low mx-space-md"></div>
+<a class="w-full flex items-center justify-between p-space-md hover:bg-surface-container-low/60 active:bg-surface-container-low transition-colors group" href="#">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-tertiary-fixed/60 flex items-center justify-center text-on-tertiary-fixed-variant flex-shrink-0 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">person_alert</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface truncate font-semibold">Student Follow-ups</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Behavior &amp; academic flags</span>
+</div>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0">
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold">5 Cases</span>
+<span class="material-symbols-outlined text-outline-variant text-[20px]">chevron_right</span>
+</div>
+</a>
+</div>
+</section>
+<!-- Group 4: Communication -->
+<section class="flex flex-col gap-space-xs">
+<div class="px-space-xs flex items-center justify-between">
+<h2 class="font-label-lg text-label-lg text-on-surface font-bold uppercase tracking-wider">Communication</h2>
+<span class="font-label-sm text-label-sm text-primary font-semibold">Broadcasts</span>
+</div>
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_16px_-2px_rgba(11,110,79,0.05)] overflow-hidden">
+<!-- Notices & Circulars -->
+<a class="w-full flex items-center justify-between p-space-md hover:bg-surface-container-low/60 active:bg-surface-container-low transition-colors group" href="#">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-secondary-container/50 flex items-center justify-center text-on-secondary-container flex-shrink-0 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">campaign</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface truncate font-semibold">Notices &amp; Circulars</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">School-wide broadcasts &amp; alerts</span>
+</div>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0">
+<span class="px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant font-label-sm text-label-sm font-bold">3 Unread</span>
+<span class="material-symbols-outlined text-outline-variant text-[20px]">chevron_right</span>
+</div>
+</a>
+</div>
+</section>
+<!-- Group 5: Finance -->
+<section class="flex flex-col gap-space-xs">
+<div class="px-space-xs flex items-center justify-between">
+<h2 class="font-label-lg text-label-lg text-on-surface font-bold uppercase tracking-wider">Finance &amp; Accounts</h2>
+<span class="font-label-sm text-label-sm text-tertiary-container font-semibold">Review Required</span>
+</div>
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_16px_-2px_rgba(11,110,79,0.05)] overflow-hidden">
+<!-- Fee Payment Review -->
+<a class="w-full flex items-center justify-between p-space-md hover:bg-surface-container-low/60 active:bg-surface-container-low transition-colors group" href="#">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-tertiary-fixed/60 flex items-center justify-center text-on-tertiary-fixed-variant flex-shrink-0 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface truncate font-semibold">Fee Payment Review</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Online slip verification &amp; approvals</span>
+</div>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0">
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold">14 Pending</span>
+<span class="material-symbols-outlined text-outline-variant text-[20px]">chevron_right</span>
+</div>
+</a>
+<!-- Payroll -->
+<div class="h-[1px] bg-surface-container-low mx-space-md"></div>
+<a class="w-full flex items-center justify-between p-space-md hover:bg-surface-container-low/60 active:bg-surface-container-low transition-colors group" href="#">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary flex-shrink-0 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface truncate font-semibold">Payroll &amp; Compensation</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Staff salary disbursements &amp; slips</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[20px]">chevron_right</span>
+</a>
+</div>
+</section>
+<!-- Group 6: Reports & Data -->
+<section class="flex flex-col gap-space-xs">
+<div class="px-space-xs flex items-center justify-between">
+<h2 class="font-label-lg text-label-lg text-on-surface font-bold uppercase tracking-wider">Reports &amp; Data</h2>
+<span class="font-label-sm text-label-sm text-secondary font-semibold">System Stable</span>
+</div>
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_16px_-2px_rgba(11,110,79,0.05)] overflow-hidden">
+<!-- Reports & Analytics -->
+<a class="w-full flex items-center justify-between p-space-md hover:bg-surface-container-low/60 active:bg-surface-container-low transition-colors group" href="#">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary flex-shrink-0 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">monitoring</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface truncate font-semibold">Reports &amp; Analytics</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Collection, grades &amp; enrollment metrics</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[20px]">chevron_right</span>
+</a>
+<!-- Backup & Data -->
+<div class="h-[1px] bg-surface-container-low mx-space-md"></div>
+<a class="w-full flex items-center justify-between p-space-md hover:bg-surface-container-low/60 active:bg-surface-container-low transition-colors group" href="#">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary flex-shrink-0 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">cloud_sync</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface truncate font-semibold">Backup &amp; Data Export</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Automated cloud backup &amp; snapshot</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5 flex-shrink-0">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+            Healthy
+          </span>
+<span class="material-symbols-outlined text-outline-variant text-[20px]">chevron_right</span>
+</div>
+</a>
+<!-- ID Cards -->
+<div class="h-[1px] bg-surface-container-low mx-space-md"></div>
+<a class="w-full flex items-center justify-between p-space-md hover:bg-surface-container-low/60 active:bg-surface-container-low transition-colors group" href="#">
+<div class="flex items-center gap-space-md min-w-0">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary flex-shrink-0 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[20px]">contactless</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-title-sm text-on-surface truncate font-semibold">ID Cards &amp; NFC Badges</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Student &amp; staff smart credentials</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant text-[20px]">chevron_right</span>
+</a>
+</div>
+</section>
+<!-- Logout and Session Actions -->
+<section class="flex flex-col gap-space-md pt-space-sm">
+<button class="w-full h-12 rounded-full bg-error-container/70 text-on-error-container hover:bg-error-container active:scale-[0.98] transition-all flex items-center justify-center gap-2 font-label-lg text-label-lg font-semibold shadow-sm" id="admin-logout-btn" type="button">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+      Log Out of Admin Console
+    </button>
+<!-- Institutional Footer Info -->
+<div class="flex flex-col items-center justify-center text-center gap-1 px-space-md">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[15px] text-secondary">lock</span>
+<span>CloudsLMS v2.4.12 • Super-Admin Tier</span>
+</div>
+<p class="font-body-sm text-body-sm text-outline">
+        Oakwood Int'l Academy • Secured by 256-bit Cloud SSL
+      </p>
+</div>
+</section>
+</div>
+<script>
+  (function() {
+    const logoutBtn = document.getElementById('admin-logout-btn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const confirmed = confirm('Are you sure you want to end your current Super Admin session on this device?');
+        if (confirmed) {
+          logoutBtn.innerHTML = '<span class="material-symbols-outlined text-[20px] animate-spin">progress_activity</span> Signing Out...';
+          logoutBtn.disabled = true;
+          setTimeout(() => {
+            alert('Session safely terminated.');
+            location.reload();
+          }, 800);
+        }
+      });
+    }
+  })();
+</script></main><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface-container-lowest/85 backdrop-blur-xl shadow-[0_8px_24px_-4px_rgba(11,110,79,0.08),0_4px_12px_-2px_rgba(15,23,42,0.04)]" data-active-classes="text-primary font-bold"><div class="flex justify-around items-center h-16 px-gutter"><a class="flex flex-col items-center justify-center gap-0.5 min-w-[56px] h-14 text-on-surface-variant hover:text-primary transition-colors" data-path="home" href="#"><span class="material-symbols-outlined text-[24px]">dashboard</span><span class="font-label-sm text-label-sm">Home</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[56px] h-14 text-on-surface-variant hover:text-primary transition-colors" data-path="attendance" href="#"><span class="material-symbols-outlined text-[24px]">fact_check</span><span class="font-label-sm text-label-sm">Attendance</span></a><a class="flex flex-col items-center justify-center gap-0.5 min-w-[56px] h-14 text-on-surface-variant hover:text-primary transition-colors" data-path="fees" href="#"><span class="material-symbols-outlined text-[24px]">payments</span><span class="font-label-sm text-label-sm">Fees</span></a><a aria-current="page" class="flex flex-col items-center justify-center gap-0.5 min-w-[56px] h-14 transition-colors text-primary font-bold" data-path="more" href="#"><span class="material-symbols-outlined text-[24px]">tune</span><span class="font-label-sm text-label-sm">More</span></a></div></nav></body></html>

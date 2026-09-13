@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CloudsLMS - Notices</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eef9f5',
+              100: '#d7f2e6',
+              200: '#b2e5d1',
+              500: '#0b6e4f',
+              600: '#08583f',
+              700: '#064431',
+              800: '#043123',
+              accent: '#10b981',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      background-color: #f6f8fa;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 flex justify-center items-center min-h-screen p-0 sm:p-4">
+  <!-- Mobile Device Container (390px) -->
+  <div class="w-full max-w-[390px] h-[844px] bg-[#f8faf9] rounded-none sm:rounded-[36px] shadow-2xl overflow-hidden flex flex-col relative border border-slate-200/80">
+
+    <!-- Mobile System Status Bar -->
+    <div class="bg-white px-6 pt-3 pb-2 flex justify-between items-center text-xs font-semibold text-slate-800 shrink-0 z-20">
+      <span>9:41</span>
+      <div class="flex items-center space-x-1.5">
+        <i class="fa-solid fa-signal text-[11px]"></i>
+        <i class="fa-solid fa-wifi text-[11px]"></i>
+        <i class="fa-solid fa-battery-full text-xs text-slate-700"></i>
+      </div>
+    </div>
+
+    <!-- Screen Header Top Bar -->
+    <header class="bg-white px-4 py-3 border-b border-slate-100 flex items-center justify-between shrink-0 z-10 shadow-xs">
+      <div class="flex items-center space-x-2.5">
+        <button class="w-9 h-9 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center hover:bg-slate-200 active:scale-95 transition">
+          <i class="fa-solid fa-arrow-left text-sm"></i>
+        </button>
+        <div class="flex items-center space-x-2">
+          <div class="w-8 h-8 rounded-lg bg-emerald-50 text-brand-500 flex items-center justify-center shadow-xs">
+            <i class="fa-solid fa-bullhorn text-sm"></i>
+          </div>
+          <h1 class="text-lg font-bold text-slate-900 tracking-tight">Notices</h1>
+        </div>
+      </div>
+
+      <!-- Date selector pill -->
+      <button class="flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-slate-100/90 hover:bg-slate-200/70 border border-slate-200/60 text-slate-700 text-xs font-medium active:scale-95 transition">
+        <i class="fa-regular fa-calendar text-brand-500 text-[11px]"></i>
+        <span class="font-semibold text-slate-800 text-[11.5px]">Thu, 16 Apr 2025</span>
+        <i class="fa-solid fa-chevron-down text-[9px] text-slate-500 ml-0.5"></i>
+      </button>
+    </header>
+
+    <!-- Scrollable Main Content -->
+    <main class="flex-1 overflow-y-auto px-4 py-3 space-y-3.5 hide-scrollbar">
+
+      <!-- Hero Announcement Banner Card -->
+      <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#eaf7f1] via-[#ebf8f2] to-[#d8f2e5] p-4 border border-emerald-100/80 shadow-xs">
+        <!-- Background decorative rings -->
+        <div class="absolute -right-8 -top-8 w-28 h-28 bg-emerald-200/30 rounded-full blur-lg pointer-events-none"></div>
+        <div class="absolute -left-6 -bottom-6 w-24 h-24 bg-teal-200/20 rounded-full blur-md pointer-events-none"></div>
+
+        <div class="relative z-10 flex items-center justify-between gap-3">
+          <div class="flex items-start space-x-3">
+            <!-- Megaphone graphic badge -->
+            <div class="w-11 h-11 rounded-xl bg-white shadow-sm border border-emerald-100 flex items-center justify-center text-brand-500 shrink-0 mt-0.5">
+              <i class="fa-solid fa-bullhorn text-lg transform -rotate-12 text-brand-500"></i>
+            </div>
+            <div class="pr-1">
+              <div class="flex items-center gap-1.5">
+                <h2 class="text-sm font-extrabold text-slate-900 leading-tight">Stay Informed</h2>
+                <span class="inline-flex items-center px-1.5 py-0.2 rounded-full text-[9px] font-bold bg-brand-500 text-white uppercase tracking-wider">LIVE</span>
+              </div>
+              <p class="text-[11.5px] text-slate-600 font-medium leading-snug mt-1">
+                Check the latest notices, announcements and important updates from your institution.
+              </p>
+            </div>
+          </div>
+
+          <!-- Total Notices Box -->
+          <div class="bg-white/95 backdrop-blur-xs rounded-xl p-2.5 px-3 border border-emerald-200/60 shadow-xs flex flex-col items-center justify-center text-center shrink-0 min-w-[70px]">
+            <div class="w-6 h-6 rounded-md bg-emerald-50 text-brand-500 flex items-center justify-center mb-0.5">
+              <i class="fa-regular fa-file-lines text-xs"></i>
+            </div>
+            <span class="text-[9.5px] text-slate-500 font-semibold tracking-tight uppercase leading-none mt-1">Total</span>
+            <span class="text-base font-extrabold text-slate-900 leading-tight">12</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Pills (Horizontal Scroll) -->
+      <div class="flex items-center space-x-2 overflow-x-auto hide-scrollbar pb-0.5 pt-0.5">
+        <!-- All (Active) -->
+        <button class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-brand-500 text-white shadow-xs font-semibold text-xs whitespace-nowrap active:scale-95 transition">
+          <span>All</span>
+          <span class="inline-flex items-center justify-center px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-white/25 text-white">12</span>
+        </button>
+
+        <!-- Academic -->
+        <button class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-white text-slate-700 border border-slate-200/90 font-medium text-xs whitespace-nowrap hover:bg-slate-50 active:scale-95 transition">
+          <span>Academic</span>
+          <span class="inline-flex items-center justify-center px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-blue-100 text-blue-700">5</span>
+        </button>
+
+        <!-- Administrative -->
+        <button class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-white text-slate-700 border border-slate-200/90 font-medium text-xs whitespace-nowrap hover:bg-slate-50 active:scale-95 transition">
+          <span>Administrative</span>
+          <span class="inline-flex items-center justify-center px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-purple-100 text-purple-700">4</span>
+        </button>
+
+        <!-- Events -->
+        <button class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-white text-slate-700 border border-slate-200/90 font-medium text-xs whitespace-nowrap hover:bg-slate-50 active:scale-95 transition">
+          <span>Events</span>
+          <span class="inline-flex items-center justify-center px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">2</span>
+        </button>
+
+        <!-- Urgent -->
+        <button class="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-white text-slate-700 border border-slate-200/90 font-medium text-xs whitespace-nowrap hover:bg-slate-50 active:scale-95 transition">
+          <span>Urgent</span>
+          <span class="inline-flex items-center justify-center px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-rose-100 text-rose-700">1</span>
+        </button>
+      </div>
+
+      <!-- Vertical List of Notice Cards -->
+      <div class="space-y-3 pb-3">
+
+        <!-- Card 1: Megaphone (Academic, New) -->
+        <div class="bg-white rounded-2xl p-3.5 border border-slate-200/80 shadow-xs hover:border-slate-300 transition relative">
+          <div class="flex items-start gap-3">
+            <!-- Icon -->
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5">
+              <i class="fa-solid fa-bullhorn text-sm"></i>
+            </div>
+
+            <!-- Body -->
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-1.5">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-100 text-blue-700">
+                    Academic
+                  </span>
+                  <span class="inline-flex items-center px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-700">
+                    New
+                  </span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-slate-400 text-xs"></i>
+              </div>
+
+              <h3 class="text-[13.5px] font-bold text-slate-900 mt-1.5 leading-snug">
+                Class Schedule Update
+              </h3>
+
+              <p class="text-xs text-slate-500 font-normal line-clamp-2 mt-1 leading-relaxed">
+                The class schedule for Semester 2 has been updated. Please check your new timetable on the student portal.
+              </p>
+
+              <div class="flex items-center space-x-1.5 text-[11px] text-slate-400 font-medium mt-2 pt-1 border-t border-slate-50">
+                <i class="fa-regular fa-calendar text-[10px] text-slate-400"></i>
+                <span>16 Apr 2025</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Document (Administrative, New) -->
+        <div class="bg-white rounded-2xl p-3.5 border border-slate-200/80 shadow-xs hover:border-slate-300 transition relative">
+          <div class="flex items-start gap-3">
+            <!-- Icon -->
+            <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0 mt-0.5">
+              <i class="fa-regular fa-file-lines text-sm"></i>
+            </div>
+
+            <!-- Body -->
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-1.5">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-100 text-purple-700">
+                    Administrative
+                  </span>
+                  <span class="inline-flex items-center px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-700">
+                    New
+                  </span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-slate-400 text-xs"></i>
+              </div>
+
+              <h3 class="text-[13.5px] font-bold text-slate-900 mt-1.5 leading-snug">
+                Exam Form Submission Deadline
+              </h3>
+
+              <p class="text-xs text-slate-500 font-normal line-clamp-2 mt-1 leading-relaxed">
+                Last date to submit exam form is 20 April 2025. Late submissions will not be accepted.
+              </p>
+
+              <div class="flex items-center space-x-1.5 text-[11px] text-slate-400 font-medium mt-2 pt-1 border-t border-slate-50">
+                <i class="fa-regular fa-calendar text-[10px] text-slate-400"></i>
+                <span>15 Apr 2025</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Calendar (Events) -->
+        <div class="bg-white rounded-2xl p-3.5 border border-slate-200/80 shadow-xs hover:border-slate-300 transition relative">
+          <div class="flex items-start gap-3">
+            <!-- Icon -->
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5">
+              <i class="fa-regular fa-calendar-days text-sm"></i>
+            </div>
+
+            <!-- Body -->
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-1.5">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-700">
+                    Events
+                  </span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-slate-400 text-xs"></i>
+              </div>
+
+              <h3 class="text-[13.5px] font-bold text-slate-900 mt-1.5 leading-snug">
+                Annual Sports Day 2025
+              </h3>
+
+              <p class="text-xs text-slate-500 font-normal line-clamp-2 mt-1 leading-relaxed">
+                Join us for the Annual Sports Day on 25 April 2025 at the university ground. All students are welcome!
+              </p>
+
+              <div class="flex items-center space-x-1.5 text-[11px] text-slate-400 font-medium mt-2 pt-1 border-t border-slate-50">
+                <i class="fa-regular fa-calendar text-[10px] text-slate-400"></i>
+                <span>14 Apr 2025</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4: Exclamation (Urgent, New, Red) -->
+        <div class="bg-rose-50/40 rounded-2xl p-3.5 border border-rose-200/70 shadow-xs hover:border-rose-300 transition relative">
+          <div class="flex items-start gap-3">
+            <!-- Icon -->
+            <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0 mt-0.5">
+              <i class="fa-solid fa-circle-exclamation text-sm"></i>
+            </div>
+
+            <!-- Body -->
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-1.5">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-rose-100 text-rose-700">
+                    Urgent
+                  </span>
+                  <span class="inline-flex items-center px-1.5 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-700">
+                    New
+                  </span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-slate-400 text-xs"></i>
+              </div>
+
+              <h3 class="text-[13.5px] font-bold text-slate-900 mt-1.5 leading-snug">
+                Notice Regarding Library Access
+              </h3>
+
+              <p class="text-xs text-slate-600 font-normal line-clamp-2 mt-1 leading-relaxed">
+                Library will remain closed from 18-19 April 2025 due to maintenance work. We apologize for the inconvenience.
+              </p>
+
+              <div class="flex items-center space-x-1.5 text-[11px] text-slate-400 font-medium mt-2 pt-1 border-t border-rose-100/60">
+                <i class="fa-regular fa-calendar text-[10px] text-slate-400"></i>
+                <span>12 Apr 2025</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5: Document (Academic) -->
+        <div class="bg-white rounded-2xl p-3.5 border border-slate-200/80 shadow-xs hover:border-slate-300 transition relative">
+          <div class="flex items-start gap-3">
+            <!-- Icon -->
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5">
+              <i class="fa-regular fa-file-lines text-sm"></i>
+            </div>
+
+            <!-- Body -->
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-1.5">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-100 text-blue-700">
+                    Academic
+                  </span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-slate-400 text-xs"></i>
+              </div>
+
+              <h3 class="text-[13.5px] font-bold text-slate-900 mt-1.5 leading-snug">
+                Result Publication Notice
+              </h3>
+
+              <p class="text-xs text-slate-500 font-normal line-clamp-2 mt-1 leading-relaxed">
+                Results for Mid-Term Examination (Batch 2024) have been published. Check your result on the student portal.
+              </p>
+
+              <div class="flex items-center space-x-1.5 text-[11px] text-slate-400 font-medium mt-2 pt-1 border-t border-slate-50">
+                <i class="fa-regular fa-calendar text-[10px] text-slate-400"></i>
+                <span>10 Apr 2025</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 6: Info (Administrative) -->
+        <div class="bg-white rounded-2xl p-3.5 border border-slate-200/80 shadow-xs hover:border-slate-300 transition relative">
+          <div class="flex items-start gap-3">
+            <!-- Icon -->
+            <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0 mt-0.5">
+              <i class="fa-solid fa-circle-info text-sm"></i>
+            </div>
+
+            <!-- Body -->
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-1.5">
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-100 text-purple-700">
+                    Administrative
+                  </span>
+                </div>
+                <i class="fa-solid fa-chevron-right text-slate-400 text-xs"></i>
+              </div>
+
+              <h3 class="text-[13.5px] font-bold text-slate-900 mt-1.5 leading-snug">
+                Office Hours During Exam Period
+              </h3>
+
+              <p class="text-xs text-slate-500 font-normal line-clamp-2 mt-1 leading-relaxed">
+                The administration office will be open from 9:00 AM - 3:00 PM during the exam period (16-30 April 2025).
+              </p>
+
+              <div class="flex items-center space-x-1.5 text-[11px] text-slate-400 font-medium mt-2 pt-1 border-t border-slate-50">
+                <i class="fa-regular fa-calendar text-[10px] text-slate-400"></i>
+                <span>08 Apr 2025</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Bottom Navigation Bar: Home, Classes, Students, Notices (active), More -->
+    <nav class="bg-white border-t border-slate-200/90 px-3 py-2 flex items-center justify-around shrink-0 z-20 shadow-lg">
+      <!-- Home -->
+      <a href="#" class="flex flex-col items-center justify-center text-slate-400 hover:text-slate-600 transition min-w-[54px] py-1">
+        <i class="fa-solid fa-table-cells-large text-[17px] mb-1"></i>
+        <span class="text-[10px] font-medium tracking-tight">Home</span>
+      </a>
+
+      <!-- Classes -->
+      <a href="#" class="flex flex-col items-center justify-center text-slate-400 hover:text-slate-600 transition min-w-[54px] py-1">
+        <i class="fa-solid fa-graduation-cap text-[17px] mb-1"></i>
+        <span class="text-[10px] font-medium tracking-tight">Classes</span>
+      </a>
+
+      <!-- Students -->
+      <a href="#" class="flex flex-col items-center justify-center text-slate-400 hover:text-slate-600 transition min-w-[54px] py-1">
+        <i class="fa-solid fa-user-graduate text-[17px] mb-1"></i>
+        <span class="text-[10px] font-medium tracking-tight">Students</span>
+      </a>
+
+      <!-- Notices (Active) -->
+      <a href="#" class="flex flex-col items-center justify-center text-brand-500 font-bold transition min-w-[54px] py-1">
+        <div class="relative">
+          <i class="fa-solid fa-bullhorn text-[17px] mb-1 text-brand-500"></i>
+          <span class="absolute -top-0.5 -right-1 w-2 h-2 bg-rose-500 rounded-full ring-2 ring-white"></span>
+        </div>
+        <span class="text-[10px] font-bold text-brand-500 tracking-tight">Notices</span>
+      </a>
+
+      <!-- More -->
+      <a href="#" class="flex flex-col items-center justify-center text-slate-400 hover:text-slate-600 transition min-w-[54px] py-1">
+        <i class="fa-solid fa-ellipsis text-[17px] mb-1"></i>
+        <span class="text-[10px] font-medium tracking-tight">More</span>
+      </a>
+    </nav>
+
+  </div>
+</body>
+</html>
