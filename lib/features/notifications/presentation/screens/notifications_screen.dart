@@ -56,8 +56,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             ? const EmptyStateView(message: 'No notifications yet', icon: Icons.notifications_none)
             : RefreshIndicator(
                 onRefresh: provider.loadNotifications,
-                child: ListView.builder(
+                child: ListView.separated(
+                  padding: const EdgeInsets.all(16),
                   itemCount: provider.notifications.length,
+                  separatorBuilder: (context, index) => const SizedBox(height: 8),
                   itemBuilder: (context, index) {
                     final notification = provider.notifications[index];
                     return _NotificationTile(
@@ -82,19 +84,36 @@ class _NotificationTile extends StatelessWidget {
 
   const _NotificationTile({required this.notification, required this.onTap});
 
+  IconData get _typeIcon => switch (notification.type) {
+        'fee' => Icons.payments_outlined,
+        'attendance' || 'attendanceSession' || 'attendanceRecord' || 'attendanceCorrection' => Icons.event_available_outlined,
+        'assignment' => Icons.assignment_outlined,
+        'exam' || 'result' => Icons.quiz_outlined,
+        'payroll' => Icons.account_balance_wallet_outlined,
+        'subscription' => Icons.workspace_premium_outlined,
+        _ => Icons.notifications_outlined,
+      };
+
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(
-        notification.isRead ? Icons.notifications_none : Icons.notifications,
-        color: notification.isRead ? null : Theme.of(context).colorScheme.primary,
+    final scheme = Theme.of(context).colorScheme;
+    final tint = notification.isRead ? scheme.onSurfaceVariant : scheme.primary;
+    return Card(
+      margin: EdgeInsets.zero,
+      color: notification.isRead ? null : scheme.primary.withValues(alpha: 0.05),
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        leading: CircleAvatar(
+          backgroundColor: tint.withValues(alpha: 0.14),
+          child: Icon(_typeIcon, color: tint, size: 20),
+        ),
+        title: Text(
+          notification.title,
+          style: TextStyle(fontWeight: notification.isRead ? FontWeight.normal : FontWeight.bold),
+        ),
+        subtitle: Text(notification.message, maxLines: 2, overflow: TextOverflow.ellipsis),
+        onTap: onTap,
       ),
-      title: Text(
-        notification.title,
-        style: TextStyle(fontWeight: notification.isRead ? FontWeight.normal : FontWeight.bold),
-      ),
-      subtitle: Text(notification.message, maxLines: 2, overflow: TextOverflow.ellipsis),
-      onTap: onTap,
     );
   }
 }

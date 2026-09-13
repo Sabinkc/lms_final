@@ -33,27 +33,76 @@ class AppTheme {
     );
 
     return base.copyWith(
-      textTheme: AppTypography.textTheme(base.textTheme),
+      textTheme: AppTypography.textTheme(base.textTheme).copyWith(
+        titleLarge: AppTypography.textTheme(base.textTheme).titleLarge?.copyWith(fontWeight: FontWeight.w800),
+      ),
       appBarTheme: AppBarTheme(
         elevation: 0,
         scrolledUnderElevation: 0,
         backgroundColor: isDark ? AppColors.darkBase : AppColors.lightBase,
         foregroundColor: colorScheme.onSurface,
+        titleTextStyle: TextStyle(
+          fontFamily: 'Inter',
+          fontSize: 22,
+          fontWeight: FontWeight.w800,
+          color: colorScheme.onSurface,
+        ),
       ),
       cardTheme: CardThemeData(
-        elevation: isDark ? 0 : 1,
+        elevation: isDark ? 0 : 3,
+        shadowColor: isDark ? Colors.transparent : AppColors.primary.withValues(alpha: 0.12),
         color: isDark ? AppColors.darkElevated2 : AppColors.lightElevated,
         shape: RoundedRectangleBorder(borderRadius: AppRadius.card),
       ),
       filledButtonTheme: FilledButtonThemeData(
-        style: FilledButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: AppRadius.button)),
+        style: FilledButton.styleFrom(
+          shape: const StadiumBorder(),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+          textStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+          elevation: 2,
+          shadowColor: AppColors.primary.withValues(alpha: 0.4),
+        ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: AppRadius.button)),
+        style: OutlinedButton.styleFrom(
+          shape: const StadiumBorder(),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+          textStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+          side: BorderSide(color: colorScheme.primary.withValues(alpha: 0.5)),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          shape: const StadiumBorder(),
+          textStyle: const TextStyle(fontWeight: FontWeight.w700),
+        ),
+      ),
+      chipTheme: ChipThemeData(
+        shape: const StadiumBorder(),
+        side: BorderSide.none,
+        backgroundColor: isDark ? AppColors.darkElevated3 : colorScheme.primary.withValues(alpha: 0.08),
+        labelStyle: TextStyle(fontWeight: FontWeight.w600, color: colorScheme.onSurface),
+        secondaryLabelStyle: TextStyle(fontWeight: FontWeight.w700, color: colorScheme.primary),
+        selectedColor: colorScheme.primary.withValues(alpha: isDark ? 0.34 : 0.2),
+        checkmarkColor: colorScheme.primary,
       ),
       inputDecorationTheme: InputDecorationTheme(
-        border: OutlineInputBorder(borderRadius: AppRadius.textField),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(28)),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(28),
+          borderSide: BorderSide(color: colorScheme.outlineVariant),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(28),
+          borderSide: BorderSide(color: colorScheme.primary, width: 2),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         filled: false,
+      ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        elevation: 4,
+        highlightElevation: 6,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.xl3)),
       ),
       bottomSheetTheme: BottomSheetThemeData(
         shape: RoundedRectangleBorder(
@@ -61,8 +110,10 @@ class AppTheme {
         ),
       ),
       navigationBarTheme: NavigationBarThemeData(
+        height: 64,
         elevation: 0,
         backgroundColor: isDark ? AppColors.darkElevated2 : AppColors.lightElevated,
+        indicatorShape: const StadiumBorder(),
         indicatorColor: colorScheme.primary.withValues(alpha: isDark ? 0.24 : 0.16),
         labelTextStyle: WidgetStateProperty.resolveWith(
           (states) => TextStyle(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../shared/widgets/empty_state_view.dart';
+import '../../../../shared/widgets/filter_chip_bar.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../providers/self_fee_provider.dart';
 import '../widgets/fee_history_body.dart';
@@ -34,22 +35,11 @@ class _ChildFeesScreenState extends State<ChildFeesScreen> {
           if (provider.childrenStatus == LoadStatus.success && provider.children.length > 1)
             Padding(
               padding: const EdgeInsets.all(16),
-              child: SizedBox(
-                height: 40,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    for (final child in provider.children)
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: ChoiceChip(
-                          label: Text(child.fullName),
-                          selected: provider.selectedChildId == child.id,
-                          onSelected: (_) => provider.selectChild(child.id),
-                        ),
-                      ),
-                  ],
-                ),
+              child: AppFilterChipBar<String>(
+                options: [for (final child in provider.children) child.id],
+                selected: provider.selectedChildId ?? '',
+                labelBuilder: (id) => provider.children.firstWhere((c) => c.id == id).fullName,
+                onSelected: provider.selectChild,
               ),
             ),
           Expanded(

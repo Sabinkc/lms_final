@@ -56,27 +56,39 @@ class _SectionsListScreenState extends State<SectionsListScreen> {
                 actionLabel: 'Add Section',
                 onAction: () => _showSectionFormDialog(context, provider, classId: widget.classId),
               )
-            : ListView.builder(
+            : ListView.separated(
+                padding: const EdgeInsets.all(16),
                 itemCount: provider.sections.length,
+                separatorBuilder: (context, index) => const SizedBox(height: 8),
                 itemBuilder: (context, index) {
                   final section = provider.sections[index];
-                  return ListTile(
-                    title: Text(section.name),
-                    subtitle: Text('${section.studentCount} student${section.studentCount == 1 ? '' : 's'}'),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.edit_outlined),
-                          tooltip: 'Edit',
-                          onPressed: () => _showSectionFormDialog(context, provider, classId: widget.classId, existing: section),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.delete_outline),
-                          tooltip: 'Delete',
-                          onPressed: () => _confirmDeleteSection(context, provider, section),
-                        ),
-                      ],
+                  final accent = Theme.of(context).colorScheme.primary;
+                  return Card(
+                    margin: EdgeInsets.zero,
+                    clipBehavior: Clip.antiAlias,
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      leading: CircleAvatar(
+                        backgroundColor: accent.withValues(alpha: 0.14),
+                        child: Icon(Icons.groups_outlined, color: accent, size: 20),
+                      ),
+                      title: Text(section.name, style: Theme.of(context).textTheme.titleSmall),
+                      subtitle: Text('${section.studentCount} student${section.studentCount == 1 ? '' : 's'}'),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit_outlined),
+                            tooltip: 'Edit',
+                            onPressed: () => _showSectionFormDialog(context, provider, classId: widget.classId, existing: section),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete_outline),
+                            tooltip: 'Delete',
+                            onPressed: () => _confirmDeleteSection(context, provider, section),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },

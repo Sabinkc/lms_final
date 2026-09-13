@@ -133,21 +133,39 @@ class _RosterBody extends StatelessWidget {
       LoadStatus.error => ErrorView(error: provider.rosterError!, onRetry: () => provider.loadRoster(sectionId!)),
       LoadStatus.success => provider.roster.isEmpty
           ? const EmptyStateView(message: 'No students in this section')
-          : ListView.builder(
+          : ListView.separated(
+              padding: const EdgeInsets.all(16),
               itemCount: provider.roster.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 8),
               itemBuilder: (context, index) {
                 final student = provider.roster[index];
                 final locked = provider.lastSubmitResult != null;
-                return ListTile(
-                  title: Text(student.fullName),
-                  subtitle: Text(student.admissionNumber),
-                  trailing: DropdownButton<AttendanceStatus>(
-                    value: provider.statusFor(student.id),
-                    onChanged: locked ? null : (status) => provider.setStatus(student.id, status!),
-                    items: [
-                      for (final status in AttendanceStatus.values)
-                        DropdownMenuItem(value: status, child: Text(status.label)),
-                    ],
+                final current = provider.statusFor(student.id);
+                return Card(
+                  margin: EdgeInsets.zero,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(student.fullName, style: Theme.of(context).textTheme.titleSmall),
+                        Text(student.admissionNumber, style: Theme.of(context).textTheme.bodySmall),
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 4,
+                          children: [
+                            for (final status in AttendanceStatus.values)
+                              ChoiceChip(
+                                label: Text(status.label),
+                                selected: current == status,
+                                showCheckmark: false,
+                                onSelected: locked ? null : (_) => provider.setStatus(student.id, status),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },

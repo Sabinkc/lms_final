@@ -57,25 +57,31 @@ class _DualCalendarScreenState extends State<DualCalendarScreen> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(icon: const Icon(Icons.chevron_left), onPressed: () => _changeMonth(-1)),
-                Column(
+            padding: const EdgeInsets.all(16),
+            child: Card(
+              margin: EdgeInsets.zero,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      '${_monthName(_displayedMonth.month)} ${_displayedMonth.year}',
-                      style: Theme.of(context).textTheme.titleLarge,
+                    IconButton(icon: const Icon(Icons.chevron_left), onPressed: () => _changeMonth(-1)),
+                    Column(
+                      children: [
+                        Text(
+                          '${_monthName(_displayedMonth.month)} ${_displayedMonth.year}',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        Text(
+                          'BS ${firstOfMonth.toNepaliDateTime().format('MMMM yyyy')} onward',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
                     ),
-                    Text(
-                      'BS ${firstOfMonth.toNepaliDateTime().format('MMMM yyyy')} onward',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
+                    IconButton(icon: const Icon(Icons.chevron_right), onPressed: () => _changeMonth(1)),
                   ],
                 ),
-                IconButton(icon: const Icon(Icons.chevron_right), onPressed: () => _changeMonth(1)),
-              ],
+              ),
             ),
           ),
           Row(
@@ -128,16 +134,21 @@ class _DayCell extends StatelessWidget {
   Widget build(BuildContext context) {
     final bsLabel = date.toNepaliDateTime().format('MMM d');
 
+    final accent = Theme.of(context).colorScheme.primary;
     return Container(
       margin: const EdgeInsets.all(2),
-      decoration: isToday
-          ? BoxDecoration(color: Theme.of(context).colorScheme.primaryContainer, borderRadius: BorderRadius.circular(8))
-          : null,
+      decoration: isToday ? BoxDecoration(color: accent, borderRadius: BorderRadius.circular(14)) : null,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('${date.day}', style: const TextStyle(fontWeight: FontWeight.bold)),
-          Text(bsLabel, style: Theme.of(context).textTheme.labelSmall),
+          Text(
+            '${date.day}',
+            style: TextStyle(fontWeight: FontWeight.bold, color: isToday ? Colors.white : null),
+          ),
+          Text(
+            bsLabel,
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(color: isToday ? Colors.white70 : null),
+          ),
         ],
       ),
     );

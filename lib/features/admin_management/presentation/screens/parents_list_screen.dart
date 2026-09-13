@@ -108,28 +108,43 @@ class _ParentsList extends StatelessWidget {
         Expanded(
           child: parents.isEmpty
               ? const EmptyStateView(message: 'No parents match your search')
-              : ListView.builder(
+              : ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                   itemCount: parents.length,
+                  separatorBuilder: (context, index) => const SizedBox(height: 8),
                   itemBuilder: (context, index) {
                     final parent = parents[index];
                     final childNames = parent.children.map((c) => c.fullName).join(', ');
-                    return ListTile(
-                      title: Text(parent.fullName),
-                      subtitle: Text(childNames.isEmpty ? 'No children linked' : 'Children: $childNames'),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit_outlined),
-                            tooltip: 'Edit',
-                            onPressed: () => onEdit(parent),
+                    final accent = Theme.of(context).colorScheme.primary;
+                    return Card(
+                      margin: EdgeInsets.zero,
+                      clipBehavior: Clip.antiAlias,
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        leading: CircleAvatar(
+                          backgroundColor: accent.withValues(alpha: 0.14),
+                          child: Text(
+                            parent.fullName.isNotEmpty ? parent.fullName[0].toUpperCase() : '?',
+                            style: TextStyle(color: accent, fontWeight: FontWeight.w700),
                           ),
-                          IconButton(
-                            icon: const Icon(Icons.delete_outline),
-                            tooltip: 'Delete',
-                            onPressed: () => onDelete(parent),
-                          ),
-                        ],
+                        ),
+                        title: Text(parent.fullName, style: Theme.of(context).textTheme.titleSmall),
+                        subtitle: Text(childNames.isEmpty ? 'No children linked' : 'Children: $childNames'),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.edit_outlined),
+                              tooltip: 'Edit',
+                              onPressed: () => onEdit(parent),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete_outline),
+                              tooltip: 'Delete',
+                              onPressed: () => onDelete(parent),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },

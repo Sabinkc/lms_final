@@ -3,11 +3,14 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
+import '../../../../shared/widgets/status_chip.dart';
 import '../../../../shared/utils/display_date.dart';
-import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
+import '../../../admin_management/presentation/providers/academic_structure_provider.dart'
+    show LoadStatus;
 import '../../../auth/data/models/app_role.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../data/models/exam.dart';
@@ -60,22 +63,39 @@ class _ExamsListScreenState extends State<ExamsListScreen> {
             )
           : null,
       body: switch (provider.status) {
-        LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading exams...'),
+        LoadStatus.initial ||
+        LoadStatus.loading => const LoadingView(message: 'Loading exams...'),
         LoadStatus.error => ErrorView(
-            error: provider.error!,
-            onRetry: () => isAdmin ? provider.loadExamsAsAdmin() : provider.loadMyExams(),
-          ),
-        LoadStatus.success => provider.exams.isEmpty
-            ? EmptyStateView(
-                message: 'No exams scheduled yet',
-                icon: Icons.school_outlined,
-                actionLabel: isAdmin ? 'Add Exam' : null,
-                onAction: isAdmin ? () => showExamFormDialog(context, provider) : null,
-              )
-            : ListView.builder(
-                itemCount: provider.exams.length,
-                itemBuilder: (context, index) => _ExamTile(exam: provider.exams[index], role: role, isAdmin: isAdmin),
-              ),
+          error: provider.error!,
+          onRetry: () =>
+              isAdmin ? provider.loadExamsAsAdmin() : provider.loadMyExams(),
+        ),
+        LoadStatus.success =>
+          provider.exams.isEmpty
+              ? EmptyStateView(
+                  message: 'No exams scheduled yet',
+                  icon: Icons.school_outlined,
+                  actionLabel: isAdmin ? 'Add Exam' : null,
+                  onAction: isAdmin
+                      ? () => showExamFormDialog(context, provider)
+                      : null,
+                )
+              : ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.lg,
+                    AppSpacing.sm,
+                    AppSpacing.lg,
+                    AppSpacing.lg,
+                  ),
+                  itemCount: provider.exams.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: AppSpacing.sm),
+                  itemBuilder: (context, index) => _ExamTile(
+                    exam: provider.exams[index],
+                    role: role,
+                    isAdmin: isAdmin,
+                  ),
+                ),
       },
     );
   }
@@ -86,54 +106,81 @@ class _ExamTile extends StatelessWidget {
   final AppRole? role;
   final bool isAdmin;
 
-  const _ExamTile({required this.exam, required this.role, required this.isAdmin});
+  const _ExamTile({
+    required this.exam,
+    required this.role,
+    required this.isAdmin,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return ExpansionTile(
-      title: Text(exam.title),
-      subtitle: Text(
-        '${exam.className}${exam.section != null ? ' ${exam.section}' : ''} · Due ${formatDisplayDate(exam.examDate)}'
-        '${exam.status == 'published' ? ' · Published' : ''}',
-      ),
-      children: [
-        for (final subject in exam.subjects)
-          ListTile(
-            dense: true,
-            title: Text(subject.name),
-            subtitle: Text('${formatDisplayDate(subject.examDate)}${subject.examTime != null ? ' at ${subject.examTime}' : ''}'
-                '${subject.room != null ? ' · Room ${subject.room}' : ''}'),
-            trailing: Text('${subject.fullMarks} marks'),
-          ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    return Card(
+      margin: EdgeInsets.zero,
+      clipBehavior: Clip.antiAlias,
+      child: ExpansionTile(
+        title: Text(exam.title, style: Theme.of(context).textTheme.titleSmall),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 4),
           child: Wrap(
-            spacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 6,
+            runSpacing: 4,
             children: [
-              if (isAdmin && exam.status != 'published')
-                FilledButton(
-                  onPressed: () => context.push(AppRoutes.examPublishResults(exam.id), extra: exam),
-                  child: const Text('Publish Results'),
-                ),
-              if (isAdmin && exam.status == 'published')
-                OutlinedButton(
-                  onPressed: () => context.push(AppRoutes.examResults(exam.id)),
-                  child: const Text('View Results'),
-                ),
-              if (!isAdmin && role == AppRole.student)
-                OutlinedButton(
-                  onPressed: () => context.push(AppRoutes.examResults(exam.id)),
-                  child: const Text('My Result'),
-                ),
-              if (role == AppRole.parent)
-                OutlinedButton(
-                  onPressed: () => context.push(AppRoutes.examResults(exam.id)),
-                  child: const Text("Child's Result"),
-                ),
+              Text(
+                '${exam.className}${exam.section != null ? ' ${exam.section}' : ''} · Due ${formatDisplayDate(exam.examDate)}',
+              ),
+              if (exam.status == 'published')
+                const AppStatusChip(label: 'Published', color: Colors.green),
             ],
           ),
         ),
-      ],
+        children: [
+          for (final subject in exam.subjects)
+            ListTile(
+              dense: true,
+              title: Text(subject.name),
+              subtitle: Text(
+                '${formatDisplayDate(subject.examDate)}${subject.examTime != null ? ' at ${subject.examTime}' : ''}'
+                '${subject.room != null ? ' · Room ${subject.room}' : ''}',
+              ),
+              trailing: Text('${subject.fullMarks} marks'),
+            ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Wrap(
+              spacing: 8,
+              children: [
+                if (isAdmin && exam.status != 'published')
+                  FilledButton(
+                    onPressed: () => context.push(
+                      AppRoutes.examPublishResults(exam.id),
+                      extra: exam,
+                    ),
+                    child: const Text('Publish Results'),
+                  ),
+                if (isAdmin && exam.status == 'published')
+                  OutlinedButton(
+                    onPressed: () =>
+                        context.push(AppRoutes.examResults(exam.id)),
+                    child: const Text('View Results'),
+                  ),
+                if (!isAdmin && role == AppRole.student)
+                  OutlinedButton(
+                    onPressed: () =>
+                        context.push(AppRoutes.examResults(exam.id)),
+                    child: const Text('My Result'),
+                  ),
+                if (role == AppRole.parent)
+                  OutlinedButton(
+                    onPressed: () =>
+                        context.push(AppRoutes.examResults(exam.id)),
+                    child: const Text("Child's Result"),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

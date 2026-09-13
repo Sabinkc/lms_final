@@ -264,15 +264,26 @@ class _DaySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final accent = Theme.of(context).colorScheme.primary;
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
+      clipBehavior: Clip.antiAlias,
       child: ExpansionTile(
-        title: Text(day),
+        leading: CircleAvatar(
+          backgroundColor: accent.withValues(alpha: 0.14),
+          child: Icon(Icons.calendar_today_outlined, color: accent, size: 20),
+        ),
+        title: Text(day, style: Theme.of(context).textTheme.titleSmall),
         subtitle: Text('${periods.length} period(s)'),
         children: [
           for (final period in periods)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            Container(
+              margin: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
+                borderRadius: BorderRadius.circular(12),
+              ),
               child: Row(
                 children: [
                   Expanded(

@@ -44,40 +44,64 @@ class _AdminIdCardScreenState extends State<AdminIdCardScreen> {
   Widget build(BuildContext context) {
     final provider = context.watch<AdminIdCardProvider>();
 
+    final accent = Theme.of(context).colorScheme.primary;
     return Scaffold(
       appBar: AppBar(title: const Text('ID Cards')),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('Pick a student to generate their ID card as a PDF.'),
-            const SizedBox(height: 16),
-            Autocomplete<Student>(
-              displayStringForOption: (s) => '${s.fullName} (${s.admissionNumber})',
-              optionsBuilder: (value) {
-                if (value.text.isEmpty) return provider.studentOptions;
-                final query = value.text.toLowerCase();
-                return provider.studentOptions.where(
-                  (s) => s.fullName.toLowerCase().contains(query) || s.admissionNumber.toLowerCase().contains(query),
-                );
-              },
-              onSelected: (s) => setState(() => _selectedStudent = s),
-              fieldViewBuilder: (context, controller, focusNode, onSubmit) => TextFormField(
-                controller: controller,
-                focusNode: focusNode,
-                decoration: const InputDecoration(labelText: 'Student', border: OutlineInputBorder()),
-              ),
+        child: Card(
+          margin: EdgeInsets.zero,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: accent.withValues(alpha: 0.14),
+                      child: Icon(Icons.badge_outlined, color: accent),
+                    ),
+                    const SizedBox(width: 12),
+                    const Expanded(child: Text('Pick a student to generate their ID card as a PDF.')),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Autocomplete<Student>(
+                  displayStringForOption: (s) => '${s.fullName} (${s.admissionNumber})',
+                  optionsBuilder: (value) {
+                    if (value.text.isEmpty) return provider.studentOptions;
+                    final query = value.text.toLowerCase();
+                    return provider.studentOptions.where(
+                      (s) => s.fullName.toLowerCase().contains(query) || s.admissionNumber.toLowerCase().contains(query),
+                    );
+                  },
+                  onSelected: (s) => setState(() => _selectedStudent = s),
+                  fieldViewBuilder: (context, controller, focusNode, onSubmit) => TextFormField(
+                    controller: controller,
+                    focusNode: focusNode,
+                    decoration: const InputDecoration(
+                      labelText: 'Student',
+                      prefixIcon: Icon(Icons.person_search_outlined),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: FilledButton.icon(
+                    icon: provider.isGenerating
+                        ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                        : const Icon(Icons.badge_outlined),
+                    label: const Text('Generate & Download'),
+                    onPressed: (_selectedStudent == null || provider.isGenerating) ? null : () => _generate(context, provider),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            FilledButton.icon(
-              icon: provider.isGenerating
-                  ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                  : const Icon(Icons.badge_outlined),
-              label: const Text('Generate & Download'),
-              onPressed: (_selectedStudent == null || provider.isGenerating) ? null : () => _generate(context, provider),
-            ),
-          ],
+          ),
         ),
       ),
     );

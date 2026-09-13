@@ -115,7 +115,10 @@ void main() {
     await tester.pumpAndSettle();
 
     verify(() => repository.gradeSubmission(submissionId: 'sub1', marks: 90, remarks: 'Great job')).called(1);
-    expect(find.textContaining('Graded: 90'), findsOneWidget);
+    // "Graded" moved into an AppStatusChip on the submission card; the
+    // marks/remarks line is now labeled "Marks:" instead of "Graded:".
+    expect(find.textContaining('Marks: 90'), findsOneWidget);
+    expect(find.text('Graded'), findsOneWidget);
   });
 
   testWidgets('Student with no submission yet sees the submit form; submitting calls submitAssignment',

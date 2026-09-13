@@ -57,10 +57,10 @@ class RoleHomeScreen extends StatelessWidget {
             GridView.count(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 2,
-              mainAxisSpacing: AppSpacing.md,
-              crossAxisSpacing: AppSpacing.md,
-              childAspectRatio: 1.3,
+              crossAxisCount: 3,
+              mainAxisSpacing: AppSpacing.sm,
+              crossAxisSpacing: AppSpacing.sm,
+              childAspectRatio: 0.95,
               children: [
                 for (final action in quickActions)
                   QuickActionCard(
@@ -85,6 +85,13 @@ class _Greeting extends StatelessWidget {
 
   const _Greeting({required this.name, required this.role, required this.accent});
 
+  static String _timeOfDayGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) return 'Good Morning';
+    if (hour < 17) return 'Good Afternoon';
+    return 'Good Evening';
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -94,21 +101,26 @@ class _Greeting extends StatelessWidget {
       AppRole.student => 'Student',
       AppRole.parent => 'Parent',
     };
+    final firstName = (name != null && name!.trim().isNotEmpty) ? name!.trim().split(' ').first : null;
 
     return Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: accent.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(20),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [accent.withValues(alpha: 0.22), accent.withValues(alpha: 0.08)],
+        ),
+        borderRadius: BorderRadius.circular(24),
       ),
       child: Row(
         children: [
           CircleAvatar(
-            radius: 26,
+            radius: 28,
             backgroundColor: accent,
             child: Text(
               (name?.isNotEmpty ?? false) ? name![0].toUpperCase() : '?',
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
             ),
           ),
           const SizedBox(width: AppSpacing.md),
@@ -116,10 +128,28 @@ class _Greeting extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Welcome back${name != null && name!.isNotEmpty ? ',' : ''}', style: textTheme.bodyMedium),
-                if (name != null && name!.isNotEmpty)
-                  Text(name!, style: textTheme.titleLarge, maxLines: 1, overflow: TextOverflow.ellipsis),
-                Text(roleLabel, style: textTheme.bodySmall?.copyWith(color: accent, fontWeight: FontWeight.w700)),
+                Text(
+                  '${_timeOfDayGreeting()}${firstName != null ? ',' : ''}',
+                  style: textTheme.bodyMedium,
+                ),
+                if (firstName != null)
+                  Text(firstName, style: textTheme.headlineSmall, maxLines: 1, overflow: TextOverflow.ellipsis),
+                const SizedBox(height: 2),
+                Text(
+                  "Here's what's happening today",
+                  style: textTheme.bodySmall,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  decoration: BoxDecoration(color: accent, borderRadius: BorderRadius.circular(20)),
+                  child: Text(
+                    roleLabel,
+                    style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 11),
+                  ),
+                ),
               ],
             ),
           ),

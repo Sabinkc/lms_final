@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
+import '../../../../shared/widgets/status_chip.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../../data/models/teacher_schedule_entry.dart';
 import '../providers/teacher_timetable_provider.dart';
@@ -38,6 +39,7 @@ class _TeacherTimetableScreenState extends State<TeacherTimetableScreen> {
         LoadStatus.success => provider.entries.isEmpty
             ? const EmptyStateView(message: 'No periods scheduled for you yet', icon: Icons.schedule_outlined)
             : ListView.builder(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
                 itemCount: provider.entries.length,
                 itemBuilder: (context, index) => _EntryCard(entry: provider.entries[index]),
               ),
@@ -53,20 +55,44 @@ class _EntryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final accent = Theme.of(context).colorScheme.primary;
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      margin: const EdgeInsets.only(bottom: 12),
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('${entry.day} · ${entry.className} ${entry.section}', style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 8),
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 18,
+                  backgroundColor: accent.withValues(alpha: 0.14),
+                  child: Icon(Icons.calendar_today_outlined, color: accent, size: 16),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text('${entry.day} · ${entry.className} ${entry.section}', style: Theme.of(context).textTheme.titleSmall),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
             for (final period in entry.periods)
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 2),
-                child: Text('Period ${period.periodNumber}: ${period.subject} (${period.startTime}–${period.endTime})'
-                    '${period.room != null && period.room!.isNotEmpty ? ' · Room ${period.room}' : ''}'),
+                padding: const EdgeInsets.symmetric(vertical: 3),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppStatusChip(label: 'P${period.periodNumber}', color: accent),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        '${period.subject} (${period.startTime}–${period.endTime})'
+                        '${period.room != null && period.room!.isNotEmpty ? ' · Room ${period.room}' : ''}',
+                      ),
+                    ),
+                  ],
+                ),
               ),
           ],
         ),

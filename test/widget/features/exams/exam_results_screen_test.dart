@@ -107,7 +107,15 @@ void main() {
     await tester.pumpWidget(_wrap(provider, authProvider));
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('1 passed, 0 failed'), findsOneWidget);
+    // Summary is now rendered as StatCards (Passed/Failed/Average) rather
+    // than one combined sentence — "Passed" appears twice: the stat card's
+    // own label plus this single result row's AppStatusChip (isPassed: true).
+    // "1" appears twice: the Passed stat card's value and this result's
+    // rank-1 avatar badge.
+    expect(find.text('1'), findsNWidgets(2));
+    expect(find.text('0'), findsOneWidget);
+    expect(find.text('Passed'), findsNWidgets(2));
+    expect(find.text('Failed'), findsOneWidget);
     expect(find.text('Sam Student'), findsOneWidget);
     expect(find.text('A · 85.0%'), findsOneWidget);
   });

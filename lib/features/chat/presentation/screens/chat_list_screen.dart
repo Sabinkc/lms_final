@@ -82,8 +82,10 @@ class _ChatListScreenState extends State<ChatListScreen> {
                 actionLabel: isTeacher ? 'New Group' : null,
                 onAction: isTeacher ? () => showCreateGroupDialog(context, provider) : null,
               )
-            : ListView.builder(
+            : ListView.separated(
+                padding: const EdgeInsets.all(16),
                 itemCount: provider.groups.length,
+                separatorBuilder: (context, index) => const SizedBox(height: 8),
                 itemBuilder: (context, index) {
                   final group = provider.groups[index];
                   return _GroupTile(group: group);
@@ -101,17 +103,27 @@ class _GroupTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: const CircleAvatar(child: Icon(Icons.groups_outlined)),
-      title: Text(group.name),
-      subtitle: Text(
-        group.lastMessagePreview.isEmpty
-            ? '${group.className}${group.sectionName != null ? ' ${group.sectionName}' : ''}'
-            : group.lastMessagePreview,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
+    final accent = Theme.of(context).colorScheme.primary;
+    return Card(
+      margin: EdgeInsets.zero,
+      clipBehavior: Clip.antiAlias,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        leading: CircleAvatar(
+          backgroundColor: accent.withValues(alpha: 0.14),
+          child: Icon(Icons.groups_outlined, color: accent),
+        ),
+        title: Text(group.name, style: Theme.of(context).textTheme.titleSmall),
+        subtitle: Text(
+          group.lastMessagePreview.isEmpty
+              ? '${group.className}${group.sectionName != null ? ' ${group.sectionName}' : ''}'
+              : group.lastMessagePreview,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        trailing: const Icon(Icons.chevron_right),
+        onTap: () => context.push(AppRoutes.chatThread(group.id), extra: group),
       ),
-      onTap: () => context.push(AppRoutes.chatThread(group.id), extra: group),
     );
   }
 }

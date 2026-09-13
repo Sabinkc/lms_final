@@ -81,7 +81,10 @@ void main() {
     await tester.pumpWidget(_wrap(provider));
     await tester.pumpAndSettle();
 
-    expect(find.text('Rs 5000'), findsOneWidget);
+    // "Rs 5000" now legitimately appears twice: once in the summary's Total
+    // Due stat card, once on the itemized fee row itself (same amount in
+    // this fixture).
+    expect(find.text('Rs 5000'), findsNWidgets(2));
     expect(find.text('Term 1 Fee'), findsOneWidget);
   });
 

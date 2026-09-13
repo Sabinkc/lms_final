@@ -37,25 +37,52 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
             error: provider.detailError!,
             onRetry: () => provider.loadNoticeDetail(widget.noticeId),
           ),
-        LoadStatus.success => ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              Row(
-                children: [
-                  if (provider.currentNotice!.isImportant) const Icon(Icons.priority_high, color: Colors.red),
-                  Expanded(
-                    child: Text(provider.currentNotice!.title, style: Theme.of(context).textTheme.headlineSmall),
+        LoadStatus.success => Builder(builder: (context) {
+            final notice = provider.currentNotice!;
+            final scheme = Theme.of(context).colorScheme;
+            final tint = notice.isImportant ? scheme.error : scheme.primary;
+            return ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                Card(
+                  margin: EdgeInsets.zero,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: tint.withValues(alpha: 0.14),
+                          child: Icon(notice.isImportant ? Icons.priority_high : Icons.campaign_outlined, color: tint),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(notice.title, style: Theme.of(context).textTheme.titleLarge),
+                              const SizedBox(height: 6),
+                              Text('Audience: ${notice.audience}', style: Theme.of(context).textTheme.bodySmall),
+                              if (notice.createdByName.isNotEmpty)
+                                Text('Posted by: ${notice.createdByName}', style: Theme.of(context).textTheme.bodySmall),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text('Audience: ${provider.currentNotice!.audience}'),
-              if (provider.currentNotice!.createdByName.isNotEmpty)
-                Text('Posted by: ${provider.currentNotice!.createdByName}'),
-              const SizedBox(height: 16),
-              Text(provider.currentNotice!.description),
-            ],
-          ),
+                ),
+                const SizedBox(height: 12),
+                Card(
+                  margin: EdgeInsets.zero,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(notice.description),
+                  ),
+                ),
+              ],
+            );
+          }),
       },
     );
   }

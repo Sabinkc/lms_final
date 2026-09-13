@@ -29,26 +29,41 @@ class StudentIdCardScreen extends StatelessWidget {
     final provider = context.watch<StudentIdCardProvider>();
     final isLoading = provider.status == LoadStatus.loading;
 
+    final accent = Theme.of(context).colorScheme.primary;
     return Scaffold(
       appBar: AppBar(title: const Text('My ID Card')),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.badge_outlined, size: 64),
-              const SizedBox(height: 16),
-              const Text('Download your student ID card as a PDF.', textAlign: TextAlign.center),
-              const SizedBox(height: 24),
-              FilledButton.icon(
-                icon: isLoading
-                    ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                    : const Icon(Icons.download_outlined),
-                label: const Text('Download ID Card'),
-                onPressed: isLoading ? null : () => _download(context, provider),
+          child: Card(
+            margin: EdgeInsets.zero,
+            child: Padding(
+              padding: const EdgeInsets.all(28),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(color: accent.withValues(alpha: 0.14), shape: BoxShape.circle),
+                    child: Icon(Icons.badge_outlined, size: 48, color: accent),
+                  ),
+                  const SizedBox(height: 20),
+                  const Text('Download your student ID card as a PDF.', textAlign: TextAlign.center),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 48,
+                    child: FilledButton.icon(
+                      icon: isLoading
+                          ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                          : const Icon(Icons.download_outlined),
+                      label: const Text('Download ID Card'),
+                      onPressed: isLoading ? null : () => _download(context, provider),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

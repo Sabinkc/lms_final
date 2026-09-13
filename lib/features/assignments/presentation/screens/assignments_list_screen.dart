@@ -3,11 +3,15 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/utils/display_date.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
-import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
+import '../../../../shared/widgets/status_chip.dart';
+import '../../../admin_management/presentation/providers/academic_structure_provider.dart'
+    show LoadStatus;
 import '../../../auth/data/models/app_role.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../data/models/assignment.dart';
@@ -51,29 +55,76 @@ class _AssignmentsListScreenState extends State<AssignmentsListScreen> {
             )
           : null,
       body: switch (provider.status) {
-        LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading assignments...'),
-        LoadStatus.error => ErrorView(error: provider.error!, onRetry: () => provider.loadAssignments()),
-        LoadStatus.success => provider.assignments.isEmpty
-            ? EmptyStateView(
-                message: 'No assignments yet',
-                icon: Icons.assignment_outlined,
-                actionLabel: isTeacher ? 'Add Assignment' : null,
-                onAction: isTeacher ? () => showAssignmentFormDialog(context, provider) : null,
-              )
-            : ListView.builder(
-                itemCount: provider.assignments.length,
-                itemBuilder: (context, index) {
-                  final assignment = provider.assignments[index];
-                  return ListTile(
-                    title: Text(assignment.title),
-                    subtitle: Text(
-                      '${assignment.subject} · ${assignment.className} ${assignment.section} · Due ${formatDisplayDate(assignment.dueDate)}',
-                    ),
-                    trailing: _RowTrailing(assignment: assignment, isTeacher: isTeacher, provider: provider),
-                    onTap: () => context.push(AppRoutes.assignmentDetail(assignment.id)),
-                  );
-                },
-              ),
+        LoadStatus.initial || LoadStatus.loading => const LoadingView(
+          message: 'Loading assignments...',
+        ),
+        LoadStatus.error => ErrorView(
+          error: provider.error!,
+          onRetry: () => provider.loadAssignments(),
+        ),
+        LoadStatus.success =>
+          provider.assignments.isEmpty
+              ? EmptyStateView(
+                  message: 'No assignments yet',
+                  icon: Icons.assignment_outlined,
+                  actionLabel: isTeacher ? 'Add Assignment' : null,
+                  onAction: isTeacher
+                      ? () => showAssignmentFormDialog(context, provider)
+                      : null,
+                )
+              : ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.lg,
+                    AppSpacing.sm,
+                    AppSpacing.lg,
+                    AppSpacing.lg,
+                  ),
+                  itemCount: provider.assignments.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: AppSpacing.sm),
+                  itemBuilder: (context, index) {
+                    final assignment = provider.assignments[index];
+                    final scheme = Theme.of(context).colorScheme;
+                    return Card(
+                      margin: EdgeInsets.zero,
+                      clipBehavior: Clip.antiAlias,
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 4,
+                        ),
+                        leading: Container(
+                          width: 44,
+                          height: 44,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: scheme.primary.withValues(alpha: 0.14),
+                            borderRadius: AppRadius.card,
+                          ),
+                          child: Icon(
+                            Icons.assignment_outlined,
+                            color: scheme.primary,
+                          ),
+                        ),
+                        title: Text(
+                          assignment.title,
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                        subtitle: Text(
+                          '${assignment.subject} · ${assignment.className} ${assignment.section} · Due ${formatDisplayDate(assignment.dueDate)}',
+                        ),
+                        trailing: _RowTrailing(
+                          assignment: assignment,
+                          isTeacher: isTeacher,
+                          provider: provider,
+                        ),
+                        onTap: () => context.push(
+                          AppRoutes.assignmentDetail(assignment.id),
+                        ),
+                      ),
+                    );
+                  },
+                ),
       },
     );
   }
@@ -84,21 +135,32 @@ class _RowTrailing extends StatelessWidget {
   final bool isTeacher;
   final AssignmentProvider provider;
 
-  const _RowTrailing({required this.assignment, required this.isTeacher, required this.provider});
+  const _RowTrailing({
+    required this.assignment,
+    required this.isTeacher,
+    required this.provider,
+  });
 
   @override
   Widget build(BuildContext context) {
     if (!isTeacher) {
-      return assignment.status == 'closed' ? const Icon(Icons.lock_outline) : const SizedBox.shrink();
+      return assignment.status == 'closed'
+          ? const AppStatusChip(label: 'Closed', color: Colors.grey)
+          : const SizedBox.shrink();
     }
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (assignment.status == 'closed') const Icon(Icons.lock_outline),
+        if (assignment.status == 'closed')
+          const Padding(
+            padding: EdgeInsets.only(right: 4),
+            child: AppStatusChip(label: 'Closed', color: Colors.grey),
+          ),
         IconButton(
           icon: const Icon(Icons.edit_outlined),
           tooltip: 'Edit',
-          onPressed: () => showAssignmentFormDialog(context, provider, existing: assignment),
+          onPressed: () =>
+              showAssignmentFormDialog(context, provider, existing: assignment),
         ),
       ],
     );

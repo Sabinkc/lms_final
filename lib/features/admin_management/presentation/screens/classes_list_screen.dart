@@ -113,28 +113,46 @@ class _ClassesList extends StatelessWidget {
         Expanded(
           child: classes.isEmpty
               ? const EmptyStateView(message: 'No classes match your search')
-              : ListView.builder(
+              : ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                   itemCount: classes.length,
+                  separatorBuilder: (context, index) => const SizedBox(height: 8),
                   itemBuilder: (context, index) {
                     final academicClass = classes[index];
-                    return ListTile(
-                      title: Text(academicClass.name),
-                      subtitle: academicClass.description.isEmpty ? null : Text(academicClass.description),
-                      onTap: () => onTap(academicClass),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit_outlined),
-                            tooltip: 'Edit',
-                            onPressed: () => onEdit(academicClass),
+                    final badgeColor = _badgeColors[index % _badgeColors.length];
+                    return Card(
+                      margin: EdgeInsets.zero,
+                      clipBehavior: Clip.antiAlias,
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        leading: Container(
+                          width: 44,
+                          height: 44,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(color: badgeColor, borderRadius: BorderRadius.circular(12)),
+                          child: Text(
+                            _classInitials(academicClass.name),
+                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 13),
                           ),
-                          IconButton(
-                            icon: const Icon(Icons.delete_outline),
-                            tooltip: 'Delete',
-                            onPressed: () => onDelete(academicClass),
-                          ),
-                        ],
+                        ),
+                        title: Text(academicClass.name, style: Theme.of(context).textTheme.titleSmall),
+                        subtitle: academicClass.description.isEmpty ? null : Text(academicClass.description),
+                        onTap: () => onTap(academicClass),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.edit_outlined),
+                              tooltip: 'Edit',
+                              onPressed: () => onEdit(academicClass),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete_outline),
+                              tooltip: 'Delete',
+                              onPressed: () => onDelete(academicClass),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
@@ -143,6 +161,18 @@ class _ClassesList extends StatelessWidget {
       ],
     );
   }
+}
+
+/// Small fixed palette cycled by row index purely for visual variety — not
+/// tied to any class data (`AcademicClass` has no color field).
+const _badgeColors = [Color(0xFF4F46E5), Color(0xFFD97706), Color(0xFF059669), Color(0xFF9333EA)];
+
+String _classInitials(String name) {
+  final trimmed = name.trim();
+  if (trimmed.isEmpty) return '?';
+  final parts = trimmed.split(RegExp(r'\s+'));
+  if (parts.length == 1) return trimmed.length >= 2 ? trimmed.substring(0, 2).toUpperCase() : trimmed.toUpperCase();
+  return (parts[0][0] + parts[1][0]).toUpperCase();
 }
 
 Future<void> _showClassFormDialog(

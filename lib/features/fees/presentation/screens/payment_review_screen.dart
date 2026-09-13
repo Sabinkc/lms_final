@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
+import '../../../../shared/widgets/status_chip.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../../data/models/fee_payment.dart';
 import '../providers/fee_provider.dart';
@@ -72,13 +73,15 @@ class _PendingQueue extends StatelessWidget {
         ErrorView(error: provider.pendingError!, onRetry: () => provider.loadPendingPayments()),
       LoadStatus.success => provider.pendingPayments.isEmpty
           ? const EmptyStateView(message: 'No pending payments to review', icon: Icons.task_alt_outlined)
-          : ListView.builder(
+          : ListView.separated(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
               itemCount: provider.pendingPayments.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 8),
               itemBuilder: (context, index) {
                 final payment = provider.pendingPayments[index];
                 final processing = provider.isProcessingPayment(payment.id);
                 return Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  margin: EdgeInsets.zero,
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Column(
@@ -128,39 +131,31 @@ class _HistoryList extends StatelessWidget {
       LoadStatus.error => ErrorView(error: provider.historyError!, onRetry: () => provider.loadHistory()),
       LoadStatus.success => provider.history.isEmpty
           ? const EmptyStateView(message: 'No payments submitted yet', icon: Icons.history)
-          : ListView.builder(
+          : ListView.separated(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
               itemCount: provider.history.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 8),
               itemBuilder: (context, index) {
                 final payment = provider.history[index];
-                return ListTile(
-                  title: Text(payment.feeTitle ?? 'Fee'),
-                  subtitle: Text('Rs ${payment.amount.toStringAsFixed(0)} · ${payment.submittedByName ?? ''}'),
-                  trailing: _StatusChip(status: payment.status),
+                final color = switch (payment.status) {
+                  'approved' => Colors.green,
+                  'rejected' => Theme.of(context).colorScheme.error,
+                  _ => Colors.orange,
+                };
+                return Card(
+                  margin: EdgeInsets.zero,
+                  child: ListTile(
+                    title: Text(payment.feeTitle ?? 'Fee'),
+                    subtitle: Text('Rs ${payment.amount.toStringAsFixed(0)} · ${payment.submittedByName ?? ''}'),
+                    trailing: AppStatusChip(
+                      label: payment.status[0].toUpperCase() + payment.status.substring(1),
+                      color: color,
+                    ),
+                  ),
                 );
               },
             ),
     };
-  }
-}
-
-class _StatusChip extends StatelessWidget {
-  final String status;
-
-  const _StatusChip({required this.status});
-
-  @override
-  Widget build(BuildContext context) {
-    final color = switch (status) {
-      'approved' => Colors.green,
-      'rejected' => Theme.of(context).colorScheme.error,
-      _ => Colors.orange,
-    };
-    return Chip(
-      label: Text(status[0].toUpperCase() + status.substring(1)),
-      backgroundColor: color.withValues(alpha: 0.15),
-      labelStyle: TextStyle(color: color),
-      side: BorderSide.none,
-    );
   }
 }
 

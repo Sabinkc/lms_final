@@ -44,20 +44,42 @@ class _AttendanceCorrectionsScreenState extends State<AttendanceCorrectionsScree
         LoadStatus.error => ErrorView(error: provider.correctionsError!, onRetry: () => provider.loadCorrections()),
         LoadStatus.success => provider.corrections.isEmpty
             ? const EmptyStateView(message: 'No pending correction requests', icon: Icons.task_alt_outlined)
-            : ListView.builder(
+            : ListView.separated(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                 itemCount: provider.corrections.length,
+                separatorBuilder: (context, index) => const SizedBox(height: 8),
                 itemBuilder: (context, index) {
                   final correction = provider.corrections[index];
                   final processing = provider.isProcessingCorrection(correction.id);
+                  final accent = Theme.of(context).colorScheme.primary;
                   return Card(
-                    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    margin: EdgeInsets.zero,
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('${correction.targetType}: ${correction.oldStatus} → ${correction.newStatus}'),
-                          const SizedBox(height: 4),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: accent.withValues(alpha: 0.14),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Icon(Icons.fact_check_outlined, color: accent, size: 20),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  '${correction.targetType}: ${correction.oldStatus} → ${correction.newStatus}',
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
                           Text('Reason: ${correction.reason}'),
                           if (correction.studentId != null) ...[
                             const SizedBox(height: 4),

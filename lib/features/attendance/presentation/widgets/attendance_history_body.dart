@@ -4,6 +4,7 @@ import '../../../../core/error/app_exception.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
+import '../../../../shared/widgets/stat_card.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../../data/models/student_attendance_history.dart';
 
@@ -61,23 +62,25 @@ class _SummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(16),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Text('${summary.percentage}%', style: Theme.of(context).textTheme.headlineMedium),
-            const Text('attendance'),
-            const SizedBox(height: 12),
+    final scheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          StatCardRow(cards: [
+            StatCard(icon: Icons.pie_chart_outline, value: '${summary.percentage}%', label: 'Attendance', color: scheme.primary),
+            StatCard(icon: Icons.check_circle_outline, value: '${summary.present}', label: 'Present', color: Colors.green),
+            StatCard(icon: Icons.cancel_outlined, value: '${summary.absent}', label: 'Absent', color: scheme.error),
+            StatCard(icon: Icons.schedule_outlined, value: '${summary.late}', label: 'Late', color: Colors.orange),
+          ]),
+          if (summary.leave > 0 || summary.halfDay > 0) ...[
+            const SizedBox(height: 8),
             Text(
-              '${summary.present} present · ${summary.absent} absent · ${summary.late} late · '
-              '${summary.leave} leave · ${summary.halfDay} half-day (${summary.total} total)',
-              textAlign: TextAlign.center,
+              '${summary.leave} leave · ${summary.halfDay} half-day · ${summary.total} total',
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
-        ),
+        ],
       ),
     );
   }

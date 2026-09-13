@@ -6,6 +6,7 @@ import '../../../../core/router/app_routes.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
+import '../../../../shared/widgets/status_chip.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../../../auth/data/models/app_role.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
@@ -71,22 +72,63 @@ class _NoticesListScreenState extends State<NoticesListScreen> {
                 actionLabel: isAdmin ? 'Add Notice' : null,
                 onAction: isAdmin ? () => showNoticeFormDialog(context, provider) : null,
               )
-            : ListView.builder(
-                itemCount: provider.notices.length,
+            : ListView.separated(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+                itemCount: provider.notices.length + 1,
+                separatorBuilder: (context, index) => const SizedBox(height: 8),
                 itemBuilder: (context, index) {
-                  final notice = provider.notices[index];
-                  return ListTile(
-                    leading: notice.isImportant ? const Icon(Icons.priority_high, color: Colors.red) : null,
-                    title: Text(notice.title),
-                    subtitle: Text('Audience: ${notice.audience}'),
-                    trailing: isAdmin ? _AdminRowActions(notice: notice, provider: provider) : null,
-                    onTap: () => context.push(AppRoutes.noticeDetail(notice.id)),
+                  if (index == 0) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 4),
+                      child: Text(
+                        'Total Notices: ${provider.notices.length}',
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                    );
+                  }
+                  final notice = provider.notices[index - 1];
+                  final scheme = Theme.of(context).colorScheme;
+                  final tint = notice.isImportant ? scheme.error : scheme.primary;
+                  final isNew = _isRecent(notice.createdAt);
+                  return Card(
+                    margin: EdgeInsets.zero,
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: tint.withValues(alpha: 0.14),
+                        child: Icon(
+                          notice.isImportant ? Icons.priority_high : Icons.campaign_outlined,
+                          color: tint,
+                          size: 20,
+                        ),
+                      ),
+                      title: Text(notice.title, style: Theme.of(context).textTheme.titleSmall),
+                      subtitle: Text('Audience: ${notice.audience}'),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (isNew) ...[
+                            const AppStatusChip(label: 'New', color: Colors.green),
+                            if (isAdmin) const SizedBox(width: 4),
+                          ],
+                          if (isAdmin) _AdminRowActions(notice: notice, provider: provider),
+                        ],
+                      ),
+                      onTap: () => context.push(AppRoutes.noticeDetail(notice.id)),
+                    ),
                   );
                 },
               ),
       },
     );
   }
+}
+
+/// "New" if posted within the last 3 days — purely a client-side heuristic
+/// on the existing `createdAt` field, no new data.
+bool _isRecent(String createdAt) {
+  final parsed = DateTime.tryParse(createdAt);
+  if (parsed == null) return false;
+  return DateTime.now().difference(parsed) < const Duration(days: 3);
 }
 
 class _AdminRowActions extends StatelessWidget {

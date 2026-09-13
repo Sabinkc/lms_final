@@ -182,17 +182,29 @@ class _ChatThreadScreenState extends State<ChatThreadScreen> {
                   Expanded(
                     child: TextField(
                       controller: _textController,
-                      decoration: const InputDecoration(hintText: 'Message', border: OutlineInputBorder()),
+                      decoration: const InputDecoration(
+                        hintText: 'Message',
+                        border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(24))),
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      ),
                       minLines: 1,
                       maxLines: 4,
                     ),
                   ),
-                  IconButton(
-                    icon: provider.isSending
-                        ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                        : const Icon(Icons.send),
-                    tooltip: 'Send',
-                    onPressed: provider.isSending ? null : _send,
+                  const SizedBox(width: 4),
+                  Container(
+                    decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary, shape: BoxShape.circle),
+                    child: IconButton(
+                      icon: provider.isSending
+                          ? const SizedBox(
+                              height: 16,
+                              width: 16,
+                              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                            )
+                          : const Icon(Icons.send, color: Colors.white, size: 20),
+                      tooltip: 'Send',
+                      onPressed: provider.isSending ? null : _send,
+                    ),
                   ),
                 ],
               ),
@@ -220,8 +232,13 @@ class _MessageBubble extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
         decoration: BoxDecoration(
-          color: isMine ? colorScheme.primaryContainer : colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(12),
+          color: isMine ? colorScheme.primary.withValues(alpha: 0.9) : colorScheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.only(
+            topLeft: const Radius.circular(16),
+            topRight: const Radius.circular(16),
+            bottomLeft: Radius.circular(isMine ? 16 : 4),
+            bottomRight: Radius.circular(isMine ? 4 : 16),
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -233,8 +250,12 @@ class _MessageBubble extends StatelessWidget {
                       borderRadius: BorderRadius.circular(8),
                       child: Image.network(message.attachment!.url, width: 200, fit: BoxFit.cover),
                     )
-                  : Text('📎 ${message.attachment!.type} attachment', style: Theme.of(context).textTheme.bodySmall),
-            if (message.text.isNotEmpty) Text(message.text),
+                  : Text(
+                      '📎 ${message.attachment!.type} attachment',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(color: isMine ? Colors.white : null),
+                    ),
+            if (message.text.isNotEmpty)
+              Text(message.text, style: TextStyle(color: isMine ? Colors.white : null)),
           ],
         ),
       ),

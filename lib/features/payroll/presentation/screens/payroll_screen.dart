@@ -4,7 +4,10 @@ import 'package:provider/provider.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
-import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
+import '../../../../shared/widgets/stat_card.dart';
+import '../../../../shared/widgets/status_chip.dart';
+import '../../../admin_management/presentation/providers/academic_structure_provider.dart'
+    show LoadStatus;
 import '../../data/models/payroll.dart';
 import '../providers/payroll_provider.dart';
 import 'generate_payroll_dialog.dart';
@@ -85,9 +88,15 @@ class _PayrollScreenState extends State<PayrollScreen> {
     );
   }
 
-  Future<void> _generateBulk(BuildContext context, PayrollProvider provider) async {
+  Future<void> _generateBulk(
+    BuildContext context,
+    PayrollProvider provider,
+  ) async {
     final now = DateTime.now();
-    final succeeded = await provider.generateBulkPayroll(month: now.month, year: now.year);
+    final succeeded = await provider.generateBulkPayroll(
+      month: now.month,
+      year: now.year,
+    );
     if (!context.mounted) return;
     final result = provider.lastBulkResult;
     ScaffoldMessenger.of(context).showSnackBar(
@@ -95,7 +104,8 @@ class _PayrollScreenState extends State<PayrollScreen> {
         content: Text(
           succeeded && result != null
               ? 'Generated: ${result.$1} · Skipped: ${result.$2} · Failed: ${result.$3}'
-              : provider.generateError?.message ?? 'Failed to generate bulk payroll',
+              : provider.generateError?.message ??
+                    'Failed to generate bulk payroll',
         ),
       ),
     );
@@ -110,7 +120,12 @@ class _PayrollScreenState extends State<PayrollScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Payroll'),
-          bottom: const TabBar(tabs: [Tab(text: 'Salary Config'), Tab(text: 'Payroll')]),
+          bottom: const TabBar(
+            tabs: [
+              Tab(text: 'Salary Config'),
+              Tab(text: 'Payroll'),
+            ],
+          ),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => _showActions(context, provider),
@@ -135,26 +150,54 @@ class _SalaryConfigTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return switch (provider.configsStatus) {
-      LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading salary configs...'),
-      LoadStatus.error => ErrorView(error: provider.configsError!, onRetry: () => provider.loadSalaryConfigs()),
-      LoadStatus.success => provider.configs.isEmpty
-          ? const EmptyStateView(message: 'No salary configs set yet', icon: Icons.badge_outlined)
-          : ListView.builder(
-              itemCount: provider.configs.length,
-              itemBuilder: (context, index) {
-                final config = provider.configs[index];
-                return ListTile(
-                  title: Text(config.staffName ?? config.staffId),
-                  subtitle: Text('Rs ${config.basicSalary.toStringAsFixed(0)} basic · PF ${config.pfRate.toStringAsFixed(0)}%'
-                      ' · Tax ${config.taxRate.toStringAsFixed(0)}%'),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.edit_outlined),
-                    tooltip: 'Update',
-                    onPressed: () => showSalaryConfigDialog(context, provider, existing: config),
-                  ),
-                );
-              },
-            ),
+      LoadStatus.initial || LoadStatus.loading => const LoadingView(
+        message: 'Loading salary configs...',
+      ),
+      LoadStatus.error => ErrorView(
+        error: provider.configsError!,
+        onRetry: () => provider.loadSalaryConfigs(),
+      ),
+      LoadStatus.success =>
+        provider.configs.isEmpty
+            ? const EmptyStateView(
+                message: 'No salary configs set yet',
+                icon: Icons.badge_outlined,
+              )
+            : ListView.separated(
+                padding: const EdgeInsets.all(16),
+                itemCount: provider.configs.length,
+                separatorBuilder: (context, index) => const SizedBox(height: 8),
+                itemBuilder: (context, index) {
+                  final config = provider.configs[index];
+                  final accent = Theme.of(context).colorScheme.primary;
+                  return Card(
+                    margin: EdgeInsets.zero,
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: accent.withValues(alpha: 0.14),
+                        child: Icon(Icons.badge_outlined, color: accent),
+                      ),
+                      title: Text(
+                        config.staffName ?? config.staffId,
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                      subtitle: Text(
+                        'Rs ${config.basicSalary.toStringAsFixed(0)} basic · PF ${config.pfRate.toStringAsFixed(0)}%'
+                        ' · Tax ${config.taxRate.toStringAsFixed(0)}%',
+                      ),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.edit_outlined),
+                        tooltip: 'Update',
+                        onPressed: () => showSalaryConfigDialog(
+                          context,
+                          provider,
+                          existing: config,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
     };
   }
 }
@@ -167,40 +210,63 @@ class _PayrollTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return switch (provider.payrollsStatus) {
-      LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading payroll...'),
-      LoadStatus.error => ErrorView(error: provider.payrollsError!, onRetry: () => provider.loadPayrolls()),
-      LoadStatus.success => provider.payrolls.isEmpty
-          ? const EmptyStateView(message: 'No payroll generated yet', icon: Icons.payments_outlined)
-          : ListView(
-              children: [
-                if (provider.summary != null) _SummaryCard(summary: provider.summary!),
-                for (final payroll in provider.payrolls) _PayrollTile(payroll: payroll, provider: provider),
-              ],
-            ),
+      LoadStatus.initial ||
+      LoadStatus.loading => const LoadingView(message: 'Loading payroll...'),
+      LoadStatus.error => ErrorView(
+        error: provider.payrollsError!,
+        onRetry: () => provider.loadPayrolls(),
+      ),
+      LoadStatus.success =>
+        provider.payrolls.isEmpty
+            ? const EmptyStateView(
+                message: 'No payroll generated yet',
+                icon: Icons.payments_outlined,
+              )
+            : ListView(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                children: [
+                  if (provider.summary != null) ...[
+                    _SummaryCards(summary: provider.summary!),
+                    const SizedBox(height: 16),
+                  ],
+                  for (final payroll in provider.payrolls) ...[
+                    _PayrollTile(payroll: payroll, provider: provider),
+                    const SizedBox(height: 8),
+                  ],
+                ],
+              ),
     };
   }
 }
 
-class _SummaryCard extends StatelessWidget {
+class _SummaryCards extends StatelessWidget {
   final PayrollSummary summary;
 
-  const _SummaryCard({required this.summary});
+  const _SummaryCards({required this.summary});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(16),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Text('Rs ${summary.totalNetSalary.toStringAsFixed(0)}', style: Theme.of(context).textTheme.headlineSmall),
-            const Text('total net salary'),
-            const SizedBox(height: 8),
-            Text('Paid: Rs ${summary.totalPaid.toStringAsFixed(0)} · Pending: Rs ${summary.totalPending.toStringAsFixed(0)}'),
-          ],
+    return StatCardRow(
+      cards: [
+        StatCard(
+          icon: Icons.account_balance_wallet_outlined,
+          value: 'Rs ${summary.totalNetSalary.toStringAsFixed(0)}',
+          label: 'Total Net',
+          color: Theme.of(context).colorScheme.primary,
         ),
-      ),
+        StatCard(
+          icon: Icons.check_circle_outline,
+          value: 'Rs ${summary.totalPaid.toStringAsFixed(0)}',
+          label: 'Paid',
+          color: Colors.green,
+        ),
+        StatCard(
+          icon: Icons.schedule_outlined,
+          value: 'Rs ${summary.totalPending.toStringAsFixed(0)}',
+          label: 'Pending',
+          color: Colors.orange,
+        ),
+      ],
     );
   }
 }
@@ -214,27 +280,65 @@ class _PayrollTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final processing = provider.isProcessingPayroll(payroll.id);
-    return ListTile(
-      title: Text('${payroll.staffName ?? payroll.staffId} — ${_monthNames[payroll.month]} ${payroll.year}'),
-      subtitle: Text('Net Rs ${payroll.netSalary.toStringAsFixed(0)} · ${payroll.status[0].toUpperCase()}${payroll.status.substring(1)}'),
-      trailing: payroll.status == 'pending'
-          ? Row(
-              mainAxisSize: MainAxisSize.min,
+    final statusColor = payroll.status == 'paid' ? Colors.green : Colors.orange;
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
               children: [
-                IconButton(
-                  icon: const Icon(Icons.delete_outline),
-                  tooltip: 'Delete',
-                  onPressed: processing ? null : () => provider.deletePayroll(payroll.id),
+                Expanded(
+                  child: Text(
+                    '${payroll.staffName ?? payroll.staffId} — ${_monthNames[payroll.month]} ${payroll.year}',
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
                 ),
-                FilledButton(
-                  onPressed: processing ? null : () => provider.markAsPaid(payroll.id),
-                  child: processing
-                      ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                      : const Text('Mark Paid'),
+                AppStatusChip(
+                  label:
+                      payroll.status[0].toUpperCase() +
+                      payroll.status.substring(1),
+                  color: statusColor,
                 ),
               ],
-            )
-          : null,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Net Rs ${payroll.netSalary.toStringAsFixed(0)}',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            if (payroll.status == 'pending') ...[
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.delete_outline),
+                    tooltip: 'Delete',
+                    onPressed: processing
+                        ? null
+                        : () => provider.deletePayroll(payroll.id),
+                  ),
+                  FilledButton(
+                    onPressed: processing
+                        ? null
+                        : () => provider.markAsPaid(payroll.id),
+                    child: processing
+                        ? const SizedBox(
+                            height: 16,
+                            width: 16,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Text('Mark Paid'),
+                  ),
+                ],
+              ),
+            ],
+          ],
+        ),
+      ),
     );
   }
 }

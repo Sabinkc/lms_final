@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../../shared/utils/download_helper.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
+import '../../../../shared/widgets/filter_chip_bar.dart';
 import '../../../../shared/widgets/loading_view.dart';
 import '../../data/models/academic_class.dart';
 import '../../data/models/student.dart';
@@ -115,31 +116,18 @@ class _ClassFilterBar extends StatelessWidget {
 
   const _ClassFilterBar({required this.classOptions, required this.selected, required this.onChanged});
 
+  static const _all = 'All';
+
   @override
   Widget build(BuildContext context) {
     if (classOptions.isEmpty) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-      child: SizedBox(
-        height: 40,
-        child: ListView(
-          scrollDirection: Axis.horizontal,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: ChoiceChip(label: const Text('All'), selected: selected == null, onSelected: (_) => onChanged(null)),
-            ),
-            for (final c in classOptions)
-              Padding(
-                padding: const EdgeInsets.only(right: 8),
-                child: ChoiceChip(
-                  label: Text(c.name),
-                  selected: selected == c.name,
-                  onSelected: (_) => onChanged(c.name),
-                ),
-              ),
-          ],
-        ),
+      child: AppFilterChipBar<String>(
+        options: [_all, for (final c in classOptions) c.name],
+        selected: selected ?? _all,
+        labelBuilder: (option) => option,
+        onSelected: (option) => onChanged(option == _all ? null : option),
       ),
     );
   }
@@ -176,30 +164,45 @@ class _StudentsList extends StatelessWidget {
         Expanded(
           child: students.isEmpty
               ? const EmptyStateView(message: 'No students match your search')
-              : ListView.builder(
+              : ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                   itemCount: students.length,
+                  separatorBuilder: (context, index) => const SizedBox(height: 8),
                   itemBuilder: (context, index) {
                     final student = students[index];
-                    return ListTile(
-                      title: Text(student.fullName),
-                      subtitle: Text(
-                        '${student.className} · ${student.section}'
-                        '${student.admissionNumber.isEmpty ? '' : ' · ${student.admissionNumber}'}',
-                      ),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit_outlined),
-                            tooltip: 'Edit',
-                            onPressed: () => onEdit(student),
+                    final accent = Theme.of(context).colorScheme.primary;
+                    return Card(
+                      margin: EdgeInsets.zero,
+                      clipBehavior: Clip.antiAlias,
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        leading: CircleAvatar(
+                          backgroundColor: accent.withValues(alpha: 0.14),
+                          child: Text(
+                            student.fullName.isNotEmpty ? student.fullName[0].toUpperCase() : '?',
+                            style: TextStyle(color: accent, fontWeight: FontWeight.w700),
                           ),
-                          IconButton(
-                            icon: const Icon(Icons.delete_outline),
-                            tooltip: 'Delete',
-                            onPressed: () => onDelete(student),
-                          ),
-                        ],
+                        ),
+                        title: Text(student.fullName, style: Theme.of(context).textTheme.titleSmall),
+                        subtitle: Text(
+                          '${student.className} · ${student.section}'
+                          '${student.admissionNumber.isEmpty ? '' : ' · ${student.admissionNumber}'}',
+                        ),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.edit_outlined),
+                              tooltip: 'Edit',
+                              onPressed: () => onEdit(student),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete_outline),
+                              tooltip: 'Delete',
+                              onPressed: () => onDelete(student),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },

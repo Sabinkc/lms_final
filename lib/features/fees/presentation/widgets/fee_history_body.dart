@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
+import '../../../../shared/widgets/stat_card.dart';
+import '../../../../shared/widgets/status_chip.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../../data/models/fee.dart';
 import '../providers/self_fee_provider.dart';
@@ -44,28 +46,42 @@ class _SummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.all(16),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Text('Rs ${summary.totalDue.toStringAsFixed(0)}', style: Theme.of(context).textTheme.headlineMedium),
-            const Text('total due'),
-            const SizedBox(height: 12),
-            Text(
-              '${summary.pending} pending · ${summary.partial} partial · ${summary.paid} paid (${summary.total} total)',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodySmall,
+    final scheme = Theme.of(context).colorScheme;
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          StatCardRow(cards: [
+            StatCard(
+              icon: Icons.account_balance_wallet_outlined,
+              value: 'Rs ${summary.totalDue.toStringAsFixed(0)}',
+              label: 'Total Due',
+              color: scheme.primary,
             ),
-            if (paymentQrUrl != null) ...[
-              const SizedBox(height: 16),
-              const Text('Scan to pay, then submit the confirmation below'),
-              const SizedBox(height: 8),
-              Image.network(paymentQrUrl!, width: 160, height: 160, fit: BoxFit.contain),
-            ],
+            StatCard(icon: Icons.schedule_outlined, value: '${summary.pending}', label: 'Pending', color: Colors.orange),
+            StatCard(icon: Icons.hourglass_bottom_outlined, value: '${summary.partial}', label: 'Partial', color: scheme.secondary),
+            StatCard(icon: Icons.check_circle_outline, value: '${summary.paid}', label: 'Paid', color: Colors.green),
+          ]),
+          if (paymentQrUrl != null) ...[
+            const SizedBox(height: 16),
+            Card(
+              margin: EdgeInsets.zero,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Text('Scan to pay, then submit the confirmation below', style: Theme.of(context).textTheme.bodyMedium),
+                    const SizedBox(height: 12),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(paymentQrUrl!, width: 160, height: 160, fit: BoxFit.contain),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
-        ),
+        ],
       ),
     );
   }
@@ -79,11 +95,28 @@ class _FeeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final statusColor = switch (fee.status) {
+      'paid' => Colors.green,
+      'partial' => Colors.orange,
+      _ => Theme.of(context).colorScheme.error,
+    };
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      clipBehavior: Clip.antiAlias,
       child: ExpansionTile(
         title: Text(fee.title),
-        subtitle: Text('Rs ${fee.totalAmount.toStringAsFixed(0)} · ${fee.status[0].toUpperCase()}${fee.status.substring(1)}'),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 6,
+            runSpacing: 4,
+            children: [
+              Text('Rs ${fee.totalAmount.toStringAsFixed(0)}'),
+              AppStatusChip(label: fee.status[0].toUpperCase() + fee.status.substring(1), color: statusColor),
+            ],
+          ),
+        ),
         children: [
           if (fee.description.isNotEmpty)
             Padding(
@@ -142,9 +175,9 @@ class _PayableRow extends StatelessWidget {
 
     Widget trailing;
     if (itemStatus == 'paid') {
-      trailing = const Chip(label: Text('Paid'), side: BorderSide.none);
+      trailing = const AppStatusChip(label: 'Paid', color: Colors.green);
     } else if (submission != null && submission.status == 'pending') {
-      trailing = const Chip(label: Text('Review pending'), side: BorderSide.none);
+      trailing = const AppStatusChip(label: 'Review pending', color: Colors.orange);
     } else {
       trailing = OutlinedButton(
         onPressed: () => showPayFeeDialog(

@@ -74,31 +74,43 @@ class _DepartmentsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    final accent = Theme.of(context).colorScheme.primary;
+    return ListView.separated(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
       itemCount: departments.length,
+      separatorBuilder: (context, index) => const SizedBox(height: 8),
       itemBuilder: (context, index) {
         final department = departments[index];
         final subtitleParts = [
           if (department.headOfDepartmentName != null) 'Head: ${department.headOfDepartmentName}',
           if (department.classes.isNotEmpty) 'Classes: ${department.classes.join(', ')}',
         ];
-        return ListTile(
-          title: Text(department.name),
-          subtitle: subtitleParts.isEmpty ? null : Text(subtitleParts.join(' · ')),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.edit_outlined),
-                tooltip: 'Edit',
-                onPressed: () => onEdit(department),
-              ),
-              IconButton(
-                icon: const Icon(Icons.delete_outline),
-                tooltip: 'Delete',
-                onPressed: () => onDelete(department),
-              ),
-            ],
+        return Card(
+          margin: EdgeInsets.zero,
+          clipBehavior: Clip.antiAlias,
+          child: ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            leading: CircleAvatar(
+              backgroundColor: accent.withValues(alpha: 0.14),
+              child: Icon(Icons.apartment_outlined, color: accent, size: 20),
+            ),
+            title: Text(department.name, style: Theme.of(context).textTheme.titleSmall),
+            subtitle: subtitleParts.isEmpty ? null : Text(subtitleParts.join(' · ')),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.edit_outlined),
+                  tooltip: 'Edit',
+                  onPressed: () => onEdit(department),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.delete_outline),
+                  tooltip: 'Delete',
+                  onPressed: () => onDelete(department),
+                ),
+              ],
+            ),
           ),
         );
       },

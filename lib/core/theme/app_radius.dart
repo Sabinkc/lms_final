@@ -15,7 +15,10 @@ class AppRadius {
   static const double xl4 = 32;
 
   // Recommended component mapping (design_system.md §4/§5).
-  static final BorderRadius card = BorderRadius.circular(xl);
+  // Card radius bumped from xl (12px) to xl2 (16px) for the 2026-09 UI
+  // restyle pass — matches the rounder card shape in the reference designs;
+  // cascades automatically via `app_theme.dart`'s `cardTheme`.
+  static final BorderRadius card = BorderRadius.circular(xl2);
   static final BorderRadius button = BorderRadius.circular(lg);
   static final BorderRadius textField = BorderRadius.circular(md);
   static final BorderRadius sheet = BorderRadius.circular(xl2);

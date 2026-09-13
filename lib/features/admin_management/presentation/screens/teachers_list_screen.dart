@@ -111,27 +111,42 @@ class _TeachersList extends StatelessWidget {
         Expanded(
           child: teachers.isEmpty
               ? const EmptyStateView(message: 'No teachers match your search')
-              : ListView.builder(
+              : ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                   itemCount: teachers.length,
+                  separatorBuilder: (context, index) => const SizedBox(height: 8),
                   itemBuilder: (context, index) {
                     final teacher = teachers[index];
-                    return ListTile(
-                      title: Text(teacher.fullName),
-                      subtitle: Text('${teacher.department} · ${teacher.employeeId} · ${teacher.email}'),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit_outlined),
-                            tooltip: 'Edit',
-                            onPressed: () => onEdit(teacher),
+                    final accent = Theme.of(context).colorScheme.primary;
+                    return Card(
+                      margin: EdgeInsets.zero,
+                      clipBehavior: Clip.antiAlias,
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        leading: CircleAvatar(
+                          backgroundColor: accent.withValues(alpha: 0.14),
+                          child: Text(
+                            teacher.fullName.isNotEmpty ? teacher.fullName[0].toUpperCase() : '?',
+                            style: TextStyle(color: accent, fontWeight: FontWeight.w700),
                           ),
-                          IconButton(
-                            icon: const Icon(Icons.delete_outline),
-                            tooltip: 'Delete',
-                            onPressed: () => onDelete(teacher),
-                          ),
-                        ],
+                        ),
+                        title: Text(teacher.fullName, style: Theme.of(context).textTheme.titleSmall),
+                        subtitle: Text('${teacher.department} · ${teacher.employeeId} · ${teacher.email}'),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.edit_outlined),
+                              tooltip: 'Edit',
+                              onPressed: () => onEdit(teacher),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete_outline),
+                              tooltip: 'Delete',
+                              onPressed: () => onDelete(teacher),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
