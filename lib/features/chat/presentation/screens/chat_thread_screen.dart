@@ -2,8 +2,15 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../shared/utils/display_date.dart';
+import '../../../../shared/utils/initials.dart';
+import '../../../../shared/utils/relative_time.dart';
+import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
+import '../../../../shared/widgets/status_chip.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../../../auth/data/models/app_role.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
@@ -183,14 +190,29 @@ class _ChatThreadScreenState extends State<ChatThreadScreen> {
                 ),
                 LoadStatus.success =>
                   provider.messages.isEmpty
-                      ? const Center(child: Text('No messages yet — say hello!'))
+                      ? const EmptyStateView(message: 'No messages yet — say hello!', icon: Icons.waving_hand_outlined)
                       : ListView.builder(
                           controller: _scrollController,
-                          padding: const EdgeInsets.all(12),
+                          padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
                           itemCount: provider.messages.length,
                           itemBuilder: (context, index) {
                             final message = provider.messages[index];
-                            return _MessageBubble(message: message, isMine: message.senderUserId == myUserId);
+                            final previous = index > 0 ? provider.messages[index - 1] : null;
+                            final day = _dayOf(message.createdAt);
+                            final showDate = day != null && (previous == null || _dayOf(previous.createdAt) != day);
+                            // Consecutive messages from one sender share a single name header.
+                            final showSender =
+                                showDate || previous == null || previous.senderUserId != message.senderUserId;
+                            return Column(
+                              children: [
+                                if (showDate) _DateSeparator(day: day),
+                                _MessageBubble(
+                                  message: message,
+                                  isMine: message.senderUserId == myUserId,
+                                  showSender: showSender,
+                                ),
+                              ],
+                            );
                           },
                         ),
               },
@@ -214,44 +236,59 @@ class _ChatThreadScreenState extends State<ChatThreadScreen> {
                   onDeleted: () => setState(() => _pendingAttachment = null),
                 ),
               ),
-            SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.attach_file),
-                      tooltip: 'Attach image or video',
-                      onPressed: _pickAttachment,
-                    ),
-                    Expanded(
-                      child: TextField(
-                        controller: _textController,
-                        decoration: const InputDecoration(
-                          hintText: 'Message',
-                          border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(24))),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            Material(
+              color: Theme.of(context).colorScheme.surface,
+              elevation: 6,
+              child: SafeArea(
+                top: false,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+                  child: Row(
+                    children: [
+                      IconButton.filledTonal(
+                        icon: const Icon(Icons.add_photo_alternate_outlined),
+                        tooltip: 'Attach image or video',
+                        onPressed: _pickAttachment,
+                      ),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: TextField(
+                          controller: _textController,
+                          decoration: InputDecoration(
+                            hintText: group == null ? 'Message' : 'Message ${group.name}',
+                            filled: true,
+                            fillColor: Theme.of(context).colorScheme.surfaceContainerLow,
+                            border: const OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(24)),
+                              borderSide: BorderSide.none,
+                            ),
+                            enabledBorder: const OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(24)),
+                              borderSide: BorderSide.none,
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          ),
+                          minLines: 1,
+                          maxLines: 4,
                         ),
-                        minLines: 1,
-                        maxLines: 4,
                       ),
-                    ),
-                    const SizedBox(width: 4),
-                    Container(
-                      decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary, shape: BoxShape.circle),
-                      child: IconButton(
-                        icon: provider.isSending
-                            ? const SizedBox(
-                                height: 16,
-                                width: 16,
-                                child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                              )
-                            : const Icon(Icons.send, color: Colors.white, size: 20),
-                        tooltip: 'Send',
-                        onPressed: provider.isSending ? null : _send,
+                      const SizedBox(width: 6),
+                      Container(
+                        decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
+                        child: IconButton(
+                          icon: provider.isSending
+                              ? const SizedBox(
+                                  height: 16,
+                                  width: 16,
+                                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                )
+                              : const Icon(Icons.send_rounded, color: Colors.white, size: 20),
+                          tooltip: 'Send',
+                          onPressed: provider.isSending ? null : _send,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -267,65 +304,168 @@ String _groupInitials(String source) {
   return letters.length >= 2 ? letters.substring(0, 2).toUpperCase() : letters.toUpperCase();
 }
 
-class _MessageBubble extends StatelessWidget {
-  final GroupMessage message;
-  final bool isMine;
+/// Local calendar day of an ISO timestamp, for grouping messages.
+DateTime? _dayOf(String raw) {
+  final at = DateTime.tryParse(raw)?.toLocal();
+  return at == null ? null : DateTime(at.year, at.month, at.day);
+}
 
-  const _MessageBubble({required this.message, required this.isMine});
+class _DateSeparator extends StatelessWidget {
+  final DateTime day;
+
+  const _DateSeparator({required this.day});
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Align(
-      alignment: isMine ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 4),
-        padding: const EdgeInsets.all(10),
-        constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
-        decoration: BoxDecoration(
-          color: isMine ? colorScheme.primary.withValues(alpha: 0.9) : colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.only(
-            topLeft: const Radius.circular(16),
-            topRight: const Radius.circular(16),
-            bottomLeft: Radius.circular(isMine ? 16 : 4),
-            bottomRight: Radius.circular(isMine ? 4 : 16),
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final diff = today.difference(day).inDays;
+    final label = switch (diff) {
+      0 => 'Today',
+      1 => 'Yesterday',
+      _ => formatDisplayDate(day.toIso8601String()),
+    };
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Center(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surface,
+            borderRadius: BorderRadius.circular(AppRadius.xl4),
+            border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
           ),
+          child: Text(label, style: Theme.of(context).textTheme.labelSmall),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (!isMine)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 2),
-                child: RichText(
-                  text: TextSpan(
-                    style: Theme.of(
-                      context,
-                    ).textTheme.labelSmall?.copyWith(color: colorScheme.primary, fontWeight: FontWeight.w700),
-                    children: [
-                      TextSpan(text: message.senderName),
-                      if (message.senderRole.isNotEmpty)
-                        TextSpan(
-                          text: ' • ${message.senderRole[0].toUpperCase()}${message.senderRole.substring(1)}',
-                          style: TextStyle(color: colorScheme.onSurfaceVariant, fontWeight: FontWeight.normal),
-                        ),
-                    ],
-                  ),
-                ),
-              ),
-            if (message.attachment != null)
-              message.attachment!.type == 'image'
+      ),
+    );
+  }
+}
+
+class _MessageBubble extends StatelessWidget {
+  final GroupMessage message;
+  final bool isMine;
+  final bool showSender;
+
+  const _MessageBubble({required this.message, required this.isMine, this.showSender = true});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final time = formatRelativeTime(message.createdAt);
+    final role = message.senderRole.isEmpty
+        ? ''
+        : '${message.senderRole[0].toUpperCase()}${message.senderRole.substring(1)}';
+    final maxWidth = MediaQuery.of(context).size.width * 0.72;
+
+    final bubble = Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      constraints: BoxConstraints(maxWidth: maxWidth),
+      decoration: BoxDecoration(
+        color: isMine ? AppColors.primary : colorScheme.surface,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(isMine || !showSender ? 18 : 4),
+          topRight: Radius.circular(isMine && showSender ? 4 : 18),
+          bottomLeft: const Radius.circular(18),
+          bottomRight: const Radius.circular(18),
+        ),
+        boxShadow: isMine
+            ? null
+            : [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 6, offset: const Offset(0, 2))],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (message.attachment != null)
+            Padding(
+              padding: EdgeInsets.only(bottom: message.text.isNotEmpty ? 6 : 0),
+              child: message.attachment!.type == 'image'
                   ? ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.network(message.attachment!.url, width: 200, fit: BoxFit.cover),
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.network(message.attachment!.url, width: 220, fit: BoxFit.cover),
                     )
                   : Text(
                       '📎 ${message.attachment!.type} attachment',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(color: isMine ? Colors.white : null),
+                      style: theme.textTheme.bodySmall?.copyWith(color: isMine ? Colors.white : null),
                     ),
-            if (message.text.isNotEmpty) Text(message.text, style: TextStyle(color: isMine ? Colors.white : null)),
-          ],
-        ),
+            ),
+          if (message.text.isNotEmpty)
+            Text(message.text, style: theme.textTheme.bodyMedium?.copyWith(color: isMine ? Colors.white : null)),
+        ],
+      ),
+    );
+
+    final timeLabel = time.isEmpty
+        ? const SizedBox.shrink()
+        : Padding(
+            padding: const EdgeInsets.only(top: 3, left: 4, right: 4),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(time, style: theme.textTheme.labelSmall?.copyWith(color: colorScheme.onSurfaceVariant)),
+                if (isMine && message.readBy.length > 1) ...[
+                  const SizedBox(width: 4),
+                  const Icon(Icons.done_all_rounded, size: 14, color: AppColors.primary),
+                ],
+              ],
+            ),
+          );
+
+    if (isMine) {
+      return Padding(
+        padding: EdgeInsets.only(top: showSender ? 8 : 3),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [bubble, timeLabel]),
+      );
+    }
+
+    return Padding(
+      padding: EdgeInsets.only(top: showSender ? 10 : 3),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 36,
+            child: showSender
+                ? CircleAvatar(
+                    radius: 16,
+                    backgroundColor: AppColors.primary,
+                    child: Text(
+                      initialsFor(message.senderName),
+                      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 11),
+                    ),
+                  )
+                : null,
+          ),
+          const SizedBox(width: 6),
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (showSender)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 4, left: 2),
+                    child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 6,
+                      children: [
+                        Text(
+                          message.senderName,
+                          style: theme.textTheme.labelMedium?.copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        if (role.isNotEmpty) AppStatusPill(label: role, color: AppColors.primary),
+                      ],
+                    ),
+                  ),
+                bubble,
+                timeLabel,
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

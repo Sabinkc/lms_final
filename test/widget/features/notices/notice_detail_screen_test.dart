@@ -73,7 +73,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('School Holiday'), findsOneWidget);
-    expect(find.text('all'), findsOneWidget);
+    expect(find.text('Everyone'), findsWidgets);
     expect(find.text('Important'), findsOneWidget);
     expect(find.text('Admin Person'), findsOneWidget);
     expect(find.text('24 Aug 2026'), findsOneWidget);

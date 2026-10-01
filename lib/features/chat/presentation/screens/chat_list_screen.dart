@@ -3,9 +3,14 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../shared/utils/relative_time.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
+import '../../../../shared/widgets/filter_chip_bar.dart';
 import '../../../../shared/widgets/loading_view.dart';
+import '../../../../shared/widgets/status_chip.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../../../auth/data/models/app_role.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
@@ -31,6 +36,7 @@ class ChatListScreen extends StatefulWidget {
 class _ChatListScreenState extends State<ChatListScreen> {
   final _searchController = TextEditingController();
   String _query = '';
+  String? _classFilter;
 
   // Captured once, not read again in dispose(): by teardown time (e.g. a
   // full-tree unmount on logout, or a test's pumpWidget-away) the element
@@ -104,34 +110,59 @@ class _ChatListScreenState extends State<ChatListScreen> {
                     actionLabel: isTeacher ? 'New Group' : null,
                     onAction: isTeacher ? () => showCreateGroupDialog(context, provider) : null,
                   )
-                : Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-                        child: TextField(
-                          controller: _searchController,
-                          onChanged: (value) => setState(() => _query = value),
-                          decoration: const InputDecoration(
-                            hintText: 'Search conversations or classes...',
-                            prefixIcon: Icon(Icons.search),
-                            isDense: true,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: filtered.isEmpty
-                            ? const Center(child: Text('No conversations match your search'))
-                            : ListView.separated(
-                                padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                                itemCount: filtered.length,
-                                separatorBuilder: (context, index) => const SizedBox(height: 8),
-                                itemBuilder: (context, index) => _GroupTile(group: filtered[index]),
-                              ),
-                      ),
-                    ],
-                  ),
+                : _buildList(context, provider, filtered),
         },
       ),
+    );
+  }
+
+  Widget _buildList(BuildContext context, ChatProvider provider, List<GroupConversation> searched) {
+    final classCounts = <String, int>{};
+    for (final g in provider.groups) {
+      if (g.className.isNotEmpty) classCounts[g.className] = (classCounts[g.className] ?? 0) + 1;
+    }
+    final classFilter = classCounts.containsKey(_classFilter) ? _classFilter : null;
+    final visible = [
+      for (final g in searched)
+        if (classFilter == null || g.className == classFilter) g,
+    ];
+    final scheme = Theme.of(context).colorScheme;
+
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+      children: [
+        TextField(
+          controller: _searchController,
+          onChanged: (value) => setState(() => _query = value),
+          decoration: InputDecoration(
+            hintText: 'Search conversations or classes...',
+            prefixIcon: const Icon(Icons.search),
+            filled: true,
+            fillColor: scheme.surfaceContainerLow,
+            border: OutlineInputBorder(borderRadius: AppRadius.button, borderSide: BorderSide.none),
+          ),
+        ),
+        if (classCounts.length > 1) ...[
+          const SizedBox(height: 12),
+          AppFilterChipBar<String?>(
+            options: [null, ...classCounts.keys],
+            selected: classFilter,
+            labelBuilder: (c) => c ?? 'All',
+            countBuilder: (c) => c == null ? provider.groups.length : classCounts[c]!,
+            onSelected: (c) => setState(() => _classFilter = c),
+          ),
+        ],
+        const SizedBox(height: 14),
+        if (visible.isEmpty)
+          const Padding(
+            padding: EdgeInsets.only(top: 32),
+            child: EmptyStateView(message: 'No conversations match your search', icon: Icons.search_off),
+          ),
+        for (final group in visible) ...[
+          _GroupTile(group: group),
+          const SizedBox(height: 10),
+        ],
+      ],
     );
   }
 }
@@ -141,51 +172,90 @@ class _GroupTile extends StatelessWidget {
 
   const _GroupTile({required this.group});
 
-  String get _initials {
-    final words = group.className.trim().split(RegExp(r'\s+'));
-    final base = words.isNotEmpty && words.first.isNotEmpty ? words.first : group.name;
-    final letters = base.replaceAll(RegExp(r'[^A-Za-z0-9]'), '');
-    return letters.length >= 2 ? letters.substring(0, 2).toUpperCase() : letters.toUpperCase();
-  }
+  /// A stable tint per group so the list isn't one flat color.
+  static const _palette = [
+    Color(0xFF0B6E4F),
+    Color(0xFF4F46E5),
+    Color(0xFFEA580C),
+    Color(0xFF0891B2),
+    Color(0xFFDB2777),
+    Color(0xFF7C3AED),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    final accent = Theme.of(context).colorScheme.primary;
+    final theme = Theme.of(context);
+    final color = _palette[group.id.hashCode.abs() % _palette.length];
     final memberCount = group.memberIds.length + group.teacherIds.length;
+    final when = group.lastMessageAt == null ? '' : formatRelativeTime(group.lastMessageAt!);
+    final subtitle = [
+      if (group.className.isNotEmpty) group.className,
+      if (group.sectionName != null && group.sectionName!.isNotEmpty) 'Section ${group.sectionName}',
+    ].join(' · ');
+
     return Card(
       margin: EdgeInsets.zero,
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () => context.push(AppRoutes.chatThread(group.id), extra: group),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          padding: const EdgeInsets.all(14),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(
-                radius: 22,
-                backgroundColor: accent,
-                child: Text(
-                  _initials.isEmpty ? '?' : _initials,
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 13),
-                ),
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(color: color.withValues(alpha: 0.12), shape: BoxShape.circle),
+                child: Icon(Icons.forum_outlined, color: color),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(group.name, style: Theme.of(context).textTheme.titleSmall),
-                    const SizedBox(height: 2),
-                    Text(
-                      group.lastMessagePreview.isEmpty ? '$memberCount members' : group.lastMessagePreview,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodySmall,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            group.name,
+                            style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        if (when.isNotEmpty) ...[
+                          const SizedBox(width: 8),
+                          Text(when, style: theme.textTheme.labelSmall?.copyWith(color: AppColors.primary)),
+                        ],
+                      ],
+                    ),
+                    if (subtitle.isNotEmpty)
+                      Text(
+                        subtitle,
+                        style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                      ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            group.lastMessagePreview.isEmpty ? 'No messages yet' : group.lastMessagePreview,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              fontStyle: group.lastMessagePreview.isEmpty ? FontStyle.italic : null,
+                              color: group.lastMessagePreview.isEmpty ? theme.colorScheme.onSurfaceVariant : null,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        AppStatusPill(label: '$memberCount', icon: Icons.people_outline, color: color),
+                      ],
                     ),
                   ],
                 ),
               ),
-              const Icon(Icons.chevron_right, size: 20),
             ],
           ),
         ),

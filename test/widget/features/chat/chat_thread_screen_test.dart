@@ -127,7 +127,7 @@ void main() {
     await tester.pumpAndSettle();
 
     await tester.enterText(find.byType(TextField), 'Hello class');
-    await tester.tap(find.byIcon(Icons.send));
+    await tester.tap(find.byTooltip('Send'));
     await tester.pumpAndSettle();
 
     verify(() => chatRepository.sendMessage('g1', text: 'Hello class', attachmentBytes: null, attachmentFilename: null))

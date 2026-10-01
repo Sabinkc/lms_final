@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_radius.dart';
 import '../../../../shared/utils/display_date.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
@@ -46,65 +48,80 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
           LoadStatus.success => Builder(
             builder: (context) {
               final notice = provider.currentNotice!;
-              final scheme = Theme.of(context).colorScheme;
-              final tint = notice.isImportant ? scheme.error : scheme.primary;
+              final theme = Theme.of(context);
+              final audience = _audienceStyle(notice.audience);
+              final expiry = DateTime.tryParse(notice.expiryDate ?? '');
+              final expired = expiry != null && expiry.isBefore(DateTime.now());
               return ListView(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
                 children: [
                   Card(
                     margin: EdgeInsets.zero,
                     child: Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(18),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Wrap(
                             spacing: 6,
                             runSpacing: 6,
                             children: [
-                              AppStatusChip(label: notice.audience, color: scheme.secondary),
-                              if (notice.isImportant) AppStatusChip(label: 'Important', color: scheme.error),
+                              if (notice.isImportant)
+                                AppStatusPill(label: 'Important', icon: Icons.error_rounded, color: theme.colorScheme.error),
+                              AppStatusPill(label: audience.label, icon: audience.icon, color: audience.color),
+                              if (expired)
+                                AppStatusPill(
+                                  label: 'Expired',
+                                  icon: Icons.event_busy_outlined,
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
                             ],
                           ),
-                          const SizedBox(height: 10),
+                          const SizedBox(height: 12),
                           Text(
                             notice.title,
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                            style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800, height: 1.25),
                           ),
-                          const SizedBox(height: 14),
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 18,
-                                backgroundColor: tint.withValues(alpha: 0.14),
-                                child: Icon(Icons.account_balance, color: tint, size: 18),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    if (notice.createdByName.isNotEmpty)
-                                      Text(
-                                        notice.createdByName,
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
-                                      ),
-                                    Text(
-                                      formatDisplayDate(notice.createdAt),
-                                      style: Theme.of(context).textTheme.bodySmall,
-                                    ),
-                                  ],
+                          const SizedBox(height: 16),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: theme.colorScheme.surfaceContainerLow,
+                              borderRadius: BorderRadius.circular(AppRadius.lg),
+                            ),
+                            child: Column(
+                              children: [
+                                if (notice.createdByName.isNotEmpty)
+                                  _MetaRow(
+                                    icon: Icons.person_outline,
+                                    color: AppColors.primary,
+                                    label: 'Posted by',
+                                    value: notice.createdByName,
+                                  ),
+                                _MetaRow(
+                                  icon: audience.icon,
+                                  color: audience.color,
+                                  label: 'Audience',
+                                  value: audience.label,
                                 ),
-                              ),
-                            ],
+                                _MetaRow(
+                                  icon: Icons.event_outlined,
+                                  color: const Color(0xFFEA580C),
+                                  label: 'Published',
+                                  value: formatDisplayDate(notice.createdAt),
+                                ),
+                                if (notice.expiryDate != null && notice.expiryDate!.isNotEmpty)
+                                  _MetaRow(
+                                    icon: Icons.event_busy_outlined,
+                                    color: theme.colorScheme.error,
+                                    label: 'Expires',
+                                    value: formatDisplayDate(notice.expiryDate!),
+                                  ),
+                              ],
+                            ),
                           ),
-                          const Divider(height: 28),
-                          Text(
-                            notice.description,
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(height: 1.5),
-                          ),
+                          const Divider(height: 32),
+                          Text(notice.description, style: theme.textTheme.bodyLarge?.copyWith(height: 1.6)),
                         ],
                       ),
                     ),
@@ -114,6 +131,43 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
             },
           ),
         },
+      ),
+    );
+  }
+}
+
+/// Same audience labels/colours as the Notices list chips.
+({String label, IconData icon, Color color}) _audienceStyle(String audience) => switch (audience.toLowerCase()) {
+  'students' => (label: 'Students', icon: Icons.school_rounded, color: const Color(0xFF7C3AED)),
+  'teachers' => (label: 'Teachers', icon: Icons.co_present_rounded, color: AppColors.primary),
+  'parents' => (label: 'Parents', icon: Icons.family_restroom_rounded, color: const Color(0xFFF2600C)),
+  'admins' => (label: 'Admins', icon: Icons.admin_panel_settings_rounded, color: const Color(0xFF0EA5B7)),
+  _ => (label: 'Everyone', icon: Icons.campaign_rounded, color: const Color(0xFF2F80FF)),
+};
+
+class _MetaRow extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+  final String label;
+  final String value;
+
+  const _MetaRow({required this.icon, required this.color, required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          CircleAvatar(radius: 14, backgroundColor: color.withValues(alpha: 0.12), child: Icon(icon, size: 15, color: color)),
+          const SizedBox(width: 10),
+          SizedBox(
+            width: 84,
+            child: Text(label, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
+          ),
+          Expanded(child: Text(value, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600))),
+        ],
       ),
     );
   }
