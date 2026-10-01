@@ -91,6 +91,19 @@ class AppTheme {
         selectedColor: colorScheme.primary.withValues(alpha: isDark ? 0.34 : 0.2),
         checkmarkColor: colorScheme.primary,
       ),
+      // Form dialogs: a clean white sheet (no M3 surface tint), bold title.
+      dialogTheme: DialogThemeData(
+        backgroundColor: isDark ? AppColors.darkElevated2 : colorScheme.surface,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+        titleTextStyle: TextStyle(
+          fontFamily: AppTypography.fontFamily,
+          fontSize: 22,
+          fontWeight: FontWeight.w800,
+          color: colorScheme.onSurface,
+        ),
+        actionsPadding: const EdgeInsets.fromLTRB(24, 8, 24, 20),
+      ),
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(28)),
         enabledBorder: OutlineInputBorder(

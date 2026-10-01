@@ -5,6 +5,8 @@ import '../providers/notice_provider.dart';
 
 const _audiences = ['all', 'students', 'teachers', 'parents', 'admins'];
 
+String _audienceLabel(String a) => a == 'all' ? 'Everyone' : a[0].toUpperCase() + a.substring(1);
+
 /// Admin: Create/Edit Notice.
 Future<void> showNoticeFormDialog(
   BuildContext context,
@@ -49,7 +51,7 @@ Future<void> showNoticeFormDialog(
                     initialValue: audience,
                     decoration: const InputDecoration(labelText: 'Audience'),
                     items: [
-                      for (final a in _audiences) DropdownMenuItem(value: a, child: Text(a)),
+                      for (final a in _audiences) DropdownMenuItem(value: a, child: Text(_audienceLabel(a))),
                     ],
                     onChanged: (value) {
                       audience = value!;
