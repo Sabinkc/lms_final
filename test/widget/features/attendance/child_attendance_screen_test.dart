@@ -6,6 +6,7 @@ import 'package:cloud_lms/features/attendance/data/models/student_attendance_his
 import 'package:cloud_lms/features/attendance/data/repositories/attendance_repository.dart';
 import 'package:cloud_lms/features/attendance/presentation/providers/self_attendance_provider.dart';
 import 'package:cloud_lms/features/attendance/presentation/screens/child_attendance_screen.dart';
+import 'package:cloud_lms/shared/widgets/filter_chip_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -103,7 +104,7 @@ void main() {
     await tester.pumpWidget(_wrap(provider));
     await tester.pumpAndSettle();
 
-    expect(find.byType(ChoiceChip), findsNothing);
+    expect(find.byType(AppFilterChip), findsNothing);
     expect(find.text('90%'), findsOneWidget);
   });
 
@@ -119,10 +120,10 @@ void main() {
     await tester.pumpWidget(_wrap(provider));
     await tester.pumpAndSettle();
 
-    expect(find.byType(ChoiceChip), findsNWidgets(2));
+    expect(find.byType(AppFilterChip), findsNWidgets(2));
     expect(find.text('Select a child above to view their attendance'), findsOneWidget);
 
-    await tester.tap(find.widgetWithText(ChoiceChip, 'Alex Other'));
+    await tester.tap(find.widgetWithText(AppFilterChip, 'Alex Other'));
     await tester.pumpAndSettle();
 
     verify(() => repository.getStudentAttendanceHistory(

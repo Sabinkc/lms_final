@@ -44,7 +44,9 @@ void main() {
       ),
     );
 
-    expect(find.text('All 12'), findsOneWidget);
-    expect(find.text('Academic 5'), findsOneWidget);
+    expect(find.text('All'), findsOneWidget);
+    expect(find.text('12'), findsOneWidget);
+    expect(find.text('Academic'), findsOneWidget);
+    expect(find.text('5'), findsOneWidget);
   });
 }

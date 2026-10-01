@@ -13,6 +13,7 @@ import 'package:cloud_lms/features/admin_management/presentation/providers/stude
 import 'package:cloud_lms/features/attendance/data/models/day_attendance_record.dart';
 import 'package:cloud_lms/features/attendance/data/repositories/attendance_repository.dart';
 import 'package:cloud_lms/features/admin_management/presentation/screens/students_list_screen.dart';
+import 'package:cloud_lms/shared/widgets/filter_chip_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -156,7 +157,7 @@ void main() {
 
     expect(find.text('Class 10'), findsWidgets);
 
-    await tester.tap(find.widgetWithText(ChoiceChip, 'Class 10'));
+    await tester.tap(find.widgetWithText(AppFilterChip, 'Class 10'));
     await tester.pumpAndSettle();
 
     verify(() => studentRepository.getStudents(className: 'Class 10')).called(1);

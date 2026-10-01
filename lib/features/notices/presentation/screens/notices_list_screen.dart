@@ -7,6 +7,8 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../shared/utils/display_date.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
+import '../../../../shared/widgets/filter_chip_bar.dart';
+import '../../../../shared/widgets/page_hero_card.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
 import '../../../../shared/widgets/status_chip.dart';
@@ -132,13 +134,19 @@ class _NoticesListScreenState extends State<NoticesListScreen> {
                 : ListView(
                     padding: const EdgeInsets.fromLTRB(16, 12, 16, 88),
                     children: [
-                      _NoticesHeroBanner(total: notices.length),
+                      PageHeroCard(
+                        icon: Icons.campaign_rounded,
+                        title: 'Stay Informed',
+                        subtitle: 'The latest notices, announcements and important updates from your institution.',
+                        color: const Color(0xFF2F80FF),
+                        figure: '${notices.length}',
+                      ),
                       const SizedBox(height: 14),
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
                           children: [
-                            _CategoryChip(
+                            AppFilterChip(
                               label: 'All',
                               count: notices.length,
                               selected: filter == null,
@@ -146,7 +154,7 @@ class _NoticesListScreenState extends State<NoticesListScreen> {
                             ),
                             for (final c in chips) ...[
                               const SizedBox(width: 8),
-                              _CategoryChip(
+                              AppFilterChip(
                                 label: _categoryStyle(c).$1,
                                 icon: _categoryStyle(c).$2,
                                 count: counts[c]!,
@@ -172,133 +180,6 @@ class _NoticesListScreenState extends State<NoticesListScreen> {
 
 /// "Stay Informed" hero from the reference: big megaphone, blurb, and a
 /// Total Notices card. [total] is the loaded list's real length.
-class _NoticesHeroBanner extends StatelessWidget {
-  final int total;
-
-  const _NoticesHeroBanner({required this.total});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    const blue = Color(0xFF2F80FF);
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [blue.withValues(alpha: 0.10), AppColors.primary.withValues(alpha: 0.08)]),
-        borderRadius: BorderRadius.circular(AppRadius.xl2),
-        border: Border.all(color: blue.withValues(alpha: 0.15)),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(color: blue.withValues(alpha: 0.14), shape: BoxShape.circle),
-            child: const Icon(Icons.campaign_rounded, color: blue, size: 36),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Stay Informed',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w800,
-                    color: const Color(0xFF1E3A8A),
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  'The latest notices, announcements and important updates from your institution.',
-                  style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 10),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
-              borderRadius: BorderRadius.circular(AppRadius.xl),
-              border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text('Total', style: theme.textTheme.labelSmall?.copyWith(color: AppColors.primary)),
-                Text(
-                  '$total',
-                  style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800, color: AppColors.primary),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _CategoryChip extends StatelessWidget {
-  final String label;
-  final IconData? icon;
-  final int count;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const _CategoryChip({
-    required this.label,
-    this.icon,
-    required this.count,
-    required this.selected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final fg = selected ? Colors.white : theme.colorScheme.onSurface;
-    return Material(
-      color: selected ? AppColors.primary : theme.colorScheme.surfaceContainerLow,
-      shape: StadiumBorder(side: selected ? BorderSide.none : BorderSide(color: theme.colorScheme.outlineVariant)),
-      child: InkWell(
-        customBorder: const StadiumBorder(),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (icon != null) ...[
-                Icon(icon, size: 16, color: selected ? Colors.white : AppColors.primary),
-                const SizedBox(width: 6),
-              ],
-              Text(
-                label,
-                style: TextStyle(color: fg, fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(width: 6),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 1),
-                decoration: BoxDecoration(
-                  color: selected ? Colors.white.withValues(alpha: 0.25) : AppColors.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(AppRadius.xl4),
-                ),
-                child: Text(
-                  '$count',
-                  style: TextStyle(color: fg, fontSize: 12, fontWeight: FontWeight.w600),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _NoticeCard extends StatelessWidget {
   final Notice notice;
   final NoticeProvider provider;

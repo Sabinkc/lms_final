@@ -23,6 +23,7 @@ import '../widgets/class_badge.dart';
 import 'classes_list_screen.dart' show confirmDeleteClass, showClassFormDialog;
 import 'sections_list_screen.dart' show SectionsPanel, showSectionFormDialog;
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../shared/widgets/section_card.dart';
 
 enum _Tab { overview, students, teachers, sections }
 
@@ -319,57 +320,6 @@ class _IconLabel extends StatelessWidget {
 
 /// Card with the reference's section header: soft round icon + title, and an
 /// optional "View All →" on the right.
-class _SectionCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final VoidCallback? onViewAll;
-  final Widget child;
-
-  const _SectionCard({required this.icon, required this.title, this.onViewAll, required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.lg),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 18,
-                  backgroundColor: AppColors.primary.withValues(alpha: 0.1),
-                  child: Icon(icon, size: 20, color: AppColors.primary),
-                ),
-                const SizedBox(width: AppSpacing.md),
-                Expanded(
-                  child: Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
-                  ),
-                ),
-                if (onViewAll != null)
-                  TextButton(
-                    onPressed: onViewAll,
-                    style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [Text('View All'), SizedBox(width: 4), Icon(Icons.arrow_forward_rounded, size: 16)],
-                    ),
-                  ),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.md),
-            child,
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 class _OverviewStats extends StatelessWidget {
   final int? students;
   final int? sections;
@@ -380,7 +330,7 @@ class _OverviewStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String show(int? v) => v?.toString() ?? '–';
-    return _SectionCard(
+    return SectionCard(
       icon: Icons.bar_chart_rounded,
       title: 'Class Overview',
       child: Row(
@@ -479,7 +429,7 @@ class _TeachersCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final list = teachers;
     final shown = list == null ? null : (preview ? list.take(_previewCount).toList() : list);
-    return _SectionCard(
+    return SectionCard(
       icon: Icons.person_outline_rounded,
       title: 'Assigned Teachers',
       onViewAll: preview && list != null && list.length > _previewCount ? onViewAll : null,
@@ -524,7 +474,7 @@ class _StudentsPreviewCard extends StatelessWidget {
     final list = students;
     final theme = Theme.of(context);
     final muted = theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant);
-    return _SectionCard(
+    return SectionCard(
       icon: Icons.groups_outlined,
       title: 'Students',
       onViewAll: list != null && list.isNotEmpty ? onViewAll : null,

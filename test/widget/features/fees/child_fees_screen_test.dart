@@ -9,6 +9,7 @@ import 'package:cloud_lms/features/fees/data/repositories/fee_repository.dart';
 import 'package:cloud_lms/features/fees/data/repositories/payment_repository.dart';
 import 'package:cloud_lms/features/fees/presentation/providers/self_fee_provider.dart';
 import 'package:cloud_lms/features/fees/presentation/screens/child_fees_screen.dart';
+import 'package:cloud_lms/shared/widgets/filter_chip_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -108,7 +109,7 @@ void main() {
     await tester.pumpWidget(_wrap(provider));
     await tester.pumpAndSettle();
 
-    expect(find.byType(ChoiceChip), findsNothing);
+    expect(find.byType(AppFilterChip), findsNothing);
     expect(find.text('Term 1 Fee'), findsOneWidget);
   });
 
@@ -122,10 +123,10 @@ void main() {
     await tester.pumpWidget(_wrap(provider));
     await tester.pumpAndSettle();
 
-    expect(find.byType(ChoiceChip), findsNWidgets(2));
+    expect(find.byType(AppFilterChip), findsNWidgets(2));
     expect(find.text('Select a child above to view their fees'), findsOneWidget);
 
-    await tester.tap(find.widgetWithText(ChoiceChip, 'Alex Other'));
+    await tester.tap(find.widgetWithText(AppFilterChip, 'Alex Other'));
     await tester.pumpAndSettle();
 
     verify(() => feeRepository.getStudentFees('s2')).called(1);

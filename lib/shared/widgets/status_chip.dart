@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theme/app_radius.dart';
+
 /// A small colored pill for a status label (paid/pending/present/absent/
 /// new/...). Promoted from the private `_StatusChip` that used to live only
 /// in `fees/presentation/screens/payment_review_screen.dart`, so every
@@ -22,6 +24,38 @@ class AppStatusChip extends StatelessWidget {
       visualDensity: VisualDensity.compact,
       padding: const EdgeInsets.symmetric(horizontal: 4),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    );
+  }
+}
+
+/// A compact rounded status badge with an optional leading icon — the
+/// "✓ Published" / "⏱ Upcoming" pill from the Stitch card headers. Lighter
+/// than [AppStatusChip] (no Material `Chip` padding), for card corners.
+class AppStatusPill extends StatelessWidget {
+  final String label;
+  final IconData? icon;
+  final Color color;
+
+  const AppStatusPill({super.key, required this.label, this.icon, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(AppRadius.xl4),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (icon != null) ...[
+            Icon(icon, size: 14, color: color),
+            const SizedBox(width: 4),
+          ],
+          Text(label, style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w700)),
+        ],
+      ),
     );
   }
 }
