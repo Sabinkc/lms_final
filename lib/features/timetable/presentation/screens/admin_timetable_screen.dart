@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_radius.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
+import '../../../../shared/widgets/status_chip.dart';
 import '../../../admin_management/data/models/teacher.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart';
 import '../../../admin_management/presentation/providers/teacher_provider.dart';
@@ -195,37 +198,73 @@ class _AdminTimetableScreenState extends State<AdminTimetableScreen> {
               )
             : null,
         body: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: DropdownButtonFormField<String>(
-                    initialValue: _selectedClass,
-                    decoration: const InputDecoration(labelText: 'Class'),
-                    items: [
-                      for (final c in academicProvider.classes) DropdownMenuItem(value: c.name, child: Text(c.name)),
-                    ],
-                    onChanged: (value) async {
-                      final matching = academicProvider.classes.where((c) => c.name == value);
-                      if (matching.isNotEmpty) await academicProvider.loadSections(matching.first.id);
-                      if (!mounted) return;
-                      await _selectClassSection(value, null);
-                    },
-                  ),
+            Card(
+              margin: EdgeInsets.zero,
+              child: Padding(
+                padding: const EdgeInsets.all(14),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.calendar_view_week_rounded, color: AppColors.primary),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'Master Class Schedule',
+                            style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
+                          ),
+                        ),
+                        if (canEdit && timetableProvider.status == LoadStatus.success)
+                          AppStatusPill(
+                            label: timetableProvider.current != null ? 'Saved timetable' : 'New timetable',
+                            icon: timetableProvider.current != null ? Icons.cloud_done_outlined : Icons.edit_note,
+                            color: timetableProvider.current != null
+                                ? const Color(0xFF16A34A)
+                                : const Color(0xFFEA580C),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: DropdownButtonFormField<String>(
+                            initialValue: _selectedClass,
+                            decoration: const InputDecoration(labelText: 'Class'),
+                            items: [
+                              for (final c in academicProvider.classes)
+                                DropdownMenuItem(value: c.name, child: Text(c.name)),
+                            ],
+                            onChanged: (value) async {
+                              final matching = academicProvider.classes.where((c) => c.name == value);
+                              if (matching.isNotEmpty) await academicProvider.loadSections(matching.first.id);
+                              if (!mounted) return;
+                              await _selectClassSection(value, null);
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: DropdownButtonFormField<String>(
+                            initialValue: _selectedSection,
+                            decoration: const InputDecoration(labelText: 'Section'),
+                            items: [
+                              for (final s in academicProvider.sections)
+                                DropdownMenuItem(value: s.name, child: Text(s.name)),
+                            ],
+                            onChanged: _selectedClass == null
+                                ? null
+                                : (value) => _selectClassSection(_selectedClass, value),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: DropdownButtonFormField<String>(
-                    initialValue: _selectedSection,
-                    decoration: const InputDecoration(labelText: 'Section'),
-                    items: [
-                      for (final s in academicProvider.sections) DropdownMenuItem(value: s.name, child: Text(s.name)),
-                    ],
-                    onChanged: _selectedClass == null ? null : (value) => _selectClassSection(_selectedClass, value),
-                  ),
-                ),
-              ],
+              ),
             ),
             const SizedBox(height: 16),
             if (!canEdit)
@@ -277,83 +316,175 @@ class _DaySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent = Theme.of(context).colorScheme.primary;
+    final theme = Theme.of(context);
+    final subjects = {
+      for (final p in periods)
+        if (p.subjectController.text.trim().isNotEmpty) p.subjectController.text.trim(),
+    };
+    final first = periods.isEmpty ? '' : periods.first.startTimeController.text.trim();
+    final last = periods.isEmpty ? '' : periods.last.endTimeController.text.trim();
+    final count = '${periods.length} period${periods.length == 1 ? '' : 's'}';
+
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       clipBehavior: Clip.antiAlias,
-      child: ExpansionTile(
-        leading: CircleAvatar(
-          backgroundColor: accent.withValues(alpha: 0.14),
-          child: Icon(Icons.calendar_today_outlined, color: accent, size: 20),
+      child: Theme(
+        data: theme.copyWith(dividerColor: Colors.transparent),
+        child: ExpansionTile(
+          tilePadding: const EdgeInsets.fromLTRB(14, 6, 10, 6),
+          childrenPadding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+          leading: Container(
+            width: 40,
+            height: 40,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: periods.isEmpty ? 0.06 : 0.12),
+              borderRadius: BorderRadius.circular(AppRadius.lg),
+            ),
+            child: Text(
+              day[0],
+              style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w800, fontSize: 16),
+            ),
+          ),
+          title: Text(day, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                periods.isEmpty
+                    ? 'No periods yet'
+                    : (first.isNotEmpty && last.isNotEmpty ? '$count ($first – $last)' : count),
+                style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+              ),
+              if (subjects.isNotEmpty) ...[
+                const SizedBox(height: 6),
+                Wrap(
+                  spacing: 6,
+                  runSpacing: 4,
+                  children: [
+                    for (final subject in subjects.take(5)) AppStatusPill(label: subject, color: AppColors.info),
+                  ],
+                ),
+              ],
+            ],
+          ),
+          children: [
+            for (final period in periods) ...[
+              _PeriodEditor(period: period, teacherOptions: teacherOptions, onRemove: () => onRemovePeriod(period)),
+              const SizedBox(height: 10),
+            ],
+            OutlinedButton.icon(
+              style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(44)),
+              onPressed: onAddPeriod,
+              icon: const Icon(Icons.add_circle_outline),
+              label: const Text('Add period'),
+            ),
+          ],
         ),
-        title: Text(day, style: Theme.of(context).textTheme.titleSmall),
-        subtitle: Text('${periods.length} period(s)'),
+      ),
+    );
+  }
+}
+
+class _PeriodEditor extends StatelessWidget {
+  final _PeriodDraft period;
+  final List<Teacher> teacherOptions;
+  final VoidCallback onRemove;
+
+  const _PeriodEditor({required this.period, required this.teacherOptions, required this.onRemove});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final fill = theme.colorScheme.surface;
+    InputDecoration field(String label, {String? hint, IconData? icon}) => InputDecoration(
+      labelText: label,
+      hintText: hint,
+      isDense: true,
+      filled: true,
+      fillColor: fill,
+      prefixIcon: icon != null ? Icon(icon, size: 18) : null,
+    );
+
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          for (final period in periods)
-            Container(
-              margin: const EdgeInsets.fromLTRB(12, 0, 12, 8),
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
-                borderRadius: BorderRadius.circular(12),
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(6)),
+                child: Text(
+                  'P${period.periodNumber}',
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 12),
+                ),
               ),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: TextField(
-                      controller: period.subjectController,
-                      decoration: const InputDecoration(labelText: 'Subject', isDense: true),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: TextField(
-                      controller: period.startTimeController,
-                      decoration: const InputDecoration(labelText: 'Start', hintText: '10:00 AM', isDense: true),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: TextField(
-                      controller: period.endTimeController,
-                      decoration: const InputDecoration(labelText: 'End', hintText: '11:00 AM', isDense: true),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: DropdownButtonFormField<String>(
-                      initialValue: period.teacherId,
-                      decoration: const InputDecoration(labelText: 'Teacher', isDense: true),
-                      isExpanded: true,
-                      items: [
-                        for (final t in teacherOptions)
-                          DropdownMenuItem(
-                            value: t.id,
-                            child: Text(t.fullName, overflow: TextOverflow.ellipsis),
-                          ),
-                      ],
-                      onChanged: (value) => period.teacherId = value,
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.remove_circle_outline),
-                    tooltip: 'Remove period',
-                    onPressed: () => onRemovePeriod(period),
-                  ),
-                ],
+              const Spacer(),
+              IconButton(
+                icon: Icon(Icons.delete_outline, color: theme.colorScheme.error),
+                tooltip: 'Remove period',
+                visualDensity: VisualDensity.compact,
+                onPressed: onRemove,
               ),
-            ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8, bottom: 8),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton.icon(
-                onPressed: onAddPeriod,
-                icon: const Icon(Icons.add),
-                label: const Text('Add period'),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: period.startTimeController,
+                  decoration: field('Start', hint: '10:00 AM', icon: Icons.schedule),
+                ),
               ),
-            ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: TextField(
+                  controller: period.endTimeController,
+                  decoration: field('End', hint: '11:00 AM', icon: Icons.schedule),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          TextField(
+            controller: period.subjectController,
+            decoration: field('Subject', icon: Icons.menu_book_outlined),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                flex: 3,
+                child: DropdownButtonFormField<String>(
+                  initialValue: period.teacherId,
+                  decoration: field('Teacher', icon: Icons.person_outline),
+                  isExpanded: true,
+                  items: [
+                    for (final t in teacherOptions)
+                      DropdownMenuItem(
+                        value: t.id,
+                        child: Text(t.fullName, overflow: TextOverflow.ellipsis),
+                      ),
+                  ],
+                  onChanged: (value) => period.teacherId = value,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                flex: 2,
+                child: TextField(
+                  controller: period.roomController,
+                  decoration: field('Room'),
+                ),
+              ),
+            ],
           ),
         ],
       ),

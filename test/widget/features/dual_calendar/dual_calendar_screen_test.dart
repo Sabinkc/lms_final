@@ -19,9 +19,9 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('August 2026'), findsOneWidget);
-    // The header's BS label is for the 1st of the AD month (Shrawan), not
-    // the 27th's BS month (Bhadra) — verified separately below.
-    expect(find.textContaining('Shrawan 2083'), findsOneWidget);
+    // The header's BS label spans every BS month the AD month touches
+    // (Shrawan on the 1st through Bhadra on the 31st).
+    expect(find.textContaining('Shrawan – Bhadra 2083'), findsOneWidget);
     expect(find.text('27'), findsOneWidget);
     expect(find.text('Bha 11'), findsOneWidget);
   });

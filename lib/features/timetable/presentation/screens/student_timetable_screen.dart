@@ -4,11 +4,11 @@ import 'package:provider/provider.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
-import '../../../../shared/widgets/status_chip.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../../data/models/my_timetable.dart';
-import '../../data/models/timetable_period.dart';
+import '../../data/models/timetable_day.dart';
 import '../providers/student_timetable_provider.dart';
+import '../widgets/day_timeline.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 
@@ -25,6 +25,8 @@ class StudentTimetableScreen extends StatefulWidget {
 }
 
 class _StudentTimetableScreenState extends State<StudentTimetableScreen> {
+  String? _selectedDay;
+
   @override
   void initState() {
     super.initState();
@@ -54,61 +56,44 @@ class _StudentTimetableScreenState extends State<StudentTimetableScreen> {
       return const EmptyStateView(message: 'No timetable set up for your class yet', icon: Icons.schedule_outlined);
     }
 
-    final today = timetable.todaySchedule;
-    final fullSchedule = timetable.fullSchedule;
+    final byDay = {for (final d in timetable.fullSchedule) d.day: d.periods};
+    byDay[timetable.todaySchedule.day] ??= timetable.todaySchedule.periods;
+    final days = [
+      for (final d in timetableWeekdays)
+        if (byDay.containsKey(d)) d,
+    ];
+    final selected = _selectedDay != null && days.contains(_selectedDay) ? _selectedDay! : timetable.today;
+    final periods = selected == timetable.todaySchedule.day ? timetable.todaySchedule.periods : byDay[selected] ?? [];
+    final isToday = selected == timetable.today;
 
-    final accent = Theme.of(context).colorScheme.primary;
     return ListView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
       children: [
-        Text('Today (${timetable.today})', style: Theme.of(context).textTheme.titleLarge),
-        const SizedBox(height: 8),
-        if (today.periods.isEmpty)
-          const Padding(padding: EdgeInsets.symmetric(vertical: 8), child: Text('No periods today'))
+        if (days.isNotEmpty) ...[
+          DayStrip(
+            days: days,
+            selected: selected,
+            today: timetable.today,
+            periodCount: (d) =>
+                (d == timetable.todaySchedule.day ? timetable.todaySchedule.periods : byDay[d] ?? []).length,
+            onSelected: (d) => setState(() => _selectedDay = d),
+          ),
+          const SizedBox(height: 14),
+        ],
+        RoutineSummaryCard(
+          title: isToday ? 'Today ($selected)' : '$selected Routine',
+          periods: periods,
+          isToday: isToday,
+        ),
+        const SizedBox(height: 16),
+        if (periods.isEmpty)
+          const Padding(
+            padding: EdgeInsets.only(top: 24),
+            child: EmptyStateView(message: 'No periods on this day', icon: Icons.event_busy_outlined),
+          )
         else
-          Card(
-            margin: EdgeInsets.zero,
-            child: Column(children: [for (final period in today.periods) _PeriodTile(period: period)]),
-          ),
-        const Divider(height: 32),
-        Text('Full Week', style: Theme.of(context).textTheme.titleLarge),
-        const SizedBox(height: 8),
-        for (final day in fullSchedule)
-          Card(
-            margin: const EdgeInsets.only(bottom: 12),
-            clipBehavior: Clip.antiAlias,
-            child: ExpansionTile(
-              leading: CircleAvatar(
-                backgroundColor: accent.withValues(alpha: 0.14),
-                child: Icon(Icons.calendar_today_outlined, color: accent, size: 20),
-              ),
-              title: Text(day.day, style: Theme.of(context).textTheme.titleSmall),
-              subtitle: Text('${day.periods.length} period(s)'),
-              children: [for (final period in day.periods) _PeriodTile(period: period)],
-            ),
-          ),
+          PeriodTimeline(periods: [for (final p in periods) (period: p, context: null)], isToday: isToday),
       ],
-    );
-  }
-}
-
-class _PeriodTile extends StatelessWidget {
-  final TimetablePeriod period;
-
-  const _PeriodTile({required this.period});
-
-  @override
-  Widget build(BuildContext context) {
-    final accent = Theme.of(context).colorScheme.primary;
-    return ListTile(
-      dense: true,
-      leading: AppStatusChip(label: 'P${period.periodNumber}', color: accent),
-      title: Text(period.subject),
-      subtitle: Text(
-        '${period.startTime}–${period.endTime}'
-        '${period.teacherName != null ? ' · ${period.teacherName}' : ''}'
-        '${period.room != null && period.room!.isNotEmpty ? ' · Room ${period.room}' : ''}',
-      ),
     );
   }
 }

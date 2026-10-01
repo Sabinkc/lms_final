@@ -8,6 +8,7 @@ import 'package:cloud_lms/features/timetable/data/models/timetable_period.dart';
 import 'package:cloud_lms/features/timetable/data/repositories/timetable_repository.dart';
 import 'package:cloud_lms/features/timetable/presentation/providers/student_timetable_provider.dart';
 import 'package:cloud_lms/features/timetable/presentation/screens/student_timetable_screen.dart';
+import 'package:cloud_lms/features/timetable/presentation/widgets/day_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -102,7 +103,12 @@ void main() {
     expect(find.text('Today (Monday)'), findsOneWidget);
     expect(find.textContaining('Science'), findsOneWidget);
     expect(find.textContaining('Sam Teacher'), findsOneWidget);
-    expect(find.text('Full Week'), findsOneWidget);
-    expect(find.text('Tuesday'), findsOneWidget);
+    expect(find.byType(DayStrip), findsOneWidget);
+    expect(find.text('TUE'), findsOneWidget);
+
+    await tester.tap(find.text('TUE'));
+    await tester.pumpAndSettle();
+    expect(find.text('Tuesday Routine'), findsOneWidget);
+    expect(find.text('No periods on this day'), findsOneWidget);
   });
 }
