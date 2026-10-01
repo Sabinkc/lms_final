@@ -17,6 +17,7 @@ import '../../data/models/student_followup.dart';
 import '../providers/student_followup_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 String _formatDate(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
@@ -212,7 +213,7 @@ class _FollowupTile extends StatelessWidget {
                   backgroundColor: style.color.withValues(alpha: 0.12),
                   child: Text(
                     initialsFor(followup.studentName),
-                    style: TextStyle(color: style.color, fontWeight: FontWeight.w700),
+                    style: TextStyle(color: context.readable(style.color), fontWeight: FontWeight.w700),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -220,7 +221,10 @@ class _FollowupTile extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(followup.studentName, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+                      Text(
+                        followup.studentName,
+                        style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                      ),
                       if (followup.faculty.isNotEmpty)
                         AppStatusPill(label: followup.faculty, icon: Icons.school_outlined, color: AppColors.info),
                     ],
@@ -239,7 +243,11 @@ class _FollowupTile extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(resolved ? Icons.check_circle_outline : Icons.format_quote_rounded, size: 18, color: style.color),
+                  Icon(
+                    resolved ? Icons.check_circle_outline : Icons.format_quote_rounded,
+                    size: 18,
+                    color: context.readable(style.color),
+                  ),
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
@@ -257,10 +265,15 @@ class _FollowupTile extends StatelessWidget {
               spacing: 14,
               runSpacing: 4,
               children: [
-                if (followup.contactNumber.isNotEmpty) _Meta(icon: Icons.phone_outlined, text: followup.contactNumber, style: muted),
+                if (followup.contactNumber.isNotEmpty)
+                  _Meta(icon: Icons.phone_outlined, text: followup.contactNumber, style: muted),
                 if (followup.email.isNotEmpty) _Meta(icon: Icons.mail_outline, text: followup.email, style: muted),
                 if (followup.visitDate != null)
-                  _Meta(icon: Icons.event_outlined, text: 'Visit ${formatDisplayDate(followup.visitDate!)}', style: muted),
+                  _Meta(
+                    icon: Icons.event_outlined,
+                    text: 'Visit ${formatDisplayDate(followup.visitDate!)}',
+                    style: muted,
+                  ),
                 if (followup.createdByName != null)
                   _Meta(icon: Icons.person_outline, text: followup.createdByName!, style: muted),
               ],
@@ -303,7 +316,9 @@ class _Meta extends StatelessWidget {
       children: [
         Icon(icon, size: 14, color: style?.color),
         const SizedBox(width: 4),
-        Flexible(child: Text(text, style: style, overflow: TextOverflow.ellipsis)),
+        Flexible(
+          child: Text(text, style: style, overflow: TextOverflow.ellipsis),
+        ),
       ],
     );
   }

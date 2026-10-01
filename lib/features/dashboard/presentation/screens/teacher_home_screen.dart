@@ -19,6 +19,7 @@ import '../../../notifications/presentation/providers/notification_provider.dart
 import '../../../timetable/data/models/timetable_day.dart' show timetableWeekdays;
 import '../../../timetable/presentation/providers/teacher_timetable_provider.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// Teacher Home dashboard — matches [AdminHomeScreen]'s photo-hero restyle.
 ///
@@ -89,9 +90,10 @@ class _TeacherHomeScreenState extends State<TeacherHomeScreen> {
                   ),
                   Text(
                     '${_TeacherQuickTile.all.length} shortcuts',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.labelMedium?.copyWith(color: AppColors.primary, fontWeight: FontWeight.w600),
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: context.readable(AppColors.primary),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
               ),

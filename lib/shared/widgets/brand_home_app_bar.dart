@@ -7,6 +7,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../features/auth/presentation/providers/auth_provider.dart';
+import '../../core/theme/readable_color.dart';
 
 /// The branded Home-screen `AppBar` — logo/wordmark/tagline, a hamburger
 /// that opens that role's More screen, a notification bell with an unread
@@ -23,12 +24,7 @@ class BrandHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// shown disabled or pointing at the current screen.
   final String? moreRoute;
 
-  const BrandHomeAppBar({
-    super.key,
-    required this.initials,
-    required this.unreadCount,
-    this.moreRoute,
-  });
+  const BrandHomeAppBar({super.key, required this.initials, required this.unreadCount, this.moreRoute});
 
   @override
   Size get preferredSize => const Size.fromHeight(72);
@@ -42,22 +38,13 @@ class BrandHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       titleSpacing: moreRoute == null ? NavigationToolbar.kMiddleSpacing : 0,
       leading: moreRoute == null
           ? null
-          : IconButton(
-              tooltip: 'More',
-              icon: const Icon(Icons.menu),
-              onPressed: () => context.push(moreRoute!),
-            ),
+          : IconButton(tooltip: 'More', icon: const Icon(Icons.menu), onPressed: () => context.push(moreRoute!)),
       automaticallyImplyLeading: moreRoute != null,
       title: Row(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(AppRadius.md),
-            child: Image.asset(
-              'assets/icon/app_icon.png',
-              width: 32,
-              height: 32,
-              fit: BoxFit.cover,
-            ),
+            child: Image.asset('assets/icon/app_icon.png', width: 32, height: 32, fit: BoxFit.cover),
           ),
           const SizedBox(width: AppSpacing.sm),
           Flexible(
@@ -68,19 +55,15 @@ class BrandHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 RichText(
                   overflow: TextOverflow.ellipsis,
                   text: TextSpan(
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w800,
-                    ),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
                     children: [
                       TextSpan(
                         text: 'Clouds',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
+                        style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
                       ),
-                      const TextSpan(
+                      TextSpan(
                         text: 'LMS',
-                        style: TextStyle(color: AppColors.primary),
+                        style: TextStyle(color: context.readable(AppColors.primary)),
                       ),
                     ],
                   ),
@@ -89,9 +72,9 @@ class BrandHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                   'Learn • Manage • Grow',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.labelSmall?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
                 ),
               ],
             ),
@@ -129,26 +112,13 @@ class BrandNotificationBell extends StatelessWidget {
             right: 6,
             top: 6,
             child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 5,
-                vertical: 1,
-              ),
-              decoration: const BoxDecoration(
-                color: AppColors.danger,
-                shape: BoxShape.circle,
-              ),
-              constraints: const BoxConstraints(
-                minWidth: 16,
-                minHeight: 16,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+              decoration: const BoxDecoration(color: AppColors.danger, shape: BoxShape.circle),
+              constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
               child: Text(
                 unreadCount > 9 ? '9+' : '$unreadCount',
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 9,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: const TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.w700),
               ),
             ),
           ),
@@ -171,9 +141,7 @@ class BrandAccountMenu extends StatelessWidget {
       onSelected: (value) {
         if (value == 'logout') context.read<AuthProvider>().logout();
       },
-      itemBuilder: (context) => const [
-        PopupMenuItem(value: 'logout', child: Text('Log out')),
-      ],
+      itemBuilder: (context) => const [PopupMenuItem(value: 'logout', child: Text('Log out'))],
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
         child: Row(
@@ -184,11 +152,7 @@ class BrandAccountMenu extends StatelessWidget {
               backgroundColor: AppColors.primary,
               child: Text(
                 initials,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 12,
-                ),
+                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 12),
               ),
             ),
             const Icon(Icons.arrow_drop_down),

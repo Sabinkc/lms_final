@@ -15,6 +15,7 @@ import '../../data/models/exam.dart';
 import '../providers/exam_result_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// Admin: enter every student's marks per subject for one exam, then
 /// publish in one call (`docs/production_roadmap.md` Phase F — System B,
@@ -49,10 +50,7 @@ class _PublishResultsScreenState extends State<PublishResultsScreen> {
         appBar: BrandAppBar(title: 'Publish Results'),
         body: switch (provider.rosterStatus) {
           LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading roster...'),
-          LoadStatus.error => ErrorView(
-            error: provider.rosterError!,
-            onRetry: () => provider.loadRosterForExam(exam),
-          ),
+          LoadStatus.error => ErrorView(error: provider.rosterError!, onRetry: () => provider.loadRosterForExam(exam)),
           LoadStatus.success =>
             provider.published
                 ? _PublishedView(exam: exam)
@@ -62,7 +60,12 @@ class _PublishResultsScreenState extends State<PublishResultsScreen> {
                     children: [
                       Expanded(
                         child: ListView(
-                          padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.sm, AppSpacing.lg, AppSpacing.lg),
+                          padding: const EdgeInsets.fromLTRB(
+                            AppSpacing.lg,
+                            AppSpacing.sm,
+                            AppSpacing.lg,
+                            AppSpacing.lg,
+                          ),
                           children: [
                             _ExamHeader(provider: provider, exam: exam),
                             const SizedBox(height: AppSpacing.lg),
@@ -137,7 +140,7 @@ class _ExamHeader extends StatelessWidget {
                     color: AppColors.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(AppRadius.lg),
                   ),
-                  child: const Icon(Icons.fact_check_outlined, color: AppColors.primary),
+                  child: Icon(Icons.fact_check_outlined, color: context.readable(AppColors.primary)),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -243,12 +246,15 @@ class _StudentMarksCard extends StatelessWidget {
                   backgroundColor: AppColors.primary.withValues(alpha: 0.12),
                   child: Text(
                     initialsFor(student.fullName),
-                    style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w700),
+                    style: TextStyle(color: context.readable(AppColors.primary), fontWeight: FontWeight.w700),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: Text(student.fullName, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+                  child: Text(
+                    student.fullName,
+                    style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                  ),
                 ),
                 if (complete)
                   Column(
@@ -382,10 +388,7 @@ class _PublishBar extends StatelessWidget {
               if (provider.publishError != null)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8),
-                  child: Text(
-                    provider.publishError!.message,
-                    style: TextStyle(color: theme.colorScheme.error),
-                  ),
+                  child: Text(provider.publishError!.message, style: TextStyle(color: theme.colorScheme.error)),
                 )
               else
                 Padding(

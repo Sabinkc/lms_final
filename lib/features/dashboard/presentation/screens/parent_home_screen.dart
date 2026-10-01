@@ -18,6 +18,7 @@ import '../../../exams/presentation/providers/exam_provider.dart';
 import '../../../fees/presentation/providers/self_fee_provider.dart';
 import '../../../notifications/presentation/providers/notification_provider.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// Parent Home dashboard — matches [AdminHomeScreen]'s photo-hero restyle.
 ///
@@ -96,9 +97,10 @@ class _ParentHomeScreenState extends State<ParentHomeScreen> {
                   ),
                   Text(
                     '${_ParentQuickTile.all.length} shortcuts',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.labelMedium?.copyWith(color: AppColors.primary, fontWeight: FontWeight.w600),
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: context.readable(AppColors.primary),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
               ),
@@ -146,7 +148,10 @@ class _OverviewHeading extends StatelessWidget {
         Text("Today's Overview", style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
         if (showChildName) ...[
           const SizedBox(width: AppSpacing.xs),
-          Text('· $childName', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.primary)),
+          Text(
+            '· $childName',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: context.readable(AppColors.primary)),
+          ),
         ],
       ],
     );

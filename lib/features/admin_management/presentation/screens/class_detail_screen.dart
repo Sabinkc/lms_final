@@ -24,6 +24,7 @@ import 'classes_list_screen.dart' show confirmDeleteClass, showClassFormDialog;
 import 'sections_list_screen.dart' show SectionsPanel, showSectionFormDialog;
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/section_card.dart';
+import '../../../../core/theme/readable_color.dart';
 
 enum _Tab { overview, students, teachers, sections }
 
@@ -390,7 +391,7 @@ class _StatTile extends StatelessWidget {
           CircleAvatar(
             radius: 18,
             backgroundColor: color.withValues(alpha: 0.14),
-            child: Icon(icon, size: 20, color: color),
+            child: Icon(icon, size: 20, color: context.readable(color)),
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(value, style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800)),
@@ -509,7 +510,7 @@ class _StudentsPreviewCard extends StatelessWidget {
                     avatar: CircleAvatar(
                       radius: 24,
                       backgroundColor: AppColors.primary.withValues(alpha: 0.1),
-                      child: const Icon(Icons.more_horiz_rounded, color: AppColors.primary),
+                      child: Icon(Icons.more_horiz_rounded, color: context.readable(AppColors.primary)),
                     ),
                     title: 'View More',
                     subtitle: '${list.length - _previewCount} more',
@@ -640,7 +641,11 @@ class _InitialsAvatar extends StatelessWidget {
       backgroundColor: AppColors.primary.withValues(alpha: 0.12),
       child: Text(
         initialsFor(name),
-        style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w700, fontSize: radius * 0.6),
+        style: TextStyle(
+          color: context.readable(AppColors.primary),
+          fontWeight: FontWeight.w700,
+          fontSize: radius * 0.6,
+        ),
       ),
     );
   }

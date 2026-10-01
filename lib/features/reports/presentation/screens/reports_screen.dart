@@ -19,6 +19,7 @@ import '../../data/models/system_report.dart';
 import '../providers/reports_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// Admin: Reports Dashboard (`docs/production_roadmap.md` Phase J,
 /// `implementation_backlog.md` E12) — four tabs, one per confirmed
@@ -132,7 +133,7 @@ class _KpiTile extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(color: color.withValues(alpha: 0.12), shape: BoxShape.circle),
-              child: Icon(icon, color: color, size: 20),
+              child: Icon(icon, color: context.readable(color), size: 20),
             ),
             const SizedBox(height: 10),
             Text(label, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
@@ -145,7 +146,10 @@ class _KpiTile extends StatelessWidget {
             if (caption != null)
               Text(
                 caption!,
-                style: theme.textTheme.labelSmall?.copyWith(color: color, fontWeight: FontWeight.w600),
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: context.readable(color),
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             if (progress != null) ...[
               const SizedBox(height: 8),
@@ -228,7 +232,10 @@ class _BreakdownBar extends StatelessWidget {
               ),
               Text(
                 showPercent ? '${(fraction * 100).toStringAsFixed(1)}%' : '$count',
-                style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800, color: barColor),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w800,
+                  color: context.readable(barColor),
+                ),
               ),
             ],
           ),
@@ -540,7 +547,7 @@ class _AttendanceTabState extends State<_AttendanceTab> {
               padding: const EdgeInsets.fromLTRB(14, 6, 6, 6),
               child: Row(
                 children: [
-                  const Icon(Icons.date_range_outlined, color: AppColors.primary, size: 20),
+                  Icon(Icons.date_range_outlined, color: context.readable(AppColors.primary), size: 20),
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
@@ -701,7 +708,7 @@ class _Callout extends StatelessWidget {
           CircleAvatar(
             radius: 14,
             backgroundColor: color.withValues(alpha: 0.15),
-            child: Icon(icon, size: 16, color: color),
+            child: Icon(icon, size: 16, color: context.readable(color)),
           ),
           const SizedBox(width: 8),
           Expanded(
@@ -711,7 +718,10 @@ class _Callout extends StatelessWidget {
                 Text(title, style: theme.textTheme.labelSmall),
                 Text(
                   value,
-                  style: theme.textTheme.bodySmall?.copyWith(color: color, fontWeight: FontWeight.w700),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: context.readable(color),
+                    fontWeight: FontWeight.w700,
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -801,7 +811,7 @@ class _SystemBody extends StatelessWidget {
                               CircleAvatar(
                                 radius: 16,
                                 backgroundColor: AppColors.info.withValues(alpha: 0.1),
-                                child: const Icon(Icons.bolt_rounded, size: 16, color: AppColors.info),
+                                child: Icon(Icons.bolt_rounded, size: 16, color: context.readable(AppColors.info)),
                               ),
                               const SizedBox(width: 10),
                               Expanded(

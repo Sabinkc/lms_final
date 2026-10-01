@@ -17,6 +17,7 @@ import '../notification_route.dart';
 import '../providers/notification_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// Chip filters: everything, unread only, or one notification category.
 const _all = 'All';
@@ -26,21 +27,17 @@ const _unread = 'Unread';
 /// by (`notificationSchema.js`: fee | attendance | attendance_correction |
 /// assignment | general | subscription | payroll, plus exam/result refs).
 ({String label, IconData icon, Color color}) _category(String type) => switch (type) {
-  'assignment' || 'exam' || 'result' => (
-    label: 'Academic',
-    icon: Icons.school_outlined,
-    color: const Color(0xFF4F46E5),
-  ),
+  'assignment' ||
+  'exam' ||
+  'result' => (label: 'Academic', icon: Icons.school_outlined, color: const Color(0xFF4F46E5)),
   'attendance' ||
   'attendance_correction' ||
   'attendanceSession' ||
   'attendanceRecord' ||
   'attendanceCorrection' => (label: 'Attendance', icon: Icons.event_available_outlined, color: const Color(0xFF0B6E4F)),
-  'fee' || 'payroll' || 'subscription' => (
-    label: 'Finance',
-    icon: Icons.account_balance_wallet_outlined,
-    color: const Color(0xFFEA580C),
-  ),
+  'fee' ||
+  'payroll' ||
+  'subscription' => (label: 'Finance', icon: Icons.account_balance_wallet_outlined, color: const Color(0xFFEA580C)),
   _ => (label: 'General', icon: Icons.campaign_outlined, color: const Color(0xFF0891B2)),
 };
 
@@ -120,7 +117,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           iconBuilder: (option) => switch (option) {
                             _all => null,
                             _unread => Icons.mark_email_unread_outlined,
-                            _ => provider.notifications.map((n) => _category(n.type)).firstWhere((c) => c.label == option).icon,
+                            _ =>
+                              provider.notifications
+                                  .map((n) => _category(n.type))
+                                  .firstWhere((c) => c.label == option)
+                                  .icon,
                           },
                           countBuilder: (option) => switch (option) {
                             _all => provider.notifications.length,
@@ -214,7 +215,10 @@ class _NotificationTile extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        Text(when, style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
+                        Text(
+                          when,
+                          style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                        ),
                         if (unread) ...[
                           const SizedBox(width: 6),
                           Padding(
@@ -248,7 +252,7 @@ class _NotificationTile extends StatelessWidget {
                               fontWeight: FontWeight.w700,
                             ),
                           ),
-                          const Icon(Icons.arrow_forward_rounded, size: 14, color: AppColors.primary),
+                          Icon(Icons.arrow_forward_rounded, size: 14, color: context.readable(AppColors.primary)),
                         ],
                       ],
                     ),
@@ -280,7 +284,7 @@ class _CaughtUp extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.check_circle_outline, size: 16, color: AppColors.primary),
+              Icon(Icons.check_circle_outline, size: 16, color: context.readable(AppColors.primary)),
               const SizedBox(width: 6),
               Text("You're all caught up", style: Theme.of(context).textTheme.labelMedium),
             ],

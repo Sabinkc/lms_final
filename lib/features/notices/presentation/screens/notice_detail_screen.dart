@@ -11,6 +11,7 @@ import '../../../admin_management/presentation/providers/academic_structure_prov
 import '../providers/notice_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// docs/screens.md's Notice Detail — read-only for every role (Admin's
 /// edit/delete live on the list screen's row actions, not here).
@@ -67,7 +68,11 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
                             runSpacing: 6,
                             children: [
                               if (notice.isImportant)
-                                AppStatusPill(label: 'Important', icon: Icons.error_rounded, color: theme.colorScheme.error),
+                                AppStatusPill(
+                                  label: 'Important',
+                                  icon: Icons.error_rounded,
+                                  color: theme.colorScheme.error,
+                                ),
                               AppStatusPill(label: audience.label, icon: audience.icon, color: audience.color),
                               if (expired)
                                 AppStatusPill(
@@ -160,13 +165,19 @@ class _MetaRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          CircleAvatar(radius: 14, backgroundColor: color.withValues(alpha: 0.12), child: Icon(icon, size: 15, color: color)),
+          CircleAvatar(
+            radius: 14,
+            backgroundColor: color.withValues(alpha: 0.12),
+            child: Icon(icon, size: 15, color: context.readable(color)),
+          ),
           const SizedBox(width: 10),
           SizedBox(
             width: 84,
             child: Text(label, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
           ),
-          Expanded(child: Text(value, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600))),
+          Expanded(
+            child: Text(value, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+          ),
         ],
       ),
     );

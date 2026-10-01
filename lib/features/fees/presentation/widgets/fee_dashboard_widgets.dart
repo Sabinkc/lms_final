@@ -7,6 +7,7 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
 
 import '../../../../shared/utils/format_rs.dart';
+import '../../../../core/theme/readable_color.dart';
 
 export '../../../../shared/utils/format_rs.dart';
 
@@ -21,7 +22,6 @@ abstract final class FeeColors {
   /// The lighter second series in the collected-vs-pending bar chart.
   static const Color pendingBar = Color(0xFF8FD3B4);
 }
-
 
 /// Compact axis label: `85K`, `2.5L`, `1.2Cr`.
 String _compactRs(double v) {
@@ -75,7 +75,7 @@ class FeeStatCard extends StatelessWidget {
             height: 36,
             alignment: Alignment.center,
             decoration: BoxDecoration(color: color.withValues(alpha: 0.14), shape: BoxShape.circle),
-            child: Icon(icon, color: color, size: 20),
+            child: Icon(icon, color: context.readable(color), size: 20),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

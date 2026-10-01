@@ -21,6 +21,7 @@ import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../data/models/exam.dart';
 import '../providers/exam_provider.dart';
 import 'exam_form_dialog.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// docs/screens.md's Exam & Academic Schedule module. One list for every
 /// role (`GET /exams` Admin-only, `GET /exams/my` everyone else, role read
@@ -105,7 +106,10 @@ class _ExamsListScreenState extends State<ExamsListScreen> {
     for (final e in exams) {
       counts[e.status] = (counts[e.status] ?? 0) + 1;
     }
-    final statuses = [for (final s in _statusOrder) if (counts.containsKey(s)) s];
+    final statuses = [
+      for (final s in _statusOrder)
+        if (counts.containsKey(s)) s,
+    ];
     final status = statuses.contains(_status) ? _status : null;
     final query = _search.text.trim().toLowerCase();
     final visible = exams.where((e) {
@@ -187,11 +191,11 @@ class _ExamsListScreenState extends State<ExamsListScreen> {
 const _statusOrder = ['upcoming', 'ongoing', 'completed', 'published'];
 
 ({String label, IconData icon, Color color}) _statusStyle(String status) => switch (status) {
-      'published' => (label: 'Published', icon: Icons.check_circle_outline, color: const Color(0xFF16A34A)),
-      'ongoing' => (label: 'In Progress', icon: Icons.timelapse, color: const Color(0xFFEA580C)),
-      'completed' => (label: 'Completed', icon: Icons.pending_actions, color: const Color(0xFF0891B2)),
-      _ => (label: 'Upcoming', icon: Icons.schedule, color: const Color(0xFF2F80FF)),
-    };
+  'published' => (label: 'Published', icon: Icons.check_circle_outline, color: const Color(0xFF16A34A)),
+  'ongoing' => (label: 'In Progress', icon: Icons.timelapse, color: const Color(0xFFEA580C)),
+  'completed' => (label: 'Completed', icon: Icons.pending_actions, color: const Color(0xFF0891B2)),
+  _ => (label: 'Upcoming', icon: Icons.schedule, color: const Color(0xFF2F80FF)),
+};
 
 class _ExamCard extends StatelessWidget {
   final Exam exam;
@@ -203,7 +207,10 @@ class _ExamCard extends StatelessWidget {
   /// "12 Sep 2026" or "12 Sep 2026 – 18 Sep 2026" across the subject dates,
   /// falling back to the exam's own date.
   String get _dateRange {
-    final dates = [for (final s in exam.subjects) if (s.examDate.isNotEmpty) s.examDate]..sort();
+    final dates = [
+      for (final s in exam.subjects)
+        if (s.examDate.isNotEmpty) s.examDate,
+    ]..sort();
     if (dates.isEmpty || dates.first == dates.last) {
       return formatDisplayDate(dates.isEmpty ? exam.examDate : dates.first);
     }
@@ -234,7 +241,7 @@ class _ExamCard extends StatelessWidget {
                     color: AppColors.info.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(AppRadius.lg),
                   ),
-                  child: const Icon(Icons.history_edu_rounded, color: AppColors.info),
+                  child: Icon(Icons.history_edu_rounded, color: context.readable(AppColors.info)),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -268,9 +275,7 @@ class _ExamCard extends StatelessWidget {
                   color: theme.colorScheme.surfaceContainerLow,
                   borderRadius: BorderRadius.circular(AppRadius.lg),
                 ),
-                child: Column(
-                  children: [for (final subject in exam.subjects) _SubjectRow(subject: subject)],
-                ),
+                child: Column(children: [for (final subject in exam.subjects) _SubjectRow(subject: subject)]),
               ),
             ],
             if (actions.isNotEmpty) ...[
@@ -361,7 +366,10 @@ class _SubjectRow extends StatelessWidget {
             children: [
               Text(
                 '${subject.fullMarks} marks',
-                style: theme.textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w700, color: AppColors.primary),
+                style: theme.textTheme.labelMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: context.readable(AppColors.primary),
+                ),
               ),
               Text('Pass ${subject.passMarks}', style: muted),
             ],

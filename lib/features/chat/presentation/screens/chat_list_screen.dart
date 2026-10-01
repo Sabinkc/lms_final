@@ -19,6 +19,7 @@ import '../providers/chat_provider.dart';
 import 'create_group_dialog.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// docs/production_roadmap.md Phase H — one shared list for Teacher and
 /// Student (`GET /group-chats` is role-scoped server-side: a Teacher's own
@@ -158,10 +159,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
             padding: EdgeInsets.only(top: 32),
             child: EmptyStateView(message: 'No conversations match your search', icon: Icons.search_off),
           ),
-        for (final group in visible) ...[
-          _GroupTile(group: group),
-          const SizedBox(height: 10),
-        ],
+        for (final group in visible) ...[_GroupTile(group: group), const SizedBox(height: 10)],
       ],
     );
   }
@@ -207,7 +205,7 @@ class _GroupTile extends StatelessWidget {
                 width: 50,
                 height: 50,
                 decoration: BoxDecoration(color: color.withValues(alpha: 0.12), shape: BoxShape.circle),
-                child: Icon(Icons.forum_outlined, color: color),
+                child: Icon(Icons.forum_outlined, color: context.readable(color)),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -226,7 +224,10 @@ class _GroupTile extends StatelessWidget {
                         ),
                         if (when.isNotEmpty) ...[
                           const SizedBox(width: 8),
-                          Text(when, style: theme.textTheme.labelSmall?.copyWith(color: AppColors.primary)),
+                          Text(
+                            when,
+                            style: theme.textTheme.labelSmall?.copyWith(color: context.readable(AppColors.primary)),
+                          ),
                         ],
                       ],
                     ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
+import '../../core/theme/readable_color.dart';
 
 /// A white rounded card with a tinted round icon, a bold title, an optional
 /// trailing widget / "View All" link, then its content. Promoted from Class
@@ -39,7 +40,7 @@ class SectionCard extends StatelessWidget {
                 CircleAvatar(
                   radius: 18,
                   backgroundColor: color.withValues(alpha: 0.1),
-                  child: Icon(icon, size: 20, color: color),
+                  child: Icon(icon, size: 20, color: context.readable(color)),
                 ),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(

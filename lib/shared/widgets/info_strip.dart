@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_radius.dart';
+import '../../core/theme/readable_color.dart';
 
 /// A tinted inset row inside a card — leading icon + text, with an optional
 /// emphasized value on the right (e.g. "📅 12 Sep 2026 · · · 100 Total
@@ -17,6 +18,7 @@ class InfoStrip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final fg = context.readable(color);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
       decoration: BoxDecoration(
@@ -25,7 +27,7 @@ class InfoStrip extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(icon, size: 16, color: color),
+          Icon(icon, size: 16, color: fg),
           const SizedBox(width: 8),
           Expanded(
             child: Text(text, style: theme.textTheme.bodySmall, maxLines: 2, overflow: TextOverflow.ellipsis),
@@ -34,7 +36,7 @@ class InfoStrip extends StatelessWidget {
             const SizedBox(width: 8),
             Text(
               trailing!,
-              style: theme.textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w700, color: color),
+              style: theme.textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w700, color: fg),
             ),
           ],
         ],

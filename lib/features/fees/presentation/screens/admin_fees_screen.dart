@@ -21,6 +21,7 @@ import '../widgets/fee_dashboard_widgets.dart';
 import 'fee_form_dialog.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 const _statusFilterOptions = <String?>[null, 'pending', 'partial', 'paid'];
 
@@ -357,7 +358,7 @@ class _QuickActions extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.bolt_rounded, color: AppColors.primary),
+              Icon(Icons.bolt_rounded, color: context.readable(AppColors.primary)),
               const SizedBox(width: AppSpacing.xs),
               Text(
                 'Quick Actions',
@@ -579,7 +580,7 @@ class _SectionCard extends StatelessWidget {
                     color: AppColors.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(AppRadius.lg),
                   ),
-                  child: Icon(icon, size: 18, color: AppColors.primary),
+                  child: Icon(icon, size: 18, color: context.readable(AppColors.primary)),
                 ),
                 const SizedBox(width: AppSpacing.sm),
                 Expanded(
@@ -676,7 +677,7 @@ class _CollectionRow extends StatelessWidget {
             CircleAvatar(
               radius: 18,
               backgroundColor: AppColors.primary.withValues(alpha: 0.1),
-              child: const Icon(Icons.person_outline_rounded, size: 20, color: AppColors.primary),
+              child: Icon(Icons.person_outline_rounded, size: 20, color: context.readable(AppColors.primary)),
             ),
             const SizedBox(width: AppSpacing.sm),
             Expanded(
@@ -701,7 +702,7 @@ class _CollectionRow extends StatelessWidget {
                   const SizedBox(height: 2),
                   Row(
                     children: [
-                      Icon(methodIcon, size: 14, color: AppColors.primary),
+                      Icon(methodIcon, size: 14, color: context.readable(AppColors.primary)),
                       const SizedBox(width: 4),
                       Flexible(
                         child: Text(method, maxLines: 1, overflow: TextOverflow.ellipsis, style: muted),

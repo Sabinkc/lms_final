@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/app_spacing.dart';
+import '../../core/theme/readable_color.dart';
 
 /// A single stat tile — icon, big value, label — the shared building block
 /// for summary rows (Fees totals, Attendance breakdowns, etc.) that used to
@@ -108,10 +109,9 @@ class _ProgressRing extends StatelessWidget {
           ),
           Text(
             '${(progress.clamp(0, 1) * 100).round()}',
-            style: Theme.of(context)
-                .textTheme
-                .labelSmall
-                ?.copyWith(fontSize: 8, fontWeight: FontWeight.w700, color: color),
+            style: Theme.of(
+              context,
+            ).textTheme.labelSmall?.copyWith(fontSize: 8, fontWeight: FontWeight.w700, color: context.readable(color)),
           ),
         ],
       ),

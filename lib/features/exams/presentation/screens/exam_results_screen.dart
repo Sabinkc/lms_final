@@ -19,6 +19,7 @@ import '../providers/exam_result_provider.dart';
 import '../widgets/exam_result_card.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// docs/screens.md's exam-results view — body adapts by role, same pattern
 /// as `AssignmentDetailScreen`: Admin sees the whole class's ranked results
@@ -198,10 +199,7 @@ class _AdminClassResultsState extends State<_AdminClassResults> {
             padding: EdgeInsets.only(top: 24),
             child: EmptyStateView(message: 'No students match your search', icon: Icons.search_off),
           ),
-        for (final result in visible) ...[
-          _RankedResultCard(result: result),
-          const SizedBox(height: 10),
-        ],
+        for (final result in visible) ...[_RankedResultCard(result: result), const SizedBox(height: 10)],
       ],
     );
   }
@@ -211,11 +209,11 @@ const _passGreen = Color(0xFF16A34A);
 
 /// Gold / silver / bronze for the top three ranks, none otherwise.
 Color? _medalColor(int? rank) => switch (rank) {
-      1 => const Color(0xFFEAB308),
-      2 => const Color(0xFF94A3B8),
-      3 => const Color(0xFFD97706),
-      _ => null,
-    };
+  1 => const Color(0xFFEAB308),
+  2 => const Color(0xFF94A3B8),
+  3 => const Color(0xFFD97706),
+  _ => null,
+};
 
 class _RankedResultCard extends StatelessWidget {
   final ExamResult result;
@@ -254,7 +252,7 @@ class _RankedResultCard extends StatelessWidget {
                           backgroundColor: AppColors.primary.withValues(alpha: 0.12),
                           child: Text(
                             initialsFor(name),
-                            style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w700),
+                            style: TextStyle(color: context.readable(AppColors.primary), fontWeight: FontWeight.w700),
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -266,9 +264,7 @@ class _RankedResultCard extends StatelessWidget {
                               if (result.studentAdmissionNumber.isNotEmpty && result.studentName.isNotEmpty)
                                 Text(
                                   result.studentAdmissionNumber,
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    color: theme.colorScheme.onSurfaceVariant,
-                                  ),
+                                  style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                                 ),
                             ],
                           ),
@@ -286,7 +282,10 @@ class _RankedResultCard extends StatelessWidget {
                       children: [
                         AppStatusPill(label: 'Grade ${result.grade}', color: AppColors.primary),
                         const SizedBox(width: 8),
-                        Text('${result.percentage}%', style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+                        Text(
+                          '${result.percentage}%',
+                          style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                        ),
                         const Spacer(),
                         AppStatusPill(label: result.isPassed ? 'Passed' : 'Failed', color: statusColor),
                       ],

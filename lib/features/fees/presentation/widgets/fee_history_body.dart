@@ -13,6 +13,7 @@ import '../../data/models/fee.dart';
 import '../providers/self_fee_provider.dart';
 import '../screens/pay_fee_dialog.dart';
 import 'fee_dashboard_widgets.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// Shared summary + fee list, used by both Student "My Fees" and Parent
 /// "Child's Fees" — same [SelfFeeProvider] state either way, mirroring
@@ -115,7 +116,7 @@ class _SummaryCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Icon(Icons.qr_code_2_rounded, color: AppColors.primary),
+                    Icon(Icons.qr_code_2_rounded, color: context.readable(AppColors.primary)),
                     const SizedBox(width: AppSpacing.sm),
                     Expanded(
                       child: Text(
@@ -165,7 +166,7 @@ class _FeeCard extends StatelessWidget {
             color: statusColor.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(AppRadius.xl),
           ),
-          child: Icon(Icons.receipt_long_rounded, color: statusColor),
+          child: Icon(Icons.receipt_long_rounded, color: context.readable(statusColor)),
         ),
         title: Row(
           children: [

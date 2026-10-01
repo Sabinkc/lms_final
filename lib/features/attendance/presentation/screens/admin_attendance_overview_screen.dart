@@ -13,6 +13,7 @@ import '../../data/models/attendance_session.dart';
 import '../providers/admin_attendance_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 String _formatDate(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
@@ -108,7 +109,11 @@ class _AdminAttendanceOverviewScreenState extends State<AdminAttendanceOverviewS
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        const Icon(Icons.calendar_today_outlined, size: 16, color: AppColors.primary),
+                                        Icon(
+                                          Icons.calendar_today_outlined,
+                                          size: 16,
+                                          color: context.readable(AppColors.primary),
+                                        ),
                                         const SizedBox(width: 6),
                                         Text(
                                           _prettyDate(_date),
@@ -231,19 +236,13 @@ class _AdminAttendanceOverviewScreenState extends State<AdminAttendanceOverviewS
         const SizedBox(height: 16),
         Row(
           children: [
-            Text(
-              'Section Logs',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
-            ),
+            Text('Section Logs', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
             const SizedBox(width: 8),
             AppStatusPill(label: '${sessions.length}', color: AppColors.info),
           ],
         ),
         const SizedBox(height: 10),
-        for (final session in sessions) ...[
-          _SessionCard(session: session),
-          const SizedBox(height: 10),
-        ],
+        for (final session in sessions) ...[_SessionCard(session: session), const SizedBox(height: 10)],
       ],
     );
   }
@@ -304,9 +303,7 @@ class _SessionCard extends StatelessWidget {
                               if (session.subject.isNotEmpty)
                                 Text(
                                   session.subject,
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    color: theme.colorScheme.onSurfaceVariant,
-                                  ),
+                                  style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                                 ),
                               const SizedBox(height: 6),
                               if (flagged)
@@ -331,7 +328,10 @@ class _SessionCard extends StatelessWidget {
                           children: [
                             Text(
                               '${(rate * 100).toStringAsFixed(1)}%',
-                              style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800, color: rateColor),
+                              style: theme.textTheme.titleLarge?.copyWith(
+                                fontWeight: FontWeight.w800,
+                                color: context.readable(rateColor),
+                              ),
                             ),
                             Text(_students(session.totalCount), style: theme.textTheme.bodySmall),
                           ],

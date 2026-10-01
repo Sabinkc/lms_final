@@ -15,6 +15,7 @@ import '../../data/models/timetable_period.dart';
 import '../providers/admin_timetable_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 class _PeriodDraft {
   int periodNumber;
@@ -209,7 +210,7 @@ class _AdminTimetableScreenState extends State<AdminTimetableScreen> {
                   children: [
                     Row(
                       children: [
-                        const Icon(Icons.calendar_view_week_rounded, color: AppColors.primary),
+                        Icon(Icons.calendar_view_week_rounded, color: context.readable(AppColors.primary)),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
@@ -343,7 +344,7 @@ class _DaySection extends StatelessWidget {
             ),
             child: Text(
               day[0],
-              style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w800, fontSize: 16),
+              style: TextStyle(color: context.readable(AppColors.primary), fontWeight: FontWeight.w800, fontSize: 16),
             ),
           ),
           title: Text(day, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
@@ -479,10 +480,7 @@ class _PeriodEditor extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 flex: 2,
-                child: TextField(
-                  controller: period.roomController,
-                  decoration: field('Room'),
-                ),
+                child: TextField(controller: period.roomController, decoration: field('Room')),
               ),
             ],
           ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 import '../utils/initials.dart';
 import 'status_chip.dart';
+import '../../core/theme/readable_color.dart';
 
 /// Directory-row card from the Stitch "Manage Teachers/Parents" mockups:
 /// coloured initials avatar, name, a status pill, one meta line, round
@@ -70,10 +71,10 @@ class PersonCard extends StatelessWidget {
                     radius: 24,
                     backgroundColor: color.withValues(alpha: 0.14),
                     child: avatarIcon != null
-                        ? Icon(avatarIcon, color: color)
+                        ? Icon(avatarIcon, color: context.readable(color))
                         : Text(
                             initialsFor(name),
-                            style: TextStyle(color: color, fontWeight: FontWeight.w800, fontSize: 16),
+                            style: TextStyle(color: context.readable(color), fontWeight: FontWeight.w800, fontSize: 16),
                           ),
                   ),
                   const SizedBox(width: 12),
@@ -127,7 +128,7 @@ class PersonCard extends StatelessWidget {
                 Row(
                   children: [
                     if (phone != null && phone!.isNotEmpty) ...[
-                      const Icon(Icons.phone_outlined, size: 15, color: AppColors.primary),
+                      Icon(Icons.phone_outlined, size: 15, color: context.readable(AppColors.primary)),
                       const SizedBox(width: 5),
                       Text(phone!, style: theme.textTheme.bodySmall),
                     ],

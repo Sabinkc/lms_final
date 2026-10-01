@@ -12,6 +12,7 @@ import '../../../admin_management/data/models/student.dart';
 import '../providers/admin_id_card_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// Admin: Generate ID Card (`docs/production_roadmap.md` Phase L6,
 /// `implementation_backlog.md` E21-F1) — pick a student (same
@@ -115,7 +116,7 @@ class _AdminIdCardScreenState extends State<AdminIdCardScreen> {
             const SizedBox(height: 16),
             Row(
               children: [
-                const Icon(Icons.badge_outlined, color: AppColors.primary),
+                Icon(Icons.badge_outlined, color: context.readable(AppColors.primary)),
                 const SizedBox(width: 8),
                 Text(
                   'Badge Preview',

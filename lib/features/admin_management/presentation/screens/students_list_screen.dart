@@ -22,6 +22,7 @@ import '../providers/student_provider.dart';
 import '../widgets/class_badge.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// docs/screens.md "Manage Students — List / Add-Edit / Detail". Tapping a
 /// student opens `StudentProfileScreen`. See [_StudentsBody] for the
@@ -439,7 +440,7 @@ class _StatusFilterButton extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.filter_alt_outlined, size: 18, color: AppColors.primary),
+            Icon(Icons.filter_alt_outlined, size: 18, color: context.readable(AppColors.primary)),
             const SizedBox(width: 4),
             Text(
               _label(selected),
@@ -475,7 +476,7 @@ class _StudentRow extends StatelessWidget {
               backgroundColor: AppColors.primary.withValues(alpha: 0.12),
               child: Text(
                 initialsFor(student.fullName),
-                style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w700),
+                style: TextStyle(color: context.readable(AppColors.primary), fontWeight: FontWeight.w700),
               ),
             ),
             const SizedBox(width: 12),

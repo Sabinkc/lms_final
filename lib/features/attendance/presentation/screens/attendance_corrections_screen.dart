@@ -13,6 +13,7 @@ import '../../data/models/attendance_correction.dart';
 import '../providers/admin_attendance_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// docs/screens.md doesn't name this screen explicitly (it predates the
 /// correction-workflow finding) — `implementation_backlog.md` E3-F6-T2:
@@ -59,7 +60,8 @@ class _AttendanceCorrectionsScreenState extends State<AttendanceCorrectionsScree
                       PageHeroCard(
                         icon: Icons.rule_rounded,
                         title: 'Review Queue',
-                        subtitle: 'Teacher requests to change a marked attendance status. Approving updates the record.',
+                        subtitle:
+                            'Teacher requests to change a marked attendance status. Approving updates the record.',
                         color: const Color(0xFFEA580C),
                         figure: '${provider.corrections.length}',
                         figureLabel: 'Pending',
@@ -142,14 +144,20 @@ class _CorrectionCard extends StatelessWidget {
                     color: AppColors.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(AppRadius.lg),
                   ),
-                  child: Icon(isStudent ? Icons.person_outline : Icons.fact_check_outlined, color: AppColors.primary),
+                  child: Icon(
+                    isStudent ? Icons.person_outline : Icons.fact_check_outlined,
+                    color: context.readable(AppColors.primary),
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(correction.targetType, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+                      Text(
+                        correction.targetType,
+                        style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                      ),
                       if (correction.studentId != null)
                         Text(
                           'Student ID: ${correction.studentId}',
@@ -194,7 +202,7 @@ class _CorrectionCard extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(Icons.format_quote_rounded, size: 18, color: AppColors.info),
+                    Icon(Icons.format_quote_rounded, size: 18, color: context.readable(AppColors.info)),
                     const SizedBox(width: 6),
                     Expanded(child: Text(correction.reason, style: theme.textTheme.bodyMedium)),
                   ],

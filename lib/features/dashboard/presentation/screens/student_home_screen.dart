@@ -18,6 +18,7 @@ import '../../../exams/presentation/providers/exam_provider.dart';
 import '../../../fees/presentation/providers/self_fee_provider.dart';
 import '../../../notifications/presentation/providers/notification_provider.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// Student Home dashboard — matches [AdminHomeScreen]'s photo-hero restyle
 /// (shared app bar/hero/tile widgets in `shared/widgets/`) per the user's
@@ -87,9 +88,10 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                   ),
                   Text(
                     '${_StudentQuickTile.all.length} shortcuts',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.labelMedium?.copyWith(color: AppColors.primary, fontWeight: FontWeight.w600),
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: context.readable(AppColors.primary),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
               ),

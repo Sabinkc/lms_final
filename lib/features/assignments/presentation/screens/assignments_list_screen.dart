@@ -24,6 +24,7 @@ import '../providers/assignment_provider.dart';
 import 'assignment_form_dialog.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// docs/screens.md's Assignments module, System A
 /// (`docs/production_roadmap.md` §4 decision #3). One list for every role —
@@ -96,12 +97,11 @@ class _AssignmentsListScreenState extends State<AssignmentsListScreen> {
           // getAllAssignments; same root cause as the delete bug in
           // docs/api_spec.md §12 #7). Explain that instead of offering a
           // Retry that can never succeed.
-          LoadStatus.error when role == AppRole.admin && provider.error is ForbiddenException =>
-            const EmptyStateView(
-              message:
-                  'Assignments are created and graded by teachers. The server does not yet let Admin accounts view them.',
-              icon: Icons.lock_outline_rounded,
-            ),
+          LoadStatus.error when role == AppRole.admin && provider.error is ForbiddenException => const EmptyStateView(
+            message:
+                'Assignments are created and graded by teachers. The server does not yet let Admin accounts view them.',
+            icon: Icons.lock_outline_rounded,
+          ),
           LoadStatus.error => ErrorView(error: provider.error!, onRetry: () => provider.loadAssignments()),
           LoadStatus.success => _buildList(context, provider, isTeacher),
         },
@@ -249,7 +249,7 @@ class _AssignmentCard extends StatelessWidget {
                       color: AppColors.primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(AppRadius.lg),
                     ),
-                    child: Icon(subjectIcon(assignment.subject), color: AppColors.primary),
+                    child: Icon(subjectIcon(assignment.subject), color: context.readable(AppColors.primary)),
                   ),
                   const SizedBox(width: 12),
                   Expanded(

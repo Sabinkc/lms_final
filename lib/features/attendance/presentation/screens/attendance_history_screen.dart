@@ -16,6 +16,7 @@ import '../providers/attendance_provider.dart';
 import '../widgets/attendance_status_style.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 String _formatDate(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
@@ -183,11 +184,11 @@ class _SessionCard extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 14, color: color),
+            Icon(icon, size: 14, color: context.readable(color)),
             const SizedBox(width: 4),
             Text(
               '$n $label',
-              style: TextStyle(color: color, fontWeight: FontWeight.w600, fontSize: 12),
+              style: TextStyle(color: context.readable(color), fontWeight: FontWeight.w600, fontSize: 12),
             ),
           ],
         ),

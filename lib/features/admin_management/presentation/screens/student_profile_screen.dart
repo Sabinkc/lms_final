@@ -23,6 +23,7 @@ import '../providers/student_provider.dart';
 import '../providers/teacher_provider.dart';
 import 'students_list_screen.dart' show confirmDeleteStudent, showStudentFormDialog;
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 enum _Tab { overview, academic, attendance, fees }
 
@@ -356,7 +357,7 @@ class _InfoCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(icon, color: AppColors.primary),
+                Icon(icon, color: context.readable(AppColors.primary)),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: Text(
@@ -578,7 +579,7 @@ class _ClassCell extends StatelessWidget {
               // Class name "Class 10" -> "10" in the pill, as in the reference.
               value.isEmpty ? '–' : (RegExp(r'\d+').firstMatch(value)?.group(0) ?? value),
               textAlign: TextAlign.center,
-              style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800, color: color),
+              style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800, color: context.readable(color)),
             ),
           ),
         ),

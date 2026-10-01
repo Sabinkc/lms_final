@@ -11,6 +11,7 @@ import '../../../../shared/widgets/tinted_stat_tile.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../../data/models/student_attendance_history.dart';
 import 'attendance_status_style.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// Shared summary card + record list, used by both the Student "My
 /// Attendance" screen and the Parent "Child's Attendance" screen — same
@@ -131,7 +132,7 @@ class _RecordsCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                const Icon(Icons.event_note_rounded, color: AppColors.primary),
+                Icon(Icons.event_note_rounded, color: context.readable(AppColors.primary)),
                 const SizedBox(width: AppSpacing.md),
                 Text('Recent Attendance', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
               ],

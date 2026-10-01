@@ -23,6 +23,7 @@ import '../../data/repositories/assignment_repository.dart' show SubmissionFile;
 import '../providers/assignment_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// docs/screens.md's Assignment Detail — one screen, body adapts by role:
 /// Teacher sees the submissions list with a grade action, Student sees
@@ -128,8 +129,7 @@ class _DetailBody extends StatelessWidget {
                       style: theme.textTheme.titleLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.w800),
                     ),
                   ),
-                  if (closed)
-                    const AppStatusPill(label: 'Closed', icon: Icons.lock_outline, color: Colors.white),
+                  if (closed) const AppStatusPill(label: 'Closed', icon: Icons.lock_outline, color: Colors.white),
                 ],
               ),
               const SizedBox(height: 14),
@@ -193,7 +193,10 @@ class _MetaPill extends StatelessWidget {
         children: [
           Icon(icon, size: 14, color: Colors.white),
           const SizedBox(width: 5),
-          Text(label, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
+          Text(
+            label,
+            style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600),
+          ),
         ],
       ),
     );
@@ -238,11 +241,7 @@ class _TeacherSubmissions extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.all(24),
                   child: Column(
-                    children: [
-                      Icon(Icons.inbox_outlined, size: 36),
-                      SizedBox(height: 8),
-                      Text('No submissions yet'),
-                    ],
+                    children: [Icon(Icons.inbox_outlined, size: 36), SizedBox(height: 8), Text('No submissions yet')],
                   ),
                 ),
               )
@@ -308,7 +307,7 @@ class _SubmissionCard extends StatelessWidget {
                   backgroundColor: AppColors.primary.withValues(alpha: 0.12),
                   child: Text(
                     initialsFor(name),
-                    style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w700),
+                    style: TextStyle(color: context.readable(AppColors.primary), fontWeight: FontWeight.w700),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -573,11 +572,14 @@ class _StudentSubmissionState extends State<_StudentSubmission> {
               ),
               child: Column(
                 children: [
-                  const Icon(Icons.cloud_upload_outlined, color: AppColors.info, size: 28),
+                  Icon(Icons.cloud_upload_outlined, color: context.readable(AppColors.info), size: 28),
                   const SizedBox(height: 6),
                   Text(
                     _pickedFiles.isEmpty ? 'Attach files (up to 5)' : '${_pickedFiles.length} file(s) selected',
-                    style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.info, fontWeight: FontWeight.w600),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: context.readable(AppColors.info),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   if (_pickedFiles.isNotEmpty)
                     Padding(

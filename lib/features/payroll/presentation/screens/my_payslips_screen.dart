@@ -17,6 +17,7 @@ import '../../data/models/payroll.dart';
 import '../providers/my_payslips_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 const _monthNames = [
   '',
@@ -88,10 +89,15 @@ class _MyPayslipsScreenState extends State<MyPayslipsScreen> {
             Expanded(
               child: Text(
                 'YEAR TO DATE',
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w700, letterSpacing: 0.6),
+                style: Theme.of(
+                  context,
+                ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w700, letterSpacing: 0.6),
               ),
             ),
-            Text('${latest.year}', style: Theme.of(context).textTheme.labelMedium?.copyWith(color: AppColors.primary)),
+            Text(
+              '${latest.year}',
+              style: Theme.of(context).textTheme.labelMedium?.copyWith(color: context.readable(AppColors.primary)),
+            ),
           ],
         ),
         const SizedBox(height: 8),
@@ -124,15 +130,9 @@ class _MyPayslipsScreenState extends State<MyPayslipsScreen> {
           ],
         ),
         const SizedBox(height: AppSpacing.lg),
-        Text(
-          'Payment History',
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
-        ),
+        Text('Payment History', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
         const SizedBox(height: 10),
-        for (final payslip in payslips) ...[
-          _PayslipTile(payslip: payslip),
-          const SizedBox(height: 10),
-        ],
+        for (final payslip in payslips) ...[_PayslipTile(payslip: payslip), const SizedBox(height: 10)],
       ],
     );
   }
@@ -204,7 +204,9 @@ class _LatestPayHighlight extends StatelessWidget {
           const SizedBox(height: 14),
           Row(
             children: [
-              Expanded(child: _HeroFigure(label: 'Gross Earnings', value: formatRs(payslip.grossSalary))),
+              Expanded(
+                child: _HeroFigure(label: 'Gross Earnings', value: formatRs(payslip.grossSalary)),
+              ),
               const SizedBox(width: 10),
               Expanded(
                 child: _HeroFigure(
@@ -243,7 +245,10 @@ class _HeroFigure extends StatelessWidget {
           const SizedBox(height: 2),
           FittedBox(
             fit: BoxFit.scaleDown,
-            child: Text(value, style: TextStyle(color: valueColor, fontWeight: FontWeight.w800, fontSize: 16)),
+            child: Text(
+              value,
+              style: TextStyle(color: valueColor, fontWeight: FontWeight.w800, fontSize: 16),
+            ),
           ),
         ],
       ),
@@ -278,7 +283,7 @@ class _PayslipTile extends StatelessWidget {
               color: statusColor.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(AppRadius.lg),
             ),
-            child: Icon(Icons.receipt_long_outlined, color: statusColor),
+            child: Icon(Icons.receipt_long_outlined, color: context.readable(statusColor)),
           ),
           title: Row(
             children: [
@@ -372,7 +377,10 @@ class _BreakdownGroup extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(title.toUpperCase(), style: theme.textTheme.labelSmall?.copyWith(color: color, fontWeight: FontWeight.w800)),
+          Text(
+            title.toUpperCase(),
+            style: theme.textTheme.labelSmall?.copyWith(color: context.readable(color), fontWeight: FontWeight.w800),
+          ),
           const SizedBox(height: 6),
           for (final (label, amount) in rows)
             Padding(
@@ -392,7 +400,10 @@ class _BreakdownGroup extends StatelessWidget {
               ),
               Text(
                 formatRs(total.$2),
-                style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800, color: color),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w800,
+                  color: context.readable(color),
+                ),
               ),
             ],
           ),

@@ -22,6 +22,7 @@ import 'generate_payroll_dialog.dart';
 import 'salary_config_dialog.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 const _monthNames = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -129,10 +130,7 @@ class _PayrollScreenState extends State<PayrollScreen> {
             Expanded(
               child: _tab == 0
                   ? _SalaryConfigTab(provider: provider)
-                  : _PayrollTab(
-                      provider: provider,
-                      onGenerate: () => showGeneratePayrollDialog(context, provider),
-                    ),
+                  : _PayrollTab(provider: provider, onGenerate: () => showGeneratePayrollDialog(context, provider)),
             ),
           ],
         ),
@@ -239,11 +237,7 @@ class _SalaryConfigCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 10),
-            InfoStrip(
-              icon: Icons.payments_outlined,
-              text: 'Basic salary',
-              trailing: formatRs(config.basicSalary),
-            ),
+            InfoStrip(icon: Icons.payments_outlined, text: 'Basic salary', trailing: formatRs(config.basicSalary)),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
@@ -391,10 +385,7 @@ class _PayrollHero extends StatelessWidget {
                         style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w800),
                       ),
                     ),
-                    Text(
-                      '${provider.payrolls.length} payslips',
-                      style: TextStyle(color: white70),
-                    ),
+                    Text('${provider.payrolls.length} payslips', style: TextStyle(color: white70)),
                   ],
                 ),
               ),
@@ -574,7 +565,7 @@ class _Initials extends StatelessWidget {
       backgroundColor: AppColors.primary.withValues(alpha: 0.12),
       child: Text(
         initialsFor(name),
-        style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w700),
+        style: TextStyle(color: context.readable(AppColors.primary), fontWeight: FontWeight.w700),
       ),
     );
   }

@@ -5,6 +5,7 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../shared/utils/display_date.dart';
 import '../../../../shared/utils/initials.dart';
 import '../../../admin_management/data/models/student.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// On-screen look of a student's ID badge, built only from fields the
 /// student record already has. The downloadable PDF from
@@ -89,7 +90,11 @@ class IdBadgePreview extends StatelessWidget {
                       ),
                       child: Text(
                         initialsFor(student.fullName),
-                        style: const TextStyle(color: AppColors.primary, fontSize: 30, fontWeight: FontWeight.w800),
+                        style: TextStyle(
+                          color: context.readable(AppColors.primary),
+                          fontSize: 30,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
                     ),
                     if (student.admissionNumber.isNotEmpty) ...[
@@ -177,7 +182,10 @@ class _Field extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (icon != null) ...[Icon(icon, size: 14, color: AppColors.primary), const SizedBox(width: 4)],
+            if (icon != null) ...[
+              Icon(icon, size: 14, color: context.readable(AppColors.primary)),
+              const SizedBox(width: 4),
+            ],
             Text(value, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700)),
           ],
         ),

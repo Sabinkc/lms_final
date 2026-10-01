@@ -5,6 +5,7 @@ import '../../../../core/theme/app_radius.dart';
 import '../../../../shared/widgets/status_chip.dart';
 import '../../data/models/timetable_day.dart';
 import '../../data/models/timetable_period.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// Today's weekday name in the backend's `timetableWeekdays` spelling, or
 /// null on Sunday (no school day in the 6-day schema).
@@ -328,7 +329,7 @@ class RoutineSummaryCard extends StatelessWidget {
               color: AppColors.info.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(AppRadius.lg),
             ),
-            child: const Icon(Icons.view_timeline_outlined, color: AppColors.info),
+            child: Icon(Icons.view_timeline_outlined, color: context.readable(AppColors.info)),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -343,7 +344,10 @@ class RoutineSummaryCard extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   status,
-                  style: theme.textTheme.bodySmall?.copyWith(color: AppColors.info, fontWeight: FontWeight.w600),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: context.readable(AppColors.info),
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ],
             ),

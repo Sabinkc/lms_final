@@ -15,6 +15,7 @@ import '../providers/academic_structure_provider.dart' show LoadStatus;
 import '../providers/department_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// Admin: Manage Departments (`docs/production_roadmap.md` Phase L2,
 /// `implementation_backlog.md` E17) — same list/create/edit/delete shape as
@@ -188,7 +189,7 @@ class _DepartmentCard extends StatelessWidget {
                 CircleAvatar(
                   radius: 24,
                   backgroundColor: AppColors.primary.withValues(alpha: 0.12),
-                  child: Icon(subjectIcon(department.name), color: AppColors.primary),
+                  child: Icon(subjectIcon(department.name), color: context.readable(AppColors.primary)),
                 ),
                 const SizedBox(width: 12),
                 Expanded(

@@ -20,6 +20,7 @@ import '../providers/notice_provider.dart';
 import 'notice_form_dialog.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// docs/screens.md's Notices module. Admin-only creation for v1
 /// (`docs/production_roadmap.md` §4 decision #2 — the backend's
@@ -209,7 +210,7 @@ class _NoticeCard extends StatelessWidget {
                   color: color.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(AppRadius.xl),
                 ),
-                child: Icon(icon, color: color, size: 28),
+                child: Icon(icon, color: context.readable(color), size: 28),
               ),
               const SizedBox(width: 12),
               Expanded(

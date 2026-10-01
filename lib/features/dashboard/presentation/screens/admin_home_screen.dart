@@ -16,6 +16,7 @@ import '../../../admin_management/presentation/providers/academic_structure_prov
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../notifications/presentation/providers/notification_provider.dart';
 import '../providers/admin_dashboard_provider.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// Admin-only Home dashboard — restyled 2026-09-28 to match a real-photo
 /// reference design the user supplied (`LMS UI/WhatsApp Image ... 3.24.26
@@ -88,9 +89,10 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                   ),
                   Text(
                     '${_AdminQuickTile.all.length} shortcuts',
-                    style: Theme.of(
-                      context,
-                    ).textTheme.labelMedium?.copyWith(color: AppColors.primary, fontWeight: FontWeight.w600),
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: context.readable(AppColors.primary),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
               ),
@@ -219,7 +221,7 @@ class _TodaysOverview extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
         child: Text(
           dashboard.statsError?.message ?? 'Could not load today\'s overview.',
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.danger),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(color: context.readable(AppColors.danger)),
         ),
       );
     }

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/error/app_exception.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../providers/auth_provider.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// Restyled 2026-09-12 to match the reference design's branded look (logo,
 /// "Welcome Back" hero, pill-shaped inputs) — same [AuthProvider] wiring as
@@ -43,16 +44,8 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          Positioned(
-            top: -60,
-            left: -60,
-            child: _decorativeBlob(AppColors.warning.withValues(alpha: 0.18), 180),
-          ),
-          Positioned(
-            bottom: -80,
-            right: -80,
-            child: _decorativeBlob(AppColors.primary.withValues(alpha: 0.16), 220),
-          ),
+          Positioned(top: -60, left: -60, child: _decorativeBlob(AppColors.warning.withValues(alpha: 0.18), 180)),
+          Positioned(bottom: -80, right: -80, child: _decorativeBlob(AppColors.primary.withValues(alpha: 0.16), 220)),
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
@@ -71,7 +64,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(24),
                             boxShadow: [
-                              BoxShadow(color: AppColors.primary.withValues(alpha: 0.3), blurRadius: 24, offset: const Offset(0, 8)),
+                              BoxShadow(
+                                color: AppColors.primary.withValues(alpha: 0.3),
+                                blurRadius: 24,
+                                offset: const Offset(0, 8),
+                              ),
                             ],
                           ),
                           child: Image.asset('assets/icon/app_icon.png', fit: BoxFit.cover),
@@ -81,8 +78,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           text: TextSpan(
                             style: textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w800),
                             children: [
-                              TextSpan(text: 'Clouds', style: TextStyle(color: scheme.onSurface)),
-                              TextSpan(text: 'LMS', style: TextStyle(color: AppColors.primary)),
+                              TextSpan(
+                                text: 'Clouds',
+                                style: TextStyle(color: scheme.onSurface),
+                              ),
+                              TextSpan(
+                                text: 'LMS',
+                                style: TextStyle(color: context.readable(AppColors.primary)),
+                              ),
                             ],
                           ),
                         ),
@@ -98,12 +101,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(height: 32),
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Text('Welcome Back', style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800)),
+                          child: Text(
+                            'Welcome Back',
+                            style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Text('Sign in to continue your account.', style: textTheme.bodyMedium?.copyWith(color: scheme.onSurfaceVariant)),
+                          child: Text(
+                            'Sign in to continue your account.',
+                            style: textTheme.bodyMedium?.copyWith(color: scheme.onSurfaceVariant),
+                          ),
                         ),
                         const SizedBox(height: 24),
                         TextField(
@@ -132,10 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(height: 24),
                         if (authProvider.lastError != null) ...[
-                          Text(
-                            authProvider.lastError!.message,
-                            style: TextStyle(color: scheme.error),
-                          ),
+                          Text(authProvider.lastError!.message, style: TextStyle(color: scheme.error)),
                           // A ValidationException may carry field-level messages
                           // beyond its top-level `.message` (docs/api_spec.md §2's
                           // `errors` map) — show them too when present, rather than
@@ -143,10 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           for (final fieldError in _fieldErrorsOf(authProvider.lastError))
                             Padding(
                               padding: const EdgeInsets.only(top: 4),
-                              child: Text(
-                                '• $fieldError',
-                                style: TextStyle(color: scheme.error, fontSize: 13),
-                              ),
+                              child: Text('• $fieldError', style: TextStyle(color: scheme.error, fontSize: 13)),
                             ),
                           const SizedBox(height: 12),
                         ],
@@ -154,10 +157,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           width: double.infinity,
                           height: 52,
                           child: FilledButton.icon(
-                            style: FilledButton.styleFrom(shape: const RoundedRectangleBorder(borderRadius: pillRadius)),
+                            style: FilledButton.styleFrom(
+                              shape: const RoundedRectangleBorder(borderRadius: pillRadius),
+                            ),
                             onPressed: authProvider.isSubmitting ? null : _submit,
                             icon: authProvider.isSubmitting
-                                ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                                ? const SizedBox(
+                                    height: 16,
+                                    width: 16,
+                                    child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                  )
                                 : const Icon(Icons.login),
                             label: Text(authProvider.isSubmitting ? 'Logging in...' : 'Log In'),
                           ),
@@ -176,16 +185,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _decorativeBlob(Color color, double size) => Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(color: color, shape: BoxShape.circle),
-      );
+    width: size,
+    height: size,
+    decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+  );
 
   void _submit() {
-    context.read<AuthProvider>().login(
-          email: _emailController.text.trim(),
-          password: _passwordController.text,
-        );
+    context.read<AuthProvider>().login(email: _emailController.text.trim(), password: _passwordController.text);
   }
 
   Iterable<String> _fieldErrorsOf(AppException? error) =>

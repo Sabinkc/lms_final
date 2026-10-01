@@ -16,6 +16,7 @@ import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../notifications/presentation/providers/notification_provider.dart';
 import '../providers/admin_dashboard_provider.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// The catch-all destination list for whatever isn't a bottom-nav tab —
 /// the modernized, exhaustive replacement for the old dashboards' flat
@@ -202,7 +203,9 @@ class _GroupSection extends StatelessWidget {
             Expanded(
               child: Text(
                 title,
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(color: accent, fontWeight: FontWeight.w700),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleSmall?.copyWith(color: context.readable(accent), fontWeight: FontWeight.w700),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -319,7 +322,10 @@ class _ProfileCard extends StatelessWidget {
                     decoration: BoxDecoration(color: accent.withValues(alpha: 0.14), borderRadius: AppRadius.button),
                     child: Text(
                       _MoreScreenState._roleLabel(role),
-                      style: textTheme.labelSmall?.copyWith(color: accent, fontWeight: FontWeight.w700),
+                      style: textTheme.labelSmall?.copyWith(
+                        color: context.readable(accent),
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                 ],

@@ -20,6 +20,7 @@ import '../providers/chat_provider.dart';
 import 'manage_group_dialog.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// Group Thread — bubbles, compose bar, typing indicator
 /// (`implementation_backlog.md` E10-F1-T2/E10-F2-T3). [group] is passed via
@@ -406,7 +407,7 @@ class _MessageBubble extends StatelessWidget {
                 Text(time, style: theme.textTheme.labelSmall?.copyWith(color: colorScheme.onSurfaceVariant)),
                 if (isMine && message.readBy.length > 1) ...[
                   const SizedBox(width: 4),
-                  const Icon(Icons.done_all_rounded, size: 14, color: AppColors.primary),
+                  Icon(Icons.done_all_rounded, size: 14, color: context.readable(AppColors.primary)),
                 ],
               ],
             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_radius.dart';
+import '../../core/theme/readable_color.dart';
 
 /// Summary banner at the top of a list screen: a tinted gradient card with a
 /// round icon, a bold title, a one-line description and an optional
@@ -51,7 +52,7 @@ class PageHeroCard extends StatelessWidget {
                 width: 56,
                 height: 56,
                 decoration: BoxDecoration(color: color.withValues(alpha: 0.15), shape: BoxShape.circle),
-                child: Icon(icon, color: color, size: 30),
+                child: Icon(icon, color: context.readable(color), size: 30),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -86,12 +87,15 @@ class PageHeroCard extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(figureLabel, style: theme.textTheme.labelSmall?.copyWith(color: color)),
+                      Text(figureLabel, style: theme.textTheme.labelSmall?.copyWith(color: context.readable(color))),
                       FittedBox(
                         fit: BoxFit.scaleDown,
                         child: Text(
                           figure!,
-                          style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800, color: color),
+                          style: theme.textTheme.headlineSmall?.copyWith(
+                            fontWeight: FontWeight.w800,
+                            color: context.readable(color),
+                          ),
                         ),
                       ),
                     ],

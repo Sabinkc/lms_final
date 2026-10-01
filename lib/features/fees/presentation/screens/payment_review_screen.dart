@@ -18,6 +18,7 @@ import '../../data/models/fee_payment.dart';
 import '../providers/fee_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/readable_color.dart';
 
 /// Admin: pending-payments review queue (`implementation_backlog.md`
 /// E7-F2) plus a read-only full history tab backed by `GET
@@ -78,21 +79,21 @@ const _approvedGreen = Color(0xFF16A34A);
 const _pendingOrange = Color(0xFFEA580C);
 
 Color _statusColor(BuildContext context, String status) => switch (status) {
-      'approved' => _approvedGreen,
-      'rejected' => Theme.of(context).colorScheme.error,
-      _ => _pendingOrange,
-    };
+  'approved' => _approvedGreen,
+  'rejected' => Theme.of(context).colorScheme.error,
+  _ => _pendingOrange,
+};
 
 /// Payment-method display names (`esewa` → `eSewa`), falling back to
 /// capitalizing whatever the backend sent.
 String _methodLabel(String method) => switch (method.toLowerCase()) {
-      'esewa' => 'eSewa',
-      'khalti' => 'Khalti',
-      'connectips' => 'ConnectIPS',
-      'imepay' => 'IME Pay',
-      'bank' || 'bank_transfer' => 'Bank Transfer',
-      _ => _capitalize(method.replaceAll('_', ' ')),
-    };
+  'esewa' => 'eSewa',
+  'khalti' => 'Khalti',
+  'connectips' => 'ConnectIPS',
+  'imepay' => 'IME Pay',
+  'bank' || 'bank_transfer' => 'Bank Transfer',
+  _ => _capitalize(method.replaceAll('_', ' ')),
+};
 
 String _capitalize(String s) => s.isEmpty ? s : s[0].toUpperCase() + s.substring(1);
 
@@ -207,7 +208,7 @@ class _PaymentCard extends StatelessWidget {
                   backgroundColor: AppColors.primary.withValues(alpha: 0.12),
                   child: Text(
                     initialsFor(name),
-                    style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w700),
+                    style: TextStyle(color: context.readable(AppColors.primary), fontWeight: FontWeight.w700),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -271,7 +272,11 @@ class _PaymentCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            InfoStrip(icon: Icons.phone_iphone_rounded, text: 'Paid from ${payment.phoneNumber}', color: AppColors.info),
+            InfoStrip(
+              icon: Icons.phone_iphone_rounded,
+              text: 'Paid from ${payment.phoneNumber}',
+              color: AppColors.info,
+            ),
             if (payment.rejectionNote != null && payment.rejectionNote!.isNotEmpty) ...[
               const SizedBox(height: 8),
               InfoStrip(
@@ -346,7 +351,10 @@ class _HistoryListState extends State<_HistoryList> {
                 for (final p in provider.history) {
                   counts[p.status] = (counts[p.status] ?? 0) + 1;
                 }
-                final statuses = [for (final s in const ['approved', 'pending', 'rejected']) if (counts.containsKey(s)) s];
+                final statuses = [
+                  for (final s in const ['approved', 'pending', 'rejected'])
+                    if (counts.containsKey(s)) s,
+                ];
                 final status = statuses.contains(_status) ? _status : null;
                 final visible = [
                   for (final p in provider.history)
