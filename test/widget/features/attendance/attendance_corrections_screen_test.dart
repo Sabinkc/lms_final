@@ -94,9 +94,9 @@ void main() {
     await tester.pumpWidget(_wrap(provider));
     await tester.pumpAndSettle();
 
-    expect(find.text('absent'), findsOneWidget);
-    expect(find.text('present'), findsOneWidget);
-    expect(find.text('Reason: Marked by mistake'), findsOneWidget);
+    expect(find.text('Absent'), findsOneWidget);
+    expect(find.text('Present'), findsOneWidget);
+    expect(find.text('Marked by mistake'), findsOneWidget);
 
     await tester.tap(find.text('Approve'));
     await tester.pumpAndSettle();
@@ -119,7 +119,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('This request was already approved'), findsOneWidget);
-    expect(find.text('absent'), findsOneWidget);
-    expect(find.text('present'), findsOneWidget);
+    expect(find.text('Absent'), findsOneWidget);
+    expect(find.text('Present'), findsOneWidget);
   });
 }

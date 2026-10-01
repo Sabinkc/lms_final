@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_radius.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
+import '../../../../shared/widgets/page_hero_card.dart';
 import '../../../../shared/widgets/status_chip.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../../data/models/attendance_correction.dart';
@@ -50,87 +53,28 @@ class _AttendanceCorrectionsScreenState extends State<AttendanceCorrectionsScree
           LoadStatus.success =>
             provider.corrections.isEmpty
                 ? const EmptyStateView(message: 'No pending correction requests', icon: Icons.task_alt_outlined)
-                : ListView.separated(
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-                    itemCount: provider.corrections.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: 8),
-                    itemBuilder: (context, index) {
-                      final correction = provider.corrections[index];
-                      final processing = provider.isProcessingCorrection(correction.id);
-                      final accent = Theme.of(context).colorScheme.primary;
-                      return Card(
-                        margin: EdgeInsets.zero,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: accent.withValues(alpha: 0.14),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Icon(Icons.fact_check_outlined, color: accent, size: 20),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Text(correction.targetType, style: Theme.of(context).textTheme.titleSmall),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  AppStatusChip(
-                                    label: correction.oldStatus,
-                                    color: Theme.of(context).colorScheme.outline,
-                                  ),
-                                  const Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 6),
-                                    child: Icon(Icons.arrow_forward, size: 14),
-                                  ),
-                                  AppStatusChip(label: correction.newStatus, color: accent),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              Text('Reason: ${correction.reason}'),
-                              if (correction.studentId != null) ...[
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Student ID: ${correction.studentId}',
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
-                              ],
-                              const SizedBox(height: 12),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  TextButton(
-                                    onPressed: processing ? null : () => _reject(context, provider, correction),
-                                    child: const Text('Reject'),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  FilledButton(
-                                    onPressed: processing ? null : () => _approve(context, provider, correction),
-                                    child: processing
-                                        ? const SizedBox(
-                                            height: 16,
-                                            width: 16,
-                                            child: CircularProgressIndicator(strokeWidth: 2),
-                                          )
-                                        : const Text('Approve'),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                : ListView(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                    children: [
+                      PageHeroCard(
+                        icon: Icons.rule_rounded,
+                        title: 'Review Queue',
+                        subtitle: 'Teacher requests to change a marked attendance status. Approving updates the record.',
+                        color: const Color(0xFFEA580C),
+                        figure: '${provider.corrections.length}',
+                        figureLabel: 'Pending',
+                      ),
+                      const SizedBox(height: 14),
+                      for (final correction in provider.corrections) ...[
+                        _CorrectionCard(
+                          correction: correction,
+                          processing: provider.isProcessingCorrection(correction.id),
+                          onApprove: () => _approve(context, provider, correction),
+                          onReject: () => _reject(context, provider, correction),
                         ),
-                      );
-                    },
+                        const SizedBox(height: 12),
+                      ],
+                    ],
                   ),
         },
       ),
@@ -153,5 +97,144 @@ Future<void> _reject(BuildContext context, AdminAttendanceProvider provider, Att
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text(provider.correctionActionError?.message ?? 'Failed to reject correction')));
+  }
+}
+
+String _capitalize(String s) => s.isEmpty ? s : s[0].toUpperCase() + s.substring(1);
+
+Color _statusColor(String status) => switch (status.toLowerCase()) {
+  'present' => const Color(0xFF16A34A),
+  'absent' => AppColors.danger,
+  'late' => const Color(0xFFEA580C),
+  _ => AppColors.info,
+};
+
+class _CorrectionCard extends StatelessWidget {
+  final AttendanceCorrection correction;
+  final bool processing;
+  final VoidCallback onApprove;
+  final VoidCallback onReject;
+
+  const _CorrectionCard({
+    required this.correction,
+    required this.processing,
+    required this.onApprove,
+    required this.onReject,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isStudent = correction.targetType.toLowerCase().contains('student');
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(AppRadius.lg),
+                  ),
+                  child: Icon(isStudent ? Icons.person_outline : Icons.fact_check_outlined, color: AppColors.primary),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(correction.targetType, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+                      if (correction.studentId != null)
+                        Text(
+                          'Student ID: ${correction.studentId}',
+                          style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                    ],
+                  ),
+                ),
+                const AppStatusPill(label: 'Pending', icon: Icons.schedule, color: Color(0xFFEA580C)),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surfaceContainerLow,
+                borderRadius: BorderRadius.circular(AppRadius.lg),
+              ),
+              child: Row(
+                children: [
+                  Text('STATUS SHIFT', style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700)),
+                  const Spacer(),
+                  AppStatusPill(label: _capitalize(correction.oldStatus), color: _statusColor(correction.oldStatus)),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 6),
+                    child: Icon(Icons.arrow_forward_rounded, size: 16),
+                  ),
+                  AppStatusPill(label: _capitalize(correction.newStatus), color: _statusColor(correction.newStatus)),
+                ],
+              ),
+            ),
+            if (correction.reason.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.info.withValues(alpha: 0.06),
+                  borderRadius: BorderRadius.circular(AppRadius.lg),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(Icons.format_quote_rounded, size: 18, color: AppColors.info),
+                    const SizedBox(width: 6),
+                    Expanded(child: Text(correction.reason, style: theme.textTheme.bodyMedium)),
+                  ],
+                ),
+              ),
+            ],
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: FilledButton.icon(
+                    style: FilledButton.styleFrom(
+                      backgroundColor: Color.alphaBlend(
+                        theme.colorScheme.error.withValues(alpha: 0.1),
+                        theme.colorScheme.surface,
+                      ),
+                      foregroundColor: theme.colorScheme.error,
+                      elevation: 0,
+                      shadowColor: Colors.transparent,
+                    ),
+                    onPressed: processing ? null : onReject,
+                    icon: const Icon(Icons.close_rounded, size: 18),
+                    label: const Text('Reject'),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: FilledButton.icon(
+                    onPressed: processing ? null : onApprove,
+                    icon: processing
+                        ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                        : const Icon(Icons.check_rounded, size: 18),
+                    label: const Text('Approve'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

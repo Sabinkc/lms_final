@@ -105,7 +105,8 @@ void main() {
     await tester.pumpWidget(_wrap(provider));
     await tester.pumpAndSettle();
 
-    expect(find.text('Class 10 — A · General'), findsOneWidget);
+    expect(find.text('Class 10 — A'), findsOneWidget);
+    expect(find.text('General'), findsOneWidget);
 
     await tester.enterText(find.byType(TextField), 'Class 10');
     await tester.testTextInput.receiveAction(TextInputAction.done);

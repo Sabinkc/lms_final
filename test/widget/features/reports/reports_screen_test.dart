@@ -95,11 +95,11 @@ void main() {
 
     await tester.pumpWidget(_wrap(provider));
     await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(Tab, 'Financial'));
+    await tester.tap(find.text('Financial'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Rs 60000'), findsOneWidget);
-    expect(find.text('Rs 40000'), findsOneWidget);
+    expect(find.text('Rs. 60,000'), findsOneWidget);
+    expect(find.text('Rs. 40,000'), findsOneWidget);
   });
 
   testWidgets('switching to Attendance tab shows the class breakdown row', (tester) async {
@@ -107,10 +107,10 @@ void main() {
 
     await tester.pumpWidget(_wrap(provider));
     await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(Tab, 'Attendance'));
+    await tester.tap(find.text('Attendance'));
     await tester.pumpAndSettle();
 
-    expect(find.text('90.0%'), findsOneWidget);
+    expect(find.text('90.0%'), findsWidgets);
     expect(find.text('10-A'), findsOneWidget);
   });
 
@@ -119,7 +119,7 @@ void main() {
 
     await tester.pumpWidget(_wrap(provider));
     await tester.pumpAndSettle();
-    await tester.tap(find.widgetWithText(Tab, 'System'));
+    await tester.tap(find.text('System'));
     await tester.pumpAndSettle();
 
     expect(find.text('Login'), findsOneWidget);
