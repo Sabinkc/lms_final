@@ -51,7 +51,9 @@ void main() {
     final succeeded = await provider.createClass(name: 'Class 10', description: 'Grade 10');
 
     expect(succeeded, isTrue);
-    expect(provider.classes, [_class1]);
+    expect(provider.classes.map((c) => c.id), [_class1.id]);
+    // A just-created class has no sections yet.
+    expect(provider.classes.single.sectionCount, 0);
     expect(provider.isSavingClass, isFalse);
   });
 
@@ -81,7 +83,7 @@ void main() {
     final succeeded = await provider.updateClass(id: 'c1', name: 'Class 10A');
 
     expect(succeeded, isTrue);
-    expect(provider.classes, [renamed]);
+    expect(provider.classes.map((c) => (c.id, c.name)), [(renamed.id, renamed.name)]);
   });
 
   test('deleteClass(): success removes it from the classes list', () async {

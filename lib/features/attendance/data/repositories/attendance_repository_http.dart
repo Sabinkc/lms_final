@@ -2,6 +2,7 @@ import '../../../../core/error/app_exception.dart';
 import '../../../../core/error/result.dart';
 import '../../../../core/network/api_client.dart';
 import '../../../admin_management/data/models/student.dart';
+import '../models/day_attendance_record.dart';
 import '../models/attendance_session.dart';
 import '../models/attendance_submit_result.dart';
 import '../models/student_attendance_history.dart';
@@ -91,9 +92,16 @@ class AttendanceRepositoryHttp implements AttendanceRepository {
           if (section != null && section.isNotEmpty) 'section': section,
           if (subject != null && subject.isNotEmpty) 'subject': subject,
         },
-        parse: (data) => ((data as Map<String, dynamic>)['data'] as List)
-            .map((json) => AttendanceSessionSummary.fromJson(json as Map<String, dynamic>))
-            .toList(),
+        parse: (data) {
+          final rows = ((data as Map<String, dynamic>)['data'] as List).cast<Map<String, dynamic>>();
+          // Real session documents carry counts; what the live API returns
+          // is per-student rows (see AttendanceSessionSummary's doc), which
+          // get grouped per class.
+          if (rows.isEmpty || rows.first.containsKey('presentCount')) {
+            return rows.map(AttendanceSessionSummary.fromJson).toList();
+          }
+          return AttendanceSessionSummary.fromDayRecords(rows.map(DayAttendanceRecord.fromJson).toList());
+        },
       );
       return Result.success(sessions);
     } on AppException catch (e) {
@@ -147,6 +155,27 @@ class AttendanceRepositoryHttp implements AttendanceRepository {
         parse: (data) => StudentAttendanceHistory.fromJson(data as Map<String, dynamic>),
       );
       return Result.success(history);
+    } on AppException catch (e) {
+      return Result.failure(e);
+    }
+  }
+
+  @override
+  Future<Result<List<DayAttendanceRecord>>> getDayRecords({required String date, String? className}) async {
+    try {
+      final records = await _apiClient.get<List<DayAttendanceRecord>>(
+        '/attendance/student',
+        queryParameters: {
+          'date': date,
+          if (className != null && className.isNotEmpty) 'class': className,
+          // The endpoint paginates; ask for everything in one page.
+          'limit': 1000,
+        },
+        parse: (data) => ((data as Map<String, dynamic>)['data'] as List)
+            .map((json) => DayAttendanceRecord.fromJson(json as Map<String, dynamic>))
+            .toList(),
+      );
+      return Result.success(records);
     } on AppException catch (e) {
       return Result.failure(e);
     }

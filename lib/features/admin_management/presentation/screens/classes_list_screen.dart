@@ -3,14 +3,31 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/theme/app_radius.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
+import '../../../../shared/widgets/status_chip.dart';
 import '../../data/models/academic_class.dart';
 import '../providers/academic_structure_provider.dart';
+import '../providers/student_provider.dart';
+import '../widgets/class_badge.dart';
+import '../../../../shared/widgets/brand_app_bar.dart';
+import '../../../../shared/widgets/app_background.dart';
 
 /// docs/screens.md "Manage Classes / Sections / Subjects" — the Classes
 /// half; tapping a class drills into [SectionsListScreen] for its Sections.
+///
+/// Restyled 2026-09-30 to a reference the user supplied (`LMS UI/WhatsApp
+/// Image ... 3.47.04 PM.jpeg`): "Add Class" in the app bar, colorful
+/// per-class badges, and "N Students • N Sections" under each name. Student
+/// counts come from `StudentProvider`'s full list (grouped by class name —
+/// the Students screen reloads it on open, so loading it here is safe);
+/// section counts from the `sections` array `GET /classes` already embeds.
+/// Not carried over: the reference's per-grade filter chips and filter
+/// button — with one row per class, a chip per class would just duplicate
+/// the list, and search already narrows it. Edit/Delete moved into a ⋮
+/// menu so each row matches the reference's clean single-chevron look.
 class ClassesListScreen extends StatefulWidget {
   const ClassesListScreen({super.key});
 
@@ -32,7 +49,11 @@ class _ClassesListScreenState extends State<ClassesListScreen> {
     // The Retry button's own call to `loadClasses()` doesn't need this;
     // that one fires from a tap, safely after the build phase has ended.
     final provider = context.read<AcademicStructureProvider>();
-    Future.microtask(() => provider.loadClasses());
+    final students = context.read<StudentProvider>();
+    Future.microtask(() {
+      provider.loadClasses();
+      students.loadStudents();
+    });
     _searchController.addListener(() => setState(() => _query = _searchController.text.trim().toLowerCase()));
   }
 
@@ -45,37 +66,53 @@ class _ClassesListScreenState extends State<ClassesListScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<AcademicStructureProvider>();
+    final studentProvider = context.watch<StudentProvider>();
+    // Counts only once the full (unfiltered) list is in — otherwise a
+    // class-filtered list from the Students screen would undercount.
+    final studentCounts = studentProvider.status == LoadStatus.success && studentProvider.classFilter == null
+        ? studentProvider.students.fold<Map<String, int>>(
+            {},
+            (counts, s) => counts..update(s.className, (n) => n + 1, ifAbsent: () => 1),
+          )
+        : null;
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Classes')),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showClassFormDialog(context, provider),
-        tooltip: 'Add Class',
-        child: const Icon(Icons.add),
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: BrandAppBar(
+          title: 'Classes',
+          actions: [
+            TextButton.icon(
+              onPressed: () => showClassFormDialog(context, provider),
+              icon: const Icon(Icons.add_circle, size: 22),
+              label: const Text('Add Class'),
+              style: TextButton.styleFrom(textStyle: const TextStyle(fontWeight: FontWeight.w700)),
+            ),
+          ],
+        ),
+        body: switch (provider.classesStatus) {
+          LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading classes...'),
+          LoadStatus.error => ErrorView(error: provider.classesError!, onRetry: () => provider.loadClasses()),
+          LoadStatus.success =>
+            provider.classes.isEmpty
+                ? EmptyStateView(
+                    message: 'No classes set up yet',
+                    icon: Icons.school_outlined,
+                    actionLabel: 'Add Class',
+                    onAction: () => showClassFormDialog(context, provider),
+                  )
+                : _ClassesList(
+                    searchController: _searchController,
+                    classes: provider.classes
+                        .where((c) => _query.isEmpty || c.name.toLowerCase().contains(_query))
+                        .toList(),
+                    studentCounts: studentCounts,
+                    onTap: (academicClass) => context.push(AppRoutes.adminClassDetail(academicClass.id)),
+                    onEdit: (academicClass) => showClassFormDialog(context, provider, existing: academicClass),
+                    onDelete: (academicClass) => confirmDeleteClass(context, provider, academicClass),
+                  ),
+        },
       ),
-      body: switch (provider.classesStatus) {
-        LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading classes...'),
-        LoadStatus.error => ErrorView(
-            error: provider.classesError!,
-            onRetry: () => provider.loadClasses(),
-          ),
-        LoadStatus.success => provider.classes.isEmpty
-            ? EmptyStateView(
-                message: 'No classes set up yet',
-                icon: Icons.school_outlined,
-                actionLabel: 'Add Class',
-                onAction: () => _showClassFormDialog(context, provider),
-              )
-            : _ClassesList(
-                searchController: _searchController,
-                classes: provider.classes
-                    .where((c) => _query.isEmpty || c.name.toLowerCase().contains(_query))
-                    .toList(),
-                onTap: (academicClass) => context.push(AppRoutes.adminClassSections(academicClass.id)),
-                onEdit: (academicClass) => _showClassFormDialog(context, provider, existing: academicClass),
-                onDelete: (academicClass) => _confirmDeleteClass(context, provider, academicClass),
-              ),
-      },
     );
   }
 }
@@ -83,6 +120,7 @@ class _ClassesListScreenState extends State<ClassesListScreen> {
 class _ClassesList extends StatelessWidget {
   final TextEditingController searchController;
   final List<AcademicClass> classes;
+  final Map<String, int>? studentCounts;
   final ValueChanged<AcademicClass> onTap;
   final ValueChanged<AcademicClass> onEdit;
   final ValueChanged<AcademicClass> onDelete;
@@ -90,6 +128,7 @@ class _ClassesList extends StatelessWidget {
   const _ClassesList({
     required this.searchController,
     required this.classes,
+    required this.studentCounts,
     required this.onTap,
     required this.onEdit,
     required this.onDelete,
@@ -97,16 +136,20 @@ class _ClassesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
           child: TextField(
             controller: searchController,
-            decoration: const InputDecoration(
-              labelText: 'Search classes',
-              prefixIcon: Icon(Icons.search),
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              hintText: 'Search classes...',
+              prefixIcon: const Icon(Icons.search),
+              filled: true,
+              fillColor: scheme.surfaceContainerLow,
+              border: OutlineInputBorder(borderRadius: AppRadius.button, borderSide: BorderSide.none),
             ),
           ),
         ),
@@ -114,46 +157,17 @@ class _ClassesList extends StatelessWidget {
           child: classes.isEmpty
               ? const EmptyStateView(message: 'No classes match your search')
               : ListView.separated(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
                   itemCount: classes.length,
-                  separatorBuilder: (context, index) => const SizedBox(height: 8),
+                  separatorBuilder: (context, index) => const SizedBox(height: 10),
                   itemBuilder: (context, index) {
                     final academicClass = classes[index];
-                    final badgeColor = _badgeColors[index % _badgeColors.length];
-                    return Card(
-                      margin: EdgeInsets.zero,
-                      clipBehavior: Clip.antiAlias,
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                        leading: Container(
-                          width: 44,
-                          height: 44,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(color: badgeColor, borderRadius: BorderRadius.circular(12)),
-                          child: Text(
-                            _classInitials(academicClass.name),
-                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 13),
-                          ),
-                        ),
-                        title: Text(academicClass.name, style: Theme.of(context).textTheme.titleSmall),
-                        subtitle: academicClass.description.isEmpty ? null : Text(academicClass.description),
-                        onTap: () => onTap(academicClass),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.edit_outlined),
-                              tooltip: 'Edit',
-                              onPressed: () => onEdit(academicClass),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete_outline),
-                              tooltip: 'Delete',
-                              onPressed: () => onDelete(academicClass),
-                            ),
-                          ],
-                        ),
-                      ),
+                    return _ClassCard(
+                      academicClass: academicClass,
+                      studentCount: studentCounts == null ? null : (studentCounts![academicClass.name] ?? 0),
+                      onTap: () => onTap(academicClass),
+                      onEdit: () => onEdit(academicClass),
+                      onDelete: () => onDelete(academicClass),
                     );
                   },
                 ),
@@ -163,19 +177,125 @@ class _ClassesList extends StatelessWidget {
   }
 }
 
-/// Small fixed palette cycled by row index purely for visual variety — not
-/// tied to any class data (`AcademicClass` has no color field).
-const _badgeColors = [Color(0xFF4F46E5), Color(0xFFD97706), Color(0xFF059669), Color(0xFF9333EA)];
+class _ClassCard extends StatelessWidget {
+  final AcademicClass academicClass;
+  final int? studentCount;
+  final VoidCallback onTap;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
 
-String _classInitials(String name) {
-  final trimmed = name.trim();
-  if (trimmed.isEmpty) return '?';
-  final parts = trimmed.split(RegExp(r'\s+'));
-  if (parts.length == 1) return trimmed.length >= 2 ? trimmed.substring(0, 2).toUpperCase() : trimmed.toUpperCase();
-  return (parts[0][0] + parts[1][0]).toUpperCase();
+  const _ClassCard({
+    required this.academicClass,
+    required this.studentCount,
+    required this.onTap,
+    required this.onEdit,
+    required this.onDelete,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final scheme = theme.colorScheme;
+    final muted = theme.textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant);
+    final sectionCount = academicClass.sectionCount;
+    final isInactive = academicClass.status.toLowerCase() != 'active';
+
+    final meta = <Widget>[
+      if (studentCount != null)
+        _Meta(icon: Icons.person_rounded, label: _plural(studentCount!, 'Student'), style: muted),
+      if (sectionCount != null)
+        _Meta(icon: Icons.groups_rounded, label: _plural(sectionCount, 'Section'), style: muted),
+    ];
+
+    return Card(
+      margin: EdgeInsets.zero,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(12, 12, 4, 12),
+          child: Row(
+            children: [
+              ClassBadge(name: academicClass.name),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            academicClass.name,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                        if (isInactive) ...[
+                          const SizedBox(width: 6),
+                          AppStatusChip(label: academicClass.status, color: scheme.error),
+                        ],
+                      ],
+                    ),
+                    if (meta.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        spacing: 8,
+                        runSpacing: 2,
+                        children: [
+                          for (var i = 0; i < meta.length; i++) ...[if (i > 0) Text('•', style: muted), meta[i]],
+                        ],
+                      ),
+                    ] else if (academicClass.description.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Text(academicClass.description, maxLines: 1, overflow: TextOverflow.ellipsis, style: muted),
+                    ],
+                  ],
+                ),
+              ),
+              PopupMenuButton<String>(
+                tooltip: 'Class actions',
+                icon: Icon(Icons.more_vert, color: scheme.onSurfaceVariant),
+                onSelected: (value) => value == 'edit' ? onEdit() : onDelete(),
+                itemBuilder: (context) => const [
+                  PopupMenuItem(value: 'edit', child: Text('Edit')),
+                  PopupMenuItem(value: 'delete', child: Text('Delete')),
+                ],
+              ),
+              Icon(Icons.chevron_right, color: scheme.outline),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
-Future<void> _showClassFormDialog(
+class _Meta extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final TextStyle? style;
+
+  const _Meta({required this.icon, required this.label, required this.style});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 16, color: style?.color),
+        const SizedBox(width: 4),
+        Text(label, style: style),
+      ],
+    );
+  }
+}
+
+String _plural(int n, String noun) => '$n ${n == 1 ? noun : '${noun}s'}';
+
+Future<void> showClassFormDialog(
   BuildContext context,
   AcademicStructureProvider provider, {
   AcademicClass? existing,
@@ -245,7 +365,8 @@ Future<void> _showClassFormDialog(
   );
 }
 
-Future<void> _confirmDeleteClass(
+/// Returns whether the class was actually deleted.
+Future<bool> confirmDeleteClass(
   BuildContext context,
   AcademicStructureProvider provider,
   AcademicClass academicClass,
@@ -266,12 +387,13 @@ Future<void> _confirmDeleteClass(
     ),
   );
 
-  if (confirmed != true || !context.mounted) return;
+  if (confirmed != true || !context.mounted) return false;
 
   final succeeded = await provider.deleteClass(academicClass.id);
   if (!succeeded && context.mounted) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(provider.classActionError?.message ?? 'Failed to delete class')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(provider.classActionError?.message ?? 'Failed to delete class')));
   }
+  return succeeded;
 }

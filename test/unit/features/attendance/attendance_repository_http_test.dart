@@ -170,4 +170,35 @@ void main() {
       failure: (_) => fail('expected success'),
     );
   });
+
+  test('getSessions(): groups the per-student rows the live API returns into one summary per class', () async {
+    fakeAdapter.when(
+      '/attendance/student',
+      (_) => jsonResponseBody({
+        'success': true,
+        'page': 1,
+        'totalPages': 1,
+        'total': 1,
+        'data': [
+          {'date': '2026-09-05', 'status': 'present', 'studentName': 'Sam Student', 'className': 'Class 10 A'},
+          {'date': '2026-09-05', 'status': 'present', 'studentName': 'Tom Student', 'className': 'Class 10 A'},
+          {'date': '2026-09-05', 'status': 'late', 'studentName': 'Amy Student', 'className': 'Class 10 A'},
+          {'date': '2026-09-05', 'status': 'absent', 'studentName': 'Kim Student', 'className': 'Class 9 B'},
+        ],
+      }, 200),
+    );
+
+    final result = await repository.getSessions(date: '2026-09-05');
+
+    result.when(
+      success: (sessions) {
+        expect(sessions, hasLength(2));
+        expect(sessions[0].title, 'Class 10 A');
+        expect((sessions[0].presentCount, sessions[0].lateCount, sessions[0].totalCount), (2, 1, 3));
+        expect((sessions[1].absentCount, sessions[1].totalCount), (1, 1));
+        expect(sessions[0].locked, isFalse);
+      },
+      failure: (_) => fail('expected success'),
+    );
+  });
 }

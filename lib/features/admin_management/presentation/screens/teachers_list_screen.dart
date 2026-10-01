@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/theme/app_radius.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
 import '../../data/models/teacher.dart';
 import '../providers/academic_structure_provider.dart' show LoadStatus;
 import '../providers/teacher_provider.dart';
+import '../../../../shared/widgets/brand_app_bar.dart';
+import '../../../../shared/widgets/app_background.dart';
 
 /// docs/screens.md "Manage Teachers — List / Add-Edit / Detail". No separate
 /// detail screen — same P0-only scope decision as Classes/Sections; the P1
@@ -44,38 +47,41 @@ class _TeachersListScreenState extends State<TeachersListScreen> {
   Widget build(BuildContext context) {
     final provider = context.watch<TeacherProvider>();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Teachers')),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showTeacherFormDialog(context, provider),
-        tooltip: 'Add Teacher',
-        child: const Icon(Icons.add),
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: BrandAppBar(title: 'Teachers'),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => _showTeacherFormDialog(context, provider),
+          tooltip: 'Add Teacher',
+          child: const Icon(Icons.add),
+        ),
+        body: switch (provider.status) {
+          LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading teachers...'),
+          LoadStatus.error => ErrorView(error: provider.error!, onRetry: () => provider.loadTeachers()),
+          LoadStatus.success =>
+            provider.teachers.isEmpty
+                ? EmptyStateView(
+                    message: 'No teachers added yet',
+                    icon: Icons.person_outline,
+                    actionLabel: 'Add Teacher',
+                    onAction: () => _showTeacherFormDialog(context, provider),
+                  )
+                : _TeachersList(
+                    searchController: _searchController,
+                    teachers: provider.teachers
+                        .where(
+                          (t) =>
+                              _query.isEmpty ||
+                              t.fullName.toLowerCase().contains(_query) ||
+                              t.department.toLowerCase().contains(_query),
+                        )
+                        .toList(),
+                    onEdit: (teacher) => _showTeacherFormDialog(context, provider, existing: teacher),
+                    onDelete: (teacher) => _confirmDeleteTeacher(context, provider, teacher),
+                  ),
+        },
       ),
-      body: switch (provider.status) {
-        LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading teachers...'),
-        LoadStatus.error => ErrorView(
-            error: provider.error!,
-            onRetry: () => provider.loadTeachers(),
-          ),
-        LoadStatus.success => provider.teachers.isEmpty
-            ? EmptyStateView(
-                message: 'No teachers added yet',
-                icon: Icons.person_outline,
-                actionLabel: 'Add Teacher',
-                onAction: () => _showTeacherFormDialog(context, provider),
-              )
-            : _TeachersList(
-                searchController: _searchController,
-                teachers: provider.teachers
-                    .where((t) =>
-                        _query.isEmpty ||
-                        t.fullName.toLowerCase().contains(_query) ||
-                        t.department.toLowerCase().contains(_query))
-                    .toList(),
-                onEdit: (teacher) => _showTeacherFormDialog(context, provider, existing: teacher),
-                onDelete: (teacher) => _confirmDeleteTeacher(context, provider, teacher),
-              ),
-      },
     );
   }
 }
@@ -95,16 +101,20 @@ class _TeachersList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
           child: TextField(
             controller: searchController,
-            decoration: const InputDecoration(
-              labelText: 'Search teachers by name or department',
-              prefixIcon: Icon(Icons.search),
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              hintText: 'Search teachers by name or department',
+              prefixIcon: const Icon(Icons.search),
+              filled: true,
+              fillColor: scheme.surfaceContainerLow,
+              border: OutlineInputBorder(borderRadius: AppRadius.button, borderSide: BorderSide.none),
             ),
           ),
         ),
@@ -112,12 +122,12 @@ class _TeachersList extends StatelessWidget {
           child: teachers.isEmpty
               ? const EmptyStateView(message: 'No teachers match your search')
               : ListView.separated(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
                   itemCount: teachers.length,
                   separatorBuilder: (context, index) => const SizedBox(height: 8),
                   itemBuilder: (context, index) {
                     final teacher = teachers[index];
-                    final accent = Theme.of(context).colorScheme.primary;
+                    final accent = scheme.primary;
                     return Card(
                       margin: EdgeInsets.zero,
                       clipBehavior: Clip.antiAlias,
@@ -131,7 +141,18 @@ class _TeachersList extends StatelessWidget {
                           ),
                         ),
                         title: Text(teacher.fullName, style: Theme.of(context).textTheme.titleSmall),
-                        subtitle: Text('${teacher.department} · ${teacher.employeeId} · ${teacher.email}'),
+                        subtitle: Row(
+                          children: [
+                            Icon(Icons.badge_outlined, size: 14, color: scheme.outline),
+                            const SizedBox(width: 4),
+                            Expanded(
+                              child: Text(
+                                '${teacher.department} · ${teacher.employeeId} · ${teacher.email}',
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -157,11 +178,7 @@ class _TeachersList extends StatelessWidget {
   }
 }
 
-Future<void> _showTeacherFormDialog(
-  BuildContext context,
-  TeacherProvider provider, {
-  Teacher? existing,
-}) async {
+Future<void> _showTeacherFormDialog(BuildContext context, TeacherProvider provider, {Teacher? existing}) async {
   final fullNameController = TextEditingController(text: existing?.fullName);
   final emailController = TextEditingController(text: existing?.email);
   final employeeIdController = TextEditingController(text: existing?.employeeId);
@@ -264,11 +281,7 @@ Future<void> _showTeacherFormDialog(
   );
 }
 
-Future<void> _confirmDeleteTeacher(
-  BuildContext context,
-  TeacherProvider provider,
-  Teacher teacher,
-) async {
+Future<void> _confirmDeleteTeacher(BuildContext context, TeacherProvider provider, Teacher teacher) async {
   final confirmed = await showDialog<bool>(
     context: context,
     builder: (dialogContext) => AlertDialog(
@@ -291,8 +304,8 @@ Future<void> _confirmDeleteTeacher(
 
   final succeeded = await provider.deleteTeacher(teacher.id);
   if (!succeeded && context.mounted) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(provider.actionError?.message ?? 'Failed to delete teacher')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(provider.actionError?.message ?? 'Failed to delete teacher')));
   }
 }

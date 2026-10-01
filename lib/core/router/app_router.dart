@@ -1,9 +1,11 @@
 import 'package:go_router/go_router.dart';
 
+import '../../features/admin_management/presentation/screens/class_detail_screen.dart';
 import '../../features/admin_management/presentation/screens/classes_list_screen.dart';
 import '../../features/admin_management/presentation/screens/departments_list_screen.dart';
 import '../../features/admin_management/presentation/screens/sections_list_screen.dart';
 import '../../features/admin_management/presentation/screens/parents_list_screen.dart';
+import '../../features/admin_management/presentation/screens/student_profile_screen.dart';
 import '../../features/admin_management/presentation/screens/students_list_screen.dart';
 import '../../features/admin_management/presentation/screens/teachers_list_screen.dart';
 import '../../features/assignments/presentation/screens/assignment_detail_screen.dart';
@@ -43,8 +45,11 @@ import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/splash_screen.dart';
 import '../../features/backup/presentation/screens/backup_screen.dart';
+import '../../features/dashboard/presentation/screens/admin_home_screen.dart';
 import '../../features/dashboard/presentation/screens/more_screen.dart';
-import '../../features/dashboard/presentation/screens/role_home_screen.dart';
+import '../../features/dashboard/presentation/screens/parent_home_screen.dart';
+import '../../features/dashboard/presentation/screens/student_home_screen.dart';
+import '../../features/dashboard/presentation/screens/teacher_home_screen.dart';
 import '../../shared/widgets/placeholder_screen.dart';
 import 'app_routes.dart';
 import 'role_shell.dart';
@@ -74,7 +79,7 @@ GoRouter buildAppRouter(AuthProvider authProvider) {
         builder: (context, state, navigationShell) => RoleShell(role: AppRole.admin, navigationShell: navigationShell),
         branches: [
           StatefulShellBranch(
-            routes: [GoRoute(path: AppRoutes.adminHome, builder: (context, state) => const RoleHomeScreen(role: AppRole.admin))],
+            routes: [GoRoute(path: AppRoutes.adminHome, builder: (context, state) => const AdminHomeScreen())],
           ),
           StatefulShellBranch(
             routes: [
@@ -94,6 +99,10 @@ GoRouter buildAppRouter(AuthProvider authProvider) {
         builder: (context, state) => const ClassesListScreen(),
         routes: [
           GoRoute(
+            path: ':classId',
+            builder: (context, state) => ClassDetailScreen(classId: state.pathParameters['classId']!),
+          ),
+          GoRoute(
             path: ':classId/sections',
             builder: (context, state) => SectionsListScreen(classId: state.pathParameters['classId']!),
           ),
@@ -106,6 +115,12 @@ GoRouter buildAppRouter(AuthProvider authProvider) {
       GoRoute(
         path: AppRoutes.adminStudents,
         builder: (context, state) => const StudentsListScreen(),
+        routes: [
+          GoRoute(
+            path: ':studentId',
+            builder: (context, state) => StudentProfileScreen(studentId: state.pathParameters['studentId']!),
+          ),
+        ],
       ),
       GoRoute(
         path: AppRoutes.adminParents,
@@ -151,7 +166,7 @@ GoRouter buildAppRouter(AuthProvider authProvider) {
         builder: (context, state, navigationShell) => RoleShell(role: AppRole.teacher, navigationShell: navigationShell),
         branches: [
           StatefulShellBranch(
-            routes: [GoRoute(path: AppRoutes.teacherHome, builder: (context, state) => const RoleHomeScreen(role: AppRole.teacher))],
+            routes: [GoRoute(path: AppRoutes.teacherHome, builder: (context, state) => const TeacherHomeScreen())],
           ),
           StatefulShellBranch(
             routes: [GoRoute(path: AppRoutes.teacherMarkAttendance, builder: (context, state) => const MarkAttendanceScreen())],
@@ -176,7 +191,7 @@ GoRouter buildAppRouter(AuthProvider authProvider) {
         builder: (context, state, navigationShell) => RoleShell(role: AppRole.student, navigationShell: navigationShell),
         branches: [
           StatefulShellBranch(
-            routes: [GoRoute(path: AppRoutes.studentHome, builder: (context, state) => const RoleHomeScreen(role: AppRole.student))],
+            routes: [GoRoute(path: AppRoutes.studentHome, builder: (context, state) => const StudentHomeScreen())],
           ),
           StatefulShellBranch(
             routes: [GoRoute(path: AppRoutes.studentMyAttendance, builder: (context, state) => const MyAttendanceScreen())],
@@ -201,7 +216,7 @@ GoRouter buildAppRouter(AuthProvider authProvider) {
         builder: (context, state, navigationShell) => RoleShell(role: AppRole.parent, navigationShell: navigationShell),
         branches: [
           StatefulShellBranch(
-            routes: [GoRoute(path: AppRoutes.parentHome, builder: (context, state) => const RoleHomeScreen(role: AppRole.parent))],
+            routes: [GoRoute(path: AppRoutes.parentHome, builder: (context, state) => const ParentHomeScreen())],
           ),
           StatefulShellBranch(
             routes: [GoRoute(path: AppRoutes.parentChildAttendance, builder: (context, state) => const ChildAttendanceScreen())],

@@ -6,6 +6,8 @@ import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
 import '../../data/models/class_section.dart';
 import '../providers/academic_structure_provider.dart';
+import '../../../../shared/widgets/brand_app_bar.dart';
+import '../../../../shared/widgets/app_background.dart';
 
 /// docs/screens.md "Manage Classes / Sections / Subjects" — the Sections
 /// half, scoped to one [classId] (reached by tapping a class in
@@ -36,28 +38,51 @@ class _SectionsListScreenState extends State<SectionsListScreen> {
     final matchingClasses = provider.classes.where((c) => c.id == widget.classId);
     final className = matchingClasses.isEmpty ? null : matchingClasses.first.name;
 
-    return Scaffold(
-      appBar: AppBar(title: Text(className == null ? 'Sections' : 'Sections — $className')),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showSectionFormDialog(context, provider, classId: widget.classId),
-        tooltip: 'Add Section',
-        child: const Icon(Icons.add),
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: BrandAppBar(title: className == null ? 'Sections' : 'Sections — $className'),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => showSectionFormDialog(context, provider, classId: widget.classId),
+          tooltip: 'Add Section',
+          child: const Icon(Icons.add),
+        ),
+        body: SectionsPanel(classId: widget.classId),
       ),
-      body: switch (provider.sectionsStatus) {
-        LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading sections...'),
-        LoadStatus.error => ErrorView(
-            error: provider.sectionsError!,
-            onRetry: () => provider.loadSections(widget.classId),
-          ),
-        LoadStatus.success => provider.sections.isEmpty
+    );
+  }
+}
+
+/// The section list for one class, without its own `Scaffold` — used both
+/// by [SectionsListScreen] and as the Sections tab of `ClassDetailScreen`.
+/// Loading is the caller's job (`AcademicStructureProvider.loadSections`).
+class SectionsPanel extends StatelessWidget {
+  final String classId;
+
+  /// Embedded inside another scroll view (Class Details), the list sizes to
+  /// its content instead of scrolling on its own.
+  final bool embedded;
+
+  const SectionsPanel({super.key, required this.classId, this.embedded = false});
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = context.watch<AcademicStructureProvider>();
+    return switch (provider.sectionsStatus) {
+      LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading sections...'),
+      LoadStatus.error => ErrorView(error: provider.sectionsError!, onRetry: () => provider.loadSections(classId)),
+      LoadStatus.success =>
+        provider.sections.isEmpty
             ? EmptyStateView(
                 message: 'No sections set up yet',
                 icon: Icons.groups_outlined,
                 actionLabel: 'Add Section',
-                onAction: () => _showSectionFormDialog(context, provider, classId: widget.classId),
+                onAction: () => showSectionFormDialog(context, provider, classId: classId),
               )
             : ListView.separated(
-                padding: const EdgeInsets.all(16),
+                shrinkWrap: embedded,
+                physics: embedded ? const NeverScrollableScrollPhysics() : null,
+                padding: embedded ? EdgeInsets.zero : const EdgeInsets.all(16),
                 itemCount: provider.sections.length,
                 separatorBuilder: (context, index) => const SizedBox(height: 8),
                 itemBuilder: (context, index) {
@@ -68,19 +93,32 @@ class _SectionsListScreenState extends State<SectionsListScreen> {
                     clipBehavior: Clip.antiAlias,
                     child: ListTile(
                       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                      leading: CircleAvatar(
-                        backgroundColor: accent.withValues(alpha: 0.14),
+                      leading: Container(
+                        width: 40,
+                        height: 40,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: accent.withValues(alpha: 0.14),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                         child: Icon(Icons.groups_outlined, color: accent, size: 20),
                       ),
                       title: Text(section.name, style: Theme.of(context).textTheme.titleSmall),
-                      subtitle: Text('${section.studentCount} student${section.studentCount == 1 ? '' : 's'}'),
+                      subtitle: Row(
+                        children: [
+                          Icon(Icons.badge_outlined, size: 14, color: Theme.of(context).colorScheme.outline),
+                          const SizedBox(width: 4),
+                          Text('${section.studentCount} student${section.studentCount == 1 ? '' : 's'}'),
+                        ],
+                      ),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
                             icon: const Icon(Icons.edit_outlined),
                             tooltip: 'Edit',
-                            onPressed: () => _showSectionFormDialog(context, provider, classId: widget.classId, existing: section),
+                            onPressed: () =>
+                                showSectionFormDialog(context, provider, classId: classId, existing: section),
                           ),
                           IconButton(
                             icon: const Icon(Icons.delete_outline),
@@ -93,12 +131,11 @@ class _SectionsListScreenState extends State<SectionsListScreen> {
                   );
                 },
               ),
-      },
-    );
+    };
   }
 }
 
-Future<void> _showSectionFormDialog(
+Future<void> showSectionFormDialog(
   BuildContext context,
   AcademicStructureProvider provider, {
   required String classId,
@@ -185,8 +222,8 @@ Future<void> _confirmDeleteSection(
 
   final succeeded = await provider.deleteSection(section.id);
   if (!succeeded && context.mounted) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(provider.sectionActionError?.message ?? 'Failed to delete section')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(provider.sectionActionError?.message ?? 'Failed to delete section')));
   }
 }

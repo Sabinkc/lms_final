@@ -8,6 +8,8 @@ import '../../data/models/department.dart';
 import '../../data/models/teacher.dart';
 import '../providers/academic_structure_provider.dart' show LoadStatus;
 import '../providers/department_provider.dart';
+import '../../../../shared/widgets/brand_app_bar.dart';
+import '../../../../shared/widgets/app_background.dart';
 
 /// Admin: Manage Departments (`docs/production_roadmap.md` Phase L2,
 /// `implementation_backlog.md` E17) — same list/create/edit/delete shape as
@@ -35,32 +37,33 @@ class _DepartmentsListScreenState extends State<DepartmentsListScreen> {
   Widget build(BuildContext context) {
     final provider = context.watch<DepartmentProvider>();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Departments')),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showDepartmentFormDialog(context, provider),
-        tooltip: 'Add Department',
-        child: const Icon(Icons.add),
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: BrandAppBar(title: 'Departments'),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => _showDepartmentFormDialog(context, provider),
+          tooltip: 'Add Department',
+          child: const Icon(Icons.add),
+        ),
+        body: switch (provider.status) {
+          LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading departments...'),
+          LoadStatus.error => ErrorView(error: provider.error!, onRetry: () => provider.loadDepartments()),
+          LoadStatus.success =>
+            provider.departments.isEmpty
+                ? EmptyStateView(
+                    message: 'No departments set up yet',
+                    icon: Icons.apartment_outlined,
+                    actionLabel: 'Add Department',
+                    onAction: () => _showDepartmentFormDialog(context, provider),
+                  )
+                : _DepartmentsList(
+                    departments: provider.departments,
+                    onEdit: (department) => _showDepartmentFormDialog(context, provider, existing: department),
+                    onDelete: (department) => _confirmDeleteDepartment(context, provider, department),
+                  ),
+        },
       ),
-      body: switch (provider.status) {
-        LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading departments...'),
-        LoadStatus.error => ErrorView(
-            error: provider.error!,
-            onRetry: () => provider.loadDepartments(),
-          ),
-        LoadStatus.success => provider.departments.isEmpty
-            ? EmptyStateView(
-                message: 'No departments set up yet',
-                icon: Icons.apartment_outlined,
-                actionLabel: 'Add Department',
-                onAction: () => _showDepartmentFormDialog(context, provider),
-              )
-            : _DepartmentsList(
-                departments: provider.departments,
-                onEdit: (department) => _showDepartmentFormDialog(context, provider, existing: department),
-                onDelete: (department) => _confirmDeleteDepartment(context, provider, department),
-              ),
-      },
     );
   }
 }
@@ -75,40 +78,86 @@ class _DepartmentsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accent = Theme.of(context).colorScheme.primary;
+    final scheme = Theme.of(context).colorScheme;
     return ListView.separated(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
       itemCount: departments.length,
       separatorBuilder: (context, index) => const SizedBox(height: 8),
       itemBuilder: (context, index) {
         final department = departments[index];
-        final subtitleParts = [
-          if (department.headOfDepartmentName != null) 'Head: ${department.headOfDepartmentName}',
-          if (department.classes.isNotEmpty) 'Classes: ${department.classes.join(', ')}',
-        ];
         return Card(
           margin: EdgeInsets.zero,
           clipBehavior: Clip.antiAlias,
-          child: ListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            leading: CircleAvatar(
-              backgroundColor: accent.withValues(alpha: 0.14),
-              child: Icon(Icons.apartment_outlined, color: accent, size: 20),
-            ),
-            title: Text(department.name, style: Theme.of(context).textTheme.titleSmall),
-            subtitle: subtitleParts.isEmpty ? null : Text(subtitleParts.join(' · ')),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                IconButton(
-                  icon: const Icon(Icons.edit_outlined),
-                  tooltip: 'Edit',
-                  onPressed: () => onEdit(department),
+                Row(
+                  children: [
+                    Container(
+                      width: 40,
+                      height: 40,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: accent.withValues(alpha: 0.14),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(Icons.apartment_outlined, color: accent, size: 20),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(department.name, style: Theme.of(context).textTheme.titleSmall),
+                          if (department.headOfDepartmentName != null)
+                            Row(
+                              children: [
+                                Icon(Icons.person_outline, size: 14, color: scheme.outline),
+                                const SizedBox(width: 4),
+                                Expanded(
+                                  child: Text(
+                                    'Head: ${department.headOfDepartmentName}',
+                                    style: Theme.of(context).textTheme.bodySmall,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                        ],
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.edit_outlined),
+                      tooltip: 'Edit',
+                      onPressed: () => onEdit(department),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete_outline),
+                      tooltip: 'Delete',
+                      onPressed: () => onDelete(department),
+                    ),
+                  ],
                 ),
-                IconButton(
-                  icon: const Icon(Icons.delete_outline),
-                  tooltip: 'Delete',
-                  onPressed: () => onDelete(department),
-                ),
+                if (department.classes.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 6,
+                    runSpacing: 6,
+                    children: [
+                      for (final className in department.classes)
+                        Chip(
+                          label: Text(className),
+                          backgroundColor: scheme.surfaceContainerHigh,
+                          labelStyle: Theme.of(context).textTheme.labelSmall,
+                          side: BorderSide.none,
+                          visualDensity: VisualDensity.compact,
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                    ],
+                  ),
+                ],
               ],
             ),
           ),
@@ -255,11 +304,7 @@ Future<void> _showDepartmentFormDialog(
   );
 }
 
-Future<void> _confirmDeleteDepartment(
-  BuildContext context,
-  DepartmentProvider provider,
-  Department department,
-) async {
+Future<void> _confirmDeleteDepartment(BuildContext context, DepartmentProvider provider, Department department) async {
   final confirmed = await showDialog<bool>(
     context: context,
     builder: (dialogContext) => AlertDialog(
@@ -280,8 +325,8 @@ Future<void> _confirmDeleteDepartment(
 
   final succeeded = await provider.deleteDepartment(department.id);
   if (!succeeded && context.mounted) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(provider.actionError?.message ?? 'Failed to delete department')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(provider.actionError?.message ?? 'Failed to delete department')));
   }
 }

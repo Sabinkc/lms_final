@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/theme/app_radius.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
@@ -8,6 +9,8 @@ import '../../data/models/parent.dart';
 import '../../data/models/student.dart';
 import '../providers/academic_structure_provider.dart' show LoadStatus;
 import '../providers/parent_provider.dart';
+import '../../../../shared/widgets/brand_app_bar.dart';
+import '../../../../shared/widgets/app_background.dart';
 
 /// docs/screens.md "Manage Parents — List / Add-Edit". No separate detail
 /// screen — same P0-only scope decision as the rest of Phase B. Linkage is
@@ -45,34 +48,36 @@ class _ParentsListScreenState extends State<ParentsListScreen> {
   Widget build(BuildContext context) {
     final provider = context.watch<ParentProvider>();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Parents')),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showParentFormDialog(context, provider),
-        tooltip: 'Add Parent',
-        child: const Icon(Icons.add),
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: BrandAppBar(title: 'Parents'),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => _showParentFormDialog(context, provider),
+          tooltip: 'Add Parent',
+          child: const Icon(Icons.add),
+        ),
+        body: switch (provider.status) {
+          LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading parents...'),
+          LoadStatus.error => ErrorView(error: provider.error!, onRetry: () => provider.loadParents()),
+          LoadStatus.success =>
+            provider.parents.isEmpty
+                ? EmptyStateView(
+                    message: 'No parents added yet',
+                    icon: Icons.family_restroom_outlined,
+                    actionLabel: 'Add Parent',
+                    onAction: () => _showParentFormDialog(context, provider),
+                  )
+                : _ParentsList(
+                    searchController: _searchController,
+                    parents: provider.parents
+                        .where((p) => _query.isEmpty || p.fullName.toLowerCase().contains(_query))
+                        .toList(),
+                    onEdit: (parent) => _showParentFormDialog(context, provider, existing: parent),
+                    onDelete: (parent) => _confirmDeleteParent(context, provider, parent),
+                  ),
+        },
       ),
-      body: switch (provider.status) {
-        LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading parents...'),
-        LoadStatus.error => ErrorView(
-            error: provider.error!,
-            onRetry: () => provider.loadParents(),
-          ),
-        LoadStatus.success => provider.parents.isEmpty
-            ? EmptyStateView(
-                message: 'No parents added yet',
-                icon: Icons.family_restroom_outlined,
-                actionLabel: 'Add Parent',
-                onAction: () => _showParentFormDialog(context, provider),
-              )
-            : _ParentsList(
-                searchController: _searchController,
-                parents:
-                    provider.parents.where((p) => _query.isEmpty || p.fullName.toLowerCase().contains(_query)).toList(),
-                onEdit: (parent) => _showParentFormDialog(context, provider, existing: parent),
-                onDelete: (parent) => _confirmDeleteParent(context, provider, parent),
-              ),
-      },
     );
   }
 }
@@ -92,16 +97,20 @@ class _ParentsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
           child: TextField(
             controller: searchController,
-            decoration: const InputDecoration(
-              labelText: 'Search parents by name',
-              prefixIcon: Icon(Icons.search),
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              hintText: 'Search parents by name',
+              prefixIcon: const Icon(Icons.search),
+              filled: true,
+              fillColor: scheme.surfaceContainerLow,
+              border: OutlineInputBorder(borderRadius: AppRadius.button, borderSide: BorderSide.none),
             ),
           ),
         ),
@@ -109,13 +118,13 @@ class _ParentsList extends StatelessWidget {
           child: parents.isEmpty
               ? const EmptyStateView(message: 'No parents match your search')
               : ListView.separated(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
                   itemCount: parents.length,
                   separatorBuilder: (context, index) => const SizedBox(height: 8),
                   itemBuilder: (context, index) {
                     final parent = parents[index];
                     final childNames = parent.children.map((c) => c.fullName).join(', ');
-                    final accent = Theme.of(context).colorScheme.primary;
+                    final accent = scheme.primary;
                     return Card(
                       margin: EdgeInsets.zero,
                       clipBehavior: Clip.antiAlias,
@@ -129,7 +138,18 @@ class _ParentsList extends StatelessWidget {
                           ),
                         ),
                         title: Text(parent.fullName, style: Theme.of(context).textTheme.titleSmall),
-                        subtitle: Text(childNames.isEmpty ? 'No children linked' : 'Children: $childNames'),
+                        subtitle: Row(
+                          children: [
+                            Icon(Icons.family_restroom_outlined, size: 14, color: scheme.outline),
+                            const SizedBox(width: 4),
+                            Expanded(
+                              child: Text(
+                                childNames.isEmpty ? 'No children linked' : 'Children: $childNames',
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -155,11 +175,7 @@ class _ParentsList extends StatelessWidget {
   }
 }
 
-Future<void> _showParentFormDialog(
-  BuildContext context,
-  ParentProvider provider, {
-  Parent? existing,
-}) async {
+Future<void> _showParentFormDialog(BuildContext context, ParentProvider provider, {Parent? existing}) async {
   final fullNameController = TextEditingController(text: existing?.fullName);
   final emailController = TextEditingController(text: existing?.email);
   final occupationController = TextEditingController(text: existing?.occupation);
@@ -206,7 +222,10 @@ Future<void> _showParentFormDialog(
                     decoration: const InputDecoration(labelText: 'Phone (optional)'),
                   ),
                   const SizedBox(height: 16),
-                  Align(alignment: Alignment.centerLeft, child: Text('Linked children', style: Theme.of(dialogContext).textTheme.labelLarge)),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text('Linked children', style: Theme.of(dialogContext).textTheme.labelLarge),
+                  ),
                   const SizedBox(height: 4),
                   ConstrainedBox(
                     constraints: const BoxConstraints(maxHeight: 200),
@@ -282,11 +301,7 @@ Future<void> _showParentFormDialog(
   );
 }
 
-Future<void> _confirmDeleteParent(
-  BuildContext context,
-  ParentProvider provider,
-  Parent parent,
-) async {
+Future<void> _confirmDeleteParent(BuildContext context, ParentProvider provider, Parent parent) async {
   final confirmed = await showDialog<bool>(
     context: context,
     builder: (dialogContext) => AlertDialog(
@@ -310,8 +325,8 @@ Future<void> _confirmDeleteParent(
 
   final succeeded = await provider.deleteParent(parent.id);
   if (!succeeded && context.mounted) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(provider.actionError?.message ?? 'Failed to delete parent')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(provider.actionError?.message ?? 'Failed to delete parent')));
   }
 }

@@ -1,5 +1,6 @@
 import '../../../../core/error/result.dart';
 import '../../../admin_management/data/models/student.dart';
+import '../models/day_attendance_record.dart';
 import '../models/attendance_session.dart';
 import '../models/attendance_status.dart';
 import '../models/attendance_submit_result.dart';
@@ -73,4 +74,9 @@ abstract class AttendanceRepository {
     String? month,
     String? year,
   });
+
+  /// Every student's attendance rows for [date] (`YYYY-MM-DD`), optionally
+  /// narrowed to one class — backs the Admin Students screen's per-day
+  /// statuses. See [DayAttendanceRecord] for the shape.
+  Future<Result<List<DayAttendanceRecord>>> getDayRecords({required String date, String? className});
 }

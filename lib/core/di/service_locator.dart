@@ -18,6 +18,8 @@ import '../../features/admin_management/presentation/providers/academic_structur
 import '../../features/admin_management/presentation/providers/department_provider.dart';
 import '../../features/admin_management/presentation/providers/parent_provider.dart';
 import '../../features/admin_management/presentation/providers/student_provider.dart';
+import '../../features/admin_management/presentation/providers/student_profile_provider.dart';
+import '../../features/admin_management/presentation/providers/student_day_attendance_provider.dart';
 import '../../features/admin_management/presentation/providers/teacher_provider.dart';
 import '../../features/assignments/data/repositories/assignment_repository.dart';
 import '../../features/assignments/data/repositories/assignment_repository_http.dart';
@@ -62,6 +64,9 @@ import '../../features/payroll/data/repositories/payroll_repository.dart';
 import '../../features/payroll/data/repositories/payroll_repository_http.dart';
 import '../../features/payroll/presentation/providers/my_payslips_provider.dart';
 import '../../features/payroll/presentation/providers/payroll_provider.dart';
+import '../../features/dashboard/data/repositories/admin_dashboard_repository.dart';
+import '../../features/dashboard/data/repositories/admin_dashboard_repository_http.dart';
+import '../../features/dashboard/presentation/providers/admin_dashboard_provider.dart';
 import '../../features/reports/data/repositories/reports_repository.dart';
 import '../../features/reports/data/repositories/reports_repository_http.dart';
 import '../../features/reports/presentation/providers/reports_provider.dart';
@@ -127,6 +132,8 @@ Future<void> setupServiceLocator(EnvConfig env) async {
 
   sl.registerLazySingleton<StudentRepository>(() => StudentRepositoryHttp(sl()));
   sl.registerFactory<StudentProvider>(() => StudentProvider(sl(), sl(), sl()));
+  sl.registerFactory<StudentProfileProvider>(() => StudentProfileProvider(sl(), sl(), sl(), sl()));
+  sl.registerFactory<StudentDayAttendanceProvider>(() => StudentDayAttendanceProvider(sl()));
 
   sl.registerLazySingleton<ParentRepository>(() => ParentRepositoryHttp(sl()));
   sl.registerFactory<ParentProvider>(() => ParentProvider(sl(), sl()));
@@ -180,6 +187,10 @@ Future<void> setupServiceLocator(EnvConfig env) async {
   // ── Feature: Reports (Phase J) ───────────────────────────────────────────
   sl.registerLazySingleton<ReportsRepository>(() => ReportsRepositoryHttp(sl()));
   sl.registerFactory<ReportsProvider>(() => ReportsProvider(sl()));
+
+  // ── Feature: Admin Home Dashboard overview (Verdant Scholar restyle) ────
+  sl.registerLazySingleton<AdminDashboardRepository>(() => AdminDashboardRepositoryHttp(sl()));
+  sl.registerFactory<AdminDashboardProvider>(() => AdminDashboardProvider(sl()));
 
   // ── Feature: Backup (Phase L1) ───────────────────────────────────────────
   sl.registerLazySingleton<BackupRepository>(() => BackupRepositoryHttp(sl()));

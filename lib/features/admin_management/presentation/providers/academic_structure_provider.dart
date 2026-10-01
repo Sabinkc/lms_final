@@ -72,7 +72,8 @@ class AcademicStructureProvider extends ChangeNotifier {
     final result = await _classRepository.createClass(name: name, description: description);
     final succeeded = result.isSuccess;
     result.when(
-      success: (created) => _classes = [..._classes, created],
+      // A just-created class has no sections yet.
+      success: (created) => _classes = [..._classes, created.withSectionCount(0)],
       failure: (error) => _classActionError = error,
     );
 
@@ -89,7 +90,11 @@ class AcademicStructureProvider extends ChangeNotifier {
     final result = await _classRepository.updateClass(id: id, name: name, description: description, status: status);
     final succeeded = result.isSuccess;
     result.when(
-      success: (updated) => _classes = [for (final c in _classes) if (c.id == updated.id) updated else c],
+      // The update response doesn't embed `sections` — keep the known count.
+      success: (updated) => _classes = [
+        for (final c in _classes)
+          if (c.id == updated.id) updated.withSectionCount(updated.sectionCount ?? c.sectionCount) else c
+      ],
       failure: (error) => _classActionError = error,
     );
 
@@ -112,6 +117,14 @@ class AcademicStructureProvider extends ChangeNotifier {
     return succeeded;
   }
 
+  /// Keeps the Classes list's per-class section count in step with the
+  /// Sections screen, so going back doesn't show a stale number.
+  void _syncSectionCount() {
+    final classId = _selectedClassId;
+    if (classId == null) return;
+    _classes = [for (final c in _classes) c.id == classId ? c.withSectionCount(_sections.length) : c];
+  }
+
   Future<void> loadSections(String classId) async {
     _selectedClassId = classId;
     _sectionsStatus = LoadStatus.loading;
@@ -123,6 +136,7 @@ class AcademicStructureProvider extends ChangeNotifier {
       success: (sections) {
         _sections = sections;
         _sectionsStatus = LoadStatus.success;
+        _syncSectionCount();
       },
       failure: (error) {
         _sectionsError = error;
@@ -140,7 +154,10 @@ class AcademicStructureProvider extends ChangeNotifier {
     final result = await _sectionRepository.createSection(classId: classId, name: name);
     final succeeded = result.isSuccess;
     result.when(
-      success: (created) => _sections = [..._sections, created],
+      success: (created) {
+        _sections = [..._sections, created];
+        _syncSectionCount();
+      },
       failure: (error) => _sectionActionError = error,
     );
 
@@ -172,7 +189,10 @@ class AcademicStructureProvider extends ChangeNotifier {
     final result = await _sectionRepository.deleteSection(id);
     final succeeded = result.isSuccess;
     result.when(
-      success: (_) => _sections = _sections.where((s) => s.id != id).toList(),
+      success: (_) {
+        _sections = _sections.where((s) => s.id != id).toList();
+        _syncSectionCount();
+      },
       failure: (error) => _sectionActionError = error,
     );
 

@@ -8,7 +8,10 @@ import 'package:cloud_lms/features/admin_management/data/models/student.dart';
 import 'package:cloud_lms/features/admin_management/data/repositories/class_repository.dart';
 import 'package:cloud_lms/features/admin_management/data/repositories/section_repository.dart';
 import 'package:cloud_lms/features/admin_management/data/repositories/student_repository.dart';
+import 'package:cloud_lms/features/admin_management/presentation/providers/student_day_attendance_provider.dart';
 import 'package:cloud_lms/features/admin_management/presentation/providers/student_provider.dart';
+import 'package:cloud_lms/features/attendance/data/models/day_attendance_record.dart';
+import 'package:cloud_lms/features/attendance/data/repositories/attendance_repository.dart';
 import 'package:cloud_lms/features/admin_management/presentation/screens/students_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -20,6 +23,8 @@ class _MockStudentRepository extends Mock implements StudentRepository {}
 class _MockClassRepository extends Mock implements ClassRepository {}
 
 class _MockSectionRepository extends Mock implements SectionRepository {}
+
+class _MockAttendanceRepository extends Mock implements AttendanceRepository {}
 
 const _student1 = Student(
   id: 's1',
@@ -36,8 +41,13 @@ const _student1 = Student(
   status: 'active',
 );
 
-Widget _wrap(StudentProvider provider) => ChangeNotifierProvider<StudentProvider>.value(
-      value: provider,
+late StudentDayAttendanceProvider _dayAttendance;
+
+Widget _wrap(StudentProvider provider) => MultiProvider(
+      providers: [
+        ChangeNotifierProvider<StudentProvider>.value(value: provider),
+        ChangeNotifierProvider<StudentDayAttendanceProvider>.value(value: _dayAttendance),
+      ],
       child: const MaterialApp(home: StudentsListScreen()),
     );
 
@@ -51,6 +61,12 @@ void main() {
     classRepository = _MockClassRepository();
     sectionRepository = _MockSectionRepository();
     when(() => classRepository.getClasses()).thenAnswer((_) async => const Result.success([]));
+    final attendanceRepository = _MockAttendanceRepository();
+    when(() => attendanceRepository.getDayRecords(date: any(named: 'date'), className: any(named: 'className')))
+        .thenAnswer((_) async => const Result.success([
+              DayAttendanceRecord(date: '2026-10-01', status: 'absent', studentName: 'Sam Student', className: 'Class 10 A'),
+            ]));
+    _dayAttendance = StudentDayAttendanceProvider(attendanceRepository);
   });
 
   testWidgets('loading state shows LoadingView', (tester) async {
@@ -208,5 +224,32 @@ void main() {
           phone: any(named: 'phone'),
         )).called(1);
     expect(find.byType(AlertDialog), findsNothing);
+  });
+
+  testWidgets('each student shows that day\'s attendance, matched by name and class', (tester) async {
+    const other = Student(
+      id: 's2',
+      fullName: 'Alex Other',
+      email: '',
+      admissionNumber: '',
+      rollNumber: '',
+      className: 'Class 10',
+      section: 'A',
+      parentId: null,
+      dob: '',
+      address: '',
+      phone: '',
+      status: 'active',
+    );
+    when(() => studentRepository.getStudents(className: any(named: 'className')))
+        .thenAnswer((_) async => const Result.success([_student1, other]));
+    final provider = StudentProvider(studentRepository, classRepository, sectionRepository);
+
+    await tester.pumpWidget(_wrap(provider));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Absent'), findsWidgets); // Sam's pill + the Absent stat tile
+    expect(find.text('Not marked'), findsOneWidget); // Alex has no record that day
+    expect(find.text('(50.0%)'), findsOneWidget); // 1 of 2 absent
   });
 }

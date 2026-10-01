@@ -24,8 +24,10 @@ class AppRoutes {
   // Admin management (docs/production_roadmap.md Phase B).
   static const String adminClasses = '/admin/classes';
   static String adminClassSections(String classId) => '/admin/classes/$classId/sections';
+  static String adminClassDetail(String classId) => '/admin/classes/$classId';
   static const String adminTeachers = '/admin/teachers';
   static const String adminStudents = '/admin/students';
+  static String adminStudentProfile(String studentId) => '/admin/students/$studentId';
   static const String adminParents = '/admin/parents';
 
   // Departments (docs/production_roadmap.md Phase L2).

@@ -12,12 +12,18 @@ class ClassSection {
   final String status;
   final int studentCount;
 
+  /// Assigned teachers' ids. `GET /classes/:classId/sections` populates
+  /// `teachers` as `{_id, employeeId}` objects; `GET /classes` embeds them
+  /// as bare id strings — both are reduced to ids here.
+  final List<String> teacherIds;
+
   const ClassSection({
     required this.id,
     required this.name,
     required this.classId,
     required this.status,
     this.studentCount = 0,
+    this.teacherIds = const [],
   });
 
   factory ClassSection.fromJson(Map<String, dynamic> json) => ClassSection(
@@ -26,5 +32,12 @@ class ClassSection {
         classId: json['classId'] as String? ?? '',
         status: json['status'] as String? ?? 'active',
         studentCount: json['studentCount'] as int? ?? 0,
+        teacherIds: [
+          for (final t in (json['teachers'] as List?) ?? const [])
+            if (t is String)
+              t
+            else if (t is Map<String, dynamic> && t['_id'] is String)
+              t['_id'] as String,
+        ],
       );
 }

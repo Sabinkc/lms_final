@@ -15,9 +15,9 @@ import '../theme/app_colors.dart';
 /// `AppBar` with real per-screen actions (export, payment review, ...);
 /// wrapping them in a second outer `AppBar` here would either stack two
 /// bars or force stripping those actions out of already-built, tested
-/// screens, which is out of scope for a foundation/theme pass. `RoleHome
-/// Screen` and `MoreScreen` — the two tabs that don't already have an
-/// `AppBar` — carry their own instead (title + Notifications/Logout).
+/// screens, which is out of scope for a foundation/theme pass. Each role's
+/// Home screen and `MoreScreen` — the two tabs that don't already have an
+/// `AppBar` — carry their own instead.
 class RoleShell extends StatelessWidget {
   final AppRole role;
   final StatefulNavigationShell navigationShell;
@@ -27,7 +27,10 @@ class RoleShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final config = RoleDashboardConfig.forRole(role);
-    final accent = AppColors.roleColor(role);
+    // Matches every role's Home screen/MoreScreen: Stitch's own bottom-nav
+    // mockups use the same uniform primary-container green active-state
+    // across every role, not a per-role tint.
+    final accent = AppColors.primary;
     final index = navigationShell.currentIndex;
 
     final destinations = <NavigationDestination>[
