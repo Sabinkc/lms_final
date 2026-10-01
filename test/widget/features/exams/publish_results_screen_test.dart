@@ -81,10 +81,11 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Sam Student'), findsOneWidget);
-    expect(find.text('Math (out of 100)'), findsOneWidget);
+    expect(find.text('Math'), findsOneWidget);
+    expect(find.text('/100'), findsOneWidget);
 
-    await tester.enterText(find.widgetWithText(TextFormField, 'Marks'), '85');
-    await tester.tap(find.text('Publish Results'));
+    await tester.enterText(find.byType(TextFormField), '85');
+    await tester.tap(find.ancestor(of: find.text('Publish Results'), matching: find.bySubtype<FilledButton>()));
     await tester.pumpAndSettle();
 
     final captured = verify(() => repository.publishResults(examId: 'e1', results: captureAny(named: 'results')))

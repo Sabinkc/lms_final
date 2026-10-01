@@ -2,12 +2,17 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/utils/display_date.dart';
+import '../../../../shared/utils/initials.dart';
 import '../../../../shared/widgets/error_view.dart';
+import '../../../../shared/widgets/info_strip.dart';
 import '../../../../shared/widgets/loading_view.dart';
+import '../../../../shared/widgets/section_card.dart';
 import '../../../../shared/widgets/status_chip.dart';
+import '../../../../shared/widgets/tinted_stat_tile.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../../../auth/data/models/app_role.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
@@ -15,6 +20,7 @@ import '../../data/models/assignment.dart';
 import '../../data/models/assignment_submission.dart';
 import '../../data/repositories/assignment_repository.dart' show SubmissionFile;
 import '../providers/assignment_provider.dart';
+import 'assignments_list_screen.dart' show subjectIcon;
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 
@@ -85,54 +91,79 @@ class _DetailBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final closed = assignment.status == 'closed';
     return ListView(
-      padding: const EdgeInsets.all(AppSpacing.lg),
+      padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.sm, AppSpacing.lg, AppSpacing.xl),
       children: [
-        Card(
-          margin: EdgeInsets.zero,
-          child: Padding(
-            padding: const EdgeInsets.all(AppSpacing.lg),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 44,
-                      height: 44,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: scheme.primary.withValues(alpha: 0.14),
-                        borderRadius: AppRadius.card,
-                      ),
-                      child: Icon(Icons.assignment_outlined, color: scheme.primary),
+        Container(
+          padding: const EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(AppRadius.xl2),
+            gradient: const LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [AppColors.primary, AppColors.primaryDark],
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 46,
+                    height: 46,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.16),
+                      borderRadius: BorderRadius.circular(AppRadius.lg),
                     ),
-                    const SizedBox(width: AppSpacing.sm),
-                    Expanded(child: Text(assignment.title, style: Theme.of(context).textTheme.headlineSmall)),
-                    if (assignment.status == 'closed') const AppStatusChip(label: 'Closed', color: Colors.grey),
-                  ],
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                Wrap(
-                  spacing: AppSpacing.xs,
-                  runSpacing: AppSpacing.xs,
-                  children: [
-                    _MetaPill(icon: Icons.menu_book_outlined, label: assignment.subject),
-                    _MetaPill(icon: Icons.class_outlined, label: '${assignment.className} ${assignment.section}'),
-                    _MetaPill(icon: Icons.event_outlined, label: 'Due ${formatDisplayDate(assignment.dueDate)}'),
-                  ],
-                ),
-                if (assignment.description.isNotEmpty) ...[
-                  const SizedBox(height: AppSpacing.md),
-                  Text(assignment.description),
+                    child: Icon(subjectIcon(assignment.subject), color: Colors.white),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      assignment.title,
+                      style: theme.textTheme.titleLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.w800),
+                    ),
+                  ),
+                  if (closed)
+                    const AppStatusPill(label: 'Closed', icon: Icons.lock_outline, color: Colors.white),
+                ],
+              ),
+              const SizedBox(height: 14),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  _MetaPill(icon: Icons.menu_book_outlined, label: assignment.subject),
+                  _MetaPill(icon: Icons.class_outlined, label: '${assignment.className} ${assignment.section}'),
+                  _MetaPill(icon: Icons.event_outlined, label: 'Due ${formatDisplayDate(assignment.dueDate)}'),
+                ],
+              ),
+            ],
+          ),
+        ),
+        if (assignment.description.isNotEmpty || assignment.attachment.isNotEmpty) ...[
+          const SizedBox(height: AppSpacing.md),
+          SectionCard(
+            icon: Icons.description_outlined,
+            title: 'Task Specification',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (assignment.description.isNotEmpty)
+                  Text(assignment.description, style: theme.textTheme.bodyMedium?.copyWith(height: 1.5)),
+                if (assignment.attachment.isNotEmpty) ...[
+                  const SizedBox(height: 12),
+                  const InfoStrip(icon: Icons.attach_file_rounded, text: 'Attached resource', trailing: 'Teacher file'),
                 ],
               ],
             ),
           ),
-        ),
-        const SizedBox(height: 24),
+        ],
+        const SizedBox(height: AppSpacing.lg),
         switch (role) {
           AppRole.teacher => _TeacherSubmissions(assignment: assignment),
           AppRole.student => _StudentSubmission(assignment: assignment),
@@ -151,16 +182,18 @@ class _MetaPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(color: scheme.surfaceContainerHighest, borderRadius: AppRadius.button),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.16),
+        borderRadius: BorderRadius.circular(AppRadius.xl4),
+      ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 14, color: scheme.onSurfaceVariant),
-          const SizedBox(width: 4),
-          Text(label, style: Theme.of(context).textTheme.labelSmall),
+          Icon(icon, size: 14, color: Colors.white),
+          const SizedBox(width: 5),
+          Text(label, style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
         ],
       ),
     );
@@ -182,35 +215,68 @@ class _TeacherSubmissions extends StatelessWidget {
         provider.submissionsError!.message,
         style: TextStyle(color: Theme.of(context).colorScheme.error),
       ),
-      LoadStatus.success =>
-        provider.submissions.isEmpty
-            ? const Text('No submissions yet')
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      LoadStatus.success => () {
+        final submissions = provider.submissions;
+        final graded = submissions.where((s) => s.graded).length;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                Text(
+                  'Submissions',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(width: 8),
+                AppStatusPill(label: '${submissions.length}', color: AppColors.primary),
+              ],
+            ),
+            const SizedBox(height: 10),
+            if (submissions.isEmpty)
+              const Card(
+                margin: EdgeInsets.zero,
+                child: Padding(
+                  padding: EdgeInsets.all(24),
+                  child: Column(
                     children: [
-                      Text('Submissions', style: Theme.of(context).textTheme.titleMedium),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.14),
-                          borderRadius: AppRadius.button,
-                        ),
-                        child: Text(
-                          '${provider.submissions.length}',
-                          style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
+                      Icon(Icons.inbox_outlined, size: 36),
+                      SizedBox(height: 8),
+                      Text('No submissions yet'),
                     ],
                   ),
-                  for (final submission in provider.submissions) _SubmissionCard(submission: submission),
+                ),
+              )
+            else ...[
+              Row(
+                children: [
+                  Expanded(
+                    child: TintedStatTile(
+                      icon: Icons.task_alt_rounded,
+                      label: 'Graded',
+                      value: '$graded',
+                      color: const Color(0xFF16A34A),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: TintedStatTile(
+                      icon: Icons.pending_actions_rounded,
+                      label: 'To grade',
+                      value: '${submissions.length - graded}',
+                      color: const Color(0xFFEA580C),
+                    ),
+                  ),
                 ],
               ),
+              const SizedBox(height: 10),
+              for (final submission in submissions) ...[
+                _SubmissionCard(submission: submission),
+                const SizedBox(height: 10),
+              ],
+            ],
+          ],
+        );
+      }(),
     };
   }
 }
@@ -225,42 +291,77 @@ class _SubmissionCard extends StatelessWidget {
     final provider = context.watch<AssignmentProvider>();
     final grading = provider.isGrading(submission.id);
     final name = submission.studentName ?? submission.studentAdmissionNumber ?? 'Unknown student';
-    final scheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final files = submission.attachments.length;
 
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8),
+      margin: EdgeInsets.zero,
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(14),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
               children: [
                 CircleAvatar(
-                  radius: 16,
-                  backgroundColor: scheme.primary.withValues(alpha: 0.14),
+                  radius: 20,
+                  backgroundColor: AppColors.primary.withValues(alpha: 0.12),
                   child: Text(
-                    name.isNotEmpty ? name[0].toUpperCase() : '?',
-                    style: TextStyle(color: scheme.primary, fontWeight: FontWeight.w700, fontSize: 13),
+                    initialsFor(name),
+                    style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w700),
                   ),
                 ),
-                const SizedBox(width: 10),
-                Expanded(child: Text(name, style: Theme.of(context).textTheme.titleSmall)),
-                if (submission.graded) const AppStatusChip(label: 'Graded', color: Colors.green),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(name, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+                      if (submission.submittedAt.isNotEmpty)
+                        Text(
+                          'Submitted ${formatDisplayDate(submission.submittedAt)}',
+                          style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                        ),
+                    ],
+                  ),
+                ),
+                if (submission.graded)
+                  const AppStatusPill(label: 'Graded', icon: Icons.check_circle_outline, color: Color(0xFF16A34A))
+                else
+                  const AppStatusPill(label: 'Pending', icon: Icons.schedule, color: Color(0xFFEA580C)),
               ],
             ),
+            if (submission.submissionText.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surfaceContainerLow,
+                  borderRadius: BorderRadius.circular(AppRadius.lg),
+                ),
+                child: Text('“${submission.submissionText}”', style: theme.textTheme.bodyMedium),
+              ),
+            ],
             const SizedBox(height: 8),
-            if (submission.submissionText.isNotEmpty) Text(submission.submissionText),
-            Text('${submission.attachments.length} file(s) attached'),
-            const SizedBox(height: 8),
+            InfoStrip(
+              icon: Icons.attach_file_rounded,
+              text: files == 0 ? 'No files attached' : '$files file${files == 1 ? '' : 's'} attached',
+              color: AppColors.info,
+            ),
+            const SizedBox(height: 10),
             if (submission.graded)
-              Text('Marks: ${submission.marks} — ${submission.remarks}')
+              InfoStrip(
+                icon: Icons.grade_outlined,
+                text: 'Marks: ${submission.marks}${submission.remarks.isNotEmpty ? ' — ${submission.remarks}' : ''}',
+                color: const Color(0xFF16A34A),
+              )
             else
-              FilledButton(
+              FilledButton.icon(
                 onPressed: grading ? null : () => _showGradeDialog(context, provider, submission),
-                child: grading
+                icon: grading
                     ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                    : const Text('Grade'),
+                    : const Icon(Icons.rate_review_outlined, size: 18),
+                label: const Text('Grade'),
               ),
           ],
         ),
@@ -359,28 +460,27 @@ class _StudentSubmissionState extends State<_StudentSubmission> {
     final mySubmission = existing.isEmpty ? null : existing.first;
 
     if (mySubmission != null && mySubmission.graded) {
-      final scheme = Theme.of(context).colorScheme;
       return Container(
-        padding: const EdgeInsets.all(AppSpacing.lg),
+        padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
-          borderRadius: AppRadius.card,
-          gradient: LinearGradient(
+          borderRadius: BorderRadius.circular(AppRadius.xl2),
+          gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [scheme.primary, Color.lerp(scheme.primary, Colors.black, 0.35)!],
+            colors: [AppColors.primary, AppColors.primaryDark],
           ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
+            const Row(
               children: [
-                const Icon(Icons.celebration_outlined, color: Colors.white),
-                const SizedBox(width: 8),
-                const Expanded(
+                Icon(Icons.verified_rounded, color: Colors.white, size: 20),
+                SizedBox(width: 8),
+                Expanded(
                   child: Text(
                     'Your submission has been graded',
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
                   ),
                 ),
               ],
@@ -388,70 +488,137 @@ class _StudentSubmissionState extends State<_StudentSubmission> {
             const SizedBox(height: 12),
             Text(
               'Marks: ${mySubmission.marks}',
-              style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w700),
+              style: const TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w800),
             ),
             if (mySubmission.remarks.isNotEmpty) ...[
-              const SizedBox(height: 4),
-              Text('Remarks: ${mySubmission.remarks}', style: const TextStyle(color: Colors.white)),
+              const SizedBox(height: 12),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.14),
+                  borderRadius: BorderRadius.circular(AppRadius.lg),
+                ),
+                child: Text(
+                  '“${mySubmission.remarks}”',
+                  style: const TextStyle(color: Colors.white, fontStyle: FontStyle.italic),
+                ),
+              ),
             ],
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Icon(Icons.lock_outline, size: 16, color: Colors.white.withValues(alpha: 0.8)),
+                const SizedBox(width: 6),
+                Text(
+                  'Submission locked after grading',
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.8), fontSize: 12),
+                ),
+              ],
+            ),
           ],
         ),
       );
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          mySubmission == null ? 'Submit your work' : 'Resubmit your work',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        const SizedBox(height: 8),
-        TextField(
-          controller: _textController,
-          decoration: const InputDecoration(labelText: 'Submission text (optional)'),
-          maxLines: 3,
-        ),
-        const SizedBox(height: 8),
-        TextButton.icon(
-          icon: const Icon(Icons.attach_file),
-          label: Text(_pickedFiles.isEmpty ? 'Attach files (up to 5)' : '${_pickedFiles.length} file(s) selected'),
-          onPressed: () async {
-            final files = await FilePicker.pickFiles();
-            if (files.isEmpty) return;
-            final withBytes = <SubmissionFile>[];
-            for (final f in files.take(5)) {
-              withBytes.add(SubmissionFile(bytes: await f.readAsBytes(), filename: f.name));
-            }
-            setState(() {
-              _pickedFiles
-                ..clear()
-                ..addAll(withBytes);
-            });
-          },
-        ),
-        if (provider.submitError != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: Text(provider.submitError!.message, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+    final theme = Theme.of(context);
+    return SectionCard(
+      icon: Icons.upload_file_rounded,
+      title: mySubmission == null ? 'Submit your work' : 'Resubmit your work',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (mySubmission != null) ...[
+            InfoStrip(
+              icon: Icons.check_circle_outline,
+              text: mySubmission.submittedAt.isNotEmpty
+                  ? 'Submitted ${formatDisplayDate(mySubmission.submittedAt)} · you can resubmit until graded'
+                  : 'Submitted · you can resubmit until graded',
+              color: const Color(0xFF16A34A),
+            ),
+            const SizedBox(height: 12),
+          ],
+          TextField(
+            controller: _textController,
+            decoration: InputDecoration(
+              labelText: 'Submission text (optional)',
+              alignLabelWithHint: true,
+              filled: true,
+              fillColor: theme.colorScheme.surfaceContainerLow,
+            ),
+            maxLines: 4,
           ),
-        const SizedBox(height: 8),
-        FilledButton(
-          onPressed: provider.isSubmitting
-              ? null
-              : () async {
-                  final succeeded = await provider.submitAssignment(
-                    assignmentId: widget.assignment.id,
-                    submissionText: _textController.text.trim(),
-                    files: _pickedFiles,
-                  );
-                  if (succeeded) provider.loadMySubmissions();
-                },
-          child: provider.isSubmitting
-              ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
-              : Text(mySubmission == null ? 'Submit' : 'Resubmit'),
-        ),
-      ],
+          const SizedBox(height: 12),
+          InkWell(
+            borderRadius: BorderRadius.circular(AppRadius.lg),
+            onTap: () async {
+              final files = await FilePicker.pickFiles();
+              if (files.isEmpty) return;
+              final withBytes = <SubmissionFile>[];
+              for (final f in files.take(5)) {
+                withBytes.add(SubmissionFile(bytes: await f.readAsBytes(), filename: f.name));
+              }
+              setState(() {
+                _pickedFiles
+                  ..clear()
+                  ..addAll(withBytes);
+              });
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 18),
+              decoration: BoxDecoration(
+                color: AppColors.info.withValues(alpha: 0.05),
+                borderRadius: BorderRadius.circular(AppRadius.lg),
+                border: Border.all(color: AppColors.info.withValues(alpha: 0.3)),
+              ),
+              child: Column(
+                children: [
+                  const Icon(Icons.cloud_upload_outlined, color: AppColors.info, size: 28),
+                  const SizedBox(height: 6),
+                  Text(
+                    _pickedFiles.isEmpty ? 'Attach files (up to 5)' : '${_pickedFiles.length} file(s) selected',
+                    style: theme.textTheme.bodyMedium?.copyWith(color: AppColors.info, fontWeight: FontWeight.w600),
+                  ),
+                  if (_pickedFiles.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+                      child: Text(
+                        _pickedFiles.map((f) => f.filename).join(', '),
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodySmall,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+          if (provider.submitError != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(provider.submitError!.message, style: TextStyle(color: theme.colorScheme.error)),
+            ),
+          const SizedBox(height: 14),
+          FilledButton.icon(
+            style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(48)),
+            onPressed: provider.isSubmitting
+                ? null
+                : () async {
+                    final succeeded = await provider.submitAssignment(
+                      assignmentId: widget.assignment.id,
+                      submissionText: _textController.text.trim(),
+                      files: _pickedFiles,
+                    );
+                    if (succeeded) provider.loadMySubmissions();
+                  },
+            icon: provider.isSubmitting
+                ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                : const Icon(Icons.send_rounded, size: 18),
+            label: Text(mySubmission == null ? 'Submit' : 'Resubmit'),
+          ),
+        ],
+      ),
     );
   }
 }

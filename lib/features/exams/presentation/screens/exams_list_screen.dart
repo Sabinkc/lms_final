@@ -3,30 +3,34 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
-import '../../../../core/theme/app_spacing.dart';
+import '../../../../shared/utils/display_date.dart';
+import '../../../../shared/widgets/app_background.dart';
+import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
+import '../../../../shared/widgets/filter_chip_bar.dart';
+import '../../../../shared/widgets/info_strip.dart';
 import '../../../../shared/widgets/loading_view.dart';
 import '../../../../shared/widgets/status_chip.dart';
-import '../../../../shared/utils/display_date.dart';
+import '../../../../shared/widgets/tinted_stat_tile.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../../../auth/data/models/app_role.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../data/models/exam.dart';
 import '../providers/exam_provider.dart';
 import 'exam_form_dialog.dart';
-import '../../../../shared/widgets/brand_app_bar.dart';
-import '../../../../shared/widgets/app_background.dart';
 
 /// docs/screens.md's Exam & Academic Schedule module. One list for every
 /// role (`GET /exams` Admin-only, `GET /exams/my` everyone else, role read
 /// inside the initState microtask — same reasoning as
-/// `AssignmentDetailScreen`/`NoticesListScreen`). Each row expands in place
-/// to show its subjects rather than navigating to a separate detail
-/// screen — `examController` has no `GET /:id` for non-Admin roles, so
-/// there's nothing to re-fetch anyway; the already-loaded list item is the
-/// detail.
+/// `AssignmentDetailScreen`/`NoticesListScreen`). Each card shows its
+/// subjects inline rather than navigating to a separate detail screen —
+/// `examController` has no `GET /:id` for non-Admin roles, so there's
+/// nothing to re-fetch anyway; the already-loaded list item is the detail.
+/// Layout follows the Stitch `cloudslms_exams` mockup: summary tiles,
+/// search, status chips, then one rich card per exam.
 class ExamsListScreen extends StatefulWidget {
   const ExamsListScreen({super.key});
 
@@ -35,11 +39,15 @@ class ExamsListScreen extends StatefulWidget {
 }
 
 class _ExamsListScreenState extends State<ExamsListScreen> {
+  final _search = TextEditingController();
+  String? _status;
+
   @override
   void initState() {
     super.initState();
     final provider = context.read<ExamProvider>();
     final authProvider = context.read<AuthProvider>();
+    _search.addListener(() => setState(() {}));
     Future.microtask(() {
       if (authProvider.role == AppRole.admin) {
         provider.loadExamsAsAdmin();
@@ -47,6 +55,12 @@ class _ExamsListScreenState extends State<ExamsListScreen> {
         provider.loadMyExams();
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _search.dispose();
+    super.dispose();
   }
 
   @override
@@ -80,101 +94,277 @@ class _ExamsListScreenState extends State<ExamsListScreen> {
                     actionLabel: isAdmin ? 'Add Exam' : null,
                     onAction: isAdmin ? () => showExamFormDialog(context, provider) : null,
                   )
-                : ListView.separated(
-                    padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.sm, AppSpacing.lg, AppSpacing.lg),
-                    itemCount: provider.exams.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: AppSpacing.sm),
-                    itemBuilder: (context, index) =>
-                        _ExamTile(exam: provider.exams[index], role: role, isAdmin: isAdmin),
-                  ),
+                : _buildList(context, provider.exams, role, isAdmin),
         },
       ),
     );
   }
+
+  Widget _buildList(BuildContext context, List<Exam> exams, AppRole? role, bool isAdmin) {
+    final counts = <String, int>{};
+    for (final e in exams) {
+      counts[e.status] = (counts[e.status] ?? 0) + 1;
+    }
+    final statuses = [for (final s in _statusOrder) if (counts.containsKey(s)) s];
+    final status = statuses.contains(_status) ? _status : null;
+    final query = _search.text.trim().toLowerCase();
+    final visible = exams.where((e) {
+      if (status != null && e.status != status) return false;
+      if (query.isEmpty) return true;
+      return e.title.toLowerCase().contains(query) ||
+          e.className.toLowerCase().contains(query) ||
+          e.subjects.any((s) => s.name.toLowerCase().contains(query));
+    }).toList();
+    final scheme = Theme.of(context).colorScheme;
+
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: TintedStatTile(
+                icon: Icons.assignment_outlined,
+                label: 'Total Exams',
+                value: '${exams.length}',
+                color: AppColors.primary,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: TintedStatTile(
+                icon: Icons.event_outlined,
+                label: 'Upcoming',
+                value: '${(counts['upcoming'] ?? 0) + (counts['ongoing'] ?? 0)}',
+                color: _statusStyle('upcoming').color,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: TintedStatTile(
+                icon: Icons.verified_outlined,
+                label: 'Published',
+                value: '${counts['published'] ?? 0}',
+                color: _statusStyle('published').color,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 14),
+        TextField(
+          controller: _search,
+          decoration: InputDecoration(
+            hintText: 'Search exams, subjects, classes...',
+            prefixIcon: const Icon(Icons.search),
+            filled: true,
+            fillColor: scheme.surfaceContainerLow,
+            border: OutlineInputBorder(borderRadius: AppRadius.button, borderSide: BorderSide.none),
+          ),
+        ),
+        const SizedBox(height: 12),
+        AppFilterChipBar<String?>(
+          options: [null, ...statuses],
+          selected: status,
+          labelBuilder: (s) => s == null ? 'All' : _statusStyle(s).label,
+          countBuilder: (s) => s == null ? exams.length : counts[s]!,
+          onSelected: (s) => setState(() => _status = s),
+        ),
+        const SizedBox(height: 14),
+        if (visible.isEmpty)
+          const Padding(
+            padding: EdgeInsets.only(top: 32),
+            child: EmptyStateView(message: 'No exams match your search', icon: Icons.search_off),
+          ),
+        for (final exam in visible) ...[
+          _ExamCard(exam: exam, role: role, isAdmin: isAdmin),
+          const SizedBox(height: 12),
+        ],
+      ],
+    );
+  }
 }
 
-class _ExamTile extends StatelessWidget {
+const _statusOrder = ['upcoming', 'ongoing', 'completed', 'published'];
+
+({String label, IconData icon, Color color}) _statusStyle(String status) => switch (status) {
+      'published' => (label: 'Published', icon: Icons.check_circle_outline, color: const Color(0xFF16A34A)),
+      'ongoing' => (label: 'In Progress', icon: Icons.timelapse, color: const Color(0xFFEA580C)),
+      'completed' => (label: 'Completed', icon: Icons.pending_actions, color: const Color(0xFF0891B2)),
+      _ => (label: 'Upcoming', icon: Icons.schedule, color: const Color(0xFF2F80FF)),
+    };
+
+class _ExamCard extends StatelessWidget {
   final Exam exam;
   final AppRole? role;
   final bool isAdmin;
 
-  const _ExamTile({required this.exam, required this.role, required this.isAdmin});
+  const _ExamCard({required this.exam, required this.role, required this.isAdmin});
+
+  /// "12 Sep 2026" or "12 Sep 2026 – 18 Sep 2026" across the subject dates,
+  /// falling back to the exam's own date.
+  String get _dateRange {
+    final dates = [for (final s in exam.subjects) if (s.examDate.isNotEmpty) s.examDate]..sort();
+    if (dates.isEmpty || dates.first == dates.last) {
+      return formatDisplayDate(dates.isEmpty ? exam.examDate : dates.first);
+    }
+    return '${formatDisplayDate(dates.first)} – ${formatDisplayDate(dates.last)}';
+  }
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final style = _statusStyle(exam.status);
+    final totalMarks = exam.subjects.fold<int>(0, (sum, s) => sum + s.fullMarks);
+    final actions = _actions(context);
+
     return Card(
       margin: EdgeInsets.zero,
-      clipBehavior: Clip.antiAlias,
-      child: ExpansionTile(
-        leading: Container(
-          width: 40,
-          height: 40,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(color: scheme.primary.withValues(alpha: 0.14), borderRadius: AppRadius.card),
-          child: Icon(Icons.school_outlined, color: scheme.primary, size: 20),
-        ),
-        title: Text(exam.title, style: Theme.of(context).textTheme.titleSmall),
-        subtitle: Padding(
-          padding: const EdgeInsets.only(top: 4),
-          child: Wrap(
-            crossAxisAlignment: WrapCrossAlignment.center,
-            spacing: 6,
-            runSpacing: 4,
-            children: [
-              Text(
-                '${exam.className}${exam.section != null ? ' ${exam.section}' : ''} · Due ${formatDisplayDate(exam.examDate)}',
-              ),
-              if (exam.status == 'published') const AppStatusChip(label: 'Published', color: Colors.green),
-            ],
-          ),
-        ),
-        children: [
-          for (final subject in exam.subjects)
-            ListTile(
-              dense: true,
-              leading: Icon(Icons.menu_book_outlined, color: scheme.onSurfaceVariant, size: 18),
-              title: Text(subject.name),
-              subtitle: Text(
-                '${formatDisplayDate(subject.examDate)}${subject.examTime != null ? ' at ${subject.examTime}' : ''}'
-                '${subject.room != null ? ' · Room ${subject.room}' : ''}',
-              ),
-              trailing: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                decoration: BoxDecoration(
-                  color: scheme.secondaryContainer.withValues(alpha: 0.5),
-                  borderRadius: AppRadius.button,
-                ),
-                child: Text('${subject.fullMarks} marks', style: Theme.of(context).textTheme.labelSmall),
-              ),
-            ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Wrap(
-              spacing: 8,
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (isAdmin && exam.status != 'published')
-                  FilledButton(
-                    onPressed: () => context.push(AppRoutes.examPublishResults(exam.id), extra: exam),
-                    child: const Text('Publish Results'),
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: AppColors.info.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(AppRadius.lg),
                   ),
-                if (isAdmin && exam.status == 'published')
-                  OutlinedButton(
-                    onPressed: () => context.push(AppRoutes.examResults(exam.id)),
-                    child: const Text('View Results'),
+                  child: const Icon(Icons.history_edu_rounded, color: AppColors.info),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(exam.title, style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
+                      const SizedBox(height: 2),
+                      Text(
+                        '${exam.className}${exam.section != null ? ' · Section ${exam.section}' : ''}',
+                        style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                      ),
+                    ],
                   ),
-                if (!isAdmin && role == AppRole.student)
-                  OutlinedButton(
-                    onPressed: () => context.push(AppRoutes.examResults(exam.id)),
-                    child: const Text('My Result'),
-                  ),
-                if (role == AppRole.parent)
-                  OutlinedButton(
-                    onPressed: () => context.push(AppRoutes.examResults(exam.id)),
-                    child: const Text("Child's Result"),
-                  ),
+                ),
+                const SizedBox(width: 8),
+                AppStatusPill(label: style.label, icon: style.icon, color: style.color),
               ],
             ),
+            const SizedBox(height: 12),
+            InfoStrip(
+              icon: Icons.calendar_today_outlined,
+              text: _dateRange,
+              trailing: totalMarks > 0 ? '$totalMarks Total Marks' : null,
+            ),
+            if (exam.subjects.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surfaceContainerLow,
+                  borderRadius: BorderRadius.circular(AppRadius.lg),
+                ),
+                child: Column(
+                  children: [for (final subject in exam.subjects) _SubjectRow(subject: subject)],
+                ),
+              ),
+            ],
+            if (actions.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  for (var i = 0; i < actions.length; i++) ...[
+                    if (i > 0) const SizedBox(width: 10),
+                    Expanded(child: actions[i]),
+                  ],
+                ],
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _actions(BuildContext context) {
+    void results() => context.push(AppRoutes.examResults(exam.id));
+    final published = exam.status == 'published';
+    return [
+      if (isAdmin && !published)
+        FilledButton.icon(
+          onPressed: () => context.push(AppRoutes.examPublishResults(exam.id), extra: exam),
+          icon: const Icon(Icons.publish_rounded, size: 18),
+          label: const Text('Publish Results'),
+        ),
+      if (isAdmin && published)
+        FilledButton.tonalIcon(
+          onPressed: results,
+          icon: const Icon(Icons.visibility_outlined, size: 18),
+          label: const Text('View Results'),
+        ),
+      if (!isAdmin && role == AppRole.student)
+        FilledButton.tonalIcon(
+          onPressed: results,
+          icon: const Icon(Icons.grading_rounded, size: 18),
+          label: const Text('My Result'),
+        ),
+      if (role == AppRole.parent)
+        FilledButton.tonalIcon(
+          onPressed: results,
+          icon: const Icon(Icons.grading_rounded, size: 18),
+          label: const Text("Child's Result"),
+        ),
+    ];
+  }
+}
+
+class _SubjectRow extends StatelessWidget {
+  final ExamSubject subject;
+
+  const _SubjectRow({required this.subject});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final muted = theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant);
+    final when = [
+      if (subject.examDate.isNotEmpty) formatDisplayDate(subject.examDate),
+      ?subject.examTime,
+      if (subject.room != null) 'Room ${subject.room}',
+    ].join(' · ');
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        children: [
+          Container(
+            width: 6,
+            height: 6,
+            decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(subject.name, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+                if (when.isNotEmpty) Text(when, style: muted),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                '${subject.fullMarks} marks',
+                style: theme.textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w700, color: AppColors.primary),
+              ),
+              Text('Pass ${subject.passMarks}', style: muted),
+            ],
           ),
         ],
       ),

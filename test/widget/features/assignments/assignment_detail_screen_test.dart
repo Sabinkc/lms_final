@@ -10,6 +10,7 @@ import 'package:cloud_lms/features/auth/data/models/app_user.dart';
 import 'package:cloud_lms/features/auth/data/models/auth_session.dart';
 import 'package:cloud_lms/features/auth/data/repositories/auth_repository.dart';
 import 'package:cloud_lms/features/auth/presentation/providers/auth_provider.dart';
+import 'package:cloud_lms/shared/widgets/status_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -107,6 +108,8 @@ void main() {
     expect(find.text('Sam Student'), findsOneWidget);
     expect(find.text('Grade'), findsOneWidget);
 
+    await tester.ensureVisible(find.text('Grade'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Grade'));
     await tester.pumpAndSettle();
     await tester.enterText(find.widgetWithText(TextFormField, 'Marks'), '90');
@@ -118,7 +121,7 @@ void main() {
     // "Graded" moved into an AppStatusChip on the submission card; the
     // marks/remarks line is now labeled "Marks:" instead of "Graded:".
     expect(find.textContaining('Marks: 90'), findsOneWidget);
-    expect(find.text('Graded'), findsOneWidget);
+    expect(find.widgetWithText(AppStatusPill, 'Graded'), findsOneWidget);
   });
 
   testWidgets('Student with no submission yet sees the submit form; submitting calls submitAssignment',
@@ -138,6 +141,8 @@ void main() {
     expect(find.text('Submit your work'), findsOneWidget);
 
     await tester.enterText(find.widgetWithText(TextField, 'Submission text (optional)'), 'My answer');
+    await tester.ensureVisible(find.text('Submit'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Submit'));
     await tester.pumpAndSettle();
 

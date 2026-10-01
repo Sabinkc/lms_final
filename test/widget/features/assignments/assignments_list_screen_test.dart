@@ -135,4 +135,16 @@ void main() {
 
     expect(find.text('Algebra Homework'), findsOneWidget);
   });
+
+  testWidgets('Admin gets an explanation instead of a Retry when the server returns 403', (tester) async {
+    when(() => repository.getAssignments()).thenAnswer((_) async => const Result.failure(ForbiddenException()));
+    final provider = AssignmentProvider(repository);
+    final authProvider = _authAs(authRepository, AppRole.admin);
+
+    await tester.pumpWidget(_wrap(provider, authProvider));
+    await tester.pumpAndSettle();
+
+    expect(find.textContaining('does not yet let Admin accounts view them'), findsOneWidget);
+    expect(find.text('Retry'), findsNothing);
+  });
 }

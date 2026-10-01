@@ -10,6 +10,7 @@ import 'package:cloud_lms/features/exams/data/models/exam.dart';
 import 'package:cloud_lms/features/exams/data/repositories/exam_repository.dart';
 import 'package:cloud_lms/features/exams/presentation/providers/exam_provider.dart';
 import 'package:cloud_lms/features/exams/presentation/screens/exams_list_screen.dart';
+import 'package:cloud_lms/shared/widgets/filter_chip_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -94,7 +95,7 @@ void main() {
     verifyNever(() => repository.getExamsAsAdmin());
   });
 
-  testWidgets('row subtitle shows a readable date and does not double up "Class"', (tester) async {
+  testWidgets('card shows the class/section, a readable date and the total marks', (tester) async {
     when(() => repository.getMyExams()).thenAnswer((_) async => const Result.success([_exam1]));
     final provider = ExamProvider(repository);
     final authProvider = _authAs(authRepository, AppRole.student);
@@ -102,18 +103,17 @@ void main() {
     await tester.pumpWidget(_wrap(provider, authProvider));
     await tester.pumpAndSettle();
 
-    expect(find.text('Class 10 A · Due 1 Sep 2026'), findsOneWidget);
+    expect(find.text('Class 10 · Section A'), findsOneWidget);
+    expect(find.text('1 Sep 2026'), findsWidgets);
+    expect(find.text('100 Total Marks'), findsOneWidget);
   });
 
-  testWidgets('expanding a row shows its subjects', (tester) async {
+  testWidgets('card lists its subjects inline', (tester) async {
     when(() => repository.getMyExams()).thenAnswer((_) async => const Result.success([_exam1]));
     final provider = ExamProvider(repository);
     final authProvider = _authAs(authRepository, AppRole.student);
 
     await tester.pumpWidget(_wrap(provider, authProvider));
-    await tester.pumpAndSettle();
-
-    await tester.tap(find.text('Mid Term'));
     await tester.pumpAndSettle();
 
     expect(find.text('Math'), findsOneWidget);
@@ -151,6 +151,29 @@ void main() {
 
     expect(find.text('View Results'), findsOneWidget);
     expect(find.text('Publish Results'), findsNothing);
+  });
+
+  testWidgets('status chips and search narrow the list', (tester) async {
+    when(() => repository.getExamsAsAdmin()).thenAnswer((_) async => const Result.success([_exam1, _publishedExam]));
+    final provider = ExamProvider(repository);
+    final authProvider = _authAs(authRepository, AppRole.admin);
+
+    await tester.pumpWidget(_wrap(provider, authProvider));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Mid Term'), findsOneWidget);
+    expect(find.text('Final Term'), findsOneWidget);
+
+    await tester.tap(find.widgetWithText(AppFilterChip, 'Published'));
+    await tester.pumpAndSettle();
+    expect(find.text('Mid Term'), findsNothing);
+    expect(find.text('Final Term'), findsOneWidget);
+
+    await tester.tap(find.widgetWithText(AppFilterChip, 'All'));
+    await tester.enterText(find.byType(TextField), 'math');
+    await tester.pumpAndSettle();
+    expect(find.text('Mid Term'), findsOneWidget);
+    expect(find.text('Final Term'), findsNothing);
   });
 
   testWidgets('empty state shows the CTA for Admin', (tester) async {

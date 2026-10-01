@@ -10,6 +10,8 @@ import 'package:cloud_lms/features/exams/data/models/exam_result.dart';
 import 'package:cloud_lms/features/exams/data/repositories/exam_result_repository.dart';
 import 'package:cloud_lms/features/exams/presentation/providers/exam_result_provider.dart';
 import 'package:cloud_lms/features/exams/presentation/screens/exam_results_screen.dart';
+import 'package:cloud_lms/shared/widgets/filter_chip_bar.dart';
+import 'package:cloud_lms/shared/widgets/tinted_stat_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -112,12 +114,12 @@ void main() {
     // own label plus this single result row's AppStatusChip (isPassed: true).
     // "1" appears twice: the Passed stat card's value and this result's
     // rank-1 avatar badge.
-    expect(find.text('1'), findsNWidgets(2));
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('Passed'), findsNWidgets(2));
-    expect(find.text('Failed'), findsOneWidget);
+    expect(find.widgetWithText(TintedStatTile, 'Passed'), findsOneWidget);
+    expect(find.widgetWithText(TintedStatTile, 'Failed'), findsOneWidget);
     expect(find.text('Sam Student'), findsOneWidget);
-    expect(find.text('A · 85.0%'), findsOneWidget);
+    expect(find.text('Grade A'), findsOneWidget);
+    expect(find.text('85.0%'), findsWidgets);
+    expect(find.text('Rank #1'), findsOneWidget);
   });
 
   testWidgets('Student sees their own result card', (tester) async {
@@ -144,7 +146,7 @@ void main() {
     await tester.pumpWidget(_wrap(provider, authProvider));
     await tester.pumpAndSettle();
 
-    expect(find.byType(ChoiceChip), findsNothing);
+    expect(find.byType(AppFilterChip), findsNothing);
     expect(find.text('A'), findsOneWidget);
     expect(find.text('Rank #1'), findsOneWidget);
   });
@@ -161,10 +163,10 @@ void main() {
     await tester.pumpWidget(_wrap(provider, authProvider));
     await tester.pumpAndSettle();
 
-    expect(find.byType(ChoiceChip), findsNWidgets(2));
+    expect(find.byType(AppFilterChip), findsNWidgets(2));
     expect(find.text('Select a child above to view their result'), findsOneWidget);
 
-    await tester.tap(find.widgetWithText(ChoiceChip, 'Sam Student'));
+    await tester.tap(find.widgetWithText(AppFilterChip, 'Sam Student'));
     await tester.pumpAndSettle();
 
     expect(find.text('A'), findsOneWidget);
