@@ -107,14 +107,14 @@ void main() {
 
       expect(find.text('Jane Teacher'), findsOneWidget);
 
-      await tester.tap(find.widgetWithText(Tab, 'Payroll'));
+      await tester.tap(find.text('Payroll Runs'));
       await tester.pumpAndSettle();
 
       expect(find.textContaining('Jane Teacher'), findsOneWidget);
       // 'Rs 30000' itself now appears twice (Total Net and Pending stat cards
       // both equal 30000 in this fixture, since totalPaid is 0) — assert on
       // the payroll tile's own distinct text instead.
-      expect(find.text('Net Rs 30000'), findsOneWidget);
+      expect(find.text('Net Rs. 30,000'), findsOneWidget);
     },
   );
 
@@ -165,9 +165,11 @@ void main() {
 
       await tester.pumpWidget(_wrap(provider));
       await tester.pumpAndSettle();
-      await tester.tap(find.widgetWithText(Tab, 'Payroll'));
+      await tester.tap(find.text('Payroll Runs'));
       await tester.pumpAndSettle();
 
+      await tester.ensureVisible(find.text('Mark Paid'));
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Mark Paid'));
       await tester.pumpAndSettle();
 
