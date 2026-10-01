@@ -2,19 +2,21 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/utils/display_date.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
 import '../../../../shared/widgets/status_chip.dart';
-import '../../../admin_management/presentation/providers/academic_structure_provider.dart'
-    show LoadStatus;
+import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../../../auth/data/models/app_role.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../data/models/assignment.dart';
 import '../../data/models/assignment_submission.dart';
 import '../../data/repositories/assignment_repository.dart' show SubmissionFile;
 import '../providers/assignment_provider.dart';
+import '../../../../shared/widgets/brand_app_bar.dart';
+import '../../../../shared/widgets/app_background.dart';
 
 /// docs/screens.md's Assignment Detail — one screen, body adapts by role:
 /// Teacher sees the submissions list with a grade action, Student sees
@@ -58,21 +60,19 @@ class _AssignmentDetailScreenState extends State<AssignmentDetailScreen> {
     final provider = context.watch<AssignmentProvider>();
     final role = context.watch<AuthProvider>().role;
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Assignment')),
-      body: switch (provider.detailStatus) {
-        LoadStatus.initial || LoadStatus.loading => const LoadingView(
-          message: 'Loading assignment...',
-        ),
-        LoadStatus.error => ErrorView(
-          error: provider.detailError!,
-          onRetry: () => provider.loadAssignmentDetail(widget.assignmentId),
-        ),
-        LoadStatus.success => _DetailBody(
-          assignment: provider.currentAssignment!,
-          role: role,
-        ),
-      },
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: BrandAppBar(title: 'Assignment'),
+        body: switch (provider.detailStatus) {
+          LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading assignment...'),
+          LoadStatus.error => ErrorView(
+            error: provider.detailError!,
+            onRetry: () => provider.loadAssignmentDetail(widget.assignmentId),
+          ),
+          LoadStatus.success => _DetailBody(assignment: provider.currentAssignment!, role: role),
+        },
+      ),
     );
   }
 }
@@ -85,6 +85,7 @@ class _DetailBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return ListView(
       padding: const EdgeInsets.all(AppSpacing.lg),
       children: [
@@ -96,22 +97,33 @@ class _DetailBody extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Text(
-                        assignment.title,
-                        style: Theme.of(context).textTheme.headlineSmall,
+                    Container(
+                      width: 44,
+                      height: 44,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: scheme.primary.withValues(alpha: 0.14),
+                        borderRadius: AppRadius.card,
                       ),
+                      child: Icon(Icons.assignment_outlined, color: scheme.primary),
                     ),
-                    if (assignment.status == 'closed')
-                      const AppStatusChip(label: 'Closed', color: Colors.grey),
+                    const SizedBox(width: AppSpacing.sm),
+                    Expanded(child: Text(assignment.title, style: Theme.of(context).textTheme.headlineSmall)),
+                    if (assignment.status == 'closed') const AppStatusChip(label: 'Closed', color: Colors.grey),
                   ],
                 ),
                 const SizedBox(height: AppSpacing.sm),
-                Text(
-                  '${assignment.subject} · ${assignment.className} ${assignment.section}',
+                Wrap(
+                  spacing: AppSpacing.xs,
+                  runSpacing: AppSpacing.xs,
+                  children: [
+                    _MetaPill(icon: Icons.menu_book_outlined, label: assignment.subject),
+                    _MetaPill(icon: Icons.class_outlined, label: '${assignment.className} ${assignment.section}'),
+                    _MetaPill(icon: Icons.event_outlined, label: 'Due ${formatDisplayDate(assignment.dueDate)}'),
+                  ],
                 ),
-                Text('Due: ${formatDisplayDate(assignment.dueDate)}'),
                 if (assignment.description.isNotEmpty) ...[
                   const SizedBox(height: AppSpacing.md),
                   Text(assignment.description),
@@ -131,6 +143,30 @@ class _DetailBody extends StatelessWidget {
   }
 }
 
+class _MetaPill extends StatelessWidget {
+  final IconData icon;
+  final String label;
+
+  const _MetaPill({required this.icon, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(color: scheme.surfaceContainerHighest, borderRadius: AppRadius.button),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 14, color: scheme.onSurfaceVariant),
+          const SizedBox(width: 4),
+          Text(label, style: Theme.of(context).textTheme.labelSmall),
+        ],
+      ),
+    );
+  }
+}
+
 class _TeacherSubmissions extends StatelessWidget {
   final Assignment assignment;
 
@@ -141,8 +177,7 @@ class _TeacherSubmissions extends StatelessWidget {
     final provider = context.watch<AssignmentProvider>();
 
     return switch (provider.submissionsStatus) {
-      LoadStatus.initial ||
-      LoadStatus.loading => const Center(child: CircularProgressIndicator()),
+      LoadStatus.initial || LoadStatus.loading => const Center(child: CircularProgressIndicator()),
       LoadStatus.error => Text(
         provider.submissionsError!.message,
         style: TextStyle(color: Theme.of(context).colorScheme.error),
@@ -153,12 +188,27 @@ class _TeacherSubmissions extends StatelessWidget {
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Submissions (${provider.submissions.length})',
-                    style: Theme.of(context).textTheme.titleMedium,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Submissions', style: Theme.of(context).textTheme.titleMedium),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.14),
+                          borderRadius: AppRadius.button,
+                        ),
+                        child: Text(
+                          '${provider.submissions.length}',
+                          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  for (final submission in provider.submissions)
-                    _SubmissionCard(submission: submission),
+                  for (final submission in provider.submissions) _SubmissionCard(submission: submission),
                 ],
               ),
     };
@@ -174,10 +224,7 @@ class _SubmissionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = context.watch<AssignmentProvider>();
     final grading = provider.isGrading(submission.id);
-    final name =
-        submission.studentName ??
-        submission.studentAdmissionNumber ??
-        'Unknown student';
+    final name = submission.studentName ?? submission.studentAdmissionNumber ?? 'Unknown student';
     final scheme = Theme.of(context).colorScheme;
 
     return Card(
@@ -194,42 +241,25 @@ class _SubmissionCard extends StatelessWidget {
                   backgroundColor: scheme.primary.withValues(alpha: 0.14),
                   child: Text(
                     name.isNotEmpty ? name[0].toUpperCase() : '?',
-                    style: TextStyle(
-                      color: scheme.primary,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 13,
-                    ),
+                    style: TextStyle(color: scheme.primary, fontWeight: FontWeight.w700, fontSize: 13),
                   ),
                 ),
                 const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    name,
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                ),
-                if (submission.graded)
-                  const AppStatusChip(label: 'Graded', color: Colors.green),
+                Expanded(child: Text(name, style: Theme.of(context).textTheme.titleSmall)),
+                if (submission.graded) const AppStatusChip(label: 'Graded', color: Colors.green),
               ],
             ),
             const SizedBox(height: 8),
-            if (submission.submissionText.isNotEmpty)
-              Text(submission.submissionText),
+            if (submission.submissionText.isNotEmpty) Text(submission.submissionText),
             Text('${submission.attachments.length} file(s) attached'),
             const SizedBox(height: 8),
             if (submission.graded)
               Text('Marks: ${submission.marks} — ${submission.remarks}')
             else
               FilledButton(
-                onPressed: grading
-                    ? null
-                    : () => _showGradeDialog(context, provider, submission),
+                onPressed: grading ? null : () => _showGradeDialog(context, provider, submission),
                 child: grading
-                    ? const SizedBox(
-                        height: 16,
-                        width: 16,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
+                    ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
                     : const Text('Grade'),
               ),
           ],
@@ -261,26 +291,19 @@ Future<void> _showGradeDialog(
               controller: marksController,
               decoration: const InputDecoration(labelText: 'Marks'),
               keyboardType: TextInputType.number,
-              validator: (value) => (num.tryParse(value ?? '') == null)
-                  ? 'Enter a valid number'
-                  : null,
+              validator: (value) => (num.tryParse(value ?? '') == null) ? 'Enter a valid number' : null,
               autofocus: true,
             ),
             const SizedBox(height: 12),
             TextFormField(
               controller: remarksController,
-              decoration: const InputDecoration(
-                labelText: 'Remarks (optional)',
-              ),
+              decoration: const InputDecoration(labelText: 'Remarks (optional)'),
             ),
           ],
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.of(dialogContext).pop(),
-          child: const Text('Cancel'),
-        ),
+        TextButton(onPressed: () => Navigator.of(dialogContext).pop(), child: const Text('Cancel')),
         FilledButton(
           onPressed: () async {
             if (!formKey.currentState!.validate()) return;
@@ -321,15 +344,9 @@ class _StudentSubmissionState extends State<_StudentSubmission> {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            provider.submissionsError!.message,
-            style: TextStyle(color: Theme.of(context).colorScheme.error),
-          ),
+          Text(provider.submissionsError!.message, style: TextStyle(color: Theme.of(context).colorScheme.error)),
           const SizedBox(height: 8),
-          OutlinedButton(
-            onPressed: () => provider.loadMySubmissions(),
-            child: const Text('Retry'),
-          ),
+          OutlinedButton(onPressed: () => provider.loadMySubmissions(), child: const Text('Retry')),
         ],
       );
     }
@@ -338,30 +355,46 @@ class _StudentSubmissionState extends State<_StudentSubmission> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    final existing = provider.submissions.where(
-      (s) => s.assignmentId == widget.assignment.id,
-    );
+    final existing = provider.submissions.where((s) => s.assignmentId == widget.assignment.id);
     final mySubmission = existing.isEmpty ? null : existing.first;
 
     if (mySubmission != null && mySubmission.graded) {
-      return Card(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Row(
-                children: [
-                  Expanded(child: Text('Your submission has been graded')),
-                  AppStatusChip(label: 'Graded', color: Colors.green),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text('Marks: ${mySubmission.marks}'),
-              if (mySubmission.remarks.isNotEmpty)
-                Text('Remarks: ${mySubmission.remarks}'),
-            ],
+      final scheme = Theme.of(context).colorScheme;
+      return Container(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        decoration: BoxDecoration(
+          borderRadius: AppRadius.card,
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [scheme.primary, Color.lerp(scheme.primary, Colors.black, 0.35)!],
           ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.celebration_outlined, color: Colors.white),
+                const SizedBox(width: 8),
+                const Expanded(
+                  child: Text(
+                    'Your submission has been graded',
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'Marks: ${mySubmission.marks}',
+              style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w700),
+            ),
+            if (mySubmission.remarks.isNotEmpty) ...[
+              const SizedBox(height: 4),
+              Text('Remarks: ${mySubmission.remarks}', style: const TextStyle(color: Colors.white)),
+            ],
+          ],
         ),
       );
     }
@@ -376,27 +409,19 @@ class _StudentSubmissionState extends State<_StudentSubmission> {
         const SizedBox(height: 8),
         TextField(
           controller: _textController,
-          decoration: const InputDecoration(
-            labelText: 'Submission text (optional)',
-          ),
+          decoration: const InputDecoration(labelText: 'Submission text (optional)'),
           maxLines: 3,
         ),
         const SizedBox(height: 8),
         TextButton.icon(
           icon: const Icon(Icons.attach_file),
-          label: Text(
-            _pickedFiles.isEmpty
-                ? 'Attach files (up to 5)'
-                : '${_pickedFiles.length} file(s) selected',
-          ),
+          label: Text(_pickedFiles.isEmpty ? 'Attach files (up to 5)' : '${_pickedFiles.length} file(s) selected'),
           onPressed: () async {
             final files = await FilePicker.pickFiles();
             if (files.isEmpty) return;
             final withBytes = <SubmissionFile>[];
             for (final f in files.take(5)) {
-              withBytes.add(
-                SubmissionFile(bytes: await f.readAsBytes(), filename: f.name),
-              );
+              withBytes.add(SubmissionFile(bytes: await f.readAsBytes(), filename: f.name));
             }
             setState(() {
               _pickedFiles
@@ -408,10 +433,7 @@ class _StudentSubmissionState extends State<_StudentSubmission> {
         if (provider.submitError != null)
           Padding(
             padding: const EdgeInsets.only(top: 8),
-            child: Text(
-              provider.submitError!.message,
-              style: TextStyle(color: Theme.of(context).colorScheme.error),
-            ),
+            child: Text(provider.submitError!.message, style: TextStyle(color: Theme.of(context).colorScheme.error)),
           ),
         const SizedBox(height: 8),
         FilledButton(
@@ -426,11 +448,7 @@ class _StudentSubmissionState extends State<_StudentSubmission> {
                   if (succeeded) provider.loadMySubmissions();
                 },
           child: provider.isSubmitting
-              ? const SizedBox(
-                  height: 16,
-                  width: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
+              ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
               : Text(mySubmission == null ? 'Submit' : 'Resubmit'),
         ),
       ],

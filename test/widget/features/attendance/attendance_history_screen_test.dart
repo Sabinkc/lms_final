@@ -86,11 +86,11 @@ void main() {
     await tester.pumpWidget(_wrap(provider));
     await tester.pumpAndSettle();
 
-    expect(find.text('Class 10 — A · General'), findsOneWidget);
-    expect(find.text('8 present'), findsOneWidget);
-    expect(find.text('1 absent'), findsOneWidget);
-    expect(find.text('1 late'), findsOneWidget);
-    expect(find.text('of 10'), findsOneWidget);
+    expect(find.text('Class 10 — A'), findsOneWidget);
+    expect(find.text('General  •  10 students'), findsOneWidget);
+    expect(find.text('8 Present'), findsOneWidget);
+    expect(find.text('1 Absent'), findsOneWidget);
+    expect(find.text('1 Late'), findsOneWidget);
     expect(find.byIcon(Icons.lock_outline), findsOneWidget);
   });
 }

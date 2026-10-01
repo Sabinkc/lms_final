@@ -88,7 +88,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('90%'), findsOneWidget);
-    expect(find.text('2026-08-23 — General'), findsOneWidget);
+    expect(find.text('23 Aug 2026'), findsOneWidget);
+    expect(find.textContaining('General'), findsOneWidget);
   });
 
   testWidgets('empty state shows a message when there are no records yet', (tester) async {

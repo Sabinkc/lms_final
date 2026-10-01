@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../shared/widgets/brand_app_bar.dart';
+import '../../../../shared/widgets/app_background.dart';
+
 const _weekdayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 /// Parent: Dual AD/BS Calendar (`docs/production_roadmap.md` Phase L7,
@@ -52,76 +57,108 @@ class _DualCalendarScreenState extends State<DualCalendarScreen> {
     final daysInMonth = DateTime(_displayedMonth.year, _displayedMonth.month + 1, 0).day;
     final leadingBlanks = firstOfMonth.weekday % 7; // DateTime.weekday: Mon=1..Sun=7; we want Sun=0
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Dual Calendar')),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Card(
-              margin: EdgeInsets.zero,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(icon: const Icon(Icons.chevron_left), onPressed: () => _changeMonth(-1)),
-                    Column(
-                      children: [
-                        Text(
-                          '${_monthName(_displayedMonth.month)} ${_displayedMonth.year}',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        Text(
-                          'BS ${firstOfMonth.toNepaliDateTime().format('MMMM yyyy')} onward',
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ],
-                    ),
-                    IconButton(icon: const Icon(Icons.chevron_right), onPressed: () => _changeMonth(1)),
-                  ],
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: BrandAppBar(title: 'Dual Calendar'),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Card(
+                margin: EdgeInsets.zero,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(icon: const Icon(Icons.chevron_left), onPressed: () => _changeMonth(-1)),
+                      Column(
+                        children: [
+                          Text(
+                            '${_monthName(_displayedMonth.month)} ${_displayedMonth.year}',
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          Text(
+                            'BS ${firstOfMonth.toNepaliDateTime().format('MMMM yyyy')} onward',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                      IconButton(icon: const Icon(Icons.chevron_right), onPressed: () => _changeMonth(1)),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          Row(
-            children: [for (final label in _weekdayLabels) Expanded(child: Center(child: Text(label, style: const TextStyle(fontWeight: FontWeight.bold))))],
-          ),
-          const Divider(height: 1),
-          Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(8),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 7),
-              itemCount: leadingBlanks + daysInMonth,
-              itemBuilder: (context, index) {
-                if (index < leadingBlanks) return const SizedBox.shrink();
-                final day = index - leadingBlanks + 1;
-                final date = DateTime(_displayedMonth.year, _displayedMonth.month, day);
-                final isToday = date.year == today.year && date.month == today.month && date.day == today.day;
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(AppSpacing.md, 0, AppSpacing.md, AppSpacing.md),
+                child: Card(
+                  margin: EdgeInsets.zero,
+                  clipBehavior: Clip.antiAlias,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+                        child: Row(
+                          children: [
+                            for (final label in _weekdayLabels)
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    label,
+                                    style: Theme.of(
+                                      context,
+                                    ).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      const Divider(height: 1),
+                      Expanded(
+                        child: GridView.builder(
+                          padding: const EdgeInsets.all(8),
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 7),
+                          itemCount: leadingBlanks + daysInMonth,
+                          itemBuilder: (context, index) {
+                            if (index < leadingBlanks) return const SizedBox.shrink();
+                            final day = index - leadingBlanks + 1;
+                            final date = DateTime(_displayedMonth.year, _displayedMonth.month, day);
+                            final isToday =
+                                date.year == today.year && date.month == today.month && date.day == today.day;
 
-                return _DayCell(date: date, isToday: isToday);
-              },
+                            return _DayCell(date: date, isToday: isToday);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   String _monthName(int month) => const [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
-      ][month - 1];
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ][month - 1];
 }
 
 class _DayCell extends StatelessWidget {
@@ -137,7 +174,13 @@ class _DayCell extends StatelessWidget {
     final accent = Theme.of(context).colorScheme.primary;
     return Container(
       margin: const EdgeInsets.all(2),
-      decoration: isToday ? BoxDecoration(color: accent, borderRadius: BorderRadius.circular(14)) : null,
+      decoration: isToday
+          ? BoxDecoration(
+              color: accent,
+              borderRadius: AppRadius.button,
+              boxShadow: [BoxShadow(color: accent.withValues(alpha: 0.35), blurRadius: 8, offset: const Offset(0, 2))],
+            )
+          : null,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

@@ -5,13 +5,14 @@ import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
 import '../../../../shared/widgets/stat_card.dart';
-import '../../../admin_management/presentation/providers/academic_structure_provider.dart'
-    show LoadStatus;
+import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../../data/models/academic_report.dart';
 import '../../data/models/attendance_report.dart';
 import '../../data/models/financial_report.dart';
 import '../../data/models/system_report.dart';
 import '../providers/reports_provider.dart';
+import '../../../../shared/widgets/brand_app_bar.dart';
+import '../../../../shared/widgets/app_background.dart';
 
 String _formatDate(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
@@ -47,26 +48,29 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
     return DefaultTabController(
       length: 4,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Reports'),
-          bottom: const TabBar(
-            isScrollable: true,
-            tabs: [
-              Tab(text: 'Academic'),
-              Tab(text: 'Financial'),
-              Tab(text: 'Attendance'),
-              Tab(text: 'System'),
+      child: AppBackground(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: BrandAppBar(
+            title: 'Reports',
+            bottom: const TabBar(
+              isScrollable: true,
+              tabs: [
+                Tab(text: 'Academic'),
+                Tab(text: 'Financial'),
+                Tab(text: 'Attendance'),
+                Tab(text: 'System'),
+              ],
+            ),
+          ),
+          body: TabBarView(
+            children: [
+              _AcademicTab(provider: provider),
+              _FinancialTab(provider: provider),
+              _AttendanceTab(provider: provider),
+              _SystemTab(provider: provider),
             ],
           ),
-        ),
-        body: TabBarView(
-          children: [
-            _AcademicTab(provider: provider),
-            _FinancialTab(provider: provider),
-            _AttendanceTab(provider: provider),
-            _SystemTab(provider: provider),
-          ],
         ),
       ),
     );
@@ -80,11 +84,7 @@ class _BreakdownBar extends StatelessWidget {
   final int count;
   final int total;
 
-  const _BreakdownBar({
-    required this.label,
-    required this.count,
-    required this.total,
-  });
+  const _BreakdownBar({required this.label, required this.count, required this.total});
 
   @override
   Widget build(BuildContext context) {
@@ -93,10 +93,7 @@ class _BreakdownBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Row(
         children: [
-          SizedBox(
-            width: 72,
-            child: Text(label, overflow: TextOverflow.ellipsis),
-          ),
+          SizedBox(width: 72, child: Text(label, overflow: TextOverflow.ellipsis)),
           Expanded(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(4),
@@ -119,17 +116,9 @@ class _AcademicTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return switch (provider.academicStatus) {
-      LoadStatus.initial || LoadStatus.loading => const LoadingView(
-        message: 'Loading academic report...',
-      ),
-      LoadStatus.error => ErrorView(
-        error: provider.academicError!,
-        onRetry: () => provider.loadAcademic(),
-      ),
-      LoadStatus.success => _AcademicBody(
-        report: provider.academic!,
-        onRefresh: provider.loadAcademic,
-      ),
+      LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading academic report...'),
+      LoadStatus.error => ErrorView(error: provider.academicError!, onRetry: () => provider.loadAcademic()),
+      LoadStatus.success => _AcademicBody(report: provider.academic!, onRefresh: provider.loadAcademic),
     };
   }
 }
@@ -152,11 +141,7 @@ class _AcademicBody extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: StatCardRow(
               cards: [
-                StatCard(
-                  icon: Icons.quiz_outlined,
-                  value: '${report.totalExams}',
-                  label: 'Total exams',
-                ),
+                StatCard(icon: Icons.quiz_outlined, value: '${report.totalExams}', label: 'Total exams'),
                 StatCard(
                   icon: Icons.check_circle_outline,
                   value: '${report.published}',
@@ -167,6 +152,7 @@ class _AcademicBody extends StatelessWidget {
                   icon: Icons.trending_up_outlined,
                   value: '${report.passRate.toStringAsFixed(1)}%',
                   label: 'Pass rate',
+                  progress: report.passRate / 100,
                 ),
               ],
             ),
@@ -176,16 +162,8 @@ class _AcademicBody extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: StatCardRow(
               cards: [
-                StatCard(
-                  icon: Icons.groups_outlined,
-                  value: '${report.totalStudents}',
-                  label: 'Students',
-                ),
-                StatCard(
-                  icon: Icons.badge_outlined,
-                  value: '${report.totalTeachers}',
-                  label: 'Teachers',
-                ),
+                StatCard(icon: Icons.groups_outlined, value: '${report.totalStudents}', label: 'Students'),
+                StatCard(icon: Icons.badge_outlined, value: '${report.totalTeachers}', label: 'Teachers'),
                 StatCard(
                   icon: Icons.assignment_turned_in_outlined,
                   value: '${report.totalStudentResults}',
@@ -196,23 +174,13 @@ class _AcademicBody extends StatelessWidget {
           ),
           const Padding(
             padding: EdgeInsets.fromLTRB(16, 24, 16, 8),
-            child: Text(
-              'Grade distribution',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+            child: Text('Grade distribution', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           if (gradeTotal == 0)
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: Text('No published exam results yet.'),
-            )
+            const Padding(padding: EdgeInsets.all(16), child: Text('No published exam results yet.'))
           else
             for (final entry in report.gradeDistribution.entries)
-              _BreakdownBar(
-                label: entry.key,
-                count: entry.value,
-                total: gradeTotal,
-              ),
+              _BreakdownBar(label: entry.key, count: entry.value, total: gradeTotal),
           const SizedBox(height: 24),
         ],
       ),
@@ -228,17 +196,9 @@ class _FinancialTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return switch (provider.financialStatus) {
-      LoadStatus.initial || LoadStatus.loading => const LoadingView(
-        message: 'Loading financial report...',
-      ),
-      LoadStatus.error => ErrorView(
-        error: provider.financialError!,
-        onRetry: () => provider.loadFinancial(),
-      ),
-      LoadStatus.success => _FinancialBody(
-        report: provider.financial!,
-        onRefresh: provider.loadFinancial,
-      ),
+      LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading financial report...'),
+      LoadStatus.error => ErrorView(error: provider.financialError!, onRetry: () => provider.loadFinancial()),
+      LoadStatus.success => _FinancialBody(report: provider.financial!, onRefresh: provider.loadFinancial),
     };
   }
 }
@@ -251,8 +211,7 @@ class _FinancialBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final feeCountTotal =
-        report.paidCount + report.partialCount + report.pendingCount;
+    final feeCountTotal = report.paidCount + report.partialCount + report.pendingCount;
     return RefreshIndicator(
       onRefresh: onRefresh,
       child: ListView(
@@ -286,27 +245,12 @@ class _FinancialBody extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          _BreakdownBar(
-            label: 'Paid',
-            count: report.paidCount,
-            total: feeCountTotal,
-          ),
-          _BreakdownBar(
-            label: 'Partial',
-            count: report.partialCount,
-            total: feeCountTotal,
-          ),
-          _BreakdownBar(
-            label: 'Pending',
-            count: report.pendingCount,
-            total: feeCountTotal,
-          ),
+          _BreakdownBar(label: 'Paid', count: report.paidCount, total: feeCountTotal),
+          _BreakdownBar(label: 'Partial', count: report.partialCount, total: feeCountTotal),
+          _BreakdownBar(label: 'Pending', count: report.pendingCount, total: feeCountTotal),
           const Padding(
             padding: EdgeInsets.fromLTRB(16, 24, 16, 4),
-            child: Text(
-              'Payroll',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+            child: Text('Payroll', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -324,11 +268,7 @@ class _FinancialBody extends StatelessWidget {
                   label: 'Pending',
                   color: Colors.orange,
                 ),
-                StatCard(
-                  icon: Icons.payments_outlined,
-                  value: '${report.totalPayments}',
-                  label: 'Total payments',
-                ),
+                StatCard(icon: Icons.payments_outlined, value: '${report.totalPayments}', label: 'Total payments'),
               ],
             ),
           ),
@@ -355,21 +295,13 @@ class _AttendanceTabState extends State<_AttendanceTab> {
       context: context,
       firstDate: DateTime(now.year - 2),
       lastDate: now,
-      initialDateRange:
-          widget.provider.attendanceStartDate != null &&
-              widget.provider.attendanceEndDate != null
-          ? DateTimeRange(
-              start: widget.provider.attendanceStartDate!,
-              end: widget.provider.attendanceEndDate!,
-            )
+      initialDateRange: widget.provider.attendanceStartDate != null && widget.provider.attendanceEndDate != null
+          ? DateTimeRange(start: widget.provider.attendanceStartDate!, end: widget.provider.attendanceEndDate!)
           : null,
     );
     if (picked == null) return;
     if (!context.mounted) return;
-    widget.provider.loadAttendance(
-      startDate: picked.start,
-      endDate: picked.end,
-    );
+    widget.provider.loadAttendance(startDate: picked.start, endDate: picked.end);
   }
 
   @override
@@ -384,11 +316,7 @@ class _AttendanceTabState extends State<_AttendanceTab> {
           child: Row(
             children: [
               Expanded(
-                child: Text(
-                  start != null && end != null
-                      ? '${_formatDate(start)} to ${_formatDate(end)}'
-                      : 'All time',
-                ),
+                child: Text(start != null && end != null ? '${_formatDate(start)} to ${_formatDate(end)}' : 'All time'),
               ),
               OutlinedButton.icon(
                 onPressed: () => _pickRange(context),
@@ -406,18 +334,14 @@ class _AttendanceTabState extends State<_AttendanceTab> {
         ),
         Expanded(
           child: switch (provider.attendanceStatus) {
-            LoadStatus.initial || LoadStatus.loading => const LoadingView(
-              message: 'Loading attendance report...',
-            ),
+            LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading attendance report...'),
             LoadStatus.error => ErrorView(
               error: provider.attendanceError!,
-              onRetry: () =>
-                  provider.loadAttendance(startDate: start, endDate: end),
+              onRetry: () => provider.loadAttendance(startDate: start, endDate: end),
             ),
             LoadStatus.success => _AttendanceBody(
               report: provider.attendance!,
-              onRefresh: () =>
-                  provider.loadAttendance(startDate: start, endDate: end),
+              onRefresh: () => provider.loadAttendance(startDate: start, endDate: end),
             ),
           },
         ),
@@ -447,6 +371,7 @@ class _AttendanceBody extends StatelessWidget {
                   icon: Icons.pie_chart_outline,
                   value: '${report.attendanceRate.toStringAsFixed(1)}%',
                   label: 'Attendance rate',
+                  progress: report.attendanceRate / 100,
                 ),
                 StatCard(
                   icon: Icons.check_circle_outline,
@@ -465,23 +390,13 @@ class _AttendanceBody extends StatelessWidget {
           ),
           const Padding(
             padding: EdgeInsets.fromLTRB(16, 24, 16, 8),
-            child: Text(
-              'By class & section',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+            child: Text('By class & section', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           if (report.classBreakdown.isEmpty)
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: Text('No attendance records for this range.'),
-            )
+            const Padding(padding: EdgeInsets.all(16), child: Text('No attendance records for this range.'))
           else
             for (final entry in report.classBreakdown.entries)
-              _BreakdownBar(
-                label: entry.key,
-                count: entry.value.present,
-                total: entry.value.total,
-              ),
+              _BreakdownBar(label: entry.key, count: entry.value.present, total: entry.value.total),
           const SizedBox(height: 24),
         ],
       ),
@@ -497,17 +412,9 @@ class _SystemTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return switch (provider.systemStatus) {
-      LoadStatus.initial || LoadStatus.loading => const LoadingView(
-        message: 'Loading system report...',
-      ),
-      LoadStatus.error => ErrorView(
-        error: provider.systemError!,
-        onRetry: () => provider.loadSystem(),
-      ),
-      LoadStatus.success => _SystemBody(
-        report: provider.system!,
-        onRefresh: provider.loadSystem,
-      ),
+      LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading system report...'),
+      LoadStatus.error => ErrorView(error: provider.systemError!, onRetry: () => provider.loadSystem()),
+      LoadStatus.success => _SystemBody(report: provider.system!, onRefresh: provider.loadSystem),
     };
   }
 }
@@ -530,55 +437,27 @@ class _SystemBody extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: StatCardRow(
               cards: [
-                StatCard(
-                  icon: Icons.groups_outlined,
-                  value: '${report.totalStudents}',
-                  label: 'Students',
-                ),
-                StatCard(
-                  icon: Icons.badge_outlined,
-                  value: '${report.totalTeachers}',
-                  label: 'Teachers',
-                ),
-                StatCard(
-                  icon: Icons.family_restroom_outlined,
-                  value: '${report.totalParents}',
-                  label: 'Parents',
-                ),
+                StatCard(icon: Icons.groups_outlined, value: '${report.totalStudents}', label: 'Students'),
+                StatCard(icon: Icons.badge_outlined, value: '${report.totalTeachers}', label: 'Teachers'),
+                StatCard(icon: Icons.family_restroom_outlined, value: '${report.totalParents}', label: 'Parents'),
               ],
             ),
           ),
           const Padding(
             padding: EdgeInsets.fromLTRB(16, 24, 16, 8),
-            child: Text(
-              'Recent activity by category',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+            child: Text('Recent activity by category', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           if (actionTotal == 0)
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: Text('No audit log entries yet.'),
-            )
+            const Padding(padding: EdgeInsets.all(16), child: Text('No audit log entries yet.'))
           else
             for (final entry in report.actionBreakdown.entries)
-              _BreakdownBar(
-                label: entry.key,
-                count: entry.value,
-                total: actionTotal,
-              ),
+              _BreakdownBar(label: entry.key, count: entry.value, total: actionTotal),
           const Padding(
             padding: EdgeInsets.fromLTRB(16, 24, 16, 8),
-            child: Text(
-              'Recent log entries',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
+            child: Text('Recent log entries', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
           if (report.recentLogs.isEmpty)
-            const EmptyStateView(
-              message: 'No recent activity',
-              icon: Icons.history,
-            )
+            const EmptyStateView(message: 'No recent activity', icon: Icons.history)
           else
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -591,10 +470,7 @@ class _SystemBody extends StatelessWidget {
                         dense: true,
                         title: Text(log.action),
                         subtitle: Text('${log.user} · ${log.category}'),
-                        trailing: Text(
-                          log.status,
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
+                        trailing: Text(log.status, style: Theme.of(context).textTheme.bodySmall),
                       ),
                     ),
                     const SizedBox(height: 6),

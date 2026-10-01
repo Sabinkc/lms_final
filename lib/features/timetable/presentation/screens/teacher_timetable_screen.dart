@@ -8,6 +8,8 @@ import '../../../../shared/widgets/status_chip.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../../data/models/teacher_schedule_entry.dart';
 import '../providers/teacher_timetable_provider.dart';
+import '../../../../shared/widgets/brand_app_bar.dart';
+import '../../../../shared/widgets/app_background.dart';
 
 /// Teacher: View Own Timetable (`docs/production_roadmap.md` Phase L4,
 /// `implementation_backlog.md` E16-F2) — read-only, one entry per
@@ -31,19 +33,23 @@ class _TeacherTimetableScreenState extends State<TeacherTimetableScreen> {
   Widget build(BuildContext context) {
     final provider = context.watch<TeacherTimetableProvider>();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('My Timetable')),
-      body: switch (provider.status) {
-        LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading timetable...'),
-        LoadStatus.error => ErrorView(error: provider.error!, onRetry: () => provider.loadMySchedule()),
-        LoadStatus.success => provider.entries.isEmpty
-            ? const EmptyStateView(message: 'No periods scheduled for you yet', icon: Icons.schedule_outlined)
-            : ListView.builder(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-                itemCount: provider.entries.length,
-                itemBuilder: (context, index) => _EntryCard(entry: provider.entries[index]),
-              ),
-      },
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: BrandAppBar(title: 'My Timetable'),
+        body: switch (provider.status) {
+          LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading timetable...'),
+          LoadStatus.error => ErrorView(error: provider.error!, onRetry: () => provider.loadMySchedule()),
+          LoadStatus.success =>
+            provider.entries.isEmpty
+                ? const EmptyStateView(message: 'No periods scheduled for you yet', icon: Icons.schedule_outlined)
+                : ListView.builder(
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+                    itemCount: provider.entries.length,
+                    itemBuilder: (context, index) => _EntryCard(entry: provider.entries[index]),
+                  ),
+        },
+      ),
     );
   }
 }
@@ -72,7 +78,10 @@ class _EntryCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: Text('${entry.day} · ${entry.className} ${entry.section}', style: Theme.of(context).textTheme.titleSmall),
+                  child: Text(
+                    '${entry.day} · ${entry.className} ${entry.section}',
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
                 ),
               ],
             ),

@@ -84,7 +84,8 @@ void main() {
     // "Rs 5000" now legitimately appears twice: once in the summary's Total
     // Due stat card, once on the itemized fee row itself (same amount in
     // this fixture).
-    expect(find.text('Rs 5000'), findsNWidgets(2));
+    // Total Due tile + the fee's amount.
+    expect(find.text('Rs. 5,000'), findsNWidgets(2));
     expect(find.text('Term 1 Fee'), findsOneWidget);
   });
 

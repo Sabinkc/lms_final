@@ -7,20 +7,16 @@ import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/filter_chip_bar.dart';
 import '../../../../shared/widgets/loading_view.dart';
 import '../../../../shared/widgets/status_chip.dart';
-import '../../../admin_management/presentation/providers/academic_structure_provider.dart'
-    show LoadStatus;
+import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../../data/models/student_followup.dart';
 import '../providers/student_followup_provider.dart';
+import '../../../../shared/widgets/brand_app_bar.dart';
+import '../../../../shared/widgets/app_background.dart';
 
 String _formatDate(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
 
-const _statusLabels = {
-  null: 'All',
-  'pending': 'Pending',
-  'in-progress': 'In Progress',
-  'resolved': 'Resolved',
-};
+const _statusLabels = {null: 'All', 'pending': 'Pending', 'in-progress': 'In Progress', 'resolved': 'Resolved'};
 
 /// Admin: Manage Student Follow-ups (`docs/production_roadmap.md` Phase L5,
 /// `implementation_backlog.md` E18) — a CRM-style log of prospective/at-risk
@@ -53,9 +49,7 @@ class _StudentFollowupsScreenState extends State<StudentFollowupsScreen> {
   void _reload() {
     context.read<StudentFollowupProvider>().loadFollowups(
       status: _statusFilter,
-      search: _searchController.text.trim().isEmpty
-          ? null
-          : _searchController.text.trim(),
+      search: _searchController.text.trim().isEmpty ? null : _searchController.text.trim(),
     );
   }
 
@@ -63,94 +57,78 @@ class _StudentFollowupsScreenState extends State<StudentFollowupsScreen> {
   Widget build(BuildContext context) {
     final provider = context.watch<StudentFollowupProvider>();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Student Follow-ups'),
-        actions: [
-          IconButton(
-            icon: provider.isDownloading
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : const Icon(Icons.file_download_outlined),
-            tooltip: 'Export follow-ups',
-            onPressed: provider.isDownloading
-                ? null
-                : () => _downloadExport(context, provider, _statusFilter),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showFollowupFormDialog(context, provider),
-        tooltip: 'Add Follow-up',
-        child: const Icon(Icons.add),
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: TextField(
-              controller: _searchController,
-              decoration: const InputDecoration(
-                labelText: 'Search by name, email, or phone',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(),
-              ),
-              onSubmitted: (_) => _reload(),
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: BrandAppBar(
+          title: 'Student Follow-ups',
+          actions: [
+            IconButton(
+              icon: provider.isDownloading
+                  ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                  : const Icon(Icons.file_download_outlined),
+              tooltip: 'Export follow-ups',
+              onPressed: provider.isDownloading ? null : () => _downloadExport(context, provider, _statusFilter),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: AppFilterChipBar<String?>(
-              options: _statusLabels.keys.toList(),
-              selected: _statusFilter,
-              labelBuilder: (key) => _statusLabels[key]!,
-              onSelected: (key) {
-                setState(() => _statusFilter = key);
-                _reload();
-              },
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => _showFollowupFormDialog(context, provider),
+          tooltip: 'Add Follow-up',
+          child: const Icon(Icons.add),
+        ),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: TextField(
+                controller: _searchController,
+                decoration: const InputDecoration(
+                  labelText: 'Search by name, email, or phone',
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(),
+                ),
+                onSubmitted: (_) => _reload(),
+              ),
             ),
-          ),
-          const SizedBox(height: 8),
-          Expanded(
-            child: switch (provider.status) {
-              LoadStatus.initial || LoadStatus.loading => const LoadingView(
-                message: 'Loading follow-ups...',
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: AppFilterChipBar<String?>(
+                options: _statusLabels.keys.toList(),
+                selected: _statusFilter,
+                labelBuilder: (key) => _statusLabels[key]!,
+                onSelected: (key) {
+                  setState(() => _statusFilter = key);
+                  _reload();
+                },
               ),
-              LoadStatus.error => ErrorView(
-                error: provider.error!,
-                onRetry: _reload,
-              ),
-              LoadStatus.success =>
-                provider.followups.isEmpty
-                    ? EmptyStateView(
-                        message: 'No follow-ups logged yet',
-                        icon: Icons.support_agent_outlined,
-                        actionLabel: 'Add Follow-up',
-                        onAction: () =>
-                            _showFollowupFormDialog(context, provider),
-                      )
-                    : ListView.builder(
-                        itemCount: provider.followups.length,
-                        itemBuilder: (context, index) => _FollowupTile(
-                          followup: provider.followups[index],
-                          onEdit: () => _showFollowupFormDialog(
-                            context,
-                            provider,
-                            existing: provider.followups[index],
-                          ),
-                          onDelete: () => _confirmDelete(
-                            context,
-                            provider,
-                            provider.followups[index],
+            ),
+            const SizedBox(height: 8),
+            Expanded(
+              child: switch (provider.status) {
+                LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading follow-ups...'),
+                LoadStatus.error => ErrorView(error: provider.error!, onRetry: _reload),
+                LoadStatus.success =>
+                  provider.followups.isEmpty
+                      ? EmptyStateView(
+                          message: 'No follow-ups logged yet',
+                          icon: Icons.support_agent_outlined,
+                          actionLabel: 'Add Follow-up',
+                          onAction: () => _showFollowupFormDialog(context, provider),
+                        )
+                      : ListView.builder(
+                          itemCount: provider.followups.length,
+                          itemBuilder: (context, index) => _FollowupTile(
+                            followup: provider.followups[index],
+                            onEdit: () =>
+                                _showFollowupFormDialog(context, provider, existing: provider.followups[index]),
+                            onDelete: () => _confirmDelete(context, provider, provider.followups[index]),
                           ),
                         ),
-                      ),
-            },
-          ),
-        ],
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -161,11 +139,7 @@ class _FollowupTile extends StatelessWidget {
   final VoidCallback onEdit;
   final VoidCallback onDelete;
 
-  const _FollowupTile({
-    required this.followup,
-    required this.onEdit,
-    required this.onDelete,
-  });
+  const _FollowupTile({required this.followup, required this.onEdit, required this.onDelete});
 
   Color _statusColor(BuildContext context) => switch (followup.status) {
     'resolved' => Colors.green,
@@ -184,18 +158,12 @@ class _FollowupTile extends StatelessWidget {
           children: [
             Text('${followup.faculty} · ${followup.email}'),
             const SizedBox(height: 4),
-            Text(
-              followup.followUpNote,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
+            Text(followup.followUpNote, maxLines: 2, overflow: TextOverflow.ellipsis),
             const SizedBox(height: 4),
             Align(
               alignment: Alignment.centerLeft,
               child: AppStatusChip(
-                label:
-                    followup.status[0].toUpperCase() +
-                    followup.status.substring(1),
+                label: followup.status[0].toUpperCase() + followup.status.substring(1),
                 color: _statusColor(context),
               ),
             ),
@@ -209,16 +177,8 @@ class _FollowupTile extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(
-              icon: const Icon(Icons.edit_outlined),
-              tooltip: 'Edit',
-              onPressed: onEdit,
-            ),
-            IconButton(
-              icon: const Icon(Icons.delete_outline),
-              tooltip: 'Delete',
-              onPressed: onDelete,
-            ),
+            IconButton(icon: const Icon(Icons.edit_outlined), tooltip: 'Edit', onPressed: onEdit),
+            IconButton(icon: const Icon(Icons.delete_outline), tooltip: 'Delete', onPressed: onDelete),
           ],
         ),
       ),
@@ -234,9 +194,7 @@ Future<void> _showFollowupFormDialog(
   final nameController = TextEditingController(text: existing?.studentName);
   final facultyController = TextEditingController(text: existing?.faculty);
   final emailController = TextEditingController(text: existing?.email);
-  final contactController = TextEditingController(
-    text: existing?.contactNumber,
-  );
+  final contactController = TextEditingController(text: existing?.contactNumber);
   final addressController = TextEditingController(text: existing?.address);
   final noteController = TextEditingController(text: existing?.followUpNote);
   final formKey = GlobalKey<FormState>();
@@ -261,64 +219,40 @@ Future<void> _showFollowupFormDialog(
                 children: [
                   TextFormField(
                     controller: nameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Student Name',
-                    ),
-                    validator: (value) =>
-                        (value == null || value.trim().isEmpty)
-                        ? 'Required'
-                        : null,
+                    decoration: const InputDecoration(labelText: 'Student Name'),
+                    validator: (value) => (value == null || value.trim().isEmpty) ? 'Required' : null,
                     autofocus: true,
                   ),
                   const SizedBox(height: 12),
                   TextFormField(
                     controller: facultyController,
                     decoration: const InputDecoration(labelText: 'Faculty'),
-                    validator: (value) =>
-                        (value == null || value.trim().isEmpty)
-                        ? 'Required'
-                        : null,
+                    validator: (value) => (value == null || value.trim().isEmpty) ? 'Required' : null,
                   ),
                   const SizedBox(height: 12),
                   TextFormField(
                     controller: emailController,
                     decoration: const InputDecoration(labelText: 'Email'),
-                    validator: (value) =>
-                        (value == null || value.trim().isEmpty)
-                        ? 'Required'
-                        : null,
+                    validator: (value) => (value == null || value.trim().isEmpty) ? 'Required' : null,
                   ),
                   const SizedBox(height: 12),
                   TextFormField(
                     controller: contactController,
-                    decoration: const InputDecoration(
-                      labelText: 'Contact Number',
-                    ),
-                    validator: (value) =>
-                        (value == null || value.trim().isEmpty)
-                        ? 'Required'
-                        : null,
+                    decoration: const InputDecoration(labelText: 'Contact Number'),
+                    validator: (value) => (value == null || value.trim().isEmpty) ? 'Required' : null,
                   ),
                   const SizedBox(height: 12),
                   TextFormField(
                     controller: addressController,
                     decoration: const InputDecoration(labelText: 'Address'),
-                    validator: (value) =>
-                        (value == null || value.trim().isEmpty)
-                        ? 'Required'
-                        : null,
+                    validator: (value) => (value == null || value.trim().isEmpty) ? 'Required' : null,
                   ),
                   const SizedBox(height: 12),
                   TextFormField(
                     controller: noteController,
-                    decoration: const InputDecoration(
-                      labelText: 'Follow-up Needed',
-                    ),
+                    decoration: const InputDecoration(labelText: 'Follow-up Needed'),
                     maxLines: 3,
-                    validator: (value) =>
-                        (value == null || value.trim().isEmpty)
-                        ? 'Required'
-                        : null,
+                    validator: (value) => (value == null || value.trim().isEmpty) ? 'Required' : null,
                   ),
                   const SizedBox(height: 12),
                   Row(
@@ -330,12 +264,8 @@ Future<void> _showFollowupFormDialog(
                           final picked = await showDatePicker(
                             context: dialogContext,
                             initialDate: visitDate,
-                            firstDate: DateTime.now().subtract(
-                              const Duration(days: 365),
-                            ),
-                            lastDate: DateTime.now().add(
-                              const Duration(days: 365),
-                            ),
+                            firstDate: DateTime.now().subtract(const Duration(days: 365)),
+                            lastDate: DateTime.now().add(const Duration(days: 365)),
                           );
                           if (picked != null) {
                             setDialogState(() => visitDate = picked);
@@ -349,29 +279,17 @@ Future<void> _showFollowupFormDialog(
                     initialValue: status,
                     decoration: const InputDecoration(labelText: 'Status'),
                     items: const [
-                      DropdownMenuItem(
-                        value: 'pending',
-                        child: Text('Pending'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'in-progress',
-                        child: Text('In Progress'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'resolved',
-                        child: Text('Resolved'),
-                      ),
+                      DropdownMenuItem(value: 'pending', child: Text('Pending')),
+                      DropdownMenuItem(value: 'in-progress', child: Text('In Progress')),
+                      DropdownMenuItem(value: 'resolved', child: Text('Resolved')),
                     ],
-                    onChanged: (value) =>
-                        setDialogState(() => status = value ?? 'pending'),
+                    onChanged: (value) => setDialogState(() => status = value ?? 'pending'),
                   ),
                   if (provider.actionError != null) ...[
                     const SizedBox(height: 12),
                     Text(
                       provider.actionError!.message,
-                      style: TextStyle(
-                        color: Theme.of(dialogContext).colorScheme.error,
-                      ),
+                      style: TextStyle(color: Theme.of(dialogContext).colorScheme.error),
                     ),
                   ],
                 ],
@@ -380,10 +298,7 @@ Future<void> _showFollowupFormDialog(
           ),
         ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text('Cancel'),
-          ),
+          TextButton(onPressed: () => Navigator.of(dialogContext).pop(), child: const Text('Cancel')),
           FilledButton(
             onPressed: provider.isSaving
                 ? null
@@ -417,11 +332,7 @@ Future<void> _showFollowupFormDialog(
                     setDialogState(() {});
                   },
             child: provider.isSaving
-                ? const SizedBox(
-                    height: 16,
-                    width: 16,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
+                ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
                 : const Text('Save'),
           ),
         ],
@@ -430,11 +341,7 @@ Future<void> _showFollowupFormDialog(
   );
 }
 
-Future<void> _confirmDelete(
-  BuildContext context,
-  StudentFollowupProvider provider,
-  StudentFollowup followup,
-) async {
+Future<void> _confirmDelete(BuildContext context, StudentFollowupProvider provider, StudentFollowup followup) async {
   final confirmed = await showDialog<bool>(
     context: context,
     builder: (dialogContext) => AlertDialog(
@@ -443,14 +350,9 @@ Future<void> _confirmDelete(
         'This will permanently delete the follow-up record for "${followup.studentName}". This cannot be undone.',
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.of(dialogContext).pop(false),
-          child: const Text('Cancel'),
-        ),
+        TextButton(onPressed: () => Navigator.of(dialogContext).pop(false), child: const Text('Cancel')),
         FilledButton(
-          style: FilledButton.styleFrom(
-            backgroundColor: Theme.of(dialogContext).colorScheme.error,
-          ),
+          style: FilledButton.styleFrom(backgroundColor: Theme.of(dialogContext).colorScheme.error),
           onPressed: () => Navigator.of(dialogContext).pop(true),
           child: const Text('Delete'),
         ),
@@ -462,33 +364,21 @@ Future<void> _confirmDelete(
 
   final succeeded = await provider.deleteFollowup(followup.id);
   if (!succeeded && context.mounted) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          provider.actionError?.message ?? 'Failed to delete follow-up',
-        ),
-      ),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(provider.actionError?.message ?? 'Failed to delete follow-up')));
   }
 }
 
-Future<void> _downloadExport(
-  BuildContext context,
-  StudentFollowupProvider provider,
-  String? status,
-) async {
+Future<void> _downloadExport(BuildContext context, StudentFollowupProvider provider, String? status) async {
   final bytes = await provider.exportFollowups(status: status);
   if (bytes != null) {
     if (context.mounted) {
       await saveBytesOrNotify(context, bytes, 'student-followups.xlsx');
     }
   } else if (context.mounted) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          provider.downloadError?.message ?? 'Failed to export follow-ups',
-        ),
-      ),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(provider.downloadError?.message ?? 'Failed to export follow-ups')));
   }
 }

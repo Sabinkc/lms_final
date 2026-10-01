@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../providers/self_attendance_provider.dart';
 import '../widgets/attendance_history_body.dart';
+import '../../../../shared/widgets/brand_app_bar.dart';
+import '../../../../shared/widgets/app_background.dart';
 
 /// docs/screens.md "My Attendance" (Student) — own history + summary
 /// percentage. `GET /api/attendance/me` resolves the caller's own
@@ -29,13 +31,16 @@ class _MyAttendanceScreenState extends State<MyAttendanceScreen> {
   Widget build(BuildContext context) {
     final provider = context.watch<SelfAttendanceProvider>();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('My Attendance')),
-      body: AttendanceHistoryBody(
-        status: provider.historyStatus,
-        history: provider.history,
-        error: provider.historyError,
-        onRetry: () => provider.loadOwnHistory(),
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: BrandAppBar(title: 'My Attendance'),
+        body: AttendanceHistoryBody(
+          status: provider.historyStatus,
+          history: provider.history,
+          error: provider.historyError,
+          onRetry: () => provider.loadOwnHistory(),
+        ),
       ),
     );
   }

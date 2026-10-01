@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
 import '../../../../shared/widgets/status_chip.dart';
-import '../../../admin_management/presentation/providers/academic_structure_provider.dart'
-    show LoadStatus;
+import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../../data/models/payroll.dart';
 import '../providers/my_payslips_provider.dart';
+import '../../../../shared/widgets/brand_app_bar.dart';
+import '../../../../shared/widgets/app_background.dart';
 
 const _monthNames = [
   '',
@@ -49,30 +52,78 @@ class _MyPayslipsScreenState extends State<MyPayslipsScreen> {
   Widget build(BuildContext context) {
     final provider = context.watch<MyPayslipsProvider>();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('My Payslips')),
-      body: switch (provider.status) {
-        LoadStatus.initial ||
-        LoadStatus.loading => const LoadingView(message: 'Loading payslips...'),
-        LoadStatus.error => ErrorView(
-          error: provider.error!,
-          onRetry: () => provider.loadMyPayslips(),
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: BrandAppBar(title: 'My Payslips'),
+        body: switch (provider.status) {
+          LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading payslips...'),
+          LoadStatus.error => ErrorView(error: provider.error!, onRetry: () => provider.loadMyPayslips()),
+          LoadStatus.success =>
+            provider.payslips.isEmpty
+                ? const EmptyStateView(message: 'No payslips generated yet', icon: Icons.receipt_outlined)
+                : ListView.separated(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: provider.payslips.length + 1,
+                    separatorBuilder: (context, index) => const SizedBox(height: 8),
+                    itemBuilder: (context, index) => index == 0
+                        ? _LatestPayHighlight(payslip: provider.payslips.first)
+                        : _PayslipTile(payslip: provider.payslips[index - 1]),
+                  ),
+        },
+      ),
+    );
+  }
+}
+
+class _LatestPayHighlight extends StatelessWidget {
+  final Payroll payslip;
+
+  const _LatestPayHighlight({required this.payslip});
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.md),
+      decoration: BoxDecoration(
+        borderRadius: AppRadius.card,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [scheme.primary, Color.lerp(scheme.primary, Colors.black, 0.3)!],
         ),
-        LoadStatus.success =>
-          provider.payslips.isEmpty
-              ? const EmptyStateView(
-                  message: 'No payslips generated yet',
-                  icon: Icons.receipt_outlined,
-                )
-              : ListView.separated(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: provider.payslips.length,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 8),
-                  itemBuilder: (context, index) =>
-                      _PayslipTile(payslip: provider.payslips[index]),
-                ),
-      },
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'LATEST PAYSLIP • ${_monthNames[payslip.month].toUpperCase()} ${payslip.year}',
+            style: Theme.of(
+              context,
+            ).textTheme.labelSmall?.copyWith(color: Colors.white.withValues(alpha: 0.85), fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          Text('Take-home Pay', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white70)),
+          Text(
+            'Rs ${payslip.netSalary.toStringAsFixed(0)}',
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(color: Colors.white, fontWeight: FontWeight.w700),
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          Row(
+            children: [
+              Icon(Icons.trending_up, size: 16, color: Colors.white.withValues(alpha: 0.85)),
+              const SizedBox(width: 4),
+              Text(
+                'Gross Rs ${payslip.grossSalary.toStringAsFixed(0)} · Deductions Rs ${payslip.totalDeductions.toStringAsFixed(0)}',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white.withValues(alpha: 0.85)),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -89,7 +140,13 @@ class _PayslipTile extends StatelessWidget {
       margin: EdgeInsets.zero,
       clipBehavior: Clip.antiAlias,
       child: ExpansionTile(
-        title: Text('${_monthNames[payslip.month]} ${payslip.year}'),
+        leading: CircleAvatar(
+          radius: 18,
+          backgroundColor: statusColor.withValues(alpha: 0.14),
+          foregroundColor: statusColor,
+          child: const Icon(Icons.receipt_long_outlined, size: 20),
+        ),
+        title: Text('${_monthNames[payslip.month]} ${payslip.year}', style: Theme.of(context).textTheme.titleSmall),
         subtitle: Padding(
           padding: const EdgeInsets.only(top: 4),
           child: Wrap(
@@ -98,12 +155,7 @@ class _PayslipTile extends StatelessWidget {
             runSpacing: 4,
             children: [
               Text('Net Rs ${payslip.netSalary.toStringAsFixed(0)}'),
-              AppStatusChip(
-                label:
-                    payslip.status[0].toUpperCase() +
-                    payslip.status.substring(1),
-                color: statusColor,
-              ),
+              AppStatusChip(label: payslip.status[0].toUpperCase() + payslip.status.substring(1), color: statusColor),
             ],
           ),
         ),
@@ -130,22 +182,13 @@ class _PayslipTile extends StatelessWidget {
           ),
           ListTile(
             dense: true,
-            title: Text(
-              'Net Salary',
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-            trailing: Text(
-              'Rs ${payslip.netSalary.toStringAsFixed(0)}',
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
+            title: Text('Net Salary', style: Theme.of(context).textTheme.titleSmall),
+            trailing: Text('Rs ${payslip.netSalary.toStringAsFixed(0)}', style: Theme.of(context).textTheme.titleSmall),
           ),
           if (payslip.remarks.isNotEmpty)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text('Remarks: ${payslip.remarks}'),
-              ),
+              child: Align(alignment: Alignment.centerLeft, child: Text('Remarks: ${payslip.remarks}')),
             ),
         ],
       ),

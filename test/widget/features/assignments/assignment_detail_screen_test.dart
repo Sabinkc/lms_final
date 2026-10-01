@@ -198,7 +198,7 @@ void main() {
 
     expect(find.text('Algebra Homework'), findsOneWidget);
     expect(find.text('Chapter 4 exercises'), findsOneWidget);
-    expect(find.text('Due: 1 Sep 2026'), findsOneWidget);
+    expect(find.text('Due 1 Sep 2026'), findsOneWidget);
     expect(find.text('Submit your work'), findsNothing);
     expect(find.text('Submissions (0)'), findsNothing);
   });

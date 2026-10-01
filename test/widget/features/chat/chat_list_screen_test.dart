@@ -96,7 +96,7 @@ void main() {
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 
-  testWidgets('Student sees no FAB to create a group', (tester) async {
+  testWidgets('Student sees no New Group button', (tester) async {
     when(() => chatRepository.getMyGroups()).thenAnswer((_) async => const Result.success([]));
     final provider = ChatProvider(chatRepository, realtimeService, secureStorage);
     final authProvider = _authAs(authRepository, AppRole.student);
@@ -104,11 +104,11 @@ void main() {
     await tester.pumpWidget(_wrap(provider, authProvider));
     await tester.pumpAndSettle();
 
-    expect(find.byType(FloatingActionButton), findsNothing);
+    expect(find.byKey(const Key('newGroupAppBarButton')), findsNothing);
     expect(find.text('No group conversations yet'), findsOneWidget);
   });
 
-  testWidgets('Teacher sees a FAB to create a group', (tester) async {
+  testWidgets('Teacher sees a New Group button to create a group', (tester) async {
     when(() => chatRepository.getMyGroups()).thenAnswer((_) async => const Result.success([]));
     final provider = ChatProvider(chatRepository, realtimeService, secureStorage);
     final authProvider = _authAs(authRepository, AppRole.teacher);
@@ -116,7 +116,7 @@ void main() {
     await tester.pumpWidget(_wrap(provider, authProvider));
     await tester.pumpAndSettle();
 
-    expect(find.byType(FloatingActionButton), findsOneWidget);
+    expect(find.byKey(const Key('newGroupAppBarButton')), findsOneWidget);
   });
 
   testWidgets('success state lists groups with their last message preview', (tester) async {
@@ -131,7 +131,7 @@ void main() {
     expect(find.text('Hello class'), findsOneWidget);
   });
 
-  testWidgets('create-group flow: FAB -> pick class -> create -> calls createGroup', (tester) async {
+  testWidgets('create-group flow: New Group button -> pick class -> create -> calls createGroup', (tester) async {
     when(() => chatRepository.getMyGroups()).thenAnswer((_) async => const Result.success([]));
     when(() => chatRepository.getEligibleTargets()).thenAnswer((_) async => const Result.success([
           EligibleTarget(classId: 'c1', className: 'Class 10', hasSections: true, sections: [EligibleSection(id: 'sec1', name: 'A')]),
@@ -150,7 +150,7 @@ void main() {
     await tester.pumpWidget(_wrap(provider, authProvider));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byType(FloatingActionButton));
+    await tester.tap(find.byKey(const Key('newGroupAppBarButton')));
     await tester.pumpAndSettle();
     expect(find.widgetWithText(AlertDialog, 'New Group'), findsOneWidget);
 

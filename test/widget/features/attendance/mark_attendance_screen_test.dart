@@ -70,6 +70,16 @@ void main() {
   });
 
   testWidgets('picking a section loads its roster, defaulting every student to Present', (tester) async {
+    // The restyled screen (identity card + stat row + search/filter, all
+    // above the roster) pushes a roster row below the default 800x600 test
+    // surface's fold — `find.text` skips offstage (unpainted) matches by
+    // default, so a tall surface is needed to actually see the row without
+    // a separate scroll-into-view step.
+    tester.view.physicalSize = const Size(1080, 2400);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
     when(() => repository.getMySections()).thenAnswer((_) async => const Result.success([_section1]));
     when(() => repository.getSectionRoster('sec1')).thenAnswer((_) async => const Result.success([_student1]));
     final provider = AttendanceProvider(repository);

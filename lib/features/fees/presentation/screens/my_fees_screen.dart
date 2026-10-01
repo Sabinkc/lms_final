@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../providers/self_fee_provider.dart';
 import '../widgets/fee_history_body.dart';
+import '../../../../shared/widgets/brand_app_bar.dart';
+import '../../../../shared/widgets/app_background.dart';
 
 /// docs/screens.md "My Fees" (Student) — own fee list + summary + a "Pay"
 /// action per unpaid fee/installment. Mirrors `MyAttendanceScreen`, except
@@ -27,9 +29,12 @@ class _MyFeesScreenState extends State<MyFeesScreen> {
   Widget build(BuildContext context) {
     final provider = context.watch<SelfFeeProvider>();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('My Fees')),
-      body: FeeHistoryBody(provider: provider),
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: BrandAppBar(title: 'My Fees'),
+        body: FeeHistoryBody(provider: provider),
+      ),
     );
   }
 }

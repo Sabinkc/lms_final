@@ -56,6 +56,18 @@ const _student1 = Student(
   status: 'active',
 );
 
+/// The restyled screen's header/stat-cards/quick-actions/chart all sit
+/// above the fee list now, pushing it below the default 800x600 test
+/// surface's fold — `find.text`/`find.textContaining` skip offstage
+/// (unpainted) matches by default, so tests asserting on the fee list need
+/// a taller surface to see it without a separate scroll-into-view step.
+void _useTallSurface(WidgetTester tester) {
+  tester.view.physicalSize = const Size(1080, 2800);
+  tester.view.devicePixelRatio = 1.0;
+  addTearDown(tester.view.resetPhysicalSize);
+  addTearDown(tester.view.resetDevicePixelRatio);
+}
+
 Widget _wrap(FeeProvider provider) => ChangeNotifierProvider<FeeProvider>.value(
       value: provider,
       child: MaterialApp.router(
@@ -78,6 +90,10 @@ void main() {
     feeRepository = _MockFeeRepository();
     paymentRepository = _MockPaymentRepository();
     studentRepository = _MockStudentRepository();
+    // The screen now also loads payment history for its "Recent Fee
+    // Collections" section — stub a default empty result so every test not
+    // specifically exercising that section doesn't need its own stub.
+    when(() => paymentRepository.getPaymentHistory()).thenAnswer((_) async => const Result.success([]));
   });
 
   testWidgets('loading state shows a spinner', (tester) async {
@@ -92,6 +108,7 @@ void main() {
   });
 
   testWidgets('empty state shows the add-fee CTA', (tester) async {
+    _useTallSurface(tester);
     when(() => feeRepository.getFees(status: any(named: 'status'))).thenAnswer((_) async => const Result.success([]));
     final provider = FeeProvider(feeRepository, paymentRepository, studentRepository);
 
@@ -102,6 +119,7 @@ void main() {
   });
 
   testWidgets('success state shows fee + student, expands to show due date, and deletes on confirm', (tester) async {
+    _useTallSurface(tester);
     when(() => feeRepository.getFees(status: any(named: 'status')))
         .thenAnswer((_) async => const Result.success([_fee1]));
     when(() => feeRepository.deleteFee(any())).thenAnswer((_) async => const Result.success(null));
@@ -142,7 +160,10 @@ void main() {
     await tester.pumpWidget(_wrap(provider));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byType(FloatingActionButton));
+    // "Add Fee" also appears as the empty-state action button below the
+    // Quick Actions tile (fees list is empty in this test) — the tile comes
+    // first in the widget tree, so `.first` is the tile.
+    await tester.tap(find.text('Add Fee').first);
     await tester.pumpAndSettle();
     expect(find.widgetWithText(AlertDialog, 'Add Fee'), findsOneWidget);
 
@@ -178,7 +199,7 @@ void main() {
     await tester.pumpWidget(_wrap(provider));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byTooltip('Export fees'));
+    await tester.tap(find.text('Export Fees'));
     await tester.pumpAndSettle();
 
     expect(find.textContaining('Export failed'), findsOneWidget);

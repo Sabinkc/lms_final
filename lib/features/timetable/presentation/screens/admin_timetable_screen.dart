@@ -10,6 +10,8 @@ import '../../../admin_management/presentation/providers/teacher_provider.dart';
 import '../../data/models/timetable_day.dart';
 import '../../data/models/timetable_period.dart';
 import '../providers/admin_timetable_provider.dart';
+import '../../../../shared/widgets/brand_app_bar.dart';
+import '../../../../shared/widgets/app_background.dart';
 
 class _PeriodDraft {
   int periodNumber;
@@ -31,13 +33,13 @@ class _PeriodDraft {
   }
 
   TimetablePeriodInput toInput() => TimetablePeriodInput(
-        periodNumber: periodNumber,
-        subject: subjectController.text.trim(),
-        teacherId: teacherId,
-        startTime: startTimeController.text.trim(),
-        endTime: endTimeController.text.trim(),
-        room: roomController.text.trim(),
-      );
+    periodNumber: periodNumber,
+    subject: subjectController.text.trim(),
+    teacherId: teacherId,
+    startTime: startTimeController.text.trim(),
+    endTime: endTimeController.text.trim(),
+    room: roomController.text.trim(),
+  );
 }
 
 /// Admin: Manage Timetable (`docs/production_roadmap.md` Phase L4,
@@ -125,7 +127,9 @@ class _AdminTimetableScreenState extends State<AdminTimetableScreen> {
     );
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(succeeded ? 'Timetable saved' : provider.actionError?.message ?? 'Failed to save timetable')),
+      SnackBar(
+        content: Text(succeeded ? 'Timetable saved' : provider.actionError?.message ?? 'Failed to save timetable'),
+      ),
     );
   }
 
@@ -138,7 +142,9 @@ class _AdminTimetableScreenState extends State<AdminTimetableScreen> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: const Text('Delete timetable?'),
-        content: Text('This will permanently delete the timetable for $_selectedClass $_selectedSection. This cannot be undone.'),
+        content: Text(
+          'This will permanently delete the timetable for $_selectedClass $_selectedSection. This cannot be undone.',
+        ),
         actions: [
           TextButton(onPressed: () => Navigator.of(dialogContext).pop(false), child: const Text('Cancel')),
           FilledButton(
@@ -156,9 +162,9 @@ class _AdminTimetableScreenState extends State<AdminTimetableScreen> {
     if (succeeded) {
       setState(_resetDraft);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(provider.actionError?.message ?? 'Failed to delete timetable')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(provider.actionError?.message ?? 'Failed to delete timetable')));
     }
   }
 
@@ -169,63 +175,69 @@ class _AdminTimetableScreenState extends State<AdminTimetableScreen> {
     final timetableProvider = context.watch<AdminTimetableProvider>();
     final canEdit = _selectedClass != null && _selectedSection != null;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Timetable'),
-        actions: [
-          if (canEdit && timetableProvider.current != null)
-            IconButton(icon: const Icon(Icons.delete_outline), tooltip: 'Delete timetable', onPressed: _delete),
-        ],
-      ),
-      floatingActionButton: canEdit
-          ? FloatingActionButton.extended(
-              onPressed: timetableProvider.isSaving ? null : _save,
-              icon: timetableProvider.isSaving
-                  ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                  : const Icon(Icons.save_outlined),
-              label: const Text('Save'),
-            )
-          : null,
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: DropdownButtonFormField<String>(
-                  initialValue: _selectedClass,
-                  decoration: const InputDecoration(labelText: 'Class'),
-                  items: [for (final c in academicProvider.classes) DropdownMenuItem(value: c.name, child: Text(c.name))],
-                  onChanged: (value) async {
-                    final matching = academicProvider.classes.where((c) => c.name == value);
-                    if (matching.isNotEmpty) await academicProvider.loadSections(matching.first.id);
-                    if (!mounted) return;
-                    await _selectClassSection(value, null);
-                  },
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: BrandAppBar(
+          title: 'Timetable',
+          actions: [
+            if (canEdit && timetableProvider.current != null)
+              IconButton(icon: const Icon(Icons.delete_outline), tooltip: 'Delete timetable', onPressed: _delete),
+          ],
+        ),
+        floatingActionButton: canEdit
+            ? FloatingActionButton.extended(
+                onPressed: timetableProvider.isSaving ? null : _save,
+                icon: timetableProvider.isSaving
+                    ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                    : const Icon(Icons.save_outlined),
+                label: const Text('Save'),
+              )
+            : null,
+        body: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonFormField<String>(
+                    initialValue: _selectedClass,
+                    decoration: const InputDecoration(labelText: 'Class'),
+                    items: [
+                      for (final c in academicProvider.classes) DropdownMenuItem(value: c.name, child: Text(c.name)),
+                    ],
+                    onChanged: (value) async {
+                      final matching = academicProvider.classes.where((c) => c.name == value);
+                      if (matching.isNotEmpty) await academicProvider.loadSections(matching.first.id);
+                      if (!mounted) return;
+                      await _selectClassSection(value, null);
+                    },
+                  ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: DropdownButtonFormField<String>(
-                  initialValue: _selectedSection,
-                  decoration: const InputDecoration(labelText: 'Section'),
-                  items: [for (final s in academicProvider.sections) DropdownMenuItem(value: s.name, child: Text(s.name))],
-                  onChanged: _selectedClass == null ? null : (value) => _selectClassSection(_selectedClass, value),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: DropdownButtonFormField<String>(
+                    initialValue: _selectedSection,
+                    decoration: const InputDecoration(labelText: 'Section'),
+                    items: [
+                      for (final s in academicProvider.sections) DropdownMenuItem(value: s.name, child: Text(s.name)),
+                    ],
+                    onChanged: _selectedClass == null ? null : (value) => _selectClassSection(_selectedClass, value),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          if (!canEdit)
-            const EmptyStateView(message: 'Pick a class and section to view or edit its timetable')
-          else
-            switch (timetableProvider.status) {
-              LoadStatus.loading => const LoadingView(message: 'Loading timetable...'),
-              LoadStatus.error => ErrorView(
+              ],
+            ),
+            const SizedBox(height: 16),
+            if (!canEdit)
+              const EmptyStateView(message: 'Pick a class and section to view or edit its timetable')
+            else
+              switch (timetableProvider.status) {
+                LoadStatus.loading => const LoadingView(message: 'Loading timetable...'),
+                LoadStatus.error => ErrorView(
                   error: timetableProvider.error!,
                   onRetry: () => _selectClassSection(_selectedClass, _selectedSection),
                 ),
-              LoadStatus.initial || LoadStatus.success => Column(
+                LoadStatus.initial || LoadStatus.success => Column(
                   children: [
                     for (final day in timetableWeekdays)
                       _DaySection(
@@ -240,8 +252,9 @@ class _AdminTimetableScreenState extends State<AdminTimetableScreen> {
                       ),
                   ],
                 ),
-            },
-        ],
+              },
+          ],
+        ),
       ),
     );
   }
@@ -314,7 +327,11 @@ class _DaySection extends StatelessWidget {
                       decoration: const InputDecoration(labelText: 'Teacher', isDense: true),
                       isExpanded: true,
                       items: [
-                        for (final t in teacherOptions) DropdownMenuItem(value: t.id, child: Text(t.fullName, overflow: TextOverflow.ellipsis)),
+                        for (final t in teacherOptions)
+                          DropdownMenuItem(
+                            value: t.id,
+                            child: Text(t.fullName, overflow: TextOverflow.ellipsis),
+                          ),
                       ],
                       onChanged: (value) => period.teacherId = value,
                     ),

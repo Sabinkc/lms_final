@@ -8,12 +8,13 @@ import '../../../../shared/widgets/filter_chip_bar.dart';
 import '../../../../shared/widgets/loading_view.dart';
 import '../../../../shared/widgets/stat_card.dart';
 import '../../../../shared/widgets/status_chip.dart';
-import '../../../admin_management/presentation/providers/academic_structure_provider.dart'
-    show LoadStatus;
+import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../../../auth/data/models/app_role.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../providers/exam_result_provider.dart';
 import '../widgets/exam_result_card.dart';
+import '../../../../shared/widgets/brand_app_bar.dart';
+import '../../../../shared/widgets/app_background.dart';
 
 /// docs/screens.md's exam-results view — body adapts by role, same pattern
 /// as `AssignmentDetailScreen`: Admin sees the whole class's ranked results
@@ -53,14 +54,17 @@ class _ExamResultsScreenState extends State<ExamResultsScreen> {
   Widget build(BuildContext context) {
     final role = context.watch<AuthProvider>().role;
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Exam Results')),
-      body: switch (role) {
-        AppRole.admin => _AdminClassResults(examId: widget.examId),
-        AppRole.student => _StudentOwnResult(examId: widget.examId),
-        AppRole.parent => _ParentChildResult(examId: widget.examId),
-        _ => const SizedBox.shrink(),
-      },
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: BrandAppBar(title: 'Exam Results'),
+        body: switch (role) {
+          AppRole.admin => _AdminClassResults(examId: widget.examId),
+          AppRole.student => _StudentOwnResult(examId: widget.examId),
+          AppRole.parent => _ParentChildResult(examId: widget.examId),
+          _ => const SizedBox.shrink(),
+        },
+      ),
     );
   }
 }
@@ -75,17 +79,14 @@ class _AdminClassResults extends StatelessWidget {
     final provider = context.watch<ExamResultProvider>();
 
     return switch (provider.classResultsStatus) {
-      LoadStatus.initial ||
-      LoadStatus.loading => const LoadingView(message: 'Loading results...'),
+      LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading results...'),
       LoadStatus.error => ErrorView(
         error: provider.classResultsError!,
         onRetry: () => provider.loadClassResults(examId),
       ),
       LoadStatus.success =>
         provider.classResults.isEmpty
-            ? const EmptyStateView(
-                message: 'No published results for this exam yet',
-              )
+            ? const EmptyStateView(message: 'No published results for this exam yet')
             : Column(
                 children: [
                   if (provider.classSummary case final summary?)
@@ -105,25 +106,15 @@ class _AdminClassResults extends StatelessWidget {
                             label: 'Failed',
                             color: Theme.of(context).colorScheme.error,
                           ),
-                          StatCard(
-                            icon: Icons.percent,
-                            value: '${summary.avgPercentage}%',
-                            label: 'Average',
-                          ),
+                          StatCard(icon: Icons.percent, value: '${summary.avgPercentage}%', label: 'Average'),
                         ],
                       ),
                     ),
                   Expanded(
                     child: ListView.separated(
-                      padding: const EdgeInsets.fromLTRB(
-                        AppSpacing.lg,
-                        0,
-                        AppSpacing.lg,
-                        AppSpacing.lg,
-                      ),
+                      padding: const EdgeInsets.fromLTRB(AppSpacing.lg, 0, AppSpacing.lg, AppSpacing.lg),
                       itemCount: provider.classResults.length,
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(height: AppSpacing.sm),
+                      separatorBuilder: (context, index) => const SizedBox(height: AppSpacing.sm),
                       itemBuilder: (context, index) {
                         final result = provider.classResults[index];
                         final scheme = Theme.of(context).colorScheme;
@@ -132,31 +123,20 @@ class _AdminClassResults extends StatelessWidget {
                           child: ListTile(
                             leading: result.rank != null
                                 ? CircleAvatar(
-                                    backgroundColor: scheme.primary.withValues(
-                                      alpha: 0.14,
-                                    ),
+                                    backgroundColor: scheme.primary.withValues(alpha: 0.14),
                                     child: Text(
                                       '${result.rank}',
-                                      style: TextStyle(
-                                        color: scheme.primary,
-                                        fontWeight: FontWeight.w700,
-                                      ),
+                                      style: TextStyle(color: scheme.primary, fontWeight: FontWeight.w700),
                                     ),
                                   )
                                 : null,
                             title: Text(
-                              result.studentName.isEmpty
-                                  ? result.studentAdmissionNumber
-                                  : result.studentName,
+                              result.studentName.isEmpty ? result.studentAdmissionNumber : result.studentName,
                             ),
-                            subtitle: Text(
-                              '${result.grade} · ${result.percentage}%',
-                            ),
+                            subtitle: Text('${result.grade} · ${result.percentage}%'),
                             trailing: AppStatusChip(
                               label: result.isPassed ? 'Passed' : 'Failed',
-                              color: result.isPassed
-                                  ? Colors.green
-                                  : scheme.error,
+                              color: result.isPassed ? Colors.green : scheme.error,
                             ),
                           ),
                         );
@@ -179,9 +159,7 @@ class _StudentOwnResult extends StatelessWidget {
     final provider = context.watch<ExamResultProvider>();
 
     return switch (provider.myExamResultStatus) {
-      LoadStatus.initial || LoadStatus.loading => const LoadingView(
-        message: 'Loading your result...',
-      ),
+      LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading your result...'),
       LoadStatus.error => ErrorView(
         error: provider.myExamResultError!,
         onRetry: () => provider.loadMyResultForExam(examId),
@@ -201,32 +179,20 @@ class _ParentChildResult extends StatelessWidget {
     final provider = context.watch<ExamResultProvider>();
 
     return switch (provider.childrenStatus) {
-      LoadStatus.initial ||
-      LoadStatus.loading => const LoadingView(message: 'Loading children...'),
-      LoadStatus.error => ErrorView(
-        error: provider.childrenError!,
-        onRetry: () => provider.loadChildren(),
-      ),
+      LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading children...'),
+      LoadStatus.error => ErrorView(error: provider.childrenError!, onRetry: () => provider.loadChildren()),
       LoadStatus.success =>
         provider.children.isEmpty
-            ? const EmptyStateView(
-                message: 'No children linked to your account yet',
-              )
+            ? const EmptyStateView(message: 'No children linked to your account yet')
             : Column(
                 children: [
                   if (provider.children.length > 1)
                     Padding(
                       padding: const EdgeInsets.all(AppSpacing.lg),
                       child: AppFilterChipBar<String>(
-                        options: [
-                          for (final child in provider.children) child.id,
-                        ],
-                        selected:
-                            provider.selectedChildId ??
-                            provider.children.first.id,
-                        labelBuilder: (id) => provider.children
-                            .firstWhere((c) => c.id == id)
-                            .fullName,
+                        options: [for (final child in provider.children) child.id],
+                        selected: provider.selectedChildId ?? provider.children.first.id,
+                        labelBuilder: (id) => provider.children.firstWhere((c) => c.id == id).fullName,
                         onSelected: provider.selectChild,
                       ),
                     ),
@@ -247,26 +213,19 @@ class _ChildResultBody extends StatelessWidget {
     final provider = context.watch<ExamResultProvider>();
 
     if (provider.selectedChildId == null) {
-      return const EmptyStateView(
-        message: 'Select a child above to view their result',
-      );
+      return const EmptyStateView(message: 'Select a child above to view their result');
     }
 
     return switch (provider.childResultsStatus) {
-      LoadStatus.initial ||
-      LoadStatus.loading => const LoadingView(message: 'Loading result...'),
+      LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading result...'),
       LoadStatus.error => ErrorView(
         error: provider.childResultsError!,
         onRetry: () => provider.selectChild(provider.selectedChildId!),
       ),
       LoadStatus.success => () {
-        final forThisExam = provider.childResults.where(
-          (r) => r.examId == examId,
-        );
+        final forThisExam = provider.childResults.where((r) => r.examId == examId);
         return forThisExam.isEmpty
-            ? const EmptyStateView(
-                message: 'No published result for this exam yet',
-              )
+            ? const EmptyStateView(message: 'No published result for this exam yet')
             : ExamResultCard(result: forThisExam.first);
       }(),
     };

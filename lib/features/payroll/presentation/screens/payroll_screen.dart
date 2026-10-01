@@ -6,28 +6,15 @@ import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
 import '../../../../shared/widgets/stat_card.dart';
 import '../../../../shared/widgets/status_chip.dart';
-import '../../../admin_management/presentation/providers/academic_structure_provider.dart'
-    show LoadStatus;
+import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../../data/models/payroll.dart';
 import '../providers/payroll_provider.dart';
 import 'generate_payroll_dialog.dart';
 import 'salary_config_dialog.dart';
+import '../../../../shared/widgets/brand_app_bar.dart';
+import '../../../../shared/widgets/app_background.dart';
 
-const _monthNames = [
-  '',
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-];
+const _monthNames = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 /// Admin: Teacher Salary/Payroll management (`implementation_backlog.md`
 /// E8-F1) — Salary Config and generated Payroll are two tabs of one screen
@@ -88,15 +75,9 @@ class _PayrollScreenState extends State<PayrollScreen> {
     );
   }
 
-  Future<void> _generateBulk(
-    BuildContext context,
-    PayrollProvider provider,
-  ) async {
+  Future<void> _generateBulk(BuildContext context, PayrollProvider provider) async {
     final now = DateTime.now();
-    final succeeded = await provider.generateBulkPayroll(
-      month: now.month,
-      year: now.year,
-    );
+    final succeeded = await provider.generateBulkPayroll(month: now.month, year: now.year);
     if (!context.mounted) return;
     final result = provider.lastBulkResult;
     ScaffoldMessenger.of(context).showSnackBar(
@@ -104,8 +85,7 @@ class _PayrollScreenState extends State<PayrollScreen> {
         content: Text(
           succeeded && result != null
               ? 'Generated: ${result.$1} · Skipped: ${result.$2} · Failed: ${result.$3}'
-              : provider.generateError?.message ??
-                    'Failed to generate bulk payroll',
+              : provider.generateError?.message ?? 'Failed to generate bulk payroll',
         ),
       ),
     );
@@ -117,25 +97,28 @@ class _PayrollScreenState extends State<PayrollScreen> {
 
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Payroll'),
-          bottom: const TabBar(
-            tabs: [
-              Tab(text: 'Salary Config'),
-              Tab(text: 'Payroll'),
+      child: AppBackground(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: BrandAppBar(
+            title: 'Payroll',
+            bottom: const TabBar(
+              tabs: [
+                Tab(text: 'Salary Config'),
+                Tab(text: 'Payroll'),
+              ],
+            ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => _showActions(context, provider),
+            child: const Icon(Icons.add),
+          ),
+          body: TabBarView(
+            children: [
+              _SalaryConfigTab(provider: provider),
+              _PayrollTab(provider: provider),
             ],
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => _showActions(context, provider),
-          child: const Icon(Icons.add),
-        ),
-        body: TabBarView(
-          children: [
-            _SalaryConfigTab(provider: provider),
-            _PayrollTab(provider: provider),
-          ],
         ),
       ),
     );
@@ -150,19 +133,11 @@ class _SalaryConfigTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return switch (provider.configsStatus) {
-      LoadStatus.initial || LoadStatus.loading => const LoadingView(
-        message: 'Loading salary configs...',
-      ),
-      LoadStatus.error => ErrorView(
-        error: provider.configsError!,
-        onRetry: () => provider.loadSalaryConfigs(),
-      ),
+      LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading salary configs...'),
+      LoadStatus.error => ErrorView(error: provider.configsError!, onRetry: () => provider.loadSalaryConfigs()),
       LoadStatus.success =>
         provider.configs.isEmpty
-            ? const EmptyStateView(
-                message: 'No salary configs set yet',
-                icon: Icons.badge_outlined,
-              )
+            ? const EmptyStateView(message: 'No salary configs set yet', icon: Icons.badge_outlined)
             : ListView.separated(
                 padding: const EdgeInsets.all(16),
                 itemCount: provider.configs.length,
@@ -177,10 +152,7 @@ class _SalaryConfigTab extends StatelessWidget {
                         backgroundColor: accent.withValues(alpha: 0.14),
                         child: Icon(Icons.badge_outlined, color: accent),
                       ),
-                      title: Text(
-                        config.staffName ?? config.staffId,
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
+                      title: Text(config.staffName ?? config.staffId, style: Theme.of(context).textTheme.titleSmall),
                       subtitle: Text(
                         'Rs ${config.basicSalary.toStringAsFixed(0)} basic · PF ${config.pfRate.toStringAsFixed(0)}%'
                         ' · Tax ${config.taxRate.toStringAsFixed(0)}%',
@@ -188,11 +160,7 @@ class _SalaryConfigTab extends StatelessWidget {
                       trailing: IconButton(
                         icon: const Icon(Icons.edit_outlined),
                         tooltip: 'Update',
-                        onPressed: () => showSalaryConfigDialog(
-                          context,
-                          provider,
-                          existing: config,
-                        ),
+                        onPressed: () => showSalaryConfigDialog(context, provider, existing: config),
                       ),
                     ),
                   );
@@ -210,18 +178,11 @@ class _PayrollTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return switch (provider.payrollsStatus) {
-      LoadStatus.initial ||
-      LoadStatus.loading => const LoadingView(message: 'Loading payroll...'),
-      LoadStatus.error => ErrorView(
-        error: provider.payrollsError!,
-        onRetry: () => provider.loadPayrolls(),
-      ),
+      LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading payroll...'),
+      LoadStatus.error => ErrorView(error: provider.payrollsError!, onRetry: () => provider.loadPayrolls()),
       LoadStatus.success =>
         provider.payrolls.isEmpty
-            ? const EmptyStateView(
-                message: 'No payroll generated yet',
-                icon: Icons.payments_outlined,
-              )
+            ? const EmptyStateView(message: 'No payroll generated yet', icon: Icons.payments_outlined)
             : ListView(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                 children: [
@@ -290,25 +251,24 @@ class _PayrollTile extends StatelessWidget {
           children: [
             Row(
               children: [
+                CircleAvatar(
+                  radius: 16,
+                  backgroundColor: statusColor.withValues(alpha: 0.16),
+                  foregroundColor: statusColor,
+                  child: const Icon(Icons.receipt_long_outlined, size: 16),
+                ),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Text(
                     '${payroll.staffName ?? payroll.staffId} — ${_monthNames[payroll.month]} ${payroll.year}',
                     style: Theme.of(context).textTheme.titleSmall,
                   ),
                 ),
-                AppStatusChip(
-                  label:
-                      payroll.status[0].toUpperCase() +
-                      payroll.status.substring(1),
-                  color: statusColor,
-                ),
+                AppStatusChip(label: payroll.status[0].toUpperCase() + payroll.status.substring(1), color: statusColor),
               ],
             ),
             const SizedBox(height: 4),
-            Text(
-              'Net Rs ${payroll.netSalary.toStringAsFixed(0)}',
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
+            Text('Net Rs ${payroll.netSalary.toStringAsFixed(0)}', style: Theme.of(context).textTheme.bodyMedium),
             if (payroll.status == 'pending') ...[
               const SizedBox(height: 8),
               Row(
@@ -317,20 +277,12 @@ class _PayrollTile extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.delete_outline),
                     tooltip: 'Delete',
-                    onPressed: processing
-                        ? null
-                        : () => provider.deletePayroll(payroll.id),
+                    onPressed: processing ? null : () => provider.deletePayroll(payroll.id),
                   ),
                   FilledButton(
-                    onPressed: processing
-                        ? null
-                        : () => provider.markAsPaid(payroll.id),
+                    onPressed: processing ? null : () => provider.markAsPaid(payroll.id),
                     child: processing
-                        ? const SizedBox(
-                            height: 16,
-                            width: 16,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
+                        ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
                         : const Text('Mark Paid'),
                   ),
                 ],

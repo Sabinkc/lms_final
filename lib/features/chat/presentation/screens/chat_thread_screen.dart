@@ -11,6 +11,8 @@ import '../../data/models/group_conversation.dart';
 import '../../data/models/group_message.dart';
 import '../providers/chat_provider.dart';
 import 'manage_group_dialog.dart';
+import '../../../../shared/widgets/brand_app_bar.dart';
+import '../../../../shared/widgets/app_background.dart';
 
 /// Group Thread — bubbles, compose bar, typing indicator
 /// (`implementation_backlog.md` E10-F1-T2/E10-F2-T3). [group] is passed via
@@ -98,9 +100,9 @@ class _ChatThreadScreenState extends State<ChatThreadScreen> {
       setState(() => _pendingAttachment = null);
       WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToEnd());
     } else if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(provider.sendError?.message ?? 'Failed to send message')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(provider.sendError?.message ?? 'Failed to send message')));
     }
   }
 
@@ -119,101 +121,150 @@ class _ChatThreadScreenState extends State<ChatThreadScreen> {
     final myUserId = context.watch<AuthProvider>().user?.id;
     final isTeacher = context.watch<AuthProvider>().role == AppRole.teacher;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.group?.name ?? 'Chat'),
-        actions: [
-          if (isTeacher && widget.group != null)
-            IconButton(
-              icon: const Icon(Icons.settings_outlined),
-              tooltip: 'Manage Group',
-              onPressed: () => showManageGroupDialog(context, provider, widget.group!),
-            ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: switch (provider.messagesStatus) {
-              LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading messages...'),
-              LoadStatus.error => ErrorView(error: provider.messagesError!, onRetry: () => provider.openThread(widget.conversationId)),
-              LoadStatus.success => provider.messages.isEmpty
-                  ? const Center(child: Text('No messages yet — say hello!'))
-                  : ListView.builder(
-                      controller: _scrollController,
-                      padding: const EdgeInsets.all(12),
-                      itemCount: provider.messages.length,
-                      itemBuilder: (context, index) {
-                        final message = provider.messages[index];
-                        return _MessageBubble(message: message, isMine: message.senderUserId == myUserId);
-                      },
+    final group = widget.group;
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: BrandAppBar(
+          // A conversation keeps its header to the group itself — no global
+          // bell/avatar competing with the member count.
+          showNotifications: false,
+          showAccount: false,
+          titleWidget: group == null
+              ? const Text('Chat')
+              : Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 16,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      child: Text(
+                        _groupInitials(group.className.isNotEmpty ? group.className : group.name),
+                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 11),
+                      ),
                     ),
-            },
-          ),
-          if (provider.typingUserNames.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  '${provider.typingUserNames.join(', ')} typing…',
-                  style: Theme.of(context).textTheme.bodySmall,
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            group.name,
+                            style: const TextStyle(fontSize: 16),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            '${group.memberIds.length + group.teacherIds.length} members',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+          actions: [
+            if (isTeacher && widget.group != null)
+              IconButton(
+                icon: const Icon(Icons.settings_outlined),
+                tooltip: 'Manage Group',
+                onPressed: () => showManageGroupDialog(context, provider, widget.group!),
+              ),
+          ],
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: switch (provider.messagesStatus) {
+                LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading messages...'),
+                LoadStatus.error => ErrorView(
+                  error: provider.messagesError!,
+                  onRetry: () => provider.openThread(widget.conversationId),
+                ),
+                LoadStatus.success =>
+                  provider.messages.isEmpty
+                      ? const Center(child: Text('No messages yet — say hello!'))
+                      : ListView.builder(
+                          controller: _scrollController,
+                          padding: const EdgeInsets.all(12),
+                          itemCount: provider.messages.length,
+                          itemBuilder: (context, index) {
+                            final message = provider.messages[index];
+                            return _MessageBubble(message: message, isMine: message.senderUserId == myUserId);
+                          },
+                        ),
+              },
+            ),
+            if (provider.typingUserNames.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '${provider.typingUserNames.join(', ')} typing…',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ),
+              ),
+            if (_pendingAttachment != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Chip(
+                  label: Text(_pendingAttachment!.name),
+                  onDeleted: () => setState(() => _pendingAttachment = null),
+                ),
+              ),
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.attach_file),
+                      tooltip: 'Attach image or video',
+                      onPressed: _pickAttachment,
+                    ),
+                    Expanded(
+                      child: TextField(
+                        controller: _textController,
+                        decoration: const InputDecoration(
+                          hintText: 'Message',
+                          border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(24))),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        ),
+                        minLines: 1,
+                        maxLines: 4,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Container(
+                      decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary, shape: BoxShape.circle),
+                      child: IconButton(
+                        icon: provider.isSending
+                            ? const SizedBox(
+                                height: 16,
+                                width: 16,
+                                child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                              )
+                            : const Icon(Icons.send, color: Colors.white, size: 20),
+                        tooltip: 'Send',
+                        onPressed: provider.isSending ? null : _send,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          if (_pendingAttachment != null)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Chip(
-                label: Text(_pendingAttachment!.name),
-                onDeleted: () => setState(() => _pendingAttachment = null),
-              ),
-            ),
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.attach_file),
-                    tooltip: 'Attach image or video',
-                    onPressed: _pickAttachment,
-                  ),
-                  Expanded(
-                    child: TextField(
-                      controller: _textController,
-                      decoration: const InputDecoration(
-                        hintText: 'Message',
-                        border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(24))),
-                        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                      ),
-                      minLines: 1,
-                      maxLines: 4,
-                    ),
-                  ),
-                  const SizedBox(width: 4),
-                  Container(
-                    decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary, shape: BoxShape.circle),
-                    child: IconButton(
-                      icon: provider.isSending
-                          ? const SizedBox(
-                              height: 16,
-                              width: 16,
-                              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                            )
-                          : const Icon(Icons.send, color: Colors.white, size: 20),
-                      tooltip: 'Send',
-                      onPressed: provider.isSending ? null : _send,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
+}
+
+String _groupInitials(String source) {
+  final letters = source.trim().split(RegExp(r'\s+')).first.replaceAll(RegExp(r'[^A-Za-z0-9]'), '');
+  return letters.length >= 2 ? letters.substring(0, 2).toUpperCase() : letters.toUpperCase();
 }
 
 class _MessageBubble extends StatelessWidget {
@@ -243,7 +294,25 @@ class _MessageBubble extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (!isMine) Text(message.senderName, style: Theme.of(context).textTheme.labelSmall),
+            if (!isMine)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 2),
+                child: RichText(
+                  text: TextSpan(
+                    style: Theme.of(
+                      context,
+                    ).textTheme.labelSmall?.copyWith(color: colorScheme.primary, fontWeight: FontWeight.w700),
+                    children: [
+                      TextSpan(text: message.senderName),
+                      if (message.senderRole.isNotEmpty)
+                        TextSpan(
+                          text: ' • ${message.senderRole[0].toUpperCase()}${message.senderRole.substring(1)}',
+                          style: TextStyle(color: colorScheme.onSurfaceVariant, fontWeight: FontWeight.normal),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
             if (message.attachment != null)
               message.attachment!.type == 'image'
                   ? ClipRRect(
@@ -254,8 +323,7 @@ class _MessageBubble extends StatelessWidget {
                       '📎 ${message.attachment!.type} attachment',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(color: isMine ? Colors.white : null),
                     ),
-            if (message.text.isNotEmpty)
-              Text(message.text, style: TextStyle(color: isMine ? Colors.white : null)),
+            if (message.text.isNotEmpty) Text(message.text, style: TextStyle(color: isMine ? Colors.white : null)),
           ],
         ),
       ),

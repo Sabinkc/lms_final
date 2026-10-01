@@ -3,6 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../shared/utils/display_date.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
@@ -13,11 +16,21 @@ import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../data/models/notice.dart';
 import '../providers/notice_provider.dart';
 import 'notice_form_dialog.dart';
+import '../../../../shared/widgets/brand_app_bar.dart';
+import '../../../../shared/widgets/app_background.dart';
 
 /// docs/screens.md's Notices module. Admin-only creation for v1
 /// (`docs/production_roadmap.md` §4 decision #2 — the backend's
 /// `createdByModel` enum never included Teacher) — everyone else gets a
 /// read-only list via the audience-filtered `GET /api/notices/my`.
+///
+/// Restyled 2026-10-01 to a reference the user supplied (`LMS UI/WhatsApp
+/// Image ... 4.22.36 PM.jpeg`): "Stay Informed" hero with the total, filter
+/// chips with counts, and cards with a colored icon tile, category tag,
+/// title, 2-line preview, date and a "New" badge. See [_Category] for how
+/// its categories map onto real notice fields. The reference's date pill is
+/// omitted — notices have no date filter in the API, and a bare date would
+/// only show today.
 class NoticesListScreen extends StatefulWidget {
   const NoticesListScreen({super.key});
 
@@ -25,7 +38,35 @@ class NoticesListScreen extends StatefulWidget {
   State<NoticesListScreen> createState() => _NoticesListScreenState();
 }
 
+/// A notice's category chip / tag. Notices have no category field — only an
+/// `audience` and an `isImportant` flag — so the reference's Academic /
+/// Administrative / Events chips became "Urgent" (important notices) plus
+/// one chip per real audience.
+enum _Category { urgent, all, students, teachers, parents, admins }
+
+_Category _categoryOf(Notice n) => n.isImportant
+    ? _Category.urgent
+    : switch (n.audience.toLowerCase()) {
+        'students' => _Category.students,
+        'teachers' => _Category.teachers,
+        'parents' => _Category.parents,
+        'admins' => _Category.admins,
+        _ => _Category.all,
+      };
+
+(String label, IconData icon, Color color) _categoryStyle(_Category c) => switch (c) {
+  _Category.urgent => ('Urgent', Icons.error_rounded, const Color(0xFFE11D48)),
+  _Category.all => ('Everyone', Icons.campaign_rounded, const Color(0xFF2F80FF)),
+  _Category.students => ('Students', Icons.school_rounded, const Color(0xFF7C3AED)),
+  _Category.teachers => ('Teachers', Icons.co_present_rounded, AppColors.primary),
+  _Category.parents => ('Parents', Icons.family_restroom_rounded, const Color(0xFFF2600C)),
+  _Category.admins => ('Admins', Icons.admin_panel_settings_rounded, const Color(0xFF0EA5B7)),
+};
+
 class _NoticesListScreenState extends State<NoticesListScreen> {
+  /// `null` = All.
+  _Category? _filter;
+
   @override
   void initState() {
     super.initState();
@@ -50,75 +91,306 @@ class _NoticesListScreenState extends State<NoticesListScreen> {
     final role = context.watch<AuthProvider>().role;
     final isAdmin = role == AppRole.admin;
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Notices')),
-      floatingActionButton: isAdmin
-          ? FloatingActionButton(
-              onPressed: () => showNoticeFormDialog(context, provider),
-              tooltip: 'Add Notice',
-              child: const Icon(Icons.add),
-            )
-          : null,
-      body: switch (provider.status) {
-        LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading notices...'),
-        LoadStatus.error => ErrorView(
+    final notices = provider.notices;
+    final counts = <_Category, int>{};
+    for (final n in notices) {
+      counts.update(_categoryOf(n), (c) => c + 1, ifAbsent: () => 1);
+    }
+    // Only categories that actually have notices get a chip.
+    final chips = [
+      for (final c in _Category.values)
+        if ((counts[c] ?? 0) > 0) c,
+    ];
+    final filter = chips.contains(_filter) ? _filter : null;
+    final visible = filter == null ? notices : notices.where((n) => _categoryOf(n) == filter).toList();
+
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: BrandAppBar(title: 'Notices'),
+        floatingActionButton: isAdmin
+            ? FloatingActionButton(
+                onPressed: () => showNoticeFormDialog(context, provider),
+                tooltip: 'Add Notice',
+                child: const Icon(Icons.add),
+              )
+            : null,
+        body: switch (provider.status) {
+          LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading notices...'),
+          LoadStatus.error => ErrorView(
             error: provider.error!,
             onRetry: () => isAdmin ? provider.loadNoticesAsAdmin() : provider.loadMyNotices(),
           ),
-        LoadStatus.success => provider.notices.isEmpty
-            ? EmptyStateView(
-                message: 'No notices yet',
-                icon: Icons.campaign_outlined,
-                actionLabel: isAdmin ? 'Add Notice' : null,
-                onAction: isAdmin ? () => showNoticeFormDialog(context, provider) : null,
-              )
-            : ListView.separated(
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-                itemCount: provider.notices.length + 1,
-                separatorBuilder: (context, index) => const SizedBox(height: 8),
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Text(
-                        'Total Notices: ${provider.notices.length}',
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                    );
-                  }
-                  final notice = provider.notices[index - 1];
-                  final scheme = Theme.of(context).colorScheme;
-                  final tint = notice.isImportant ? scheme.error : scheme.primary;
-                  final isNew = _isRecent(notice.createdAt);
-                  return Card(
-                    margin: EdgeInsets.zero,
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: tint.withValues(alpha: 0.14),
-                        child: Icon(
-                          notice.isImportant ? Icons.priority_high : Icons.campaign_outlined,
-                          color: tint,
-                          size: 20,
+          LoadStatus.success =>
+            notices.isEmpty
+                ? EmptyStateView(
+                    message: 'No notices yet',
+                    icon: Icons.campaign_outlined,
+                    actionLabel: isAdmin ? 'Add Notice' : null,
+                    onAction: isAdmin ? () => showNoticeFormDialog(context, provider) : null,
+                  )
+                : ListView(
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 88),
+                    children: [
+                      _NoticesHeroBanner(total: notices.length),
+                      const SizedBox(height: 14),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            _CategoryChip(
+                              label: 'All',
+                              count: notices.length,
+                              selected: filter == null,
+                              onTap: () => setState(() => _filter = null),
+                            ),
+                            for (final c in chips) ...[
+                              const SizedBox(width: 8),
+                              _CategoryChip(
+                                label: _categoryStyle(c).$1,
+                                icon: _categoryStyle(c).$2,
+                                count: counts[c]!,
+                                selected: filter == c,
+                                onTap: () => setState(() => _filter = c),
+                              ),
+                            ],
+                          ],
                         ),
                       ),
-                      title: Text(notice.title, style: Theme.of(context).textTheme.titleSmall),
-                      subtitle: Text('Audience: ${notice.audience}'),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (isNew) ...[
-                            const AppStatusChip(label: 'New', color: Colors.green),
-                            if (isAdmin) const SizedBox(width: 4),
-                          ],
-                          if (isAdmin) _AdminRowActions(notice: notice, provider: provider),
-                        ],
-                      ),
-                      onTap: () => context.push(AppRoutes.noticeDetail(notice.id)),
-                    ),
-                  );
-                },
+                      const SizedBox(height: 14),
+                      for (final notice in visible) ...[
+                        _NoticeCard(notice: notice, provider: provider, isAdmin: isAdmin),
+                        const SizedBox(height: 10),
+                      ],
+                    ],
+                  ),
+        },
+      ),
+    );
+  }
+}
+
+/// "Stay Informed" hero from the reference: big megaphone, blurb, and a
+/// Total Notices card. [total] is the loaded list's real length.
+class _NoticesHeroBanner extends StatelessWidget {
+  final int total;
+
+  const _NoticesHeroBanner({required this.total});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    const blue = Color(0xFF2F80FF);
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(colors: [blue.withValues(alpha: 0.10), AppColors.primary.withValues(alpha: 0.08)]),
+        borderRadius: BorderRadius.circular(AppRadius.xl2),
+        border: Border.all(color: blue.withValues(alpha: 0.15)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(color: blue.withValues(alpha: 0.14), shape: BoxShape.circle),
+            child: const Icon(Icons.campaign_rounded, color: blue, size: 36),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Stay Informed',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    color: const Color(0xFF1E3A8A),
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  'The latest notices, announcements and important updates from your institution.',
+                  style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surface,
+              borderRadius: BorderRadius.circular(AppRadius.xl),
+              border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('Total', style: theme.textTheme.labelSmall?.copyWith(color: AppColors.primary)),
+                Text(
+                  '$total',
+                  style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800, color: AppColors.primary),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CategoryChip extends StatelessWidget {
+  final String label;
+  final IconData? icon;
+  final int count;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _CategoryChip({
+    required this.label,
+    this.icon,
+    required this.count,
+    required this.selected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final fg = selected ? Colors.white : theme.colorScheme.onSurface;
+    return Material(
+      color: selected ? AppColors.primary : theme.colorScheme.surfaceContainerLow,
+      shape: StadiumBorder(side: selected ? BorderSide.none : BorderSide(color: theme.colorScheme.outlineVariant)),
+      child: InkWell(
+        customBorder: const StadiumBorder(),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (icon != null) ...[
+                Icon(icon, size: 16, color: selected ? Colors.white : AppColors.primary),
+                const SizedBox(width: 6),
+              ],
+              Text(
+                label,
+                style: TextStyle(color: fg, fontWeight: FontWeight.w600),
               ),
-      },
+              const SizedBox(width: 6),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 1),
+                decoration: BoxDecoration(
+                  color: selected ? Colors.white.withValues(alpha: 0.25) : AppColors.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(AppRadius.xl4),
+                ),
+                child: Text(
+                  '$count',
+                  style: TextStyle(color: fg, fontSize: 12, fontWeight: FontWeight.w600),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _NoticeCard extends StatelessWidget {
+  final Notice notice;
+  final NoticeProvider provider;
+  final bool isAdmin;
+
+  const _NoticeCard({required this.notice, required this.provider, required this.isAdmin});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final (label, icon, color) = _categoryStyle(_categoryOf(notice));
+    final muted = theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant);
+    return Card(
+      margin: EdgeInsets.zero,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () => context.push(AppRoutes.noticeDetail(notice.id)),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(12, 12, 4, 12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 52,
+                height: 52,
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(AppRadius.xl),
+                ),
+                child: Icon(icon, color: color, size: 28),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        AppStatusChip(label: label, color: color),
+                        const Spacer(),
+                        if (_isRecent(notice.createdAt)) const AppStatusChip(label: 'New', color: AppColors.primary),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Text(notice.title, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+                    if (notice.description.isNotEmpty) ...[
+                      const SizedBox(height: 2),
+                      Text(notice.description, maxLines: 2, overflow: TextOverflow.ellipsis, style: muted),
+                    ],
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        Icon(Icons.calendar_today_outlined, size: 14, color: muted?.color),
+                        const SizedBox(width: 4),
+                        Text(formatDisplayDate(notice.createdAt), style: muted),
+                        if (notice.createdByName.isNotEmpty) ...[
+                          Text('  •  ', style: muted),
+                          Flexible(
+                            child: Text(
+                              notice.createdByName,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: muted,
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              if (isAdmin)
+                PopupMenuButton<String>(
+                  tooltip: 'Notice actions',
+                  icon: Icon(Icons.more_vert, color: theme.colorScheme.onSurfaceVariant),
+                  onSelected: (value) => value == 'edit'
+                      ? showNoticeFormDialog(context, provider, existing: notice)
+                      : _confirmDelete(context, provider, notice),
+                  itemBuilder: (context) => const [
+                    PopupMenuItem(value: 'edit', child: Text('Edit')),
+                    PopupMenuItem(value: 'delete', child: Text('Delete')),
+                  ],
+                )
+              else
+                Padding(
+                  padding: const EdgeInsets.only(top: 20, right: 8),
+                  child: Icon(Icons.chevron_right, color: theme.colorScheme.onSurfaceVariant),
+                ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -129,32 +401,6 @@ bool _isRecent(String createdAt) {
   final parsed = DateTime.tryParse(createdAt);
   if (parsed == null) return false;
   return DateTime.now().difference(parsed) < const Duration(days: 3);
-}
-
-class _AdminRowActions extends StatelessWidget {
-  final Notice notice;
-  final NoticeProvider provider;
-
-  const _AdminRowActions({required this.notice, required this.provider});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        IconButton(
-          icon: const Icon(Icons.edit_outlined),
-          tooltip: 'Edit',
-          onPressed: () => showNoticeFormDialog(context, provider, existing: notice),
-        ),
-        IconButton(
-          icon: const Icon(Icons.delete_outline),
-          tooltip: 'Delete',
-          onPressed: () => _confirmDelete(context, provider, notice),
-        ),
-      ],
-    );
-  }
 }
 
 Future<void> _confirmDelete(BuildContext context, NoticeProvider provider, Notice notice) async {
@@ -178,8 +424,8 @@ Future<void> _confirmDelete(BuildContext context, NoticeProvider provider, Notic
 
   final succeeded = await provider.deleteNotice(notice.id);
   if (!succeeded && context.mounted) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(provider.actionError?.message ?? 'Failed to delete notice')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(provider.actionError?.message ?? 'Failed to delete notice')));
   }
 }

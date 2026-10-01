@@ -8,6 +8,8 @@ import '../../../../shared/widgets/status_chip.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../../data/models/fee_payment.dart';
 import '../providers/fee_provider.dart';
+import '../../../../shared/widgets/brand_app_bar.dart';
+import '../../../../shared/widgets/app_background.dart';
 
 /// Admin: pending-payments review queue (`implementation_backlog.md`
 /// E7-F2) plus a read-only full history tab backed by `GET
@@ -35,26 +37,31 @@ class _PaymentReviewScreenState extends State<PaymentReviewScreen> {
   Widget build(BuildContext context) {
     final provider = context.watch<FeeProvider>();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Payment Review')),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: SegmentedButton<bool>(
-              segments: const [
-                ButtonSegment(value: false, label: Text('Pending')),
-                ButtonSegment(value: true, label: Text('History')),
-              ],
-              selected: {_showHistory},
-              onSelectionChanged: (selection) {
-                setState(() => _showHistory = selection.first);
-                if (selection.first && provider.historyStatus == LoadStatus.initial) provider.loadHistory();
-              },
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: BrandAppBar(title: 'Payment Review'),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: SegmentedButton<bool>(
+                segments: const [
+                  ButtonSegment(value: false, label: Text('Pending')),
+                  ButtonSegment(value: true, label: Text('History')),
+                ],
+                selected: {_showHistory},
+                onSelectionChanged: (selection) {
+                  setState(() => _showHistory = selection.first);
+                  if (selection.first && provider.historyStatus == LoadStatus.initial) provider.loadHistory();
+                },
+              ),
             ),
-          ),
-          Expanded(child: _showHistory ? _HistoryList(provider: provider) : _PendingQueue(provider: provider)),
-        ],
+            Expanded(
+              child: _showHistory ? _HistoryList(provider: provider) : _PendingQueue(provider: provider),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -69,52 +76,82 @@ class _PendingQueue extends StatelessWidget {
   Widget build(BuildContext context) {
     return switch (provider.pendingStatus) {
       LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading pending payments...'),
-      LoadStatus.error =>
-        ErrorView(error: provider.pendingError!, onRetry: () => provider.loadPendingPayments()),
-      LoadStatus.success => provider.pendingPayments.isEmpty
-          ? const EmptyStateView(message: 'No pending payments to review', icon: Icons.task_alt_outlined)
-          : ListView.separated(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-              itemCount: provider.pendingPayments.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 8),
-              itemBuilder: (context, index) {
-                final payment = provider.pendingPayments[index];
-                final processing = provider.isProcessingPayment(payment.id);
-                return Card(
-                  margin: EdgeInsets.zero,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(payment.feeTitle ?? 'Fee', style: Theme.of(context).textTheme.titleMedium),
-                        const SizedBox(height: 4),
-                        Text('Rs ${payment.amount.toStringAsFixed(0)} · ${payment.method}'),
-                        Text('Phone: ${payment.phoneNumber} · PIN/Ref: ${payment.transactionPin}'),
-                        if (payment.submittedByName != null) Text('Submitted by: ${payment.submittedByName}'),
-                        const SizedBox(height: 12),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            TextButton(
-                              onPressed: processing ? null : () => _reject(context, provider, payment),
-                              child: const Text('Reject'),
-                            ),
-                            const SizedBox(width: 8),
-                            FilledButton(
-                              onPressed: processing ? null : () => _approve(context, provider, payment),
-                              child: processing
-                                  ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                                  : const Text('Approve'),
-                            ),
-                          ],
-                        ),
-                      ],
+      LoadStatus.error => ErrorView(error: provider.pendingError!, onRetry: () => provider.loadPendingPayments()),
+      LoadStatus.success =>
+        provider.pendingPayments.isEmpty
+            ? const EmptyStateView(message: 'No pending payments to review', icon: Icons.task_alt_outlined)
+            : ListView.separated(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                itemCount: provider.pendingPayments.length,
+                separatorBuilder: (context, index) => const SizedBox(height: 8),
+                itemBuilder: (context, index) {
+                  final payment = provider.pendingPayments[index];
+                  final processing = provider.isProcessingPayment(payment.id);
+                  final accent = Theme.of(context).colorScheme.primary;
+                  return Card(
+                    margin: EdgeInsets.zero,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: accent.withValues(alpha: 0.14),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Icon(Icons.payments_outlined, color: accent, size: 20),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(payment.feeTitle ?? 'Fee', style: Theme.of(context).textTheme.titleMedium),
+                                    Text(
+                                      'Rs ${payment.amount.toStringAsFixed(0)}',
+                                      style: Theme.of(context).textTheme.titleSmall?.copyWith(color: accent),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              AppStatusChip(label: payment.method, color: Theme.of(context).colorScheme.outline),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Text('Phone: ${payment.phoneNumber} · PIN/Ref: ${payment.transactionPin}'),
+                          if (payment.submittedByName != null) Text('Submitted by: ${payment.submittedByName}'),
+                          const SizedBox(height: 12),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                onPressed: processing ? null : () => _reject(context, provider, payment),
+                                child: const Text('Reject'),
+                              ),
+                              const SizedBox(width: 8),
+                              FilledButton(
+                                onPressed: processing ? null : () => _approve(context, provider, payment),
+                                child: processing
+                                    ? const SizedBox(
+                                        height: 16,
+                                        width: 16,
+                                        child: CircularProgressIndicator(strokeWidth: 2),
+                                      )
+                                    : const Text('Approve'),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
+                  );
+                },
+              ),
     };
   }
 }
@@ -129,32 +166,33 @@ class _HistoryList extends StatelessWidget {
     return switch (provider.historyStatus) {
       LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading history...'),
       LoadStatus.error => ErrorView(error: provider.historyError!, onRetry: () => provider.loadHistory()),
-      LoadStatus.success => provider.history.isEmpty
-          ? const EmptyStateView(message: 'No payments submitted yet', icon: Icons.history)
-          : ListView.separated(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-              itemCount: provider.history.length,
-              separatorBuilder: (context, index) => const SizedBox(height: 8),
-              itemBuilder: (context, index) {
-                final payment = provider.history[index];
-                final color = switch (payment.status) {
-                  'approved' => Colors.green,
-                  'rejected' => Theme.of(context).colorScheme.error,
-                  _ => Colors.orange,
-                };
-                return Card(
-                  margin: EdgeInsets.zero,
-                  child: ListTile(
-                    title: Text(payment.feeTitle ?? 'Fee'),
-                    subtitle: Text('Rs ${payment.amount.toStringAsFixed(0)} · ${payment.submittedByName ?? ''}'),
-                    trailing: AppStatusChip(
-                      label: payment.status[0].toUpperCase() + payment.status.substring(1),
-                      color: color,
+      LoadStatus.success =>
+        provider.history.isEmpty
+            ? const EmptyStateView(message: 'No payments submitted yet', icon: Icons.history)
+            : ListView.separated(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                itemCount: provider.history.length,
+                separatorBuilder: (context, index) => const SizedBox(height: 8),
+                itemBuilder: (context, index) {
+                  final payment = provider.history[index];
+                  final color = switch (payment.status) {
+                    'approved' => Colors.green,
+                    'rejected' => Theme.of(context).colorScheme.error,
+                    _ => Colors.orange,
+                  };
+                  return Card(
+                    margin: EdgeInsets.zero,
+                    child: ListTile(
+                      title: Text(payment.feeTitle ?? 'Fee'),
+                      subtitle: Text('Rs ${payment.amount.toStringAsFixed(0)} · ${payment.submittedByName ?? ''}'),
+                      trailing: AppStatusChip(
+                        label: payment.status[0].toUpperCase() + payment.status.substring(1),
+                        color: color,
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
+                  );
+                },
+              ),
     };
   }
 }
@@ -162,9 +200,9 @@ class _HistoryList extends StatelessWidget {
 Future<void> _approve(BuildContext context, FeeProvider provider, FeePayment payment) async {
   final succeeded = await provider.approvePayment(payment.id);
   if (!succeeded && context.mounted) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(provider.paymentActionError?.message ?? 'Failed to approve payment')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(provider.paymentActionError?.message ?? 'Failed to approve payment')));
   }
 }
 
@@ -187,11 +225,13 @@ Future<void> _reject(BuildContext context, FeeProvider provider, FeePayment paym
 
   if (confirmed != true || !context.mounted) return;
 
-  final succeeded =
-      await provider.rejectPayment(payment.id, note: noteController.text.trim().isEmpty ? null : noteController.text.trim());
+  final succeeded = await provider.rejectPayment(
+    payment.id,
+    note: noteController.text.trim().isEmpty ? null : noteController.text.trim(),
+  );
   if (!succeeded && context.mounted) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(provider.paymentActionError?.message ?? 'Failed to reject payment')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(provider.paymentActionError?.message ?? 'Failed to reject payment')));
   }
 }

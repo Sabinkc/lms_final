@@ -9,6 +9,8 @@ import '../../../admin_management/presentation/providers/academic_structure_prov
 import '../../data/models/my_timetable.dart';
 import '../../data/models/timetable_period.dart';
 import '../providers/student_timetable_provider.dart';
+import '../../../../shared/widgets/brand_app_bar.dart';
+import '../../../../shared/widgets/app_background.dart';
 
 /// Student: View Own Timetable (`docs/production_roadmap.md` Phase L4,
 /// `implementation_backlog.md` E16-F2) — today's schedule up top (the
@@ -34,13 +36,16 @@ class _StudentTimetableScreenState extends State<StudentTimetableScreen> {
   Widget build(BuildContext context) {
     final provider = context.watch<StudentTimetableProvider>();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('My Timetable')),
-      body: switch (provider.status) {
-        LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading timetable...'),
-        LoadStatus.error => ErrorView(error: provider.error!, onRetry: () => provider.loadMyTimetable()),
-        LoadStatus.success => _buildContent(context, provider.timetable!),
-      },
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: BrandAppBar(title: 'My Timetable'),
+        body: switch (provider.status) {
+          LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading timetable...'),
+          LoadStatus.error => ErrorView(error: provider.error!, onRetry: () => provider.loadMyTimetable()),
+          LoadStatus.success => _buildContent(context, provider.timetable!),
+        },
+      ),
     );
   }
 

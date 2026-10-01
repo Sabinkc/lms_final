@@ -130,7 +130,7 @@ void main() {
 
     expect(find.text('A'), findsOneWidget);
     expect(find.text('Passed'), findsOneWidget);
-    expect(find.text('Rank: 1'), findsOneWidget);
+    expect(find.text('Rank #1'), findsOneWidget);
   });
 
   testWidgets('Parent with one child auto-selects and sees that child\'s result for this exam', (tester) async {
@@ -146,7 +146,7 @@ void main() {
 
     expect(find.byType(ChoiceChip), findsNothing);
     expect(find.text('A'), findsOneWidget);
-    expect(find.text('Rank: 1'), findsOneWidget);
+    expect(find.text('Rank #1'), findsOneWidget);
   });
 
   testWidgets('Parent with multiple children sees a prompt until picking one, then that child\'s result',

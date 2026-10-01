@@ -87,7 +87,7 @@ void main() {
     verifyNever(() => repository.getNoticesAsAdmin(audience: any(named: 'audience')));
   });
 
-  testWidgets('Admin role calls getNoticesAsAdmin and sees a FAB plus edit/delete row actions', (tester) async {
+  testWidgets('Admin role calls getNoticesAsAdmin and sees a FAB plus an edit/delete menu', (tester) async {
     when(() => repository.getNoticesAsAdmin(audience: any(named: 'audience')))
         .thenAnswer((_) async => const Result.success([_notice1]));
     final provider = NoticeProvider(repository);
@@ -98,8 +98,11 @@ void main() {
 
     expect(find.text('School Holiday'), findsOneWidget);
     expect(find.byType(FloatingActionButton), findsOneWidget);
-    expect(find.byIcon(Icons.edit_outlined), findsOneWidget);
-    expect(find.byIcon(Icons.delete_outline), findsOneWidget);
+    // Edit/Delete live in the card's ⋮ menu.
+    await tester.tap(find.byTooltip('Notice actions'));
+    await tester.pumpAndSettle();
+    expect(find.text('Edit'), findsOneWidget);
+    expect(find.text('Delete'), findsOneWidget);
   });
 
   testWidgets('empty state shows a role-appropriate CTA for Admin', (tester) async {
@@ -168,5 +171,33 @@ void main() {
           expiryDate: any(named: 'expiryDate'),
         )).called(1);
     expect(find.byType(AlertDialog), findsNothing);
+  });
+
+  testWidgets('category chips come from real fields (important -> Urgent, audience) and filter the list', (tester) async {
+    const studentsNotice = Notice(
+      id: 'n2',
+      title: 'Sports Day',
+      description: 'Bring your kit',
+      audience: 'students',
+      isImportant: false,
+      expiryDate: null,
+      createdByName: '',
+      createdAt: '2026-08-20T00:00:00.000Z',
+    );
+    when(() => repository.getMyNotices()).thenAnswer((_) async => const Result.success([_notice1, studentsNotice]));
+    final provider = NoticeProvider(repository);
+    final authProvider = _authAs(authRepository, AppRole.student);
+
+    await tester.pumpWidget(_wrap(provider, authProvider));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Urgent'), findsWidgets); // chip + card tag
+    expect(find.text('Students'), findsWidgets);
+    expect(find.text('Teachers'), findsNothing); // no teacher notices -> no chip
+
+    await tester.tap(find.text('Urgent').first);
+    await tester.pumpAndSettle();
+    expect(find.text('School Holiday'), findsOneWidget);
+    expect(find.text('Sports Day'), findsNothing);
   });
 }

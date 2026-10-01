@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../../../../shared/utils/download_helper.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../providers/student_id_card_provider.dart';
+import '../../../../shared/widgets/brand_app_bar.dart';
+import '../../../../shared/widgets/app_background.dart';
 
 /// Student: Download Own ID Card (`docs/production_roadmap.md` Phase L6,
 /// `implementation_backlog.md` E21-F2) — one button, same shape as
@@ -18,9 +20,9 @@ class StudentIdCardScreen extends StatelessWidget {
     if (bytes != null) {
       await saveBytesOrNotify(context, bytes, 'my-id-card.pdf');
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(provider.error?.message ?? 'Failed to download ID card')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(provider.error?.message ?? 'Failed to download ID card')));
     }
   }
 
@@ -30,38 +32,41 @@ class StudentIdCardScreen extends StatelessWidget {
     final isLoading = provider.status == LoadStatus.loading;
 
     final accent = Theme.of(context).colorScheme.primary;
-    return Scaffold(
-      appBar: AppBar(title: const Text('My ID Card')),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Card(
-            margin: EdgeInsets.zero,
-            child: Padding(
-              padding: const EdgeInsets.all(28),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(color: accent.withValues(alpha: 0.14), shape: BoxShape.circle),
-                    child: Icon(Icons.badge_outlined, size: 48, color: accent),
-                  ),
-                  const SizedBox(height: 20),
-                  const Text('Download your student ID card as a PDF.', textAlign: TextAlign.center),
-                  const SizedBox(height: 24),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 48,
-                    child: FilledButton.icon(
-                      icon: isLoading
-                          ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                          : const Icon(Icons.download_outlined),
-                      label: const Text('Download ID Card'),
-                      onPressed: isLoading ? null : () => _download(context, provider),
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: BrandAppBar(title: 'My ID Card'),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Card(
+              margin: EdgeInsets.zero,
+              child: Padding(
+                padding: const EdgeInsets.all(28),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(color: accent.withValues(alpha: 0.14), shape: BoxShape.circle),
+                      child: Icon(Icons.badge_outlined, size: 48, color: accent),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 20),
+                    const Text('Download your student ID card as a PDF.', textAlign: TextAlign.center),
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 48,
+                      child: FilledButton.icon(
+                        icon: isLoading
+                            ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                            : const Icon(Icons.download_outlined),
+                        label: const Text('Download ID Card'),
+                        onPressed: isLoading ? null : () => _download(context, provider),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
