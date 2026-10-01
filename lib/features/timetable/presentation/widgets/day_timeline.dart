@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../../shared/widgets/status_chip.dart';
 import '../../data/models/timetable_day.dart';
 import '../../data/models/timetable_period.dart';
@@ -210,7 +211,9 @@ class _TimelineRow extends StatelessWidget {
                 margin: EdgeInsets.zero,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppRadius.xl),
-                  side: active ? BorderSide(color: style.color.withValues(alpha: 0.5), width: 1.5) : BorderSide.none,
+                  side: active
+                      ? BorderSide(color: style.color.withValues(alpha: 0.5), width: 1.5)
+                      : AppTheme.cardBorderSide(theme.brightness),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(12),

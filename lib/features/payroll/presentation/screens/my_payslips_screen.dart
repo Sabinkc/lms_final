@@ -101,33 +101,36 @@ class _MyPayslipsScreenState extends State<MyPayslipsScreen> {
           ],
         ),
         const SizedBox(height: 8),
-        Row(
-          children: [
-            Expanded(
-              child: TintedStatTile(
-                label: 'Gross Paid',
-                value: formatRs(sum((p) => p.grossSalary)),
-                caption: '${thisYear.length} cycle${thisYear.length == 1 ? '' : 's'}',
-                color: AppColors.primary,
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: TintedStatTile(
+                  label: 'Gross Paid',
+                  value: formatRs(sum((p) => p.grossSalary)),
+                  caption: '${thisYear.length} cycle${thisYear.length == 1 ? '' : 's'}',
+                  color: AppColors.primary,
+                ),
               ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: TintedStatTile(
-                label: 'Tax',
-                value: formatRs(sum((p) => p.deductions.tax)),
-                color: const Color(0xFFEA580C),
+              const SizedBox(width: 8),
+              Expanded(
+                child: TintedStatTile(
+                  label: 'Tax',
+                  value: formatRs(sum((p) => p.deductions.tax)),
+                  color: const Color(0xFFEA580C),
+                ),
               ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: TintedStatTile(
-                label: 'Provident Fund',
-                value: formatRs(sum((p) => p.deductions.providentFund)),
-                color: AppColors.info,
+              const SizedBox(width: 8),
+              Expanded(
+                child: TintedStatTile(
+                  label: 'Provident Fund',
+                  value: formatRs(sum((p) => p.deductions.providentFund)),
+                  color: AppColors.info,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         const SizedBox(height: AppSpacing.lg),
         Text('Payment History', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),

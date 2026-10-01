@@ -152,7 +152,7 @@ class _MarkAttendanceScreenState extends State<MarkAttendanceScreen> {
                       const SizedBox(height: AppSpacing.sm),
                       TextField(
                         controller: _subjectController,
-                        decoration: const InputDecoration(labelText: 'Subject (optional, defaults to "General")'),
+                        decoration: const InputDecoration(labelText: 'Subject (optional)', hintText: 'General'),
                       ),
                     ],
                   ),

@@ -34,7 +34,10 @@ class TintedStatTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.xl),
         border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
+      // Centered so tiles stretched to a common height (IntrinsicHeight rows)
+      // keep their content in the middle.
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           if (icon != null) ...[Icon(icon, color: fg, size: 24), const SizedBox(height: 4)],
           Text(label, style: theme.textTheme.labelMedium, maxLines: 1, overflow: TextOverflow.ellipsis),

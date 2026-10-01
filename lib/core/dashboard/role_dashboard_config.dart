@@ -94,7 +94,8 @@ class RoleDashboardConfig {
     homeTitle: 'Teacher Dashboard',
     tabTitles: ['Teacher Dashboard', 'Mark Attendance', 'My Timetable', 'More'],
     navTabs: [
-      QuickAction(icon: Icons.event_available_outlined, label: 'Mark Attendance', route: AppRoutes.teacherMarkAttendance),
+      // Short label: "Mark Attendance" wrapped to two lines in the nav bar.
+      QuickAction(icon: Icons.event_available_outlined, label: 'Attendance', route: AppRoutes.teacherMarkAttendance),
       QuickAction(icon: Icons.calendar_month_outlined, label: 'My Timetable', route: AppRoutes.teacherTimetable),
     ],
     homeHighlights: [

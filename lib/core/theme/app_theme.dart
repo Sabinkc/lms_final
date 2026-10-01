@@ -13,6 +13,11 @@ import 'app_typography.dart';
 class AppTheme {
   AppTheme._();
 
+  /// The hairline every card is outlined with. Exposed for widgets that
+  /// give a `Card` a custom shape but should keep the standard border.
+  static BorderSide cardBorderSide(Brightness brightness) =>
+      BorderSide(color: AppColors.primary.withValues(alpha: brightness == Brightness.dark ? 0.35 : 0.15));
+
   static ThemeData get light => _build(Brightness.light);
 
   static ThemeData get dark => _build(Brightness.dark);
@@ -53,11 +58,13 @@ class AppTheme {
           color: colorScheme.onSurface,
         ),
       ),
+      // Flat outlined cards: a thin brand-green hairline instead of a drop
+      // shadow (chosen 2026-10-01 from the bordered-card previews, "B").
       cardTheme: CardThemeData(
-        elevation: isDark ? 0 : 3,
-        shadowColor: isDark ? Colors.transparent : AppColors.primary.withValues(alpha: 0.12),
+        elevation: 0,
+        shadowColor: Colors.transparent,
         color: isDark ? AppColors.darkElevated2 : AppColors.lightElevated,
-        shape: RoundedRectangleBorder(borderRadius: AppRadius.card),
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.card, side: cardBorderSide(brightness)),
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(

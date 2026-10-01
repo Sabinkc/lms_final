@@ -14,5 +14,8 @@ String formatRelativeTime(String raw, {DateTime? now}) {
   }
   if (days == 1) return 'Yesterday';
   if (days < 7) return '$days days ago';
-  return formatDisplayDate(raw);
+  // A timestamp's calendar day is the viewer's local day (same as the
+  // branches above); formatting [raw] directly would show the UTC date and
+  // disagree with chat's local-day separators.
+  return formatDisplayDate(DateTime(at.year, at.month, at.day).toIso8601String());
 }

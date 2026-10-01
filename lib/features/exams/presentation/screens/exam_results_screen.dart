@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/utils/initials.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
@@ -232,7 +233,7 @@ class _RankedResultCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppRadius.xl),
-        side: medal != null ? BorderSide(color: medal.withValues(alpha: 0.5)) : BorderSide.none,
+        side: medal != null ? BorderSide(color: medal.withValues(alpha: 0.5)) : AppTheme.cardBorderSide(theme.brightness),
       ),
       child: IntrinsicHeight(
         child: Row(

@@ -19,4 +19,9 @@ void main() {
   test('unparseable input is empty', () {
     expect(formatRelativeTime('nope', now: now), '');
   });
+
+  test('older timestamps use the local calendar day, not the UTC one', () {
+    final local = DateTime(2026, 9, 5, 2, 0); // early morning local time
+    expect(formatRelativeTime(local.toUtc().toIso8601String(), now: now), '5 Sep 2026');
+  });
 }
