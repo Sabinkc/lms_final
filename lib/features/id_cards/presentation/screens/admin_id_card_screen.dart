@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../shared/widgets/empty_state_view.dart';
+import '../../../../shared/widgets/status_chip.dart';
+import '../widgets/id_badge_preview.dart';
+
 import '../../../../shared/utils/download_helper.dart';
 import '../../../admin_management/data/models/student.dart';
 import '../providers/admin_id_card_provider.dart';
@@ -46,70 +52,107 @@ class _AdminIdCardScreenState extends State<AdminIdCardScreen> {
   Widget build(BuildContext context) {
     final provider = context.watch<AdminIdCardProvider>();
 
-    final accent = Theme.of(context).colorScheme.primary;
     return AppBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: BrandAppBar(title: 'ID Cards'),
-        body: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Card(
-            margin: EdgeInsets.zero,
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: accent.withValues(alpha: 0.14),
-                        child: Icon(Icons.badge_outlined, color: accent),
-                      ),
-                      const SizedBox(width: 12),
-                      const Expanded(child: Text('Pick a student to generate their ID card as a PDF.')),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Autocomplete<Student>(
-                    displayStringForOption: (s) => '${s.fullName} (${s.admissionNumber})',
-                    optionsBuilder: (value) {
-                      if (value.text.isEmpty) return provider.studentOptions;
-                      final query = value.text.toLowerCase();
-                      return provider.studentOptions.where(
-                        (s) =>
-                            s.fullName.toLowerCase().contains(query) || s.admissionNumber.toLowerCase().contains(query),
-                      );
-                    },
-                    onSelected: (s) => setState(() => _selectedStudent = s),
-                    fieldViewBuilder: (context, controller, focusNode, onSubmit) => TextFormField(
-                      controller: controller,
-                      focusNode: focusNode,
-                      decoration: const InputDecoration(
-                        labelText: 'Student',
-                        prefixIcon: Icon(Icons.person_search_outlined),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
+        body: ListView(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+          children: [
+            Card(
+              margin: EdgeInsets.zero,
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          'SELECT STUDENT',
+                          style: Theme.of(
+                            context,
+                          ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w700, letterSpacing: 0.6),
+                        ),
+                        const Spacer(),
+                        AppStatusPill(
+                          label: '${provider.studentOptions.length} on roster',
+                          icon: Icons.school_outlined,
+                          color: AppColors.primary,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Autocomplete<Student>(
+                      displayStringForOption: (s) =>
+                          s.admissionNumber.isEmpty ? s.fullName : '${s.fullName} (${s.admissionNumber})',
+                      optionsBuilder: (value) {
+                        if (value.text.isEmpty) return provider.studentOptions;
+                        final query = value.text.toLowerCase();
+                        return provider.studentOptions.where(
+                          (s) =>
+                              s.fullName.toLowerCase().contains(query) ||
+                              s.admissionNumber.toLowerCase().contains(query),
+                        );
+                      },
+                      onSelected: (s) => setState(() => _selectedStudent = s),
+                      fieldViewBuilder: (context, controller, focusNode, onSubmit) => TextFormField(
+                        controller: controller,
+                        focusNode: focusNode,
+                        decoration: InputDecoration(
+                          labelText: 'Student',
+                          hintText: 'Search by name or admission no.',
+                          prefixIcon: const Icon(Icons.person_search_outlined),
+                          filled: true,
+                          fillColor: Theme.of(context).colorScheme.surfaceContainerLow,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 48,
-                    child: FilledButton.icon(
-                      icon: provider.isGenerating
-                          ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                          : const Icon(Icons.badge_outlined),
-                      label: const Text('Generate & Download'),
-                      onPressed: (_selectedStudent == null || provider.isGenerating)
-                          ? null
-                          : () => _generate(context, provider),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                const Icon(Icons.badge_outlined, color: AppColors.primary),
+                const SizedBox(width: 8),
+                Text(
+                  'Badge Preview',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            if (_selectedStudent != null)
+              IdBadgePreview(student: _selectedStudent!)
+            else
+              Container(
+                height: 160,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(AppRadius.xl2),
+                  border: Border.all(color: Theme.of(context).colorScheme.outlineVariant),
+                ),
+                child: const EmptyStateView(
+                  message: 'Pick a student to preview their badge',
+                  icon: Icons.credit_card_outlined,
+                ),
+              ),
+            const SizedBox(height: 16),
+            SizedBox(
+              height: 52,
+              child: FilledButton.icon(
+                icon: provider.isGenerating
+                    ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                    : const Icon(Icons.download_rounded),
+                label: const Text('Generate & Download'),
+                onPressed: (_selectedStudent == null || provider.isGenerating)
+                    ? null
+                    : () => _generate(context, provider),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../shared/utils/subject_icon.dart';
+import '../../../../shared/widgets/status_chip.dart';
+
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
@@ -68,7 +73,7 @@ class _DepartmentsListScreenState extends State<DepartmentsListScreen> {
   }
 }
 
-class _DepartmentsList extends StatelessWidget {
+class _DepartmentsList extends StatefulWidget {
   final List<Department> departments;
   final ValueChanged<Department> onEdit;
   final ValueChanged<Department> onDelete;
@@ -76,93 +81,178 @@ class _DepartmentsList extends StatelessWidget {
   const _DepartmentsList({required this.departments, required this.onEdit, required this.onDelete});
 
   @override
+  State<_DepartmentsList> createState() => _DepartmentsListState();
+}
+
+class _DepartmentsListState extends State<_DepartmentsList> {
+  final _search = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _search.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _search.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final accent = Theme.of(context).colorScheme.primary;
     final scheme = Theme.of(context).colorScheme;
-    return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-      itemCount: departments.length,
-      separatorBuilder: (context, index) => const SizedBox(height: 8),
-      itemBuilder: (context, index) {
-        final department = departments[index];
-        return Card(
-          margin: EdgeInsets.zero,
-          clipBehavior: Clip.antiAlias,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            child: Column(
+    final query = _search.text.trim().toLowerCase();
+    final visible = widget.departments
+        .where(
+          (d) =>
+              query.isEmpty ||
+              d.name.toLowerCase().contains(query) ||
+              (d.headOfDepartmentName?.toLowerCase().contains(query) ?? false),
+        )
+        .toList();
+    final heads = widget.departments.where((d) => d.headOfDepartmentName != null).length;
+    final classes = {for (final d in widget.departments) ...d.classes};
+
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
+      children: [
+        TextField(
+          controller: _search,
+          decoration: InputDecoration(
+            hintText: 'Search department or head',
+            prefixIcon: const Icon(Icons.search),
+            filled: true,
+            fillColor: scheme.surfaceContainerLow,
+            border: OutlineInputBorder(borderRadius: AppRadius.button, borderSide: BorderSide.none),
+          ),
+        ),
+        const SizedBox(height: 12),
+        Wrap(
+          spacing: 8,
+          runSpacing: 6,
+          children: [
+            AppStatusPill(
+              label: '${widget.departments.length} department${widget.departments.length == 1 ? '' : 's'}',
+              icon: Icons.apartment_outlined,
+              color: AppColors.primary,
+            ),
+            AppStatusPill(label: '$heads with a head', icon: Icons.person_outline, color: AppColors.info),
+            AppStatusPill(
+              label: '${classes.length} class${classes.length == 1 ? '' : 'es'} covered',
+              icon: Icons.class_outlined,
+              color: const Color(0xFFEA580C),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        if (visible.isEmpty)
+          const Padding(
+            padding: EdgeInsets.only(top: 32),
+            child: EmptyStateView(message: 'No departments match your search', icon: Icons.search_off),
+          ),
+        for (final department in visible) ...[
+          _DepartmentCard(
+            department: department,
+            onEdit: () => widget.onEdit(department),
+            onDelete: () => widget.onDelete(department),
+          ),
+          const SizedBox(height: 10),
+        ],
+      ],
+    );
+  }
+}
+
+class _DepartmentCard extends StatelessWidget {
+  final Department department;
+  final VoidCallback onEdit;
+  final VoidCallback onDelete;
+
+  const _DepartmentCard({required this.department, required this.onEdit, required this.onDelete});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final muted = theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant);
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: accent.withValues(alpha: 0.14),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Icon(Icons.apartment_outlined, color: accent, size: 20),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                CircleAvatar(
+                  radius: 24,
+                  backgroundColor: AppColors.primary.withValues(alpha: 0.12),
+                  child: Icon(subjectIcon(department.name), color: AppColors.primary),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(department.name, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800)),
+                      const SizedBox(height: 2),
+                      Row(
                         children: [
-                          Text(department.name, style: Theme.of(context).textTheme.titleSmall),
-                          if (department.headOfDepartmentName != null)
-                            Row(
-                              children: [
-                                Icon(Icons.person_outline, size: 14, color: scheme.outline),
-                                const SizedBox(width: 4),
-                                Expanded(
-                                  child: Text(
-                                    'Head: ${department.headOfDepartmentName}',
-                                    style: Theme.of(context).textTheme.bodySmall,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
+                          Icon(
+                            department.headOfDepartmentName != null
+                                ? Icons.verified_user_outlined
+                                : Icons.person_off_outlined,
+                            size: 14,
+                            color: department.headOfDepartmentName != null ? AppColors.primary : muted?.color,
+                          ),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              department.headOfDepartmentName != null
+                                  ? 'Head: ${department.headOfDepartmentName}'
+                                  : 'No head assigned',
+                              style: muted,
+                              overflow: TextOverflow.ellipsis,
                             ),
+                          ),
                         ],
                       ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.edit_outlined),
-                      tooltip: 'Edit',
-                      onPressed: () => onEdit(department),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete_outline),
-                      tooltip: 'Delete',
-                      onPressed: () => onDelete(department),
-                    ),
-                  ],
-                ),
-                if (department.classes.isNotEmpty) ...[
-                  const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 6,
-                    runSpacing: 6,
-                    children: [
-                      for (final className in department.classes)
-                        Chip(
-                          label: Text(className),
-                          backgroundColor: scheme.surfaceContainerHigh,
-                          labelStyle: Theme.of(context).textTheme.labelSmall,
-                          side: BorderSide.none,
-                          visualDensity: VisualDensity.compact,
-                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
                     ],
                   ),
-                ],
+                ),
+                IconButton.filledTonal(
+                  icon: const Icon(Icons.edit_outlined, size: 18),
+                  tooltip: 'Edit',
+                  visualDensity: VisualDensity.compact,
+                  onPressed: onEdit,
+                ),
+                IconButton.filledTonal(
+                  style: IconButton.styleFrom(backgroundColor: theme.colorScheme.error.withValues(alpha: 0.1)),
+                  icon: Icon(Icons.delete_outline, size: 18, color: theme.colorScheme.error),
+                  tooltip: 'Delete',
+                  visualDensity: VisualDensity.compact,
+                  onPressed: onDelete,
+                ),
               ],
             ),
-          ),
-        );
-      },
+            if (department.description.isNotEmpty) ...[
+              const SizedBox(height: 8),
+              Text(department.description, style: muted, maxLines: 2, overflow: TextOverflow.ellipsis),
+            ],
+            if (department.classes.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: [
+                  for (final className in department.classes) AppStatusPill(label: className, color: AppColors.info),
+                ],
+              ),
+            ],
+          ],
+        ),
+      ),
     );
   }
 }

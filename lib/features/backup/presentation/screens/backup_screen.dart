@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../shared/widgets/info_strip.dart';
+import '../../../../shared/widgets/page_hero_card.dart';
+import '../../../../shared/widgets/section_card.dart';
+
 import '../../../../shared/utils/download_helper.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../providers/backup_provider.dart';
@@ -36,61 +40,44 @@ class BackupScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: BrandAppBar(title: 'Backup & Data'),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Card(
-              margin: EdgeInsets.zero,
-              child: Padding(
-                padding: const EdgeInsets.all(32),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.14),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(Icons.backup_outlined, size: 40, color: Theme.of(context).colorScheme.primary),
-                    ),
-                    const SizedBox(height: 20),
-                    const Text('Download a backup of your school\'s data as a zip file.', textAlign: TextAlign.center),
-                    const SizedBox(height: 12),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Colors.green.withValues(alpha: 0.14),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.lock_outline, size: 14, color: Colors.green),
-                          const SizedBox(width: 6),
-                          Text(
-                            'Admin-only download',
-                            style: Theme.of(context).textTheme.labelSmall?.copyWith(color: Colors.green),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    SizedBox(
-                      width: double.infinity,
-                      child: FilledButton.icon(
-                        icon: isLoading
-                            ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                            : const Icon(Icons.download_outlined),
-                        label: const Text('Run Backup'),
-                        onPressed: isLoading ? null : () => _runBackup(context, provider),
-                      ),
-                    ),
-                  ],
-                ),
+        body: ListView(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+          children: [
+            const PageHeroCard(
+              icon: Icons.cloud_download_outlined,
+              title: 'School Data Backup',
+              subtitle: "Download a backup of your school's data as a zip file.",
+            ),
+            const SizedBox(height: 14),
+            const SectionCard(
+              icon: Icons.info_outline,
+              title: 'Before you download',
+              child: Column(
+                children: [
+                  InfoStrip(icon: Icons.folder_zip_outlined, text: 'Saved to your device as a single .zip file'),
+                  SizedBox(height: 8),
+                  InfoStrip(icon: Icons.lock_outline, text: 'Admin-only download', color: Color(0xFF16A34A)),
+                  SizedBox(height: 8),
+                  InfoStrip(
+                    icon: Icons.privacy_tip_outlined,
+                    text: 'Contains personal student and staff records — store it securely',
+                    color: Color(0xFFEA580C),
+                  ),
+                ],
               ),
             ),
-          ),
+            const SizedBox(height: 16),
+            SizedBox(
+              height: 52,
+              child: FilledButton.icon(
+                icon: isLoading
+                    ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                    : const Icon(Icons.download_outlined),
+                label: const Text('Run Backup'),
+                onPressed: isLoading ? null : () => _runBackup(context, provider),
+              ),
+            ),
+          ],
         ),
       ),
     );

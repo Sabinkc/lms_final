@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
+import '../../../../shared/widgets/filter_chip_bar.dart';
+import '../../../../shared/widgets/person_card.dart';
 import '../../../../shared/widgets/loading_view.dart';
 import '../../data/models/teacher.dart';
 import '../providers/academic_structure_provider.dart' show LoadStatus;
@@ -86,7 +88,7 @@ class _TeachersListScreenState extends State<TeachersListScreen> {
   }
 }
 
-class _TeachersList extends StatelessWidget {
+class _TeachersList extends StatefulWidget {
   final TextEditingController searchController;
   final List<Teacher> teachers;
   final ValueChanged<Teacher> onEdit;
@@ -100,79 +102,79 @@ class _TeachersList extends StatelessWidget {
   });
 
   @override
+  State<_TeachersList> createState() => _TeachersListState();
+}
+
+class _TeachersListState extends State<_TeachersList> {
+  String? _department;
+
+  @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    final counts = <String, int>{};
+    for (final t in widget.teachers) {
+      if (t.department.isNotEmpty) counts[t.department] = (counts[t.department] ?? 0) + 1;
+    }
+    final department = counts.containsKey(_department) ? _department : null;
+    final visible = [
+      for (final t in widget.teachers)
+        if (department == null || t.department == department) t,
+    ];
 
-    return Column(
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
       children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: TextField(
-            controller: searchController,
-            decoration: InputDecoration(
-              hintText: 'Search teachers by name or department',
-              prefixIcon: const Icon(Icons.search),
-              filled: true,
-              fillColor: scheme.surfaceContainerLow,
-              border: OutlineInputBorder(borderRadius: AppRadius.button, borderSide: BorderSide.none),
-            ),
+        TextField(
+          controller: widget.searchController,
+          decoration: InputDecoration(
+            hintText: 'Search teachers by name or department',
+            prefixIcon: const Icon(Icons.search),
+            filled: true,
+            fillColor: scheme.surfaceContainerLow,
+            border: OutlineInputBorder(borderRadius: AppRadius.button, borderSide: BorderSide.none),
           ),
         ),
-        Expanded(
-          child: teachers.isEmpty
-              ? const EmptyStateView(message: 'No teachers match your search')
-              : ListView.separated(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                  itemCount: teachers.length,
-                  separatorBuilder: (context, index) => const SizedBox(height: 8),
-                  itemBuilder: (context, index) {
-                    final teacher = teachers[index];
-                    final accent = scheme.primary;
-                    return Card(
-                      margin: EdgeInsets.zero,
-                      clipBehavior: Clip.antiAlias,
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                        leading: CircleAvatar(
-                          backgroundColor: accent.withValues(alpha: 0.14),
-                          child: Text(
-                            teacher.fullName.isNotEmpty ? teacher.fullName[0].toUpperCase() : '?',
-                            style: TextStyle(color: accent, fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                        title: Text(teacher.fullName, style: Theme.of(context).textTheme.titleSmall),
-                        subtitle: Row(
-                          children: [
-                            Icon(Icons.badge_outlined, size: 14, color: scheme.outline),
-                            const SizedBox(width: 4),
-                            Expanded(
-                              child: Text(
-                                '${teacher.department} · ${teacher.employeeId} · ${teacher.email}',
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.edit_outlined),
-                              tooltip: 'Edit',
-                              onPressed: () => onEdit(teacher),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete_outline),
-                              tooltip: 'Delete',
-                              onPressed: () => onDelete(teacher),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
+        if (counts.length > 1) ...[
+          const SizedBox(height: 12),
+          AppFilterChipBar<String?>(
+            options: [null, ...counts.keys],
+            selected: department,
+            labelBuilder: (d) => d ?? 'All',
+            countBuilder: (d) => d == null ? widget.teachers.length : counts[d]!,
+            iconBuilder: (d) => d == null ? Icons.groups_outlined : null,
+            onSelected: (d) => setState(() => _department = d),
+          ),
+        ],
+        const SizedBox(height: 12),
+        Text(
+          'SHOWING ${visible.length} FACULTY MEMBER${visible.length == 1 ? '' : 'S'}',
+          style: Theme.of(context).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700, letterSpacing: 0.5),
         ),
+        const SizedBox(height: 10),
+        if (visible.isEmpty)
+          const Padding(
+            padding: EdgeInsets.only(top: 32),
+            child: EmptyStateView(message: 'No teachers match your search'),
+          ),
+        for (final teacher in visible) ...[
+          PersonCard(
+            name: teacher.fullName,
+            status: teacher.status,
+            meta: [
+              if (teacher.department.isNotEmpty) '${teacher.department} Dept',
+              if (teacher.employeeId.isNotEmpty) teacher.employeeId,
+              if (teacher.email.isNotEmpty) teacher.email,
+            ].join(' · '),
+            phone: teacher.phone,
+            highlight: teacher.subjects.isNotEmpty
+                ? teacher.subjects.join(', ')
+                : (teacher.designation.isNotEmpty ? teacher.designation : null),
+            highlightIcon: teacher.subjects.isNotEmpty ? Icons.menu_book_outlined : Icons.work_outline,
+            onEdit: () => widget.onEdit(teacher),
+            onDelete: () => widget.onDelete(teacher),
+          ),
+          const SizedBox(height: 10),
+        ],
       ],
     );
   }

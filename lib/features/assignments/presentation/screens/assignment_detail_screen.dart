@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/app_spacing.dart';
+import '../../../../shared/utils/subject_icon.dart';
 import '../../../../shared/utils/display_date.dart';
 import '../../../../shared/utils/initials.dart';
 import '../../../../shared/widgets/error_view.dart';
@@ -20,7 +21,6 @@ import '../../data/models/assignment.dart';
 import '../../data/models/assignment_submission.dart';
 import '../../data/repositories/assignment_repository.dart' show SubmissionFile;
 import '../providers/assignment_provider.dart';
-import 'assignments_list_screen.dart' show subjectIcon;
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 

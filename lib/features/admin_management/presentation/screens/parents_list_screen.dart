@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
+import '../../../../shared/widgets/person_card.dart';
 import '../../../../shared/widgets/loading_view.dart';
 import '../../data/models/parent.dart';
 import '../../data/models/student.dart';
@@ -99,77 +100,49 @@ class _ParentsList extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
 
-    return Column(
+    final linked = parents.fold<int>(0, (sum, p) => sum + p.children.length);
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
       children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: TextField(
-            controller: searchController,
-            decoration: InputDecoration(
-              hintText: 'Search parents by name',
-              prefixIcon: const Icon(Icons.search),
-              filled: true,
-              fillColor: scheme.surfaceContainerLow,
-              border: OutlineInputBorder(borderRadius: AppRadius.button, borderSide: BorderSide.none),
-            ),
+        TextField(
+          controller: searchController,
+          decoration: InputDecoration(
+            hintText: 'Search parents by name',
+            prefixIcon: const Icon(Icons.search),
+            filled: true,
+            fillColor: scheme.surfaceContainerLow,
+            border: OutlineInputBorder(borderRadius: AppRadius.button, borderSide: BorderSide.none),
           ),
         ),
-        Expanded(
-          child: parents.isEmpty
-              ? const EmptyStateView(message: 'No parents match your search')
-              : ListView.separated(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                  itemCount: parents.length,
-                  separatorBuilder: (context, index) => const SizedBox(height: 8),
-                  itemBuilder: (context, index) {
-                    final parent = parents[index];
-                    final childNames = parent.children.map((c) => c.fullName).join(', ');
-                    final accent = scheme.primary;
-                    return Card(
-                      margin: EdgeInsets.zero,
-                      clipBehavior: Clip.antiAlias,
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                        leading: CircleAvatar(
-                          backgroundColor: accent.withValues(alpha: 0.14),
-                          child: Text(
-                            parent.fullName.isNotEmpty ? parent.fullName[0].toUpperCase() : '?',
-                            style: TextStyle(color: accent, fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                        title: Text(parent.fullName, style: Theme.of(context).textTheme.titleSmall),
-                        subtitle: Row(
-                          children: [
-                            Icon(Icons.family_restroom_outlined, size: 14, color: scheme.outline),
-                            const SizedBox(width: 4),
-                            Expanded(
-                              child: Text(
-                                childNames.isEmpty ? 'No children linked' : 'Children: $childNames',
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.edit_outlined),
-                              tooltip: 'Edit',
-                              onPressed: () => onEdit(parent),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete_outline),
-                              tooltip: 'Delete',
-                              onPressed: () => onDelete(parent),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
+        const SizedBox(height: 12),
+        Text(
+          '${parents.length} PARENT${parents.length == 1 ? '' : 'S'} · $linked LINKED CHILD${linked == 1 ? '' : 'REN'}',
+          style: Theme.of(context).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700, letterSpacing: 0.5),
         ),
+        const SizedBox(height: 10),
+        if (parents.isEmpty)
+          const Padding(
+            padding: EdgeInsets.only(top: 32),
+            child: EmptyStateView(message: 'No parents match your search'),
+          ),
+        for (final parent in parents) ...[
+          PersonCard(
+            name: parent.fullName,
+            status: parent.status,
+            meta: [
+              if (parent.occupation.isNotEmpty) parent.occupation,
+              if (parent.email.isNotEmpty) parent.email,
+            ].join(' · '),
+            phone: parent.phone,
+            highlight: parent.children.isEmpty
+                ? 'No children linked'
+                : 'Children: ${parent.children.map((c) => c.fullName).join(', ')}',
+            highlightIcon: Icons.family_restroom_outlined,
+            onEdit: () => onEdit(parent),
+            onDelete: () => onDelete(parent),
+          ),
+          const SizedBox(height: 10),
+        ],
       ],
     );
   }

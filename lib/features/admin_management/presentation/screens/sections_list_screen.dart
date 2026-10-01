@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_radius.dart';
+import '../../../../shared/widgets/status_chip.dart';
+
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_view.dart';
@@ -87,42 +91,74 @@ class SectionsPanel extends StatelessWidget {
                 separatorBuilder: (context, index) => const SizedBox(height: 8),
                 itemBuilder: (context, index) {
                   final section = provider.sections[index];
-                  final accent = Theme.of(context).colorScheme.primary;
+                  final theme = Theme.of(context);
+                  final active = section.status.isEmpty || section.status.toLowerCase() == 'active';
                   return Card(
                     margin: EdgeInsets.zero,
-                    clipBehavior: Clip.antiAlias,
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                      leading: Container(
-                        width: 40,
-                        height: 40,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: accent.withValues(alpha: 0.14),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Icon(Icons.groups_outlined, color: accent, size: 20),
-                      ),
-                      title: Text(section.name, style: Theme.of(context).textTheme.titleSmall),
-                      subtitle: Row(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Row(
                         children: [
-                          Icon(Icons.badge_outlined, size: 14, color: Theme.of(context).colorScheme.outline),
-                          const SizedBox(width: 4),
-                          Text('${section.studentCount} student${section.studentCount == 1 ? '' : 's'}'),
-                        ],
-                      ),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.edit_outlined),
+                          Container(
+                            width: 48,
+                            height: 48,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary,
+                              borderRadius: BorderRadius.circular(AppRadius.lg),
+                            ),
+                            child: Text(
+                              section.name.isEmpty ? '?' : section.name.substring(0, section.name.length.clamp(0, 2)),
+                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 18),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Section ${section.name}',
+                                  style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                                ),
+                                const SizedBox(height: 4),
+                                Wrap(
+                                  spacing: 6,
+                                  runSpacing: 4,
+                                  children: [
+                                    AppStatusPill(
+                                      label: '${section.studentCount} student${section.studentCount == 1 ? '' : 's'}',
+                                      icon: Icons.groups_outlined,
+                                      color: AppColors.info,
+                                    ),
+                                    if (section.teacherIds.isNotEmpty)
+                                      AppStatusPill(
+                                        label:
+                                            '${section.teacherIds.length} teacher${section.teacherIds.length == 1 ? '' : 's'}',
+                                        icon: Icons.co_present_outlined,
+                                        color: AppColors.primary,
+                                      ),
+                                    if (!active)
+                                      AppStatusPill(label: section.status, color: theme.colorScheme.onSurfaceVariant),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          IconButton.filledTonal(
+                            icon: const Icon(Icons.edit_outlined, size: 18),
                             tooltip: 'Edit',
+                            visualDensity: VisualDensity.compact,
                             onPressed: () =>
                                 showSectionFormDialog(context, provider, classId: classId, existing: section),
                           ),
-                          IconButton(
-                            icon: const Icon(Icons.delete_outline),
+                          IconButton.filledTonal(
+                            style: IconButton.styleFrom(
+                              backgroundColor: theme.colorScheme.error.withValues(alpha: 0.1),
+                            ),
+                            icon: Icon(Icons.delete_outline, size: 18, color: theme.colorScheme.error),
                             tooltip: 'Delete',
+                            visualDensity: VisualDensity.compact,
                             onPressed: () => _confirmDeleteSection(context, provider, section),
                           ),
                         ],
