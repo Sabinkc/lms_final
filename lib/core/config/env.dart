@@ -19,25 +19,23 @@ class EnvConfig {
   /// regardless of the flag below, as a safety net (see [enableLogging]).
   final bool verboseLogging;
 
-  const EnvConfig({
-    required this.environment,
-    required this.baseUrl,
-    required this.verboseLogging,
-  });
+  const EnvConfig({required this.environment, required this.baseUrl, required this.verboseLogging});
 
   /// The confirmed backend has no version prefix (docs/api_spec.md §1) —
   /// this constant exists so a future `/v1`-style change is a one-line diff.
   static const String apiPrefix = '/api';
 
+  /// Live production backend. Used whenever no `BASE_URL` dart-define is
+  /// supplied, so a plain `flutter run` / `flutter build` talks to prod.
+  static const String productionBaseUrl = 'https://backend.cloudslms.com';
+
   bool get enableLogging => verboseLogging && environment != AppEnvironment.prod;
 
   bool get isProd => environment == AppEnvironment.prod;
 
-  /// Reads the `--dart-define`s an entrypoint supplied. Falls back to local
-  /// backend defaults (docs/api_spec.md §1: `PORT` env var defaults to
-  /// `4000` in the backend repo) only for [AppEnvironment.dev], so a
-  /// misconfigured staging/prod build fails loudly instead of silently
-  /// talking to localhost.
+  /// Reads the `--dart-define`s an entrypoint supplied. `BASE_URL` falls
+  /// back to [productionBaseUrl]; pass
+  /// `--dart-define=BASE_URL=http://localhost:4000` to hit a local backend.
   factory EnvConfig.fromDartDefine() {
     const envName = String.fromEnvironment('ENV', defaultValue: 'dev');
     final environment = AppEnvironment.values.firstWhere(
@@ -45,15 +43,7 @@ class EnvConfig {
       orElse: () => AppEnvironment.dev,
     );
 
-    const definedBaseUrl = String.fromEnvironment('BASE_URL');
-    final baseUrl = definedBaseUrl.isNotEmpty
-        ? definedBaseUrl
-        : (environment == AppEnvironment.dev
-            ? 'http://localhost:4000'
-            : throw StateError(
-                'BASE_URL must be supplied via --dart-define for the '
-                '"$envName" environment — refusing to fall back to localhost.',
-              ));
+    const baseUrl = String.fromEnvironment('BASE_URL', defaultValue: productionBaseUrl);
 
     const verbose = bool.fromEnvironment('VERBOSE_LOGGING', defaultValue: true);
 

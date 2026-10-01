@@ -66,6 +66,7 @@ class QuickActionTile extends StatelessWidget {
   final String label;
   final VoidCallback onTap;
   final Color? color;
+  final String? subtitle;
 
   const QuickActionTile({
     super.key,
@@ -73,6 +74,7 @@ class QuickActionTile extends StatelessWidget {
     required this.label,
     required this.onTap,
     this.color,
+    this.subtitle,
   });
 
   @override
@@ -90,7 +92,18 @@ class QuickActionTile extends StatelessWidget {
         ),
         child: Icon(icon, color: tint, size: 20),
       ),
-      title: Text(label, style: Theme.of(context).textTheme.titleSmall),
+      // maxLines+ellipsis on both — the More screen's paired 2-column
+      // groups only give each tile ~150-170dp of width, where a full
+      // label like "Attendance Corrections" wrapped into a jumbled
+      // one-letter-per-line stack instead of a clean line (found live on
+      // device, not just a narrow-test-width theoretical). Truncating is
+      // the safe default at any column width; the standalone (non-paired)
+      // usage doesn't need the room either since the label is already
+      // short by design.
+      title: Text(label, style: Theme.of(context).textTheme.titleSmall, maxLines: 1, overflow: TextOverflow.ellipsis),
+      subtitle: subtitle == null
+          ? null
+          : Text(subtitle!, style: Theme.of(context).textTheme.bodySmall, maxLines: 2, overflow: TextOverflow.ellipsis),
       trailing: const Icon(Icons.chevron_right, size: 20),
     );
   }

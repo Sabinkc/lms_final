@@ -8,6 +8,8 @@ import 'features/admin_management/presentation/providers/academic_structure_prov
 import 'features/admin_management/presentation/providers/department_provider.dart';
 import 'features/admin_management/presentation/providers/parent_provider.dart';
 import 'features/admin_management/presentation/providers/student_provider.dart';
+import 'features/admin_management/presentation/providers/student_profile_provider.dart';
+import 'features/admin_management/presentation/providers/student_day_attendance_provider.dart';
 import 'features/admin_management/presentation/providers/teacher_provider.dart';
 import 'features/assignments/presentation/providers/assignment_provider.dart';
 import 'features/attendance/presentation/providers/admin_attendance_provider.dart';
@@ -16,6 +18,7 @@ import 'features/attendance/presentation/providers/self_attendance_provider.dart
 import 'features/auth/presentation/providers/auth_provider.dart';
 import 'features/backup/presentation/providers/backup_provider.dart';
 import 'features/chat/presentation/providers/chat_provider.dart';
+import 'features/dashboard/presentation/providers/admin_dashboard_provider.dart';
 import 'features/notifications/presentation/providers/notification_provider.dart';
 import 'features/exams/presentation/providers/exam_provider.dart';
 import 'features/exams/presentation/providers/exam_result_provider.dart';
@@ -48,6 +51,8 @@ class CloudsLmsApp extends StatelessWidget {
         ChangeNotifierProvider<AcademicStructureProvider>(create: (_) => sl<AcademicStructureProvider>()),
         ChangeNotifierProvider<TeacherProvider>(create: (_) => sl<TeacherProvider>()),
         ChangeNotifierProvider<StudentProvider>(create: (_) => sl<StudentProvider>()),
+        ChangeNotifierProvider<StudentProfileProvider>(create: (_) => sl<StudentProfileProvider>()),
+        ChangeNotifierProvider<StudentDayAttendanceProvider>(create: (_) => sl<StudentDayAttendanceProvider>()),
         ChangeNotifierProvider<ParentProvider>(create: (_) => sl<ParentProvider>()),
         ChangeNotifierProvider<DepartmentProvider>(create: (_) => sl<DepartmentProvider>()),
         ChangeNotifierProvider<AttendanceProvider>(create: (_) => sl<AttendanceProvider>()),
@@ -64,6 +69,7 @@ class CloudsLmsApp extends StatelessWidget {
         ChangeNotifierProvider<ChatProvider>(create: (_) => sl<ChatProvider>()),
         ChangeNotifierProvider<NotificationProvider>(create: (_) => sl<NotificationProvider>()),
         ChangeNotifierProvider<ReportsProvider>(create: (_) => sl<ReportsProvider>()),
+        ChangeNotifierProvider<AdminDashboardProvider>(create: (_) => sl<AdminDashboardProvider>()),
         ChangeNotifierProvider<BackupProvider>(create: (_) => sl<BackupProvider>()),
         ChangeNotifierProvider<AdminTimetableProvider>(create: (_) => sl<AdminTimetableProvider>()),
         ChangeNotifierProvider<TeacherTimetableProvider>(create: (_) => sl<TeacherTimetableProvider>()),

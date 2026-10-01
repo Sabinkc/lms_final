@@ -34,4 +34,29 @@ void main() {
     expect(find.text('93%'), findsOneWidget);
     expect(find.text('Rs 5,600'), findsOneWidget);
   });
+
+  testWidgets('StatCard shows a trend badge when provided', (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: StatCard(icon: Icons.people_outline, value: '128', label: 'Total Students', trend: '+5%'),
+        ),
+      ),
+    );
+
+    expect(find.text('+5%'), findsOneWidget);
+  });
+
+  testWidgets('StatCard shows a progress ring with rounded percentage when provided', (tester) async {
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: StatCard(icon: Icons.people_outline, value: '1,120', label: 'Present Today', progress: 0.93),
+        ),
+      ),
+    );
+
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(find.text('93'), findsOneWidget);
+  });
 }

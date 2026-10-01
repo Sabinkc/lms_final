@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'app_colors.dart';
 import 'app_radius.dart';
@@ -39,10 +40,14 @@ class AppTheme {
       appBarTheme: AppBarTheme(
         elevation: 0,
         scrolledUnderElevation: 0,
-        backgroundColor: isDark ? AppColors.darkBase : AppColors.lightBase,
+        // Transparent so each screen's `AppBackground` shows through; the
+        // status-bar icons are set explicitly because a transparent bar
+        // would otherwise flip them to white on the light background.
+        backgroundColor: Colors.transparent,
+        systemOverlayStyle: isDark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
         foregroundColor: colorScheme.onSurface,
         titleTextStyle: TextStyle(
-          fontFamily: 'Inter',
+          fontFamily: AppTypography.fontFamily,
           fontSize: 22,
           fontWeight: FontWeight.w800,
           color: colorScheme.onSurface,

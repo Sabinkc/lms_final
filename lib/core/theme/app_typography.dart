@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 
-/// docs/design_system.md §2: `CONFIRMED` no custom webfont in the real web
-/// source, but the doc's own recommendation (since a system-font stack
-/// isn't portably meaningful across Android/iOS/web the way it is on the
-/// web) is to pick a real font — Inter, as recommended — rather than chase
-/// an OS-default stack. Vendored locally as a variable-font asset (see
-/// `pubspec.yaml`'s `fonts:` section) rather than fetched at runtime via
+/// Switched 2026-09-14 from Inter to Plus Jakarta Sans to match the
+/// "Verdant Scholar" design system used throughout the Google Stitch
+/// mockups (`docs/stitch_screens/`) — every exported screen's tailwind
+/// config specifies `Plus Jakarta Sans` as its only font family. Vendored
+/// locally as a variable-font asset (see `pubspec.yaml`'s `fonts:` section)
+/// the same way Inter was, rather than fetched at runtime via
 /// `google_fonts`' CDN — a hard local asset has no network dependency,
 /// which matters for a school app that needs to work on unreliable wifi
 /// (and is deterministic in tests, unlike a runtime HTTP font fetch).
 ///
-/// Also applies §2's confirmed weight finding: real usage is bold/semibold-
-/// heavy (`font-bold` 1126 uses vs `font-normal` 9), so default body text
-/// is bumped from Material's default `w400` to `w500`.
+/// Weight usage still follows docs/design_system.md §2's confirmed real-
+/// web finding (bold/semibold-heavy), and the Stitch mockups independently
+/// confirm the same pattern (`font-bold`/`font-semibold` on nearly every
+/// text style token) — so default body text stays bumped from Material's
+/// default `w400` to `w500`.
 class AppTypography {
   AppTypography._();
 
-  static const String fontFamily = 'Inter';
+  static const String fontFamily = 'PlusJakartaSans';
 
   static TextTheme textTheme(TextTheme base) {
     return base

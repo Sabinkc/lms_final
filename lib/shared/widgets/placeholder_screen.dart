@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../features/auth/presentation/providers/auth_provider.dart';
+import '../../shared/widgets/brand_app_bar.dart';
+import '../../shared/widgets/app_background.dart';
 
 /// Navigation-target scaffolding only — proves the router/role-guard
 /// actually works end to end. The real Login form and the four real
@@ -35,33 +37,29 @@ class PlaceholderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(title, style: Theme.of(context).textTheme.headlineSmall),
-              const SizedBox(height: 8),
-              Text(
-                subtitle,
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              for (final (label, onTap) in links) ...[
-                const SizedBox(height: 12),
-                FilledButton(onPressed: onTap, child: Text(label)),
+    return AppBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: BrandAppBar(title: title),
+        body: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(title, style: Theme.of(context).textTheme.headlineSmall),
+                const SizedBox(height: 8),
+                Text(subtitle, textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyMedium),
+                for (final (label, onTap) in links) ...[
+                  const SizedBox(height: 12),
+                  FilledButton(onPressed: onTap, child: Text(label)),
+                ],
+                if (showLogout) ...[
+                  const SizedBox(height: 24),
+                  OutlinedButton(onPressed: () => context.read<AuthProvider>().logout(), child: const Text('Log out')),
+                ],
               ],
-              if (showLogout) ...[
-                const SizedBox(height: 24),
-                OutlinedButton(
-                  onPressed: () => context.read<AuthProvider>().logout(),
-                  child: const Text('Log out'),
-                ),
-              ],
-            ],
+            ),
           ),
         ),
       ),
