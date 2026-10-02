@@ -18,6 +18,7 @@ import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
 import '../../../../shared/utils/capitalize.dart';
 import '../../../../shared/widgets/staggered_entrance.dart';
+import '../../../../shared/widgets/press_scale.dart';
 
 /// docs/screens.md doesn't name this screen explicitly (it predates the
 /// correction-workflow finding) — `implementation_backlog.md` E3-F6-T2:
@@ -140,119 +141,121 @@ class _CorrectionCard extends StatelessWidget {
     final theme = Theme.of(context);
     final isStudent = correction.targetType.toLowerCase().contains('student');
     return StaggeredEntrance(
-      child: Card(
-        margin: EdgeInsets.zero,
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(AppRadius.lg),
-                    ),
-                    child: Icon(
-                      isStudent ? Icons.person_outline : Icons.fact_check_outlined,
-                      color: context.readable(AppColors.primary),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          correction.targetType,
-                          style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-                        ),
-                        if (correction.studentId != null)
-                          Text(
-                            'Student ID: ${correction.studentId}',
-                            style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                      ],
-                    ),
-                  ),
-                  const AppStatusPill(label: 'Pending', icon: Icons.schedule, color: AppColors.warning),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainerLow,
-                  borderRadius: BorderRadius.circular(AppRadius.lg),
-                ),
-                child: Row(
+      child: PressScale(
+        child: Card(
+          margin: EdgeInsets.zero,
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
                   children: [
-                    Text('STATUS SHIFT', style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700)),
-                    const Spacer(),
-                    AppStatusPill(label: capitalize(correction.oldStatus), color: _statusColor(correction.oldStatus)),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 6),
-                      child: Icon(Icons.arrow_forward_rounded, size: 16),
+                    Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(AppRadius.lg),
+                      ),
+                      child: Icon(
+                        isStudent ? Icons.person_outline : Icons.fact_check_outlined,
+                        color: context.readable(AppColors.primary),
+                      ),
                     ),
-                    AppStatusPill(label: capitalize(correction.newStatus), color: _statusColor(correction.newStatus)),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            correction.targetType,
+                            style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                          ),
+                          if (correction.studentId != null)
+                            Text(
+                              'Student ID: ${correction.studentId}',
+                              style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                        ],
+                      ),
+                    ),
+                    const AppStatusPill(label: 'Pending', icon: Icons.schedule, color: AppColors.warning),
                   ],
                 ),
-              ),
-              if (correction.reason.isNotEmpty) ...[
-                const SizedBox(height: 8),
+                const SizedBox(height: 12),
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                   decoration: BoxDecoration(
-                    color: AppColors.info.withValues(alpha: 0.06),
+                    color: theme.colorScheme.surfaceContainerLow,
                     borderRadius: BorderRadius.circular(AppRadius.lg),
                   ),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.format_quote_rounded, size: 18, color: context.readable(AppColors.info)),
-                      const SizedBox(width: 6),
-                      Expanded(child: Text(correction.reason, style: theme.textTheme.bodyMedium)),
+                      Text('STATUS SHIFT', style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700)),
+                      const Spacer(),
+                      AppStatusPill(label: capitalize(correction.oldStatus), color: _statusColor(correction.oldStatus)),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 6),
+                        child: Icon(Icons.arrow_forward_rounded, size: 16),
+                      ),
+                      AppStatusPill(label: capitalize(correction.newStatus), color: _statusColor(correction.newStatus)),
                     ],
                   ),
                 ),
-              ],
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: FilledButton.icon(
-                      style: FilledButton.styleFrom(
-                        backgroundColor: Color.alphaBlend(
-                          theme.colorScheme.error.withValues(alpha: 0.1),
-                          theme.colorScheme.surface,
-                        ),
-                        foregroundColor: theme.colorScheme.error,
-                        elevation: 0,
-                        shadowColor: Colors.transparent,
-                      ),
-                      onPressed: processing ? null : onReject,
-                      icon: const Icon(Icons.close_rounded, size: 18),
-                      label: const Text('Reject'),
+                if (correction.reason.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppColors.info.withValues(alpha: 0.06),
+                      borderRadius: BorderRadius.circular(AppRadius.lg),
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: FilledButton.icon(
-                      onPressed: processing ? null : onApprove,
-                      icon: processing
-                          ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                          : const Icon(Icons.check_rounded, size: 18),
-                      label: const Text('Approve'),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(Icons.format_quote_rounded, size: 18, color: context.readable(AppColors.info)),
+                        const SizedBox(width: 6),
+                        Expanded(child: Text(correction.reason, style: theme.textTheme.bodyMedium)),
+                      ],
                     ),
                   ),
                 ],
-              ),
-            ],
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: FilledButton.icon(
+                        style: FilledButton.styleFrom(
+                          backgroundColor: Color.alphaBlend(
+                            theme.colorScheme.error.withValues(alpha: 0.1),
+                            theme.colorScheme.surface,
+                          ),
+                          foregroundColor: theme.colorScheme.error,
+                          elevation: 0,
+                          shadowColor: Colors.transparent,
+                        ),
+                        onPressed: processing ? null : onReject,
+                        icon: const Icon(Icons.close_rounded, size: 18),
+                        label: const Text('Reject'),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: FilledButton.icon(
+                        onPressed: processing ? null : onApprove,
+                        icon: processing
+                            ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                            : const Icon(Icons.check_rounded, size: 18),
+                        label: const Text('Approve'),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

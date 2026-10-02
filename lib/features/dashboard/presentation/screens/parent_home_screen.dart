@@ -9,7 +9,6 @@ import '../../../../shared/utils/initials.dart';
 import '../../../../shared/utils/time_of_day_greeting.dart';
 import '../../../../shared/widgets/brand_home_app_bar.dart';
 import '../../../../shared/widgets/colorful_action_tile.dart';
-import '../../../../shared/widgets/photo_hero_banner.dart';
 import '../../../../shared/widgets/stat_card.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../../../attendance/presentation/providers/self_attendance_provider.dart';
@@ -20,6 +19,7 @@ import '../../../notifications/presentation/providers/notification_provider.dart
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
+import '../../../../shared/widgets/collapsing_hero_header.dart';
 
 /// Parent Home dashboard — matches [AdminHomeScreen]'s photo-hero restyle.
 ///
@@ -103,57 +103,62 @@ class _ParentHomeScreenState extends State<ParentHomeScreen> {
         ),
         body: PullToRefresh(
           onRefresh: _refresh,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(AppSpacing.lg),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                PhotoHeroBanner(
-                  greeting: timeOfDayGreeting(),
-                  name: firstName,
-                  subtitle: "Here's what's happening today at your child's school.",
-                ),
-                const SizedBox(height: AppSpacing.xl),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Quick Actions',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
-                    ),
-                    Text(
-                      '${_ParentQuickTile.all.length} shortcuts',
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: context.readable(AppColors.primary),
-                        fontWeight: FontWeight.w600,
+          child: CustomScrollView(
+            slivers: [
+              CollapsingHeroHeader(
+                greeting: timeOfDayGreeting(),
+                name: firstName,
+                subtitle: "Here's what's happening today at your child's school.",
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.sm, AppSpacing.lg, AppSpacing.lg),
+                sliver: SliverToBoxAdapter(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Quick Actions',
+                            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                          ),
+                          Text(
+                            '${_ParentQuickTile.all.length} shortcuts',
+                            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                              color: context.readable(AppColors.primary),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppSpacing.md),
-                GridView.count(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisCount: 4,
-                  mainAxisSpacing: AppSpacing.sm,
-                  crossAxisSpacing: AppSpacing.sm,
-                  childAspectRatio: 0.78,
-                  children: [
-                    for (final tile in _ParentQuickTile.all)
-                      ColorfulActionTile(
-                        icon: tile.icon,
-                        label: tile.label,
-                        color: tile.color,
-                        onTap: () => context.push(tile.route),
+                      const SizedBox(height: AppSpacing.md),
+                      GridView.count(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        crossAxisCount: 4,
+                        mainAxisSpacing: AppSpacing.sm,
+                        crossAxisSpacing: AppSpacing.sm,
+                        childAspectRatio: 0.78,
+                        children: [
+                          for (final tile in _ParentQuickTile.all)
+                            ColorfulActionTile(
+                              icon: tile.icon,
+                              label: tile.label,
+                              color: tile.color,
+                              onTap: () => context.push(tile.route),
+                            ),
+                        ],
                       ),
-                  ],
+                      const SizedBox(height: AppSpacing.xl),
+                      const _OverviewHeading(),
+                      const SizedBox(height: AppSpacing.sm),
+                      const _TodaysOverview(),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: AppSpacing.xl),
-                const _OverviewHeading(),
-                const SizedBox(height: AppSpacing.sm),
-                const _TodaysOverview(),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -200,12 +205,7 @@ class _ParentQuickTile {
       route: AppRoutes.parentChildAttendance,
       color: AppColors.plum,
     ),
-    _ParentQuickTile(
-      icon: Icons.payments_rounded,
-      label: 'Fees',
-      route: AppRoutes.parentFees,
-      color: AppColors.danger,
-    ),
+    _ParentQuickTile(icon: Icons.payments_rounded, label: 'Fees', route: AppRoutes.parentFees, color: AppColors.danger),
     _ParentQuickTile(
       icon: Icons.event_note_rounded,
       label: 'Dual Calendar',
@@ -218,12 +218,7 @@ class _ParentQuickTile {
       route: AppRoutes.assignments,
       color: AppColors.info,
     ),
-    _ParentQuickTile(
-      icon: Icons.campaign_rounded,
-      label: 'Notices',
-      route: AppRoutes.notices,
-      color: AppColors.ochre,
-    ),
+    _ParentQuickTile(icon: Icons.campaign_rounded, label: 'Notices', route: AppRoutes.notices, color: AppColors.ochre),
     _ParentQuickTile(icon: Icons.quiz_rounded, label: 'Exams', route: AppRoutes.exams, color: AppColors.success),
     _ParentQuickTile(
       icon: Icons.grid_view_rounded,

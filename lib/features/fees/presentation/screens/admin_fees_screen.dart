@@ -26,6 +26,7 @@ import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
 import '../../../../shared/utils/capitalize.dart';
 import '../../../../shared/widgets/staggered_entrance.dart';
+import '../../../../shared/widgets/press_scale.dart';
 
 const _statusFilterOptions = <String?>[null, 'pending', 'partial', 'paid'];
 
@@ -442,51 +443,57 @@ class _ActionTile extends StatelessWidget {
     final theme = Theme.of(context);
     final fg = filled ? Colors.white : theme.colorScheme.onSurface;
     final radius = BorderRadius.circular(AppRadius.xl);
-    return Material(
-      color: filled ? AppColors.primary : theme.colorScheme.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: radius,
-        side: filled ? BorderSide.none : BorderSide(color: theme.colorScheme.outlineVariant),
-      ),
-      child: InkWell(
-        borderRadius: radius,
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
-          child: Row(
-            children: [
-              Container(
-                width: 34,
-                height: 34,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: filled ? Colors.white.withValues(alpha: 0.2) : AppColors.primary.withValues(alpha: 0.1),
-                  shape: BoxShape.circle,
+    return PressScale(
+      child: Material(
+        color: filled ? AppColors.primary : theme.colorScheme.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: radius,
+          side: filled ? BorderSide.none : BorderSide(color: theme.colorScheme.outlineVariant),
+        ),
+        child: InkWell(
+          borderRadius: radius,
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+            child: Row(
+              children: [
+                Container(
+                  width: 34,
+                  height: 34,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: filled ? Colors.white.withValues(alpha: 0.2) : AppColors.primary.withValues(alpha: 0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(icon, size: 20, color: filled ? Colors.white : AppColors.primary),
                 ),
-                child: Icon(icon, size: 20, color: filled ? Colors.white : AppColors.primary),
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w700, color: fg, height: 1.15),
-                    ),
-                    Text(
-                      subtitle,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.labelSmall?.copyWith(color: fg.withValues(alpha: 0.75)),
-                    ),
-                  ],
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: fg,
+                          height: 1.15,
+                        ),
+                      ),
+                      Text(
+                        subtitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.labelSmall?.copyWith(color: fg.withValues(alpha: 0.75)),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -760,63 +767,65 @@ class _FeeTile extends StatelessWidget {
     };
     final initial = studentLabel.isNotEmpty ? studentLabel[0].toUpperCase() : '?';
     return StaggeredEntrance(
-      child: Card(
-        margin: EdgeInsets.zero,
-        clipBehavior: Clip.antiAlias,
-        child: ExpansionTile(
-          leading: CircleAvatar(
-            backgroundColor: statusColor.withValues(alpha: 0.16),
-            foregroundColor: statusColor,
-            child: Text(initial, style: const TextStyle(fontWeight: FontWeight.w700)),
-          ),
-          title: Text('${fee.title} — $studentLabel'),
-          subtitle: Padding(
-            padding: const EdgeInsets.only(top: 4),
-            child: Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              spacing: 6,
-              runSpacing: 4,
-              children: [
-                Text('${fee.className ?? ''} ${fee.section ?? ''} · ${formatRs(fee.totalAmount)}'),
-                AppStatusChip(label: capitalize(fee.status), color: statusColor),
-              ],
+      child: PressScale(
+        child: Card(
+          margin: EdgeInsets.zero,
+          clipBehavior: Clip.antiAlias,
+          child: ExpansionTile(
+            leading: CircleAvatar(
+              backgroundColor: statusColor.withValues(alpha: 0.16),
+              foregroundColor: statusColor,
+              child: Text(initial, style: const TextStyle(fontWeight: FontWeight.w700)),
             ),
-          ),
-          children: [
-            if (fee.description.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Align(alignment: Alignment.centerLeft, child: Text(fee.description)),
-              ),
-            if (fee.isInstallment)
-              for (final inst in fee.installments)
-                ListTile(
-                  dense: true,
-                  title: Text(inst.title),
-                  subtitle: Text('Due ${inst.dueDate} · ${inst.status}'),
-                  trailing: Text('Rs ${inst.amount.toStringAsFixed(0)}'),
-                )
-            else
-              ListTile(dense: true, title: const Text('Due date'), trailing: Text(fee.dueDate)),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+            title: Text('${fee.title} — $studentLabel'),
+            subtitle: Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 6,
+                runSpacing: 4,
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.edit_outlined),
-                    tooltip: 'Edit',
-                    onPressed: () => showFeeFormDialog(context, provider, existing: fee),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.delete_outline),
-                    tooltip: 'Delete',
-                    onPressed: () => _confirmDelete(context, provider, fee),
-                  ),
+                  Text('${fee.className ?? ''} ${fee.section ?? ''} · ${formatRs(fee.totalAmount)}'),
+                  AppStatusChip(label: capitalize(fee.status), color: statusColor),
                 ],
               ),
             ),
-          ],
+            children: [
+              if (fee.description.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Align(alignment: Alignment.centerLeft, child: Text(fee.description)),
+                ),
+              if (fee.isInstallment)
+                for (final inst in fee.installments)
+                  ListTile(
+                    dense: true,
+                    title: Text(inst.title),
+                    subtitle: Text('Due ${inst.dueDate} · ${inst.status}'),
+                    trailing: Text('Rs ${inst.amount.toStringAsFixed(0)}'),
+                  )
+              else
+                ListTile(dense: true, title: const Text('Due date'), trailing: Text(fee.dueDate)),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit_outlined),
+                      tooltip: 'Edit',
+                      onPressed: () => showFeeFormDialog(context, provider, existing: fee),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete_outline),
+                      tooltip: 'Delete',
+                      onPressed: () => _confirmDelete(context, provider, fee),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

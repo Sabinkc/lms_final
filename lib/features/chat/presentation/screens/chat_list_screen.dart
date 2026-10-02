@@ -22,6 +22,7 @@ import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
 import '../../../../shared/widgets/staggered_entrance.dart';
+import '../../../../shared/widgets/press_scale.dart';
 
 /// docs/production_roadmap.md Phase H — one shared list for Teacher and
 /// Student (`GET /group-chats` is role-scoped server-side: a Teacher's own
@@ -201,73 +202,75 @@ class _GroupTile extends StatelessWidget {
     ].join(' · ');
 
     return StaggeredEntrance(
-      child: Card(
-        margin: EdgeInsets.zero,
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: () => context.push(AppRoutes.chatThread(group.id), extra: group),
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(color: color.withValues(alpha: 0.12), shape: BoxShape.circle),
-                  child: Icon(Icons.forum_outlined, color: context.readable(color)),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              group.name,
-                              style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          if (when.isNotEmpty) ...[
-                            const SizedBox(width: 8),
-                            Text(
-                              when,
-                              style: theme.textTheme.labelSmall?.copyWith(color: context.readable(AppColors.primary)),
-                            ),
-                          ],
-                        ],
-                      ),
-                      if (subtitle.isNotEmpty)
-                        Text(
-                          subtitle,
-                          style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                        ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              group.lastMessagePreview.isEmpty ? 'No messages yet' : group.lastMessagePreview,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                fontStyle: group.lastMessagePreview.isEmpty ? FontStyle.italic : null,
-                                color: group.lastMessagePreview.isEmpty ? theme.colorScheme.onSurfaceVariant : null,
+      child: PressScale(
+        child: Card(
+          margin: EdgeInsets.zero,
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: () => context.push(AppRoutes.chatThread(group.id), extra: group),
+            child: Padding(
+              padding: const EdgeInsets.all(14),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(color: color.withValues(alpha: 0.12), shape: BoxShape.circle),
+                    child: Icon(Icons.forum_outlined, color: context.readable(color)),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                group.name,
+                                style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
+                            if (when.isNotEmpty) ...[
+                              const SizedBox(width: 8),
+                              Text(
+                                when,
+                                style: theme.textTheme.labelSmall?.copyWith(color: context.readable(AppColors.primary)),
+                              ),
+                            ],
+                          ],
+                        ),
+                        if (subtitle.isNotEmpty)
+                          Text(
+                            subtitle,
+                            style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                           ),
-                          const SizedBox(width: 8),
-                          AppStatusPill(label: '$memberCount', icon: Icons.people_outline, color: color),
-                        ],
-                      ),
-                    ],
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                group.lastMessagePreview.isEmpty ? 'No messages yet' : group.lastMessagePreview,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  fontStyle: group.lastMessagePreview.isEmpty ? FontStyle.italic : null,
+                                  color: group.lastMessagePreview.isEmpty ? theme.colorScheme.onSurfaceVariant : null,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            AppStatusPill(label: '$memberCount', icon: Icons.people_outline, color: color),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

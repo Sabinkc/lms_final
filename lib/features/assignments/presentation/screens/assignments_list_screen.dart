@@ -27,6 +27,7 @@ import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
 import '../../../../shared/widgets/staggered_entrance.dart';
+import '../../../../shared/widgets/press_scale.dart';
 
 /// docs/screens.md's Assignments module, System A
 /// (`docs/production_roadmap.md` §4 decision #3). One list for every role —
@@ -239,71 +240,73 @@ class _AssignmentCard extends StatelessWidget {
     final accent = closed ? Colors.grey : (overdue ? AppColors.danger : AppColors.primary);
 
     return StaggeredEntrance(
-      child: Card(
-        margin: EdgeInsets.zero,
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: () => context.push(AppRoutes.assignmentDetail(assignment.id)),
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 46,
-                      height: 46,
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(AppRadius.lg),
+      child: PressScale(
+        child: Card(
+          margin: EdgeInsets.zero,
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: () => context.push(AppRoutes.assignmentDetail(assignment.id)),
+            child: Padding(
+              padding: const EdgeInsets.all(14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 46,
+                        height: 46,
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(AppRadius.lg),
+                        ),
+                        child: Icon(subjectIcon(assignment.subject), color: context.readable(AppColors.primary)),
                       ),
-                      child: Icon(subjectIcon(assignment.subject), color: context.readable(AppColors.primary)),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            assignment.title,
-                            style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            '${assignment.subject} · ${assignment.className} ${assignment.section} · Due ${formatDisplayDate(assignment.dueDate)}',
-                            style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              assignment.title,
+                              style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              '${assignment.subject} · ${assignment.className} ${assignment.section} · Due ${formatDisplayDate(assignment.dueDate)}',
+                              style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
                       ),
+                      _RowTrailing(assignment: assignment, isTeacher: isTeacher, provider: provider),
+                    ],
+                  ),
+                  if (assignment.description.isNotEmpty) ...[
+                    const SizedBox(height: 10),
+                    Text(
+                      assignment.description,
+                      style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    _RowTrailing(assignment: assignment, isTeacher: isTeacher, provider: provider),
                   ],
-                ),
-                if (assignment.description.isNotEmpty) ...[
                   const SizedBox(height: 10),
-                  Text(
-                    assignment.description,
-                    style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                  InfoStrip(
+                    icon: closed ? Icons.lock_outline : Icons.schedule_rounded,
+                    text: closed
+                        ? 'Closed for submissions'
+                        : (relative ?? 'Due ${formatDisplayDate(assignment.dueDate)}'),
+                    trailing: assignment.attachment.isNotEmpty ? 'Attachment' : null,
+                    color: accent,
                   ),
                 ],
-                const SizedBox(height: 10),
-                InfoStrip(
-                  icon: closed ? Icons.lock_outline : Icons.schedule_rounded,
-                  text: closed
-                      ? 'Closed for submissions'
-                      : (relative ?? 'Due ${formatDisplayDate(assignment.dueDate)}'),
-                  trailing: assignment.attachment.isNotEmpty ? 'Attachment' : null,
-                  color: accent,
-                ),
-              ],
+              ),
             ),
           ),
         ),

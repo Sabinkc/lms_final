@@ -26,6 +26,7 @@ import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
 import '../../../../shared/widgets/staggered_entrance.dart';
+import '../../../../shared/widgets/press_scale.dart';
 
 /// docs/screens.md "Manage Students — List / Add-Edit / Detail". Tapping a
 /// student opens `StudentProfileScreen`. See [_StudentsBody] for the
@@ -482,59 +483,61 @@ class _StudentRow extends StatelessWidget {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
     return StaggeredEntrance(
-      child: InkWell(
-        onTap: () => context.push(AppRoutes.adminStudentProfile(student.id)),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 10, 0, 10),
-          child: Row(
-            children: [
-              CircleAvatar(
-                radius: 24,
-                backgroundColor: AppColors.primary.withValues(alpha: 0.12),
-                child: Text(
-                  initialsFor(student.fullName),
-                  style: TextStyle(color: context.readable(AppColors.primary), fontWeight: FontWeight.w700),
+      child: PressScale(
+        child: InkWell(
+          onTap: () => context.push(AppRoutes.adminStudentProfile(student.id)),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(12, 10, 0, 10),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 24,
+                  backgroundColor: AppColors.primary.withValues(alpha: 0.12),
+                  child: Text(
+                    initialsFor(student.fullName),
+                    style: TextStyle(color: context.readable(AppColors.primary), fontWeight: FontWeight.w700),
+                  ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      student.fullName,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-                    ),
-                    Text(
-                      [
-                        if (student.className.isNotEmpty) student.className,
-                        if (student.section.isNotEmpty) 'Section ${student.section}',
-                      ].join('  •  '),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
-                    ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        student.fullName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                      ),
+                      Text(
+                        [
+                          if (student.className.isNotEmpty) student.className,
+                          if (student.section.isNotEmpty) 'Section ${student.section}',
+                        ].join('  •  '),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
+                      ),
+                    ],
+                  ),
+                ),
+                if (status != null) AttendanceStatusPill(status: status!.name),
+                PopupMenuButton<String>(
+                  tooltip: 'Student actions',
+                  icon: Icon(Icons.more_vert, color: scheme.onSurfaceVariant),
+                  onSelected: (value) => switch (value) {
+                    'view' => context.push(AppRoutes.adminStudentProfile(student.id)),
+                    'edit' => onEdit(),
+                    _ => onDelete(),
+                  },
+                  itemBuilder: (context) => const [
+                    PopupMenuItem(value: 'view', child: Text('View profile')),
+                    PopupMenuItem(value: 'edit', child: Text('Edit')),
+                    PopupMenuItem(value: 'delete', child: Text('Delete')),
                   ],
                 ),
-              ),
-              if (status != null) AttendanceStatusPill(status: status!.name),
-              PopupMenuButton<String>(
-                tooltip: 'Student actions',
-                icon: Icon(Icons.more_vert, color: scheme.onSurfaceVariant),
-                onSelected: (value) => switch (value) {
-                  'view' => context.push(AppRoutes.adminStudentProfile(student.id)),
-                  'edit' => onEdit(),
-                  _ => onDelete(),
-                },
-                itemBuilder: (context) => const [
-                  PopupMenuItem(value: 'view', child: Text('View profile')),
-                  PopupMenuItem(value: 'edit', child: Text('Edit')),
-                  PopupMenuItem(value: 'delete', child: Text('Delete')),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -23,6 +23,7 @@ import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
 import '../../../../shared/utils/capitalize.dart';
 import '../../../../shared/widgets/staggered_entrance.dart';
+import '../../../../shared/widgets/press_scale.dart';
 
 /// Admin: pending-payments review queue (`implementation_backlog.md`
 /// E7-F2) plus a read-only full history tab backed by `GET
@@ -205,131 +206,133 @@ class _PaymentCard extends StatelessWidget {
     final muted = theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant);
 
     return StaggeredEntrance(
-      child: Card(
-        margin: EdgeInsets.zero,
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: 21,
-                    backgroundColor: AppColors.primary.withValues(alpha: 0.12),
-                    child: Text(
-                      initialsFor(name),
-                      style: TextStyle(color: context.readable(AppColors.primary), fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(name, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
-                        if (payment.studentAdmissionNumber != null)
-                          Text('Student ${payment.studentAdmissionNumber}', style: muted),
-                      ],
-                    ),
-                  ),
-                  AppStatusPill(
-                    label: payment.status == 'pending' ? 'Pending Review' : capitalize(payment.status),
-                    color: statusColor,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainerLow,
-                  borderRadius: BorderRadius.circular(AppRadius.lg),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(child: Text(payment.feeTitle ?? 'Fee', style: theme.textTheme.bodyMedium)),
-                        Text(
-                          formatRs(payment.amount),
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        AppStatusPill(label: _methodLabel(payment.method), color: AppColors.info),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            payment.transactionPin,
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              fontFamily: 'monospace',
-                              fontWeight: FontWeight.w700,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        if (payment.createdAt.isNotEmpty) Text(formatDisplayDate(payment.createdAt), style: muted),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 8),
-              InfoStrip(
-                icon: Icons.phone_iphone_rounded,
-                text: 'Paid from ${payment.phoneNumber}',
-                color: AppColors.info,
-              ),
-              if (payment.rejectionNote != null && payment.rejectionNote!.isNotEmpty) ...[
-                const SizedBox(height: 8),
-                InfoStrip(
-                  icon: Icons.report_gmailerrorred_outlined,
-                  text: payment.rejectionNote!,
-                  color: theme.colorScheme.error,
-                ),
-              ],
-              if (reviewable) ...[
-                const SizedBox(height: 12),
+      child: PressScale(
+        child: Card(
+          margin: EdgeInsets.zero,
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
                 Row(
                   children: [
-                    Expanded(
-                      child: FilledButton.tonalIcon(
-                        style: FilledButton.styleFrom(
-                          backgroundColor: Color.alphaBlend(
-                            theme.colorScheme.error.withValues(alpha: 0.1),
-                            theme.colorScheme.surface,
-                          ),
-                          foregroundColor: theme.colorScheme.error,
-                          elevation: 0,
-                          shadowColor: Colors.transparent,
-                        ),
-                        onPressed: processing ? null : () => _reject(context, provider, payment),
-                        icon: const Icon(Icons.close_rounded, size: 18),
-                        label: const Text('Reject'),
+                    CircleAvatar(
+                      radius: 21,
+                      backgroundColor: AppColors.primary.withValues(alpha: 0.12),
+                      child: Text(
+                        initialsFor(name),
+                        style: TextStyle(color: context.readable(AppColors.primary), fontWeight: FontWeight.w700),
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 12),
                     Expanded(
-                      child: FilledButton.icon(
-                        onPressed: processing ? null : () => _approve(context, provider, payment),
-                        icon: processing
-                            ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                            : const Icon(Icons.verified_outlined, size: 18),
-                        label: const Text('Approve'),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(name, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+                          if (payment.studentAdmissionNumber != null)
+                            Text('Student ${payment.studentAdmissionNumber}', style: muted),
+                        ],
                       ),
+                    ),
+                    AppStatusPill(
+                      label: payment.status == 'pending' ? 'Pending Review' : capitalize(payment.status),
+                      color: statusColor,
                     ),
                   ],
                 ),
+                const SizedBox(height: 12),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainerLow,
+                    borderRadius: BorderRadius.circular(AppRadius.lg),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(child: Text(payment.feeTitle ?? 'Fee', style: theme.textTheme.bodyMedium)),
+                          Text(
+                            formatRs(payment.amount),
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          AppStatusPill(label: _methodLabel(payment.method), color: AppColors.info),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              payment.transactionPin,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                fontFamily: 'monospace',
+                                fontWeight: FontWeight.w700,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          if (payment.createdAt.isNotEmpty) Text(formatDisplayDate(payment.createdAt), style: muted),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 8),
+                InfoStrip(
+                  icon: Icons.phone_iphone_rounded,
+                  text: 'Paid from ${payment.phoneNumber}',
+                  color: AppColors.info,
+                ),
+                if (payment.rejectionNote != null && payment.rejectionNote!.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  InfoStrip(
+                    icon: Icons.report_gmailerrorred_outlined,
+                    text: payment.rejectionNote!,
+                    color: theme.colorScheme.error,
+                  ),
+                ],
+                if (reviewable) ...[
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: FilledButton.tonalIcon(
+                          style: FilledButton.styleFrom(
+                            backgroundColor: Color.alphaBlend(
+                              theme.colorScheme.error.withValues(alpha: 0.1),
+                              theme.colorScheme.surface,
+                            ),
+                            foregroundColor: theme.colorScheme.error,
+                            elevation: 0,
+                            shadowColor: Colors.transparent,
+                          ),
+                          onPressed: processing ? null : () => _reject(context, provider, payment),
+                          icon: const Icon(Icons.close_rounded, size: 18),
+                          label: const Text('Reject'),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: FilledButton.icon(
+                          onPressed: processing ? null : () => _approve(context, provider, payment),
+                          icon: processing
+                              ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                              : const Icon(Icons.verified_outlined, size: 18),
+                          label: const Text('Approve'),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),

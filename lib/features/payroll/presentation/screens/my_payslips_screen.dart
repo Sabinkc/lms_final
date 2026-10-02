@@ -20,6 +20,7 @@ import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
 import '../../../../shared/widgets/staggered_entrance.dart';
+import '../../../../shared/widgets/press_scale.dart';
 
 const _monthNames = [
   '',
@@ -281,89 +282,91 @@ class _PayslipTile extends StatelessWidget {
     final a = payslip.allowances;
     final d = payslip.deductions;
     return StaggeredEntrance(
-      child: Card(
-        margin: EdgeInsets.zero,
-        clipBehavior: Clip.antiAlias,
-        child: Theme(
-          data: theme.copyWith(dividerColor: Colors.transparent),
-          child: ExpansionTile(
-            tilePadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-            childrenPadding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
-            leading: Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: statusColor.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(AppRadius.lg),
+      child: PressScale(
+        child: Card(
+          margin: EdgeInsets.zero,
+          clipBehavior: Clip.antiAlias,
+          child: Theme(
+            data: theme.copyWith(dividerColor: Colors.transparent),
+            child: ExpansionTile(
+              tilePadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+              childrenPadding: const EdgeInsets.fromLTRB(14, 0, 14, 14),
+              leading: Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: statusColor.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(AppRadius.lg),
+                ),
+                child: Icon(Icons.receipt_long_outlined, color: context.readable(statusColor)),
               ),
-              child: Icon(Icons.receipt_long_outlined, color: context.readable(statusColor)),
-            ),
-            title: Row(
-              children: [
-                Flexible(
-                  child: Text(
-                    '${_monthNames[payslip.month]} ${payslip.year}',
-                    style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+              title: Row(
+                children: [
+                  Flexible(
+                    child: Text(
+                      '${_monthNames[payslip.month]} ${payslip.year}',
+                      style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                    ),
                   ),
+                  const SizedBox(width: 8),
+                  AppStatusPill(label: paid ? 'Paid' : 'Pending', color: statusColor),
+                ],
+              ),
+              subtitle: Text(
+                'Net ${formatRs(payslip.netSalary)}'
+                '${payslip.paidAt != null ? ' · ${formatDisplayDate(payslip.paidAt!)}' : ''}',
+                style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+              ),
+              children: [
+                _BreakdownGroup(
+                  title: 'Earnings',
+                  color: _paidGreen,
+                  rows: [
+                    ('Basic Salary', payslip.basicSalary),
+                    if (a.houseRent > 0) ('House Rent', a.houseRent),
+                    if (a.transport > 0) ('Transport', a.transport),
+                    if (a.medical > 0) ('Medical', a.medical),
+                    if (a.other > 0) ('Other Allowance', a.other),
+                    if (payslip.totalAllowances > 0 && a.houseRent + a.transport + a.medical + a.other == 0)
+                      ('Allowances', payslip.totalAllowances),
+                  ],
+                  total: ('Gross Salary', payslip.grossSalary),
                 ),
-                const SizedBox(width: 8),
-                AppStatusPill(label: paid ? 'Paid' : 'Pending', color: statusColor),
-              ],
-            ),
-            subtitle: Text(
-              'Net ${formatRs(payslip.netSalary)}'
-              '${payslip.paidAt != null ? ' · ${formatDisplayDate(payslip.paidAt!)}' : ''}',
-              style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-            ),
-            children: [
-              _BreakdownGroup(
-                title: 'Earnings',
-                color: _paidGreen,
-                rows: [
-                  ('Basic Salary', payslip.basicSalary),
-                  if (a.houseRent > 0) ('House Rent', a.houseRent),
-                  if (a.transport > 0) ('Transport', a.transport),
-                  if (a.medical > 0) ('Medical', a.medical),
-                  if (a.other > 0) ('Other Allowance', a.other),
-                  if (payslip.totalAllowances > 0 && a.houseRent + a.transport + a.medical + a.other == 0)
-                    ('Allowances', payslip.totalAllowances),
-                ],
-                total: ('Gross Salary', payslip.grossSalary),
-              ),
-              const SizedBox(height: 10),
-              _BreakdownGroup(
-                title: 'Deductions',
-                color: _pendingOrange,
-                rows: [
-                  if (d.tax > 0) ('Tax', d.tax),
-                  if (d.providentFund > 0) ('Provident Fund', d.providentFund),
-                  if (d.absence > 0) ('Absence', d.absence),
-                  if (d.loan > 0) ('Loan', d.loan),
-                  if (d.other > 0) ('Other', d.other),
-                ],
-                total: ('Total Deductions', payslip.totalDeductions),
-              ),
-              const SizedBox(height: 10),
-              InfoStrip(
-                icon: Icons.account_balance_wallet_outlined,
-                text: 'Net Salary',
-                trailing: formatRs(payslip.netSalary),
-              ),
-              if (payslip.workingDays > 0) ...[
-                const SizedBox(height: 8),
+                const SizedBox(height: 10),
+                _BreakdownGroup(
+                  title: 'Deductions',
+                  color: _pendingOrange,
+                  rows: [
+                    if (d.tax > 0) ('Tax', d.tax),
+                    if (d.providentFund > 0) ('Provident Fund', d.providentFund),
+                    if (d.absence > 0) ('Absence', d.absence),
+                    if (d.loan > 0) ('Loan', d.loan),
+                    if (d.other > 0) ('Other', d.other),
+                  ],
+                  total: ('Total Deductions', payslip.totalDeductions),
+                ),
+                const SizedBox(height: 10),
                 InfoStrip(
-                  icon: Icons.event_available_outlined,
-                  text: '${payslip.presentDays}/${payslip.workingDays} days present',
-                  trailing: payslip.absentDays > 0 ? '${payslip.absentDays} absent' : null,
-                  color: AppColors.info,
+                  icon: Icons.account_balance_wallet_outlined,
+                  text: 'Net Salary',
+                  trailing: formatRs(payslip.netSalary),
                 ),
+                if (payslip.workingDays > 0) ...[
+                  const SizedBox(height: 8),
+                  InfoStrip(
+                    icon: Icons.event_available_outlined,
+                    text: '${payslip.presentDays}/${payslip.workingDays} days present',
+                    trailing: payslip.absentDays > 0 ? '${payslip.absentDays} absent' : null,
+                    color: AppColors.info,
+                  ),
+                ],
+                if (payslip.remarks.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Align(alignment: Alignment.centerLeft, child: Text('Remarks: ${payslip.remarks}')),
+                  ),
               ],
-              if (payslip.remarks.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Align(alignment: Alignment.centerLeft, child: Text('Remarks: ${payslip.remarks}')),
-                ),
-            ],
+            ),
           ),
         ),
       ),

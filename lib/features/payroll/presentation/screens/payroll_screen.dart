@@ -26,6 +26,7 @@ import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
 import '../../../../shared/widgets/staggered_entrance.dart';
+import '../../../../shared/widgets/press_scale.dart';
 
 const _monthNames = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -215,53 +216,55 @@ class _SalaryConfigCard extends StatelessWidget {
     final name = config.staffName ?? config.staffId;
     final allowances = _allowancesTotal(config.allowances);
     return StaggeredEntrance(
-      child: Card(
-        margin: EdgeInsets.zero,
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  _Initials(name: name),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(name, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
-                        if (config.staffEmail != null)
-                          Text(
-                            config.staffEmail!,
-                            style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                      ],
+      child: PressScale(
+        child: Card(
+          margin: EdgeInsets.zero,
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    _Initials(name: name),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(name, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+                          if (config.staffEmail != null)
+                            Text(
+                              config.staffEmail!,
+                              style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                        ],
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.edit_outlined),
-                    tooltip: 'Update',
-                    onPressed: () => showSalaryConfigDialog(context, provider, existing: config),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              InfoStrip(icon: Icons.payments_outlined, text: 'Basic salary', trailing: formatRs(config.basicSalary)),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 6,
-                children: [
-                  AppStatusPill(label: 'PF ${config.pfRate.toStringAsFixed(0)}%', color: AppColors.info),
-                  AppStatusPill(label: 'Tax ${config.taxRate.toStringAsFixed(0)}%', color: _pendingOrange),
-                  AppStatusPill(label: '${config.workingDays} working days', color: AppColors.primary),
-                  if (allowances > 0) AppStatusPill(label: '+${formatRs(allowances)} allowances', color: _paidGreen),
-                ],
-              ),
-            ],
+                    IconButton(
+                      icon: const Icon(Icons.edit_outlined),
+                      tooltip: 'Update',
+                      onPressed: () => showSalaryConfigDialog(context, provider, existing: config),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                InfoStrip(icon: Icons.payments_outlined, text: 'Basic salary', trailing: formatRs(config.basicSalary)),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 6,
+                  children: [
+                    AppStatusPill(label: 'PF ${config.pfRate.toStringAsFixed(0)}%', color: AppColors.info),
+                    AppStatusPill(label: 'Tax ${config.taxRate.toStringAsFixed(0)}%', color: _pendingOrange),
+                    AppStatusPill(label: '${config.workingDays} working days', color: AppColors.primary),
+                    if (allowances > 0) AppStatusPill(label: '+${formatRs(allowances)} allowances', color: _paidGreen),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -470,87 +473,89 @@ class _PayrollTile extends StatelessWidget {
     final name = payroll.staffName ?? payroll.staffId;
 
     return StaggeredEntrance(
-      child: Card(
-        margin: EdgeInsets.zero,
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _Initials(name: name),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+      child: PressScale(
+        child: Card(
+          margin: EdgeInsets.zero,
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _Initials(name: name),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(name, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+                          Text(
+                            '${_monthNames[payroll.month]} ${payroll.year} · ${payroll.presentDays}/${payroll.workingDays} days present',
+                            style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text(name, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
                         Text(
-                          '${_monthNames[payroll.month]} ${payroll.year} · ${payroll.presentDays}/${payroll.workingDays} days present',
-                          style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                          'Net ${formatRs(payroll.netSalary)}',
+                          style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
+                        ),
+                        const SizedBox(height: 4),
+                        AppStatusPill(
+                          label: paid ? 'Paid' : 'Pending',
+                          icon: paid ? Icons.check_circle_outline : Icons.schedule,
+                          color: statusColor,
                         ),
                       ],
                     ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                InfoStrip(
+                  icon: Icons.receipt_outlined,
+                  text: 'Gross ${formatRs(payroll.grossSalary)}',
+                  trailing: '−${formatRs(payroll.totalDeductions)}',
+                  color: AppColors.info,
+                ),
+                if (paid) ...[
+                  const SizedBox(height: 8),
+                  InfoStrip(
+                    icon: Icons.account_balance_outlined,
+                    text: [
+                      if (payroll.paymentMethod.isNotEmpty) _labelize(payroll.paymentMethod),
+                      if (payroll.paidAt != null) 'Paid ${formatDisplayDate(payroll.paidAt!)}',
+                    ].join(' · ').ifEmpty('Paid'),
+                    color: _paidGreen,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                ] else ...[
+                  const SizedBox(height: 10),
+                  Row(
                     children: [
-                      Text(
-                        'Net ${formatRs(payroll.netSalary)}',
-                        style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
+                      IconButton.outlined(
+                        icon: const Icon(Icons.delete_outline),
+                        tooltip: 'Delete',
+                        onPressed: processing ? null : () => _confirmDeletePayroll(context, provider, payroll),
                       ),
-                      const SizedBox(height: 4),
-                      AppStatusPill(
-                        label: paid ? 'Paid' : 'Pending',
-                        icon: paid ? Icons.check_circle_outline : Icons.schedule,
-                        color: statusColor,
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: FilledButton.icon(
+                          onPressed: processing ? null : () => _markPaid(context, provider, payroll),
+                          icon: processing
+                              ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                              : const Icon(Icons.check_rounded, size: 18),
+                          label: const Text('Mark Paid'),
+                        ),
                       ),
                     ],
                   ),
                 ],
-              ),
-              const SizedBox(height: 10),
-              InfoStrip(
-                icon: Icons.receipt_outlined,
-                text: 'Gross ${formatRs(payroll.grossSalary)}',
-                trailing: '−${formatRs(payroll.totalDeductions)}',
-                color: AppColors.info,
-              ),
-              if (paid) ...[
-                const SizedBox(height: 8),
-                InfoStrip(
-                  icon: Icons.account_balance_outlined,
-                  text: [
-                    if (payroll.paymentMethod.isNotEmpty) _labelize(payroll.paymentMethod),
-                    if (payroll.paidAt != null) 'Paid ${formatDisplayDate(payroll.paidAt!)}',
-                  ].join(' · ').ifEmpty('Paid'),
-                  color: _paidGreen,
-                ),
-              ] else ...[
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    IconButton.outlined(
-                      icon: const Icon(Icons.delete_outline),
-                      tooltip: 'Delete',
-                      onPressed: processing ? null : () => _confirmDeletePayroll(context, provider, payroll),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: FilledButton.icon(
-                        onPressed: processing ? null : () => _markPaid(context, provider, payroll),
-                        icon: processing
-                            ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                            : const Icon(Icons.check_rounded, size: 18),
-                        label: const Text('Mark Paid'),
-                      ),
-                    ),
-                  ],
-                ),
               ],
-            ],
+            ),
           ),
         ),
       ),

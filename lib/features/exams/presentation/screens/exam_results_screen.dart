@@ -23,6 +23,7 @@ import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
 import '../../../../shared/widgets/staggered_entrance.dart';
+import '../../../../shared/widgets/press_scale.dart';
 
 /// docs/screens.md's exam-results view — body adapts by role, same pattern
 /// as `AssignmentDetailScreen`: Admin sees the whole class's ranked results
@@ -252,84 +253,89 @@ class _RankedResultCard extends StatelessWidget {
     final statusColor = result.isPassed ? _passGreen : AppColors.danger;
 
     return StaggeredEntrance(
-      child: Card(
-        margin: EdgeInsets.zero,
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppRadius.xl),
-          side: medal != null
-              ? BorderSide(color: medal.withValues(alpha: 0.5))
-              : AppTheme.cardBorderSide(theme.brightness),
-        ),
-        child: IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (medal != null) Container(width: 5, color: medal),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 20,
-                            backgroundColor: AppColors.primary.withValues(alpha: 0.12),
-                            child: Text(
-                              initialsFor(name),
-                              style: TextStyle(color: context.readable(AppColors.primary), fontWeight: FontWeight.w700),
+      child: PressScale(
+        child: Card(
+          margin: EdgeInsets.zero,
+          clipBehavior: Clip.antiAlias,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.xl),
+            side: medal != null
+                ? BorderSide(color: medal.withValues(alpha: 0.5))
+                : AppTheme.cardBorderSide(theme.brightness),
+          ),
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (medal != null) Container(width: 5, color: medal),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 20,
+                              backgroundColor: AppColors.primary.withValues(alpha: 0.12),
+                              child: Text(
+                                initialsFor(name),
+                                style: TextStyle(
+                                  color: context.readable(AppColors.primary),
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(name, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
-                                if (result.studentAdmissionNumber.isNotEmpty && result.studentName.isNotEmpty)
-                                  Text(
-                                    result.studentAdmissionNumber,
-                                    style: theme.textTheme.bodySmall?.copyWith(
-                                      color: theme.colorScheme.onSurfaceVariant,
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(name, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+                                  if (result.studentAdmissionNumber.isNotEmpty && result.studentName.isNotEmpty)
+                                    Text(
+                                      result.studentAdmissionNumber,
+                                      style: theme.textTheme.bodySmall?.copyWith(
+                                        color: theme.colorScheme.onSurfaceVariant,
+                                      ),
                                     ),
-                                  ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          if (result.rank != null)
-                            AppStatusPill(
-                              label: 'Rank #${result.rank}',
-                              icon: medal != null ? Icons.emoji_events_rounded : null,
-                              color: medal ?? theme.colorScheme.onSurfaceVariant,
+                            if (result.rank != null)
+                              AppStatusPill(
+                                label: 'Rank #${result.rank}',
+                                icon: medal != null ? Icons.emoji_events_rounded : null,
+                                color: medal ?? theme.colorScheme.onSurfaceVariant,
+                              ),
+                          ],
+                        ),
+                        const Divider(height: 20),
+                        Row(
+                          children: [
+                            AppStatusPill(label: 'Grade ${result.grade}', color: AppColors.primary),
+                            const SizedBox(width: 8),
+                            Text(
+                              '${result.percentage}%',
+                              style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
                             ),
-                        ],
-                      ),
-                      const Divider(height: 20),
-                      Row(
-                        children: [
-                          AppStatusPill(label: 'Grade ${result.grade}', color: AppColors.primary),
-                          const SizedBox(width: 8),
-                          Text(
-                            '${result.percentage}%',
-                            style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
-                          ),
-                          const Spacer(),
-                          AppStatusPill(label: result.isPassed ? 'Passed' : 'Failed', color: statusColor),
-                        ],
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        '${result.totalObtained} / ${result.totalFull} marks',
-                        textAlign: TextAlign.end,
-                        style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                      ),
-                    ],
+                            const Spacer(),
+                            AppStatusPill(label: result.isPassed ? 'Passed' : 'Failed', color: statusColor),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          '${result.totalObtained} / ${result.totalFull} marks',
+                          textAlign: TextAlign.end,
+                          style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

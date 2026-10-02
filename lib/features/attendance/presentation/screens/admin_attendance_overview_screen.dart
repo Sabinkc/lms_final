@@ -16,6 +16,7 @@ import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
 import '../../../../shared/widgets/staggered_entrance.dart';
+import '../../../../shared/widgets/press_scale.dart';
 
 String _formatDate(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
@@ -289,96 +290,102 @@ class _SessionCard extends StatelessWidget {
     final rateColor = flagged ? _lateOrange : _presentGreen;
 
     return StaggeredEntrance(
-      child: Card(
-        margin: EdgeInsets.zero,
-        clipBehavior: Clip.antiAlias,
-        child: IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (flagged) Container(width: 5, color: _lateOrange),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(14),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+      child: PressScale(
+        child: Card(
+          margin: EdgeInsets.zero,
+          clipBehavior: Clip.antiAlias,
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (flagged) Container(width: 5, color: _lateOrange),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(14),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    session.title,
+                                    style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
+                                  ),
+                                  if (session.subject.isNotEmpty)
+                                    Text(
+                                      session.subject,
+                                      style: theme.textTheme.bodySmall?.copyWith(
+                                        color: theme.colorScheme.onSurfaceVariant,
+                                      ),
+                                    ),
+                                  const SizedBox(height: 6),
+                                  if (flagged)
+                                    const AppStatusPill(
+                                      label: 'Flagged (<85%)',
+                                      icon: Icons.warning_amber_rounded,
+                                      color: _lateOrange,
+                                    )
+                                  else if (session.locked)
+                                    const AppStatusPill(
+                                      label: 'Locked',
+                                      icon: Icons.lock_outline,
+                                      color: AppColors.info,
+                                    )
+                                  else
+                                    const AppStatusPill(
+                                      label: 'Submitted',
+                                      icon: Icons.check_circle_outline,
+                                      color: _presentGreen,
+                                    ),
+                                ],
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  session.title,
-                                  style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
+                                  '${(rate * 100).toStringAsFixed(1)}%',
+                                  style: theme.textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.w800,
+                                    color: context.readable(rateColor),
+                                  ),
                                 ),
-                                if (session.subject.isNotEmpty)
-                                  Text(
-                                    session.subject,
-                                    style: theme.textTheme.bodySmall?.copyWith(
-                                      color: theme.colorScheme.onSurfaceVariant,
-                                    ),
-                                  ),
-                                const SizedBox(height: 6),
-                                if (flagged)
-                                  const AppStatusPill(
-                                    label: 'Flagged (<85%)',
-                                    icon: Icons.warning_amber_rounded,
-                                    color: _lateOrange,
-                                  )
-                                else if (session.locked)
-                                  const AppStatusPill(label: 'Locked', icon: Icons.lock_outline, color: AppColors.info)
-                                else
-                                  const AppStatusPill(
-                                    label: 'Submitted',
-                                    icon: Icons.check_circle_outline,
-                                    color: _presentGreen,
-                                  ),
+                                Text(_students(session.totalCount), style: theme.textTheme.bodySmall),
                               ],
                             ),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                '${(rate * 100).toStringAsFixed(1)}%',
-                                style: theme.textTheme.titleLarge?.copyWith(
-                                  fontWeight: FontWeight.w800,
-                                  color: context.readable(rateColor),
-                                ),
-                              ),
-                              Text(_students(session.totalCount), style: theme.textTheme.bodySmall),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(AppRadius.xl4),
-                        child: LinearProgressIndicator(
-                          value: rate,
-                          minHeight: 6,
-                          color: rateColor,
-                          backgroundColor: rateColor.withValues(alpha: 0.12),
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      Wrap(
-                        spacing: 6,
-                        runSpacing: 6,
-                        children: [
-                          AppStatusPill(label: '${session.presentCount} Present', color: _presentGreen),
-                          AppStatusPill(label: '${session.absentCount} Absent', color: AppColors.danger),
-                          AppStatusPill(label: '${session.lateCount} Late', color: _lateOrange),
-                        ],
-                      ),
-                    ],
+                        const SizedBox(height: 10),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(AppRadius.xl4),
+                          child: LinearProgressIndicator(
+                            value: rate,
+                            minHeight: 6,
+                            color: rateColor,
+                            backgroundColor: rateColor.withValues(alpha: 0.12),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Wrap(
+                          spacing: 6,
+                          runSpacing: 6,
+                          children: [
+                            AppStatusPill(label: '${session.presentCount} Present', color: _presentGreen),
+                            AppStatusPill(label: '${session.absentCount} Absent', color: AppColors.danger),
+                            AppStatusPill(label: '${session.lateCount} Late', color: _lateOrange),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

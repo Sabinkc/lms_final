@@ -24,6 +24,7 @@ import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
 import '../../../../shared/widgets/staggered_entrance.dart';
+import '../../../../shared/widgets/press_scale.dart';
 
 /// docs/screens.md's Notices module. Admin-only creation for v1
 /// (`docs/production_roadmap.md` §4 decision #2 — the backend's
@@ -207,83 +208,86 @@ class _NoticeCard extends StatelessWidget {
     final (label, icon, color) = _categoryStyle(_categoryOf(notice));
     final muted = theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant);
     return StaggeredEntrance(
-      child: Card(
-        margin: EdgeInsets.zero,
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: () => context.push(AppRoutes.noticeDetail(notice.id)),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(12, 12, 4, 12),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 52,
-                  height: 52,
-                  decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(AppRadius.xl),
+      child: PressScale(
+        child: Card(
+          margin: EdgeInsets.zero,
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: () => context.push(AppRoutes.noticeDetail(notice.id)),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 12, 4, 12),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 52,
+                    height: 52,
+                    decoration: BoxDecoration(
+                      color: color.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(AppRadius.xl),
+                    ),
+                    child: Icon(icon, color: context.readable(color), size: 28),
                   ),
-                  child: Icon(icon, color: context.readable(color), size: 28),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          AppStatusChip(label: label, color: color),
-                          const Spacer(),
-                          if (_isRecent(notice.createdAt)) const AppStatusChip(label: 'New', color: AppColors.primary),
-                        ],
-                      ),
-                      const SizedBox(height: 6),
-                      Text(notice.title, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
-                      if (notice.description.isNotEmpty) ...[
-                        const SizedBox(height: 2),
-                        Text(notice.description, maxLines: 2, overflow: TextOverflow.ellipsis, style: muted),
-                      ],
-                      const SizedBox(height: 6),
-                      Row(
-                        children: [
-                          Icon(Icons.calendar_today_outlined, size: 14, color: muted?.color),
-                          const SizedBox(width: 4),
-                          Text(formatDisplayDate(notice.createdAt), style: muted),
-                          if (notice.createdByName.isNotEmpty) ...[
-                            Text('  •  ', style: muted),
-                            Flexible(
-                              child: Text(
-                                notice.createdByName,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: muted,
-                              ),
-                            ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            AppStatusChip(label: label, color: color),
+                            const Spacer(),
+                            if (_isRecent(notice.createdAt))
+                              const AppStatusChip(label: 'New', color: AppColors.primary),
                           ],
+                        ),
+                        const SizedBox(height: 6),
+                        Text(notice.title, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+                        if (notice.description.isNotEmpty) ...[
+                          const SizedBox(height: 2),
+                          Text(notice.description, maxLines: 2, overflow: TextOverflow.ellipsis, style: muted),
                         ],
-                      ),
-                    ],
+                        const SizedBox(height: 6),
+                        Row(
+                          children: [
+                            Icon(Icons.calendar_today_outlined, size: 14, color: muted?.color),
+                            const SizedBox(width: 4),
+                            Text(formatDisplayDate(notice.createdAt), style: muted),
+                            if (notice.createdByName.isNotEmpty) ...[
+                              Text('  •  ', style: muted),
+                              Flexible(
+                                child: Text(
+                                  notice.createdByName,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: muted,
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                if (isAdmin)
-                  PopupMenuButton<String>(
-                    tooltip: 'Notice actions',
-                    icon: Icon(Icons.more_vert, color: theme.colorScheme.onSurfaceVariant),
-                    onSelected: (value) => value == 'edit'
-                        ? showNoticeFormDialog(context, provider, existing: notice)
-                        : _confirmDelete(context, provider, notice),
-                    itemBuilder: (context) => const [
-                      PopupMenuItem(value: 'edit', child: Text('Edit')),
-                      PopupMenuItem(value: 'delete', child: Text('Delete')),
-                    ],
-                  )
-                else
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20, right: 8),
-                    child: Icon(Icons.chevron_right, color: theme.colorScheme.onSurfaceVariant),
-                  ),
-              ],
+                  if (isAdmin)
+                    PopupMenuButton<String>(
+                      tooltip: 'Notice actions',
+                      icon: Icon(Icons.more_vert, color: theme.colorScheme.onSurfaceVariant),
+                      onSelected: (value) => value == 'edit'
+                          ? showNoticeFormDialog(context, provider, existing: notice)
+                          : _confirmDelete(context, provider, notice),
+                      itemBuilder: (context) => const [
+                        PopupMenuItem(value: 'edit', child: Text('Edit')),
+                        PopupMenuItem(value: 'delete', child: Text('Delete')),
+                      ],
+                    )
+                  else
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20, right: 8),
+                      child: Icon(Icons.chevron_right, color: theme.colorScheme.onSurfaceVariant),
+                    ),
+                ],
+              ),
             ),
           ),
         ),

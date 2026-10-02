@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_radius.dart';
+import 'press_scale.dart';
 
 /// A pastel-background, solid-icon-chip tile for a role Home screen's
 /// quick-actions grid — visually distinct from the uniform-tint
@@ -24,41 +25,43 @@ class ColorfulActionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: color.withValues(alpha: 0.12),
-      borderRadius: AppRadius.card,
-      child: InkWell(
+    return PressScale(
+      child: Material(
+        color: color.withValues(alpha: 0.12),
         borderRadius: AppRadius.card,
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(AppRadius.lg)),
-                child: Icon(icon, color: Colors.white, size: 20),
-              ),
-              const SizedBox(height: 8),
-              // A single word too wide for the tile would otherwise be split
-              // mid-word ("Assignment / s"); shrink it onto one line instead.
-              if (label.contains(' '))
-                Text(
-                  label,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.labelMedium,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                )
-              else
-                FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(label, maxLines: 1, style: Theme.of(context).textTheme.labelMedium),
+        child: InkWell(
+          borderRadius: AppRadius.card,
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 12),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(AppRadius.lg)),
+                  child: Icon(icon, color: Colors.white, size: 20),
                 ),
-            ],
+                const SizedBox(height: 8),
+                // A single word too wide for the tile would otherwise be split
+                // mid-word ("Assignment / s"); shrink it onto one line instead.
+                if (label.contains(' '))
+                  Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.labelMedium,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  )
+                else
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(label, maxLines: 1, style: Theme.of(context).textTheme.labelMedium),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
