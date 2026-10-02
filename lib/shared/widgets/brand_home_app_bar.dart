@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'progress_overlay.dart';
 
 import '../../core/router/app_routes.dart';
 import '../../core/theme/app_colors.dart';
@@ -139,7 +140,7 @@ class BrandAccountMenu extends StatelessWidget {
     return PopupMenuButton<String>(
       tooltip: 'Account',
       onSelected: (value) {
-        if (value == 'logout') context.read<AuthProvider>().logout();
+        if (value == 'logout') runWithProgress(context, context.read<AuthProvider>().logout, message: 'Logging out…');
       },
       itemBuilder: (context) => const [PopupMenuItem(value: 'logout', child: Text('Log out'))],
       child: Padding(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import '../../../../shared/widgets/progress_overlay.dart';
 
 import '../../../../core/dashboard/role_dashboard_config.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -161,7 +162,7 @@ class _MoreScreenState extends State<MoreScreen> {
             ],
             const SizedBox(height: AppSpacing.lg),
             OutlinedButton.icon(
-              onPressed: () => context.read<AuthProvider>().logout(),
+              onPressed: () => runWithProgress(context, context.read<AuthProvider>().logout, message: 'Logging out…'),
               icon: const Icon(Icons.logout_outlined),
               label: const Text('Log Out'),
               style: OutlinedButton.styleFrom(

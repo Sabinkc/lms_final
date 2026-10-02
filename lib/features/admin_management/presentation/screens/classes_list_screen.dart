@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import '../../../../shared/widgets/progress_overlay.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_radius.dart';
@@ -389,7 +390,7 @@ Future<bool> confirmDeleteClass(
 
   if (confirmed != true || !context.mounted) return false;
 
-  final succeeded = await provider.deleteClass(academicClass.id);
+  final succeeded = await runWithProgress(context, () => provider.deleteClass(academicClass.id), message: 'Deleting…');
   if (!succeeded && context.mounted) {
     ScaffoldMessenger.of(
       context,

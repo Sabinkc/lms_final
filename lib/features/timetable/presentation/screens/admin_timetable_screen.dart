@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../../shared/widgets/progress_overlay.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
@@ -161,7 +162,7 @@ class _AdminTimetableScreenState extends State<AdminTimetableScreen> {
     );
     if (confirmed != true || !mounted) return;
 
-    final succeeded = await provider.deleteTimetable(current.id);
+    final succeeded = await runWithProgress(context, () => provider.deleteTimetable(current.id), message: 'Deleting…');
     if (!mounted) return;
     if (succeeded) {
       setState(_resetDraft);

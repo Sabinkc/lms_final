@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import '../../../../shared/widgets/progress_overlay.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -304,7 +305,7 @@ Future<void> _confirmDelete(BuildContext context, NoticeProvider provider, Notic
 
   if (confirmed != true || !context.mounted) return;
 
-  final succeeded = await provider.deleteNotice(notice.id);
+  final succeeded = await runWithProgress(context, () => provider.deleteNotice(notice.id), message: 'Deleting…');
   if (!succeeded && context.mounted) {
     ScaffoldMessenger.of(
       context,

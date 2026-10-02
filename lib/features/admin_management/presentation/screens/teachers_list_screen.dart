@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../../shared/widgets/progress_overlay.dart';
 
 import '../../../../core/theme/app_radius.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
@@ -304,7 +305,7 @@ Future<void> _confirmDeleteTeacher(BuildContext context, TeacherProvider provide
 
   if (confirmed != true || !context.mounted) return;
 
-  final succeeded = await provider.deleteTeacher(teacher.id);
+  final succeeded = await runWithProgress(context, () => provider.deleteTeacher(teacher.id), message: 'Deleting…');
   if (!succeeded && context.mounted) {
     ScaffoldMessenger.of(
       context,

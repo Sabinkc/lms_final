@@ -111,6 +111,31 @@ void main() {
     verify(() => chatRepository.markRead('g1')).called(1);
   });
 
+  testWidgets('own messages sit on the right, others on the left', (tester) async {
+    const mine = GroupMessage(
+      id: 'm2',
+      conversationId: 'g1',
+      senderRole: 'teacher',
+      senderUserId: 'u1',
+      senderName: 'Test User',
+      text: 'Hi',
+      attachment: null,
+      readBy: ['u1'],
+      createdAt: '2026-08-24T00:01:00.000Z',
+    );
+    when(() => chatRepository.getMessages(any(), before: any(named: 'before'), limit: any(named: 'limit')))
+        .thenAnswer((_) async => const Result.success([_message1, mine]));
+    final provider = ChatProvider(chatRepository, realtimeService, secureStorage);
+    final authProvider = _authAs(authRepository, AppRole.teacher);
+
+    await tester.pumpWidget(_wrap(provider, authProvider));
+    await tester.pumpAndSettle();
+
+    final screenWidth = tester.view.physicalSize.width / tester.view.devicePixelRatio;
+    expect(tester.getTopRight(find.text('Hi')).dx, greaterThan(screenWidth * 0.85));
+    expect(tester.getTopLeft(find.text('Hi teacher')).dx, lessThan(screenWidth * 0.25));
+  });
+
   testWidgets('send flow: typing text and tapping send calls sendMessage and clears the field', (tester) async {
     when(() => chatRepository.getMessages(any(), before: any(named: 'before'), limit: any(named: 'limit')))
         .thenAnswer((_) async => const Result.success([]));

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import '../../../../shared/widgets/progress_overlay.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -828,7 +829,7 @@ Future<void> _confirmDelete(BuildContext context, FeeProvider provider, Fee fee)
 
   if (confirmed != true || !context.mounted) return;
 
-  final succeeded = await provider.deleteFee(fee.id);
+  final succeeded = await runWithProgress(context, () => provider.deleteFee(fee.id), message: 'Deleting…');
   if (!succeeded && context.mounted) {
     ScaffoldMessenger.of(
       context,
@@ -837,7 +838,7 @@ Future<void> _confirmDelete(BuildContext context, FeeProvider provider, Fee fee)
 }
 
 Future<void> _downloadExport(BuildContext context, FeeProvider provider, String? status) async {
-  final bytes = await provider.exportFees(status: status);
+  final bytes = await runWithProgress(context, () => provider.exportFees(status: status), message: 'Exporting fees…');
   if (bytes != null) {
     if (context.mounted) await saveBytesOrNotify(context, bytes, 'fees.xlsx');
   } else if (context.mounted) {

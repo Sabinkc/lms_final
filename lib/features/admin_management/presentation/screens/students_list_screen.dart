@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import '../../../../shared/widgets/progress_overlay.dart';
 
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -678,7 +679,7 @@ Future<bool> confirmDeleteStudent(BuildContext context, StudentProvider provider
 
   if (confirmed != true || !context.mounted) return false;
 
-  final succeeded = await provider.deleteStudent(student.id);
+  final succeeded = await runWithProgress(context, () => provider.deleteStudent(student.id), message: 'Deleting…');
   if (!succeeded && context.mounted) {
     ScaffoldMessenger.of(
       context,
@@ -704,7 +705,11 @@ Future<void> _showBulkImportDialog(BuildContext context, StudentProvider provide
                 icon: const Icon(Icons.description_outlined),
                 label: const Text('Download template'),
                 onPressed: () async {
-                  final bytes = await provider.downloadImportTemplate();
+                  final bytes = await runWithProgress(
+                    dialogContext,
+                    provider.downloadImportTemplate,
+                    message: 'Downloading template…',
+                  );
                   if (bytes != null && dialogContext.mounted) {
                     await saveBytesOrNotify(dialogContext, bytes, 'student_import_template.xlsx');
                   }
@@ -734,7 +739,13 @@ Future<void> _showBulkImportDialog(BuildContext context, StudentProvider provide
                       allowedExtensions: ['xlsx', 'xls', 'csv'],
                     );
                     if (file == null) return;
-                    await provider.bulkImport(await file.readAsBytes(), file.name);
+                    final bytes = await file.readAsBytes();
+                    if (!dialogContext.mounted) return;
+                    await runWithProgress(
+                      dialogContext,
+                      () => provider.bulkImport(bytes, file.name),
+                      message: 'Importing students…',
+                    );
                     setDialogState(() {});
                   },
           ),

@@ -414,9 +414,14 @@ class _MessageBubble extends StatelessWidget {
           );
 
     if (isMine) {
+      // Align right explicitly: the list item's parent Column centres its
+      // children, and this Column only spans its widest child.
       return Padding(
         padding: EdgeInsets.only(top: showSender ? 8 : 3),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [bubble, timeLabel]),
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [bubble, timeLabel]),
+        ),
       );
     }
 

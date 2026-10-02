@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../data/models/group_conversation.dart';
+import '../../../../shared/widgets/progress_overlay.dart';
 import '../providers/chat_provider.dart';
 
 /// Teacher: member add/remove, archive, delete
@@ -9,8 +10,10 @@ import '../providers/chat_provider.dart';
 /// this group's own class/section) rather than a new student-search
 /// dependency — anyone in that roster not already a member can be added.
 Future<void> showManageGroupDialog(BuildContext context, ChatProvider provider, GroupConversation group) async {
-  await provider.loadGroupMembers(group.id);
-  await provider.loadRosterPreview(classId: group.classId, sectionId: group.sectionId);
+  await runWithProgress(context, () async {
+    await provider.loadGroupMembers(group.id);
+    await provider.loadRosterPreview(classId: group.classId, sectionId: group.sectionId);
+  }, message: 'Loading group…');
   if (!context.mounted) return;
 
   final toAdd = <String>{};
@@ -19,7 +22,9 @@ Future<void> showManageGroupDialog(BuildContext context, ChatProvider provider, 
     context: context,
     builder: (dialogContext) => StatefulBuilder(
       builder: (dialogContext, setDialogState) {
-        final nonMembers = provider.rosterPreview.where((s) => !provider.groupMembers.any((m) => m.id == s.id)).toList();
+        final nonMembers = provider.rosterPreview
+            .where((s) => !provider.groupMembers.any((m) => m.id == s.id))
+            .toList();
 
         return AlertDialog(
           title: Text('Manage "${group.name}"'),
@@ -41,7 +46,11 @@ Future<void> showManageGroupDialog(BuildContext context, ChatProvider provider, 
                             icon: const Icon(Icons.remove_circle_outline),
                             tooltip: 'Remove',
                             onPressed: () async {
-                              await provider.updateMembers(group.id, removeStudentIds: [member.id]);
+                              await runWithProgress(
+                                dialogContext,
+                                () => provider.updateMembers(group.id, removeStudentIds: [member.id]),
+                                message: 'Removing member…',
+                              );
                               setDialogState(() {});
                             },
                           ),
@@ -80,7 +89,12 @@ Future<void> showManageGroupDialog(BuildContext context, ChatProvider provider, 
               onPressed: () async {
                 final confirmed = await _confirmArchiveOrDelete(dialogContext, action: 'Archive');
                 if (confirmed != true) return;
-                final succeeded = await provider.archiveGroup(group.id);
+                if (!dialogContext.mounted) return;
+                final succeeded = await runWithProgress(
+                  dialogContext,
+                  () => provider.archiveGroup(group.id),
+                  message: 'Archiving…',
+                );
                 if (succeeded && dialogContext.mounted) Navigator.of(dialogContext).pop();
               },
               child: const Text('Archive'),
@@ -90,7 +104,12 @@ Future<void> showManageGroupDialog(BuildContext context, ChatProvider provider, 
               onPressed: () async {
                 final confirmed = await _confirmArchiveOrDelete(dialogContext, action: 'Delete');
                 if (confirmed != true) return;
-                final succeeded = await provider.deleteGroup(group.id);
+                if (!dialogContext.mounted) return;
+                final succeeded = await runWithProgress(
+                  dialogContext,
+                  () => provider.deleteGroup(group.id),
+                  message: 'Deleting…',
+                );
                 if (succeeded && dialogContext.mounted) Navigator.of(dialogContext).pop();
               },
               child: const Text('Delete'),
@@ -102,7 +121,11 @@ Future<void> showManageGroupDialog(BuildContext context, ChatProvider provider, 
                 onPressed: provider.isSaving
                     ? null
                     : () async {
-                        await provider.updateMembers(group.id, addStudentIds: toAdd.toList());
+                        await runWithProgress(
+                          dialogContext,
+                          () => provider.updateMembers(group.id, addStudentIds: toAdd.toList()),
+                          message: 'Adding students…',
+                        );
                         toAdd.clear();
                         setDialogState(() {});
                       },
@@ -116,15 +139,17 @@ Future<void> showManageGroupDialog(BuildContext context, ChatProvider provider, 
 }
 
 Future<bool?> _confirmArchiveOrDelete(BuildContext context, {required String action}) => showDialog<bool>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text('$action this group?'),
-        content: Text(action == 'Delete'
-            ? 'This permanently deletes the group and all its messages. This cannot be undone.'
-            : 'The group will no longer accept new messages. Members can still see the history.'),
-        actions: [
-          TextButton(onPressed: () => Navigator.of(dialogContext).pop(false), child: const Text('Cancel')),
-          FilledButton(onPressed: () => Navigator.of(dialogContext).pop(true), child: Text(action)),
-        ],
-      ),
-    );
+  context: context,
+  builder: (dialogContext) => AlertDialog(
+    title: Text('$action this group?'),
+    content: Text(
+      action == 'Delete'
+          ? 'This permanently deletes the group and all its messages. This cannot be undone.'
+          : 'The group will no longer accept new messages. Members can still see the history.',
+    ),
+    actions: [
+      TextButton(onPressed: () => Navigator.of(dialogContext).pop(false), child: const Text('Cancel')),
+      FilledButton(onPressed: () => Navigator.of(dialogContext).pop(true), child: Text(action)),
+    ],
+  ),
+);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'progress_overlay.dart';
 
 import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../../shared/widgets/brand_app_bar.dart';
@@ -56,7 +57,11 @@ class PlaceholderScreen extends StatelessWidget {
                 ],
                 if (showLogout) ...[
                   const SizedBox(height: 24),
-                  OutlinedButton(onPressed: () => context.read<AuthProvider>().logout(), child: const Text('Log out')),
+                  OutlinedButton(
+                    onPressed: () =>
+                        runWithProgress(context, context.read<AuthProvider>().logout, message: 'Logging out…'),
+                    child: const Text('Log out'),
+                  ),
                 ],
               ],
             ),

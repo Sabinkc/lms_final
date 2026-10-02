@@ -12,6 +12,7 @@ import '../../../../shared/widgets/loading_view.dart';
 import '../../../../shared/widgets/filter_chip_bar.dart';
 import '../../../../shared/widgets/info_strip.dart';
 import '../../../../shared/widgets/pill_tabs.dart';
+import '../../../../shared/widgets/progress_overlay.dart';
 import '../../../../shared/widgets/status_chip.dart';
 import '../../../../shared/widgets/tinted_stat_tile.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
@@ -521,12 +522,12 @@ class _PayrollTile extends StatelessWidget {
                   IconButton.outlined(
                     icon: const Icon(Icons.delete_outline),
                     tooltip: 'Delete',
-                    onPressed: processing ? null : () => provider.deletePayroll(payroll.id),
+                    onPressed: processing ? null : () => _confirmDeletePayroll(context, provider, payroll),
                   ),
                   const SizedBox(width: 10),
                   Expanded(
                     child: FilledButton.icon(
-                      onPressed: processing ? null : () => provider.markAsPaid(payroll.id),
+                      onPressed: processing ? null : () => _markPaid(context, provider, payroll),
                       icon: processing
                           ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
                           : const Icon(Icons.check_rounded, size: 18),
@@ -568,5 +569,44 @@ class _Initials extends StatelessWidget {
         style: TextStyle(color: context.readable(AppColors.primary), fontWeight: FontWeight.w700),
       ),
     );
+  }
+}
+
+Future<void> _confirmDeletePayroll(BuildContext context, PayrollProvider provider, Payroll payroll) async {
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (dialogContext) => AlertDialog(
+      title: const Text('Delete payroll?'),
+      content: Text(
+        'This will permanently delete the ${payroll.month}/${payroll.year} payroll'
+        '${payroll.staffName == null ? '' : ' for ${payroll.staffName}'}. This cannot be undone.',
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.of(dialogContext).pop(false), child: const Text('Cancel')),
+        FilledButton(
+          style: FilledButton.styleFrom(backgroundColor: Theme.of(dialogContext).colorScheme.error),
+          onPressed: () => Navigator.of(dialogContext).pop(true),
+          child: const Text('Delete'),
+        ),
+      ],
+    ),
+  );
+
+  if (confirmed != true || !context.mounted) return;
+
+  final succeeded = await runWithProgress(context, () => provider.deletePayroll(payroll.id), message: 'Deleting…');
+  if (!succeeded && context.mounted) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(provider.payrollActionError?.message ?? 'Failed to delete payroll')));
+  }
+}
+
+Future<void> _markPaid(BuildContext context, PayrollProvider provider, Payroll payroll) async {
+  final succeeded = await provider.markAsPaid(payroll.id);
+  if (!succeeded && context.mounted) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(provider.payrollActionError?.message ?? 'Failed to mark as paid')));
   }
 }

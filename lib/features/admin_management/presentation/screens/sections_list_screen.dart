@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../../shared/widgets/progress_overlay.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
@@ -256,7 +257,7 @@ Future<void> _confirmDeleteSection(
 
   if (confirmed != true || !context.mounted) return;
 
-  final succeeded = await provider.deleteSection(section.id);
+  final succeeded = await runWithProgress(context, () => provider.deleteSection(section.id), message: 'Deleting…');
   if (!succeeded && context.mounted) {
     ScaffoldMessenger.of(
       context,
