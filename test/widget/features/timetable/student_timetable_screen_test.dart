@@ -90,7 +90,9 @@ void main() {
     await tester.tap(find.text('Retry'));
     await tester.pumpAndSettle();
 
-    expect(find.textContaining('Science'), findsOneWidget);
+    // findsWidgets: depending on the real clock the period can also show in
+    // the "Up next" card.
+    expect(find.textContaining('Science'), findsWidgets);
   });
 
   testWidgets('real timetable shows today\'s periods and the full week', (tester) async {
@@ -101,8 +103,10 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Today (Monday)'), findsOneWidget);
-    expect(find.textContaining('Science'), findsOneWidget);
-    expect(find.textContaining('Sam Teacher'), findsOneWidget);
+    // findsWidgets: depending on the real clock the period can also show in
+    // the "Up next" card.
+    expect(find.textContaining('Science'), findsWidgets);
+    expect(find.textContaining('Sam Teacher'), findsWidgets);
     expect(find.byType(DayStrip), findsOneWidget);
     expect(find.text('TUE'), findsOneWidget);
 
