@@ -18,6 +18,7 @@ import '../providers/notification_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../shared/widgets/staggered_entrance.dart';
 
 /// Chip filters: everything, unread only, or one notification category.
 const _all = 'All';
@@ -27,9 +28,7 @@ const _unread = 'Unread';
 /// by (`notificationSchema.js`: fee | attendance | attendance_correction |
 /// assignment | general | subscription | payroll, plus exam/result refs).
 ({String label, IconData icon, Color color}) _category(String type) => switch (type) {
-  'assignment' ||
-  'exam' ||
-  'result' => (label: 'Academic', icon: Icons.school_outlined, color: AppColors.info),
+  'assignment' || 'exam' || 'result' => (label: 'Academic', icon: Icons.school_outlined, color: AppColors.info),
   'attendance' ||
   'attendance_correction' ||
   'attendanceSession' ||
@@ -176,90 +175,92 @@ class _NotificationTile extends StatelessWidget {
     final unread = !notification.isRead;
     final when = formatRelativeTime(notification.createdAt);
 
-    return Card(
-      margin: EdgeInsets.zero,
-      color: unread ? null : theme.colorScheme.surfaceContainerLow.withValues(alpha: 0.7),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(AppRadius.xl),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 46,
-                height: 46,
-                decoration: BoxDecoration(
-                  color: category.color.withValues(alpha: unread ? 0.14 : 0.08),
-                  shape: BoxShape.circle,
+    return StaggeredEntrance(
+      child: Card(
+        margin: EdgeInsets.zero,
+        color: unread ? null : theme.colorScheme.surfaceContainerLow.withValues(alpha: 0.7),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(AppRadius.xl),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 46,
+                  height: 46,
+                  decoration: BoxDecoration(
+                    color: category.color.withValues(alpha: unread ? 0.14 : 0.08),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(category.icon, color: unread ? category.color : theme.colorScheme.onSurfaceVariant),
                 ),
-                child: Icon(category.icon, color: unread ? category.color : theme.colorScheme.onSurfaceVariant),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            notification.title,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.titleSmall?.copyWith(
-                              fontWeight: unread ? FontWeight.w800 : FontWeight.w600,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              notification.title,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.titleSmall?.copyWith(
+                                fontWeight: unread ? FontWeight.w800 : FontWeight.w600,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          when,
-                          style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                        ),
-                        if (unread) ...[
-                          const SizedBox(width: 6),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4),
-                            child: Container(
-                              width: 8,
-                              height: 8,
-                              decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      notification.message,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        AppStatusPill(label: category.label, color: category.color),
-                        if (canOpen) ...[
-                          const SizedBox(width: 10),
+                          const SizedBox(width: 8),
                           Text(
-                            'Open',
-                            style: theme.textTheme.labelMedium?.copyWith(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.w700,
-                            ),
+                            when,
+                            style: theme.textTheme.labelSmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                           ),
-                          Icon(Icons.arrow_forward_rounded, size: 14, color: context.readable(AppColors.primary)),
+                          if (unread) ...[
+                            const SizedBox(width: 6),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4),
+                              child: Container(
+                                width: 8,
+                                height: 8,
+                                decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
+                              ),
+                            ),
+                          ],
                         ],
-                      ],
-                    ),
-                  ],
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        notification.message,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          AppStatusPill(label: category.label, color: category.color),
+                          if (canOpen) ...[
+                            const SizedBox(width: 10),
+                            Text(
+                              'Open',
+                              style: theme.textTheme.labelMedium?.copyWith(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            Icon(Icons.arrow_forward_rounded, size: 14, color: context.readable(AppColors.primary)),
+                          ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

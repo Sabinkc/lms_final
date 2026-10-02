@@ -14,13 +14,7 @@ class QuickActionCard extends StatelessWidget {
   /// Tint for the icon/background; defaults to the theme's primary color.
   final Color? color;
 
-  const QuickActionCard({
-    super.key,
-    required this.icon,
-    required this.label,
-    required this.onTap,
-    this.color,
-  });
+  const QuickActionCard({super.key, required this.icon, required this.label, required this.onTap, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -86,10 +80,7 @@ class QuickActionTile extends StatelessWidget {
       onTap: onTap,
       leading: Container(
         padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: tint.withValues(alpha: 0.14),
-          borderRadius: AppRadius.card,
-        ),
+        decoration: BoxDecoration(color: tint.withValues(alpha: 0.14), borderRadius: AppRadius.card),
         child: Icon(icon, color: tint, size: 20),
       ),
       // maxLines+ellipsis on both — the More screen's paired 2-column

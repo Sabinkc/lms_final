@@ -18,6 +18,7 @@ import '../providers/attendance_provider.dart';
 import '../widgets/attendance_status_style.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../shared/widgets/success_overlay.dart';
 
 String _formatDate(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
@@ -555,11 +556,14 @@ class _SubmitBar extends StatelessWidget {
         FilledButton(
           onPressed: provider.isSubmitting
               ? null
-              : () => provider.submit(
-                  sectionId: sectionId,
-                  date: _formatDate(date),
-                  subject: subjectController.text.trim(),
-                ),
+              : () async {
+                  final succeeded = await provider.submit(
+                    sectionId: sectionId,
+                    date: _formatDate(date),
+                    subject: subjectController.text.trim(),
+                  );
+                  if (succeeded && context.mounted) await showSuccess(context, title: 'Attendance submitted');
+                },
           child: provider.isSubmitting
               ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
               : const Text('Submit attendance'),

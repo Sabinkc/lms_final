@@ -10,6 +10,7 @@ import 'package:cloud_lms/features/notifications/data/models/app_notification.da
 import 'package:cloud_lms/features/notifications/data/repositories/notification_repository.dart';
 import 'package:cloud_lms/features/notifications/presentation/providers/notification_provider.dart';
 import 'package:cloud_lms/features/notifications/presentation/screens/notifications_screen.dart';
+import 'package:cloud_lms/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -67,7 +68,7 @@ void main() {
     authRepository = _MockAuthRepository();
   });
 
-  testWidgets('loading state shows a spinner', (tester) async {
+  testWidgets('loading state shows the skeleton loading view', (tester) async {
     when(() => repository.getNotifications()).thenAnswer((_) => Completer<Result<(int, List<AppNotification>)>>().future);
     final provider = NotificationProvider(repository);
     final authProvider = _authAs(authRepository, AppRole.student);
@@ -75,7 +76,7 @@ void main() {
     await tester.pumpWidget(_wrap(provider, authProvider));
     await tester.pump();
 
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(find.byType(LoadingView), findsOneWidget);
   });
 
   testWidgets('empty state shows a message', (tester) async {

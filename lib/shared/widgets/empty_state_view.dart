@@ -9,13 +9,7 @@ class EmptyStateView extends StatelessWidget {
   final String? actionLabel;
   final VoidCallback? onAction;
 
-  const EmptyStateView({
-    super.key,
-    required this.message,
-    this.icon,
-    this.actionLabel,
-    this.onAction,
-  });
+  const EmptyStateView({super.key, required this.message, this.icon, this.actionLabel, this.onAction});
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +23,7 @@ class EmptyStateView extends StatelessWidget {
               Icon(icon, size: 48, color: Theme.of(context).colorScheme.outline),
               const SizedBox(height: 16),
             ],
-            Text(
-              message,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
+            Text(message, textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyMedium),
             if (actionLabel != null && onAction != null) ...[
               const SizedBox(height: 16),
               FilledButton(onPressed: onAction, child: Text(actionLabel!)),

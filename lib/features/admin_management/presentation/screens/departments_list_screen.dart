@@ -18,6 +18,7 @@ import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
+import '../../../../shared/widgets/staggered_entrance.dart';
 
 /// Admin: Manage Departments (`docs/production_roadmap.md` Phase L2,
 /// `implementation_backlog.md` E17) — same list/create/edit/delete shape as
@@ -185,82 +186,84 @@ class _DepartmentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final muted = theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant);
-    return Card(
-      margin: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CircleAvatar(
-                  radius: 24,
-                  backgroundColor: AppColors.primary.withValues(alpha: 0.12),
-                  child: Icon(subjectIcon(department.name), color: context.readable(AppColors.primary)),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(department.name, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800)),
-                      const SizedBox(height: 2),
-                      Row(
-                        children: [
-                          Icon(
-                            department.headOfDepartmentName != null
-                                ? Icons.verified_user_outlined
-                                : Icons.person_off_outlined,
-                            size: 14,
-                            color: department.headOfDepartmentName != null ? AppColors.primary : muted?.color,
-                          ),
-                          const SizedBox(width: 4),
-                          Expanded(
-                            child: Text(
-                              department.headOfDepartmentName != null
-                                  ? 'Head: ${department.headOfDepartmentName}'
-                                  : 'No head assigned',
-                              style: muted,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                IconButton.filledTonal(
-                  icon: const Icon(Icons.edit_outlined, size: 18),
-                  tooltip: 'Edit',
-                  visualDensity: VisualDensity.compact,
-                  onPressed: onEdit,
-                ),
-                IconButton.filledTonal(
-                  style: IconButton.styleFrom(backgroundColor: theme.colorScheme.error.withValues(alpha: 0.1)),
-                  icon: Icon(Icons.delete_outline, size: 18, color: theme.colorScheme.error),
-                  tooltip: 'Delete',
-                  visualDensity: VisualDensity.compact,
-                  onPressed: onDelete,
-                ),
-              ],
-            ),
-            if (department.description.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              Text(department.description, style: muted, maxLines: 2, overflow: TextOverflow.ellipsis),
-            ],
-            if (department.classes.isNotEmpty) ...[
-              const SizedBox(height: 10),
-              Wrap(
-                spacing: 6,
-                runSpacing: 6,
+    return StaggeredEntrance(
+      child: Card(
+        margin: EdgeInsets.zero,
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  for (final className in department.classes) AppStatusPill(label: className, color: AppColors.info),
+                  CircleAvatar(
+                    radius: 24,
+                    backgroundColor: AppColors.primary.withValues(alpha: 0.12),
+                    child: Icon(subjectIcon(department.name), color: context.readable(AppColors.primary)),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(department.name, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800)),
+                        const SizedBox(height: 2),
+                        Row(
+                          children: [
+                            Icon(
+                              department.headOfDepartmentName != null
+                                  ? Icons.verified_user_outlined
+                                  : Icons.person_off_outlined,
+                              size: 14,
+                              color: department.headOfDepartmentName != null ? AppColors.primary : muted?.color,
+                            ),
+                            const SizedBox(width: 4),
+                            Expanded(
+                              child: Text(
+                                department.headOfDepartmentName != null
+                                    ? 'Head: ${department.headOfDepartmentName}'
+                                    : 'No head assigned',
+                                style: muted,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton.filledTonal(
+                    icon: const Icon(Icons.edit_outlined, size: 18),
+                    tooltip: 'Edit',
+                    visualDensity: VisualDensity.compact,
+                    onPressed: onEdit,
+                  ),
+                  IconButton.filledTonal(
+                    style: IconButton.styleFrom(backgroundColor: theme.colorScheme.error.withValues(alpha: 0.1)),
+                    icon: Icon(Icons.delete_outline, size: 18, color: theme.colorScheme.error),
+                    tooltip: 'Delete',
+                    visualDensity: VisualDensity.compact,
+                    onPressed: onDelete,
+                  ),
                 ],
               ),
+              if (department.description.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Text(department.description, style: muted, maxLines: 2, overflow: TextOverflow.ellipsis),
+              ],
+              if (department.classes.isNotEmpty) ...[
+                const SizedBox(height: 10),
+                Wrap(
+                  spacing: 6,
+                  runSpacing: 6,
+                  children: [
+                    for (final className in department.classes) AppStatusPill(label: className, color: AppColors.info),
+                  ],
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

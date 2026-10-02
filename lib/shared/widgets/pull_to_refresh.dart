@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// Pull-down-to-reload for a screen body, whatever that body currently is.
 ///
@@ -19,7 +20,10 @@ class PullToRefresh extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      onRefresh: onRefresh,
+      onRefresh: () {
+        HapticFeedback.lightImpact();
+        return onRefresh();
+      },
       notificationPredicate: (notification) => notification.depth <= 1,
       child: CustomScrollView(
         primary: false,

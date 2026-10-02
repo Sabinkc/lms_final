@@ -11,6 +11,7 @@ import 'package:cloud_lms/features/notices/data/models/notice.dart';
 import 'package:cloud_lms/features/notices/data/repositories/notice_repository.dart';
 import 'package:cloud_lms/features/notices/presentation/providers/notice_provider.dart';
 import 'package:cloud_lms/features/notices/presentation/screens/notices_list_screen.dart';
+import 'package:cloud_lms/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -71,7 +72,7 @@ void main() {
     await tester.pumpWidget(_wrap(provider, authProvider));
     await tester.pump();
 
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(find.byType(LoadingView), findsOneWidget);
   });
 
   testWidgets('Student role calls getMyNotices, not getNoticesAsAdmin, and sees no FAB', (tester) async {

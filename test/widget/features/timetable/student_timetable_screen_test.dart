@@ -9,6 +9,7 @@ import 'package:cloud_lms/features/timetable/data/repositories/timetable_reposit
 import 'package:cloud_lms/features/timetable/presentation/providers/student_timetable_provider.dart';
 import 'package:cloud_lms/features/timetable/presentation/screens/student_timetable_screen.dart';
 import 'package:cloud_lms/features/timetable/presentation/widgets/day_timeline.dart';
+import 'package:cloud_lms/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -61,7 +62,7 @@ void main() {
     await tester.pumpWidget(_wrap(provider));
     await tester.pump();
 
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(find.byType(LoadingView), findsOneWidget);
   });
 
   testWidgets('empty timetable shows the never-404 empty state, not an error', (tester) async {

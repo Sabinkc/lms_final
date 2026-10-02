@@ -8,6 +8,7 @@ import '../../../../core/theme/app_spacing.dart';
 
 import '../../../../shared/utils/format_rs.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../shared/widgets/count_up_text.dart';
 
 export '../../../../shared/utils/format_rs.dart';
 
@@ -89,7 +90,7 @@ class FeeStatCard extends StatelessWidget {
               FittedBox(
                 fit: BoxFit.scaleDown,
                 alignment: Alignment.centerLeft,
-                child: Text(
+                child: CountUpText(
                   value,
                   style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800, color: textColor),
                 ),

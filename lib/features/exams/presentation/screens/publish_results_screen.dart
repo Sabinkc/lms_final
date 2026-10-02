@@ -16,6 +16,7 @@ import '../providers/exam_result_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../shared/widgets/success_overlay.dart';
 
 /// Admin: enter every student's marks per subject for one exam, then
 /// publish in one call (`docs/production_roadmap.md` Phase F — System B,
@@ -400,7 +401,14 @@ class _PublishBar extends StatelessWidget {
                   ),
                 ),
               FilledButton.icon(
-                onPressed: provider.isPublishing ? null : () => provider.publish(exam),
+                onPressed: provider.isPublishing
+                    ? null
+                    : () async {
+                        final succeeded = await provider.publish(exam);
+                        if (succeeded && context.mounted) {
+                          await showSuccess(context, title: 'Results published', subtitle: exam.title);
+                        }
+                      },
                 style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(50)),
                 icon: provider.isPublishing
                     ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))

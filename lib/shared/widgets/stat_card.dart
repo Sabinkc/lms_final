@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_radius.dart';
+import 'count_up_text.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/readable_color.dart';
 
@@ -68,7 +69,10 @@ class StatCard extends StatelessWidget {
                           ? _ProgressRing(progress: progress!, color: tint)
                           : Container(
                               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                              decoration: BoxDecoration(color: tint.withValues(alpha: 0.14), borderRadius: AppRadius.button),
+                              decoration: BoxDecoration(
+                                color: tint.withValues(alpha: 0.14),
+                                borderRadius: AppRadius.button,
+                              ),
                               child: Text(
                                 trend!,
                                 style: textTheme.labelSmall?.copyWith(color: tint, fontWeight: FontWeight.w700),
@@ -79,12 +83,7 @@ class StatCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: AppSpacing.sm),
-            Text(
-              value,
-              style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+            CountUpText(value, style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
             const SizedBox(height: 2),
             Text(label, style: textTheme.bodySmall, maxLines: 1, overflow: TextOverflow.ellipsis),
           ],
@@ -102,25 +101,33 @@ class _ProgressRing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 26,
-      height: 26,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          CircularProgressIndicator(
-            value: progress.clamp(0, 1),
-            strokeWidth: 3,
-            backgroundColor: color.withValues(alpha: 0.14),
-            valueColor: AlwaysStoppedAnimation(color),
-          ),
-          Text(
-            '${(progress.clamp(0, 1) * 100).round()}',
-            style: Theme.of(
-              context,
-            ).textTheme.labelSmall?.copyWith(fontSize: 8, fontWeight: FontWeight.w700, color: context.readable(color)),
-          ),
-        ],
+    // Sweeps from empty to its value when first shown.
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: progress.clamp(0, 1).toDouble()),
+      duration: MediaQuery.disableAnimationsOf(context) ? Duration.zero : const Duration(milliseconds: 900),
+      curve: Curves.easeOutCubic,
+      builder: (context, progress, _) => SizedBox(
+        width: 26,
+        height: 26,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            CircularProgressIndicator(
+              value: progress.clamp(0, 1),
+              strokeWidth: 3,
+              backgroundColor: color.withValues(alpha: 0.14),
+              valueColor: AlwaysStoppedAnimation(color),
+            ),
+            Text(
+              '${(progress.clamp(0, 1) * 100).round()}',
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                fontSize: 8,
+                fontWeight: FontWeight.w700,
+                color: context.readable(color),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

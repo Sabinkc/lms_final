@@ -7,6 +7,7 @@ import 'package:cloud_lms/features/attendance/data/repositories/attendance_repos
 import 'package:cloud_lms/features/attendance/presentation/providers/self_attendance_provider.dart';
 import 'package:cloud_lms/features/attendance/presentation/screens/child_attendance_screen.dart';
 import 'package:cloud_lms/shared/widgets/filter_chip_bar.dart';
+import 'package:cloud_lms/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -79,7 +80,7 @@ void main() {
     await tester.pumpWidget(_wrap(provider));
     await tester.pump();
 
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(find.byType(LoadingView), findsOneWidget);
   });
 
   testWidgets('no linked children shows a message, no crash', (tester) async {

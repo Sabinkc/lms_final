@@ -6,6 +6,7 @@ import 'package:cloud_lms/features/student_followups/data/models/student_followu
 import 'package:cloud_lms/features/student_followups/data/repositories/student_followup_repository.dart';
 import 'package:cloud_lms/features/student_followups/presentation/providers/student_followup_provider.dart';
 import 'package:cloud_lms/features/student_followups/presentation/screens/student_followups_screen.dart';
+import 'package:cloud_lms/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -46,7 +47,7 @@ void main() {
     await tester.pumpWidget(_wrap(provider));
     await tester.pump();
 
-    expect(find.byType(CircularProgressIndicator), findsWidgets);
+    expect(find.byType(LoadingView), findsOneWidget);
   });
 
   testWidgets('empty state shows the add-follow-up CTA', (tester) async {

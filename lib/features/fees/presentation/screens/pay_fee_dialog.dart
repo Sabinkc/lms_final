@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../providers/self_fee_provider.dart';
+import '../../../../shared/widgets/success_overlay.dart';
 
 /// Student/Parent: submit a fee payment for manual verification
 /// (`implementation_backlog.md` E7-F4). **No payment-method selector** —
@@ -79,7 +80,17 @@ Future<void> showPayFeeDialog(
                       phoneNumber: phoneController.text.trim(),
                       transactionPin: pinController.text.trim(),
                     );
-                    if (succeeded && dialogContext.mounted) Navigator.of(dialogContext).pop();
+                    if (succeeded && dialogContext.mounted) {
+                      Navigator.of(dialogContext).pop();
+                      if (context.mounted) {
+                        await showSuccess(
+                          context,
+                          title: 'Payment sent',
+                          subtitle: 'The school will confirm it shortly.',
+                        );
+                      }
+                      return;
+                    }
                     setDialogState(() {});
                   },
             child: provider.isSubmittingPayment

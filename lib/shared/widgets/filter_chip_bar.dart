@@ -87,7 +87,10 @@ class AppFilterChip extends StatelessWidget {
                 Icon(icon, size: 16, color: selected ? Colors.white : AppColors.primary),
                 const SizedBox(width: 6),
               ],
-              Text(label, style: TextStyle(color: fg, fontWeight: FontWeight.w600)),
+              Text(
+                label,
+                style: TextStyle(color: fg, fontWeight: FontWeight.w600),
+              ),
               if (count != null) ...[
                 const SizedBox(width: 6),
                 Container(
@@ -96,7 +99,10 @@ class AppFilterChip extends StatelessWidget {
                     color: selected ? Colors.white.withValues(alpha: 0.25) : AppColors.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(AppRadius.xl4),
                   ),
-                  child: Text('$count', style: TextStyle(color: fg, fontSize: 12, fontWeight: FontWeight.w600)),
+                  child: Text(
+                    '$count',
+                    style: TextStyle(color: fg, fontSize: 12, fontWeight: FontWeight.w600),
+                  ),
                 ),
               ],
             ],

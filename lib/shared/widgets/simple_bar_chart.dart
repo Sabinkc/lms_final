@@ -15,7 +15,7 @@ class SimpleBarChart extends StatelessWidget {
   // assert when `values` is a constructor parameter rather than a literal.
   // ignore: prefer_const_constructors_in_immutables
   SimpleBarChart({super.key, required this.values, required this.labels, this.barColor, this.height = 120})
-      : assert(values.length == labels.length);
+    : assert(values.length == labels.length);
 
   @override
   Widget build(BuildContext context) {

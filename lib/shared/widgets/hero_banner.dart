@@ -38,9 +38,7 @@ class HeroBanner extends StatelessWidget {
           end: Alignment.bottomRight,
           colors: [color, Color.lerp(color, Colors.black, 0.35)!],
         ),
-        boxShadow: [
-          BoxShadow(color: color.withValues(alpha: 0.28), blurRadius: 24, offset: const Offset(0, 8)),
-        ],
+        boxShadow: [BoxShadow(color: color.withValues(alpha: 0.28), blurRadius: 24, offset: const Offset(0, 8))],
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -52,18 +50,17 @@ class HeroBanner extends StatelessWidget {
               children: [
                 Text(
                   greeting,
-                  style: Theme.of(context)
-                      .textTheme
-                      .labelMedium
-                      ?.copyWith(color: onColor.withValues(alpha: 0.85), fontWeight: FontWeight.w600),
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: onColor.withValues(alpha: 0.85),
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   name,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headlineSmall
-                      ?.copyWith(color: onColor, fontWeight: FontWeight.w700),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.headlineSmall?.copyWith(color: onColor, fontWeight: FontWeight.w700),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),

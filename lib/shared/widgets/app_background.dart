@@ -102,29 +102,26 @@ class AppBackgroundPainter extends CustomPainter {
     canvas.drawPath(
       wave(h * 0.13, h * 0.025, 0.6, fromTop: true),
       Paint()
-        ..shader = ui.Gradient.linear(
-          Offset(w, 0),
-          Offset(0, h * 0.16),
-          [waveColor.withValues(alpha: _dark ? 0.10 : 0.07), waveColor.withValues(alpha: 0.0)],
-        ),
+        ..shader = ui.Gradient.linear(Offset(w, 0), Offset(0, h * 0.16), [
+          waveColor.withValues(alpha: _dark ? 0.10 : 0.07),
+          waveColor.withValues(alpha: 0.0),
+        ]),
     );
     canvas.drawPath(
       wave(h * 0.86, h * 0.022, 2.2),
       Paint()
-        ..shader = ui.Gradient.linear(
-          Offset(0, h),
-          Offset(w, h * 0.82),
-          [waveColor.withValues(alpha: _dark ? 0.12 : 0.08), waveColor.withValues(alpha: 0.01)],
-        ),
+        ..shader = ui.Gradient.linear(Offset(0, h), Offset(w, h * 0.82), [
+          waveColor.withValues(alpha: _dark ? 0.12 : 0.08),
+          waveColor.withValues(alpha: 0.01),
+        ]),
     );
     canvas.drawPath(
       wave(h * 0.91, h * 0.018, 3.6),
       Paint()
-        ..shader = ui.Gradient.linear(
-          Offset(w, h),
-          Offset(0, h * 0.88),
-          [AppColors.slate.withValues(alpha: _dark ? 0.10 : 0.06), const Color(0x002F80FF)],
-        ),
+        ..shader = ui.Gradient.linear(Offset(w, h), Offset(0, h * 0.88), [
+          AppColors.slate.withValues(alpha: _dark ? 0.10 : 0.06),
+          const Color(0x002F80FF),
+        ]),
     );
 
     // 4. Thin line accents: a flowing curve + two rings, top-right.
@@ -139,7 +136,11 @@ class AppBackgroundPainter extends CustomPainter {
       line,
     );
     canvas.drawCircle(Offset(w * 0.9, h * 0.08), w * 0.14, line);
-    canvas.drawCircle(Offset(w * 0.9, h * 0.08), w * 0.22, line..color = line.color.withValues(alpha: _dark ? 0.08 : 0.06));
+    canvas.drawCircle(
+      Offset(w * 0.9, h * 0.08),
+      w * 0.22,
+      line..color = line.color.withValues(alpha: _dark ? 0.08 : 0.06),
+    );
 
     // 5. Dot grid, top-left, fading out.
     const spacing = 18.0;

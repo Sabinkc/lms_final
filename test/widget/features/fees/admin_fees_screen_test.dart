@@ -9,6 +9,7 @@ import 'package:cloud_lms/features/fees/data/repositories/fee_repository.dart';
 import 'package:cloud_lms/features/fees/data/repositories/payment_repository.dart';
 import 'package:cloud_lms/features/fees/presentation/providers/fee_provider.dart';
 import 'package:cloud_lms/features/fees/presentation/screens/admin_fees_screen.dart';
+import 'package:cloud_lms/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -96,7 +97,7 @@ void main() {
     when(() => paymentRepository.getPaymentHistory()).thenAnswer((_) async => const Result.success([]));
   });
 
-  testWidgets('loading state shows a spinner', (tester) async {
+  testWidgets('loading state shows the skeleton loading view', (tester) async {
     when(() => feeRepository.getFees(status: any(named: 'status')))
         .thenAnswer((_) => Completer<Result<List<Fee>>>().future);
     final provider = FeeProvider(feeRepository, paymentRepository, studentRepository);
@@ -104,7 +105,7 @@ void main() {
     await tester.pumpWidget(_wrap(provider));
     await tester.pump();
 
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(find.byType(LoadingView), findsOneWidget);
   });
 
   testWidgets('empty state shows the add-fee CTA', (tester) async {

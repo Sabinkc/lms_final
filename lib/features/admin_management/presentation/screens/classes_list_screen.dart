@@ -16,6 +16,7 @@ import '../widgets/class_badge.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
+import '../../../../shared/widgets/staggered_entrance.dart';
 
 /// docs/screens.md "Manage Classes / Sections / Subjects" — the Classes
 /// half; tapping a class drills into [SectionsListScreen] for its Sections.
@@ -219,65 +220,67 @@ class _ClassCard extends StatelessWidget {
         _Meta(icon: Icons.groups_rounded, label: _plural(sectionCount, 'Section'), style: muted),
     ];
 
-    return Card(
-      margin: EdgeInsets.zero,
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 12, 4, 12),
-          child: Row(
-            children: [
-              ClassBadge(name: academicClass.name),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            academicClass.name,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                        if (isInactive) ...[
-                          const SizedBox(width: 6),
-                          AppStatusChip(label: academicClass.status, color: scheme.error),
-                        ],
-                      ],
-                    ),
-                    if (meta.isNotEmpty) ...[
-                      const SizedBox(height: 4),
-                      Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        spacing: 8,
-                        runSpacing: 2,
+    return StaggeredEntrance(
+      child: Card(
+        margin: EdgeInsets.zero,
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(12, 12, 4, 12),
+            child: Row(
+              children: [
+                ClassBadge(name: academicClass.name),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
                         children: [
-                          for (var i = 0; i < meta.length; i++) ...[if (i > 0) Text('•', style: muted), meta[i]],
+                          Flexible(
+                            child: Text(
+                              academicClass.name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                          if (isInactive) ...[
+                            const SizedBox(width: 6),
+                            AppStatusChip(label: academicClass.status, color: scheme.error),
+                          ],
                         ],
                       ),
-                    ] else if (academicClass.description.isNotEmpty) ...[
-                      const SizedBox(height: 4),
-                      Text(academicClass.description, maxLines: 1, overflow: TextOverflow.ellipsis, style: muted),
+                      if (meta.isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          spacing: 8,
+                          runSpacing: 2,
+                          children: [
+                            for (var i = 0; i < meta.length; i++) ...[if (i > 0) Text('•', style: muted), meta[i]],
+                          ],
+                        ),
+                      ] else if (academicClass.description.isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        Text(academicClass.description, maxLines: 1, overflow: TextOverflow.ellipsis, style: muted),
+                      ],
                     ],
+                  ),
+                ),
+                PopupMenuButton<String>(
+                  tooltip: 'Class actions',
+                  icon: Icon(Icons.more_vert, color: scheme.onSurfaceVariant),
+                  onSelected: (value) => value == 'edit' ? onEdit() : onDelete(),
+                  itemBuilder: (context) => const [
+                    PopupMenuItem(value: 'edit', child: Text('Edit')),
+                    PopupMenuItem(value: 'delete', child: Text('Delete')),
                   ],
                 ),
-              ),
-              PopupMenuButton<String>(
-                tooltip: 'Class actions',
-                icon: Icon(Icons.more_vert, color: scheme.onSurfaceVariant),
-                onSelected: (value) => value == 'edit' ? onEdit() : onDelete(),
-                itemBuilder: (context) => const [
-                  PopupMenuItem(value: 'edit', child: Text('Edit')),
-                  PopupMenuItem(value: 'delete', child: Text('Delete')),
-                ],
-              ),
-              Icon(Icons.chevron_right, color: scheme.outline),
-            ],
+                Icon(Icons.chevron_right, color: scheme.outline),
+              ],
+            ),
           ),
         ),
       ),

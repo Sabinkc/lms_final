@@ -20,6 +20,7 @@ import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
+import '../../../../shared/widgets/staggered_entrance.dart';
 
 String _formatDate(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
@@ -213,103 +214,105 @@ class _FollowupTile extends StatelessWidget {
     final muted = theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant);
     final resolved = followup.status == 'resolved';
 
-    return Card(
-      margin: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 21,
-                  backgroundColor: style.color.withValues(alpha: 0.12),
-                  child: Text(
-                    initialsFor(followup.studentName),
-                    style: TextStyle(color: context.readable(style.color), fontWeight: FontWeight.w700),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        followup.studentName,
-                        style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
-                      ),
-                      if (followup.faculty.isNotEmpty)
-                        AppStatusPill(label: followup.faculty, icon: Icons.school_outlined, color: AppColors.info),
-                    ],
-                  ),
-                ),
-                AppStatusPill(label: style.label, icon: style.icon, color: style.color),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: AppColors.info.withValues(alpha: 0.06),
-                borderRadius: BorderRadius.circular(AppRadius.lg),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return StaggeredEntrance(
+      child: Card(
+        margin: EdgeInsets.zero,
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
                 children: [
-                  Icon(
-                    resolved ? Icons.check_circle_outline : Icons.format_quote_rounded,
-                    size: 18,
-                    color: context.readable(style.color),
-                  ),
-                  const SizedBox(width: 6),
-                  Expanded(
+                  CircleAvatar(
+                    radius: 21,
+                    backgroundColor: style.color.withValues(alpha: 0.12),
                     child: Text(
-                      followup.followUpNote,
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.bodyMedium?.copyWith(fontStyle: FontStyle.italic),
+                      initialsFor(followup.studentName),
+                      style: TextStyle(color: context.readable(style.color), fontWeight: FontWeight.w700),
                     ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          followup.studentName,
+                          style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                        ),
+                        if (followup.faculty.isNotEmpty)
+                          AppStatusPill(label: followup.faculty, icon: Icons.school_outlined, color: AppColors.info),
+                      ],
+                    ),
+                  ),
+                  AppStatusPill(label: style.label, icon: style.icon, color: style.color),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.info.withValues(alpha: 0.06),
+                  borderRadius: BorderRadius.circular(AppRadius.lg),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(
+                      resolved ? Icons.check_circle_outline : Icons.format_quote_rounded,
+                      size: 18,
+                      color: context.readable(style.color),
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        followup.followUpNote,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodyMedium?.copyWith(fontStyle: FontStyle.italic),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 14,
+                runSpacing: 4,
+                children: [
+                  if (followup.contactNumber.isNotEmpty)
+                    _Meta(icon: Icons.phone_outlined, text: followup.contactNumber, style: muted),
+                  if (followup.email.isNotEmpty) _Meta(icon: Icons.mail_outline, text: followup.email, style: muted),
+                  if (followup.visitDate != null)
+                    _Meta(
+                      icon: Icons.event_outlined,
+                      text: 'Visit ${formatDisplayDate(followup.visitDate!)}',
+                      style: muted,
+                    ),
+                  if (followup.createdByName != null)
+                    _Meta(icon: Icons.person_outline, text: followup.createdByName!, style: muted),
+                ],
+              ),
+              const Divider(height: 20),
+              Row(
+                children: [
+                  const Spacer(),
+                  IconButton(
+                    icon: Icon(Icons.delete_outline, color: theme.colorScheme.error),
+                    tooltip: 'Delete',
+                    onPressed: onDelete,
+                  ),
+                  const SizedBox(width: 4),
+                  FilledButton.tonalIcon(
+                    onPressed: onEdit,
+                    icon: const Icon(Icons.edit_note_rounded, size: 18),
+                    label: const Text('Update'),
                   ),
                 ],
               ),
-            ),
-            const SizedBox(height: 10),
-            Wrap(
-              spacing: 14,
-              runSpacing: 4,
-              children: [
-                if (followup.contactNumber.isNotEmpty)
-                  _Meta(icon: Icons.phone_outlined, text: followup.contactNumber, style: muted),
-                if (followup.email.isNotEmpty) _Meta(icon: Icons.mail_outline, text: followup.email, style: muted),
-                if (followup.visitDate != null)
-                  _Meta(
-                    icon: Icons.event_outlined,
-                    text: 'Visit ${formatDisplayDate(followup.visitDate!)}',
-                    style: muted,
-                  ),
-                if (followup.createdByName != null)
-                  _Meta(icon: Icons.person_outline, text: followup.createdByName!, style: muted),
-              ],
-            ),
-            const Divider(height: 20),
-            Row(
-              children: [
-                const Spacer(),
-                IconButton(
-                  icon: Icon(Icons.delete_outline, color: theme.colorScheme.error),
-                  tooltip: 'Delete',
-                  onPressed: onDelete,
-                ),
-                const SizedBox(width: 4),
-                FilledButton.tonalIcon(
-                  onPressed: onEdit,
-                  icon: const Icon(Icons.edit_note_rounded, size: 18),
-                  label: const Text('Update'),
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-/// Generic loading state, reused across every feature (docs/screens.md's
-/// stated convention: skeleton placeholders matching the final layout, not
-/// a blocking spinner — [message] is shown here only as a foundation-level
-/// fallback until each screen has its own skeleton layout).
+import 'skeleton.dart';
+
+/// Generic loading state, reused across every feature: pulsing card-shaped
+/// skeletons where the content will appear (docs/screens.md's convention)
+/// rather than a lone spinner. [message] is read out by screen readers.
 class LoadingView extends StatelessWidget {
   final String? message;
 
@@ -11,17 +12,6 @@ class LoadingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const CircularProgressIndicator(),
-          if (message != null) ...[
-            const SizedBox(height: 16),
-            Text(message!, style: Theme.of(context).textTheme.bodyMedium),
-          ],
-        ],
-      ),
-    );
+    return Semantics(label: message ?? 'Loading', liveRegion: true, child: const SkeletonCardList());
   }
 }

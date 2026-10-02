@@ -12,6 +12,7 @@ import 'package:cloud_lms/features/chat/data/models/group_message.dart';
 import 'package:cloud_lms/features/chat/data/repositories/chat_repository.dart';
 import 'package:cloud_lms/features/chat/presentation/providers/chat_provider.dart';
 import 'package:cloud_lms/features/chat/presentation/screens/chat_thread_screen.dart';
+import 'package:cloud_lms/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -74,7 +75,7 @@ void main() {
     when(() => chatRepository.markRead(any())).thenAnswer((_) async => const Result.success(null));
   });
 
-  testWidgets('loading state shows a spinner', (tester) async {
+  testWidgets('loading state shows the skeleton loading view', (tester) async {
     when(() => chatRepository.getMessages(any(), before: any(named: 'before'), limit: any(named: 'limit')))
         .thenAnswer((_) => Completer<Result<List<GroupMessage>>>().future);
     final provider = ChatProvider(chatRepository, realtimeService, secureStorage);
@@ -83,7 +84,7 @@ void main() {
     await tester.pumpWidget(_wrap(provider, authProvider));
     await tester.pump();
 
-    expect(find.byType(CircularProgressIndicator), findsWidgets);
+    expect(find.byType(LoadingView), findsOneWidget);
   });
 
   testWidgets('empty state shows a hello prompt', (tester) async {

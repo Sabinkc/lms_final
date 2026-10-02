@@ -37,9 +37,7 @@ class PhotoHeroBanner extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            Positioned.fill(
-              child: Image.asset('assets/images/admin_hero_school.jpg', fit: BoxFit.cover),
-            ),
+            Positioned.fill(child: Image.asset('assets/images/admin_hero_school.jpg', fit: BoxFit.cover)),
             // Darkens the left ~70% (where the greeting text sits) down to
             // the base gradient's own tone, fading out toward the right so
             // the photo itself stays visible full-bleed rather than boxed
@@ -68,15 +66,17 @@ class PhotoHeroBanner extends StatelessWidget {
                 children: [
                   Text(
                     greeting,
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelMedium
-                        ?.copyWith(color: Colors.white.withValues(alpha: 0.85), fontWeight: FontWeight.w600),
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: Colors.white.withValues(alpha: 0.85),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     name,
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white, fontWeight: FontWeight.w800),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.headlineSmall?.copyWith(color: Colors.white, fontWeight: FontWeight.w800),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -85,7 +85,9 @@ class PhotoHeroBanner extends StatelessWidget {
                     width: MediaQuery.of(context).size.width * 0.6,
                     child: Text(
                       subtitle,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.white.withValues(alpha: 0.9)),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodySmall?.copyWith(color: Colors.white.withValues(alpha: 0.9)),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),

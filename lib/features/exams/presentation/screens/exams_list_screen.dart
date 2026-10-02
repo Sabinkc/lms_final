@@ -23,6 +23,7 @@ import '../providers/exam_provider.dart';
 import 'exam_form_dialog.dart';
 import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
+import '../../../../shared/widgets/staggered_entrance.dart';
 
 /// docs/screens.md's Exam & Academic Schedule module. One list for every
 /// role (`GET /exams` Admin-only, `GET /exams/my` everyone else, role read
@@ -235,72 +236,74 @@ class _ExamCard extends StatelessWidget {
     final totalMarks = exam.subjects.fold<int>(0, (sum, s) => sum + s.fullMarks);
     final actions = _actions(context);
 
-    return Card(
-      margin: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 44,
-                  height: 44,
-                  decoration: BoxDecoration(
-                    color: AppColors.info.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(AppRadius.lg),
-                  ),
-                  child: Icon(Icons.history_edu_rounded, color: context.readable(AppColors.info)),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(exam.title, style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
-                      const SizedBox(height: 2),
-                      Text(
-                        '${exam.className}${exam.section != null ? ' · Section ${exam.section}' : ''}',
-                        style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 8),
-                AppStatusPill(label: style.label, icon: style.icon, color: style.color),
-              ],
-            ),
-            const SizedBox(height: 12),
-            InfoStrip(
-              icon: Icons.calendar_today_outlined,
-              text: _dateRange,
-              trailing: totalMarks > 0 ? '$totalMarks Total Marks' : null,
-            ),
-            if (exam.subjects.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainerLow,
-                  borderRadius: BorderRadius.circular(AppRadius.lg),
-                ),
-                child: Column(children: [for (final subject in exam.subjects) _SubjectRow(subject: subject)]),
-              ),
-            ],
-            if (actions.isNotEmpty) ...[
-              const SizedBox(height: 12),
+    return StaggeredEntrance(
+      child: Card(
+        margin: EdgeInsets.zero,
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  for (var i = 0; i < actions.length; i++) ...[
-                    if (i > 0) const SizedBox(width: 10),
-                    Expanded(child: actions[i]),
-                  ],
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: AppColors.info.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(AppRadius.lg),
+                    ),
+                    child: Icon(Icons.history_edu_rounded, color: context.readable(AppColors.info)),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(exam.title, style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
+                        const SizedBox(height: 2),
+                        Text(
+                          '${exam.className}${exam.section != null ? ' · Section ${exam.section}' : ''}',
+                          style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  AppStatusPill(label: style.label, icon: style.icon, color: style.color),
                 ],
               ),
+              const SizedBox(height: 12),
+              InfoStrip(
+                icon: Icons.calendar_today_outlined,
+                text: _dateRange,
+                trailing: totalMarks > 0 ? '$totalMarks Total Marks' : null,
+              ),
+              if (exam.subjects.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainerLow,
+                    borderRadius: BorderRadius.circular(AppRadius.lg),
+                  ),
+                  child: Column(children: [for (final subject in exam.subjects) _SubjectRow(subject: subject)]),
+                ),
+              ],
+              if (actions.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    for (var i = 0; i < actions.length; i++) ...[
+                      if (i > 0) const SizedBox(width: 10),
+                      Expanded(child: actions[i]),
+                    ],
+                  ],
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

@@ -11,6 +11,7 @@ import 'package:cloud_lms/features/auth/data/models/app_user.dart';
 import 'package:cloud_lms/features/auth/data/models/auth_session.dart';
 import 'package:cloud_lms/features/auth/data/repositories/auth_repository.dart';
 import 'package:cloud_lms/features/auth/presentation/providers/auth_provider.dart';
+import 'package:cloud_lms/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -78,7 +79,7 @@ void main() {
     await tester.pumpWidget(_wrap(provider, authProvider));
     await tester.pump();
 
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(find.byType(LoadingView), findsOneWidget);
   });
 
   testWidgets('Student role sees no FAB to add an assignment', (tester) async {

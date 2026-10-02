@@ -25,6 +25,8 @@ import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
+import '../../../../shared/widgets/staggered_entrance.dart';
+import '../../../../shared/widgets/success_overlay.dart';
 
 /// docs/screens.md's Assignment Detail — one screen, body adapts by role:
 /// Teacher sees the submissions list with a grade action, Student sees
@@ -229,7 +231,7 @@ class _TeacherSubmissions extends StatelessWidget {
     final provider = context.watch<AssignmentProvider>();
 
     return switch (provider.submissionsStatus) {
-      LoadStatus.initial || LoadStatus.loading => const Center(child: CircularProgressIndicator()),
+      LoadStatus.initial || LoadStatus.loading => const LoadingView(),
       LoadStatus.error => Text(
         provider.submissionsError!.message,
         style: TextStyle(color: Theme.of(context).colorScheme.error),
@@ -309,76 +311,78 @@ class _SubmissionCard extends StatelessWidget {
     final theme = Theme.of(context);
     final files = submission.attachments.length;
 
-    return Card(
-      margin: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 20,
-                  backgroundColor: AppColors.primary.withValues(alpha: 0.12),
-                  child: Text(
-                    initialsFor(name),
-                    style: TextStyle(color: context.readable(AppColors.primary), fontWeight: FontWeight.w700),
+    return StaggeredEntrance(
+      child: Card(
+        margin: EdgeInsets.zero,
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                children: [
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundColor: AppColors.primary.withValues(alpha: 0.12),
+                    child: Text(
+                      initialsFor(name),
+                      style: TextStyle(color: context.readable(AppColors.primary), fontWeight: FontWeight.w700),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(name, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
-                      if (submission.submittedAt.isNotEmpty)
-                        Text(
-                          'Submitted ${formatDisplayDate(submission.submittedAt)}',
-                          style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                        ),
-                    ],
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(name, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+                        if (submission.submittedAt.isNotEmpty)
+                          Text(
+                            'Submitted ${formatDisplayDate(submission.submittedAt)}',
+                            style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                          ),
+                      ],
+                    ),
                   ),
+                  if (submission.graded)
+                    const AppStatusPill(label: 'Graded', icon: Icons.check_circle_outline, color: AppColors.success)
+                  else
+                    const AppStatusPill(label: 'Pending', icon: Icons.schedule, color: AppColors.warning),
+                ],
+              ),
+              if (submission.submissionText.isNotEmpty) ...[
+                const SizedBox(height: 10),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainerLow,
+                    borderRadius: BorderRadius.circular(AppRadius.lg),
+                  ),
+                  child: Text('“${submission.submissionText}”', style: theme.textTheme.bodyMedium),
                 ),
-                if (submission.graded)
-                  const AppStatusPill(label: 'Graded', icon: Icons.check_circle_outline, color: AppColors.success)
-                else
-                  const AppStatusPill(label: 'Pending', icon: Icons.schedule, color: AppColors.warning),
               ],
-            ),
-            if (submission.submissionText.isNotEmpty) ...[
-              const SizedBox(height: 10),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainerLow,
-                  borderRadius: BorderRadius.circular(AppRadius.lg),
-                ),
-                child: Text('“${submission.submissionText}”', style: theme.textTheme.bodyMedium),
-              ),
-            ],
-            const SizedBox(height: 8),
-            InfoStrip(
-              icon: Icons.attach_file_rounded,
-              text: files == 0 ? 'No files attached' : '$files file${files == 1 ? '' : 's'} attached',
-              color: AppColors.info,
-            ),
-            const SizedBox(height: 10),
-            if (submission.graded)
+              const SizedBox(height: 8),
               InfoStrip(
-                icon: Icons.grade_outlined,
-                text: 'Marks: ${submission.marks}${submission.remarks.isNotEmpty ? ' — ${submission.remarks}' : ''}',
-                color: AppColors.success,
-              )
-            else
-              FilledButton.icon(
-                onPressed: grading ? null : () => _showGradeDialog(context, provider, submission),
-                icon: grading
-                    ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                    : const Icon(Icons.rate_review_outlined, size: 18),
-                label: const Text('Grade'),
+                icon: Icons.attach_file_rounded,
+                text: files == 0 ? 'No files attached' : '$files file${files == 1 ? '' : 's'} attached',
+                color: AppColors.info,
               ),
-          ],
+              const SizedBox(height: 10),
+              if (submission.graded)
+                InfoStrip(
+                  icon: Icons.grade_outlined,
+                  text: 'Marks: ${submission.marks}${submission.remarks.isNotEmpty ? ' — ${submission.remarks}' : ''}',
+                  color: AppColors.success,
+                )
+              else
+                FilledButton.icon(
+                  onPressed: grading ? null : () => _showGradeDialog(context, provider, submission),
+                  icon: grading
+                      ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                      : const Icon(Icons.rate_review_outlined, size: 18),
+                  label: const Text('Grade'),
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -628,7 +632,12 @@ class _StudentSubmissionState extends State<_StudentSubmission> {
                       submissionText: _textController.text.trim(),
                       files: _pickedFiles,
                     );
-                    if (succeeded) provider.loadMySubmissions();
+                    if (succeeded) {
+                      provider.loadMySubmissions();
+                      if (context.mounted) {
+                        await showSuccess(context, title: 'Assignment submitted', subtitle: widget.assignment.title);
+                      }
+                    }
                   },
             icon: provider.isSubmitting
                 ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2))

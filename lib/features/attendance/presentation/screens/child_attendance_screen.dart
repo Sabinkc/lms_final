@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../shared/widgets/empty_state_view.dart';
+import '../../../../shared/widgets/loading_view.dart';
 import '../../../../shared/widgets/filter_chip_bar.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../providers/self_attendance_provider.dart';
@@ -61,7 +62,7 @@ class _ChildAttendanceScreenState extends State<ChildAttendanceScreen> {
                 ),
               Expanded(
                 child: switch (provider.childrenStatus) {
-                  LoadStatus.initial || LoadStatus.loading => const Center(child: CircularProgressIndicator()),
+                  LoadStatus.initial || LoadStatus.loading => const LoadingView(),
                   LoadStatus.error => Center(
                     child: Text(
                       provider.childrenError!.message,

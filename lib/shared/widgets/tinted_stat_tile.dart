@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/readable_color.dart';
+import 'count_up_text.dart';
 
 /// Small tinted count tile (icon, label, big value, optional coloured
 /// caption such as a percentage) — the Present/Absent/Late style tiles on
@@ -43,7 +44,7 @@ class TintedStatTile extends StatelessWidget {
           Text(label, style: theme.textTheme.labelMedium, maxLines: 1, overflow: TextOverflow.ellipsis),
           FittedBox(
             fit: BoxFit.scaleDown,
-            child: Text(value, style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800)),
+            child: CountUpText(value, style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800)),
           ),
           if (caption != null && caption!.isNotEmpty)
             Text(caption!, maxLines: 1, style: theme.textTheme.labelSmall?.copyWith(color: fg)),

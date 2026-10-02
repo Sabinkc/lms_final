@@ -13,6 +13,7 @@ import 'package:cloud_lms/features/chat/data/models/group_conversation.dart';
 import 'package:cloud_lms/features/chat/data/repositories/chat_repository.dart';
 import 'package:cloud_lms/features/chat/presentation/providers/chat_provider.dart';
 import 'package:cloud_lms/features/chat/presentation/screens/chat_list_screen.dart';
+import 'package:cloud_lms/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -85,7 +86,7 @@ void main() {
     when(() => secureStorage.readAccessToken()).thenAnswer((_) async => 'token');
   });
 
-  testWidgets('loading state shows a spinner', (tester) async {
+  testWidgets('loading state shows the skeleton loading view', (tester) async {
     when(() => chatRepository.getMyGroups()).thenAnswer((_) => Completer<Result<List<GroupConversation>>>().future);
     final provider = ChatProvider(chatRepository, realtimeService, secureStorage);
     final authProvider = _authAs(authRepository, AppRole.student);
@@ -93,7 +94,7 @@ void main() {
     await tester.pumpWidget(_wrap(provider, authProvider));
     await tester.pump();
 
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(find.byType(LoadingView), findsOneWidget);
   });
 
   testWidgets('Student sees no New Group button', (tester) async {

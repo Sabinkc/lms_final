@@ -7,6 +7,7 @@ import 'package:cloud_lms/features/exams/data/models/exam.dart';
 import 'package:cloud_lms/features/exams/data/repositories/exam_result_repository.dart';
 import 'package:cloud_lms/features/exams/presentation/providers/exam_result_provider.dart';
 import 'package:cloud_lms/features/exams/presentation/screens/publish_results_screen.dart';
+import 'package:cloud_lms/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -67,7 +68,7 @@ void main() {
     await tester.pumpWidget(_wrap(provider));
     await tester.pump();
 
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(find.byType(LoadingView), findsOneWidget);
   });
 
   testWidgets('roster loads and entering a mark then publishing calls publishResults', (tester) async {

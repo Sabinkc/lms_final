@@ -15,6 +15,7 @@ import '../screens/pay_fee_dialog.dart';
 import 'fee_dashboard_widgets.dart';
 import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/utils/capitalize.dart';
+import '../../../../shared/widgets/staggered_entrance.dart';
 
 /// Shared summary + fee list, used by both Student "My Fees" and Parent
 /// "Child's Fees" — same [SelfFeeProvider] state either way, mirroring
@@ -165,74 +166,76 @@ class _FeeCard extends StatelessWidget {
       'partial' => FeeColors.partial,
       _ => FeeColors.pending,
     };
-    return Card(
-      margin: EdgeInsets.zero,
-      clipBehavior: Clip.antiAlias,
-      child: ExpansionTile(
-        shape: const Border(),
-        leading: Container(
-          width: 44,
-          height: 44,
-          decoration: BoxDecoration(
-            color: statusColor.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(AppRadius.xl),
-          ),
-          child: Icon(Icons.receipt_long_rounded, color: context.readable(statusColor)),
-        ),
-        title: Row(
-          children: [
-            Expanded(
-              child: Text(fee.title, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+    return StaggeredEntrance(
+      child: Card(
+        margin: EdgeInsets.zero,
+        clipBehavior: Clip.antiAlias,
+        child: ExpansionTile(
+          shape: const Border(),
+          leading: Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: statusColor.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(AppRadius.xl),
             ),
-            Text(formatRs(fee.totalAmount), style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
-          ],
-        ),
-        subtitle: Padding(
-          padding: const EdgeInsets.only(top: 4),
-          child: Row(
+            child: Icon(Icons.receipt_long_rounded, color: context.readable(statusColor)),
+          ),
+          title: Row(
             children: [
               Expanded(
-                child: Text(
-                  [
-                    if (fee.dueDate.isNotEmpty) 'Due ${formatDisplayDate(fee.dueDate)}',
-                    if (fee.remainingAmount > 0 && fee.status != 'paid') '${formatRs(fee.remainingAmount)} left',
-                  ].join('  •  '),
-                  style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                ),
+                child: Text(fee.title, style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
               ),
-              AppStatusChip(label: capitalize(fee.status), color: statusColor),
+              Text(formatRs(fee.totalAmount), style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
             ],
           ),
-        ),
-        children: [
-          const Divider(height: 1),
-          if (fee.description.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-              child: Align(alignment: Alignment.centerLeft, child: Text(fee.description)),
+          subtitle: Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    [
+                      if (fee.dueDate.isNotEmpty) 'Due ${formatDisplayDate(fee.dueDate)}',
+                      if (fee.remainingAmount > 0 && fee.status != 'paid') '${formatRs(fee.remainingAmount)} left',
+                    ].join('  •  '),
+                    style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                  ),
+                ),
+                AppStatusChip(label: capitalize(fee.status), color: statusColor),
+              ],
             ),
-          if (fee.isInstallment)
-            for (final inst in fee.installments)
+          ),
+          children: [
+            const Divider(height: 1),
+            if (fee.description.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
+                child: Align(alignment: Alignment.centerLeft, child: Text(fee.description)),
+              ),
+            if (fee.isInstallment)
+              for (final inst in fee.installments)
+                _PayableRow(
+                  feeId: fee.id,
+                  installmentId: inst.id,
+                  title: inst.title,
+                  amount: inst.amount,
+                  dueDate: inst.dueDate,
+                  itemStatus: inst.status,
+                  provider: provider,
+                )
+            else
               _PayableRow(
                 feeId: fee.id,
-                installmentId: inst.id,
-                title: inst.title,
-                amount: inst.amount,
-                dueDate: inst.dueDate,
-                itemStatus: inst.status,
+                installmentId: null,
+                title: 'Full amount',
+                amount: fee.remainingAmount,
+                dueDate: fee.dueDate,
+                itemStatus: fee.status,
                 provider: provider,
-              )
-          else
-            _PayableRow(
-              feeId: fee.id,
-              installmentId: null,
-              title: 'Full amount',
-              amount: fee.remainingAmount,
-              dueDate: fee.dueDate,
-              itemStatus: fee.status,
-              provider: provider,
-            ),
-        ],
+              ),
+          ],
+        ),
       ),
     );
   }

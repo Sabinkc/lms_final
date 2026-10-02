@@ -5,6 +5,7 @@ import 'package:cloud_lms/features/payroll/data/models/payroll.dart';
 import 'package:cloud_lms/features/payroll/data/repositories/payroll_repository.dart';
 import 'package:cloud_lms/features/payroll/presentation/providers/my_payslips_provider.dart';
 import 'package:cloud_lms/features/payroll/presentation/screens/my_payslips_screen.dart';
+import 'package:cloud_lms/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -48,14 +49,14 @@ void main() {
     repository = _MockPayrollRepository();
   });
 
-  testWidgets('loading state shows a spinner', (tester) async {
+  testWidgets('loading state shows the skeleton loading view', (tester) async {
     when(() => repository.getMyPayslips()).thenAnswer((_) => Completer<Result<List<Payroll>>>().future);
     final provider = MyPayslipsProvider(repository);
 
     await tester.pumpWidget(_wrap(provider));
     await tester.pump();
 
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(find.byType(LoadingView), findsOneWidget);
   });
 
   testWidgets('empty state shows a message', (tester) async {

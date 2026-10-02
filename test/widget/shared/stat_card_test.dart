@@ -11,6 +11,7 @@ void main() {
         ),
       ),
     );
+    await tester.pumpAndSettle(); // let the count-up finish
 
     expect(find.byIcon(Icons.people_outline), findsOneWidget);
     expect(find.text('128'), findsOneWidget);
@@ -29,6 +30,7 @@ void main() {
         ),
       ),
     );
+    await tester.pumpAndSettle(); // let the count-up finish
 
     expect(find.text('128'), findsOneWidget);
     expect(find.text('93%'), findsOneWidget);
@@ -43,6 +45,7 @@ void main() {
         ),
       ),
     );
+    await tester.pumpAndSettle(); // let the count-up finish
 
     expect(find.text('+5%'), findsOneWidget);
   });
@@ -55,6 +58,7 @@ void main() {
         ),
       ),
     );
+    await tester.pumpAndSettle(); // let the count-up finish
 
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     expect(find.text('93'), findsOneWidget);

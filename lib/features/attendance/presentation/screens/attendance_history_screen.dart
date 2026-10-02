@@ -18,6 +18,7 @@ import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
+import '../../../../shared/widgets/staggered_entrance.dart';
 
 String _formatDate(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
@@ -203,51 +204,53 @@ class _SessionCard extends StatelessWidget {
       );
     }
 
-    return Card(
-      margin: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClassBadge(name: session.className, size: 48),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          session.title,
-                          style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+    return StaggeredEntrance(
+      child: Card(
+        margin: EdgeInsets.zero,
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.md),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClassBadge(name: session.className, size: 48),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            session.title,
+                            style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                          ),
                         ),
-                      ),
-                      if (session.locked) Icon(Icons.lock_outline, size: 18, color: muted?.color),
-                    ],
-                  ),
-                  Text(
-                    [
-                      if (session.subject.isNotEmpty) session.subject,
-                      '${session.totalCount} ${session.totalCount == 1 ? 'student' : 'students'}',
-                    ].join('  •  '),
-                    style: muted,
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-                  Wrap(
-                    spacing: 6,
-                    runSpacing: 4,
-                    children: [
-                      count('present', session.presentCount),
-                      count('absent', session.absentCount),
-                      count('late', session.lateCount),
-                    ],
-                  ),
-                ],
+                        if (session.locked) Icon(Icons.lock_outline, size: 18, color: muted?.color),
+                      ],
+                    ),
+                    Text(
+                      [
+                        if (session.subject.isNotEmpty) session.subject,
+                        '${session.totalCount} ${session.totalCount == 1 ? 'student' : 'students'}',
+                      ].join('  •  '),
+                      style: muted,
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 4,
+                      children: [
+                        count('present', session.presentCount),
+                        count('absent', session.absentCount),
+                        count('late', session.lateCount),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

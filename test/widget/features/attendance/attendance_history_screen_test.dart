@@ -6,6 +6,7 @@ import 'package:cloud_lms/features/attendance/data/models/attendance_session.dar
 import 'package:cloud_lms/features/attendance/data/repositories/attendance_repository.dart';
 import 'package:cloud_lms/features/attendance/presentation/providers/attendance_provider.dart';
 import 'package:cloud_lms/features/attendance/presentation/screens/attendance_history_screen.dart';
+import 'package:cloud_lms/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -46,7 +47,7 @@ void main() {
     await tester.pumpWidget(_wrap(provider));
     await tester.pump();
 
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(find.byType(LoadingView), findsOneWidget);
   });
 
   testWidgets('empty state shows a message for a date with nothing submitted', (tester) async {

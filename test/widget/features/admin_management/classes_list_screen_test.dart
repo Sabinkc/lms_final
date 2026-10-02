@@ -10,6 +10,7 @@ import 'package:cloud_lms/features/admin_management/data/repositories/student_re
 import 'package:cloud_lms/features/admin_management/presentation/providers/academic_structure_provider.dart';
 import 'package:cloud_lms/features/admin_management/presentation/providers/student_provider.dart';
 import 'package:cloud_lms/features/admin_management/presentation/screens/classes_list_screen.dart';
+import 'package:cloud_lms/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -79,7 +80,7 @@ void main() {
     await tester.pumpWidget(_wrap(provider));
     await tester.pump();
 
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(find.byType(LoadingView), findsOneWidget);
   });
 
   testWidgets('empty state shows the CTA from docs/screens.md', (tester) async {
