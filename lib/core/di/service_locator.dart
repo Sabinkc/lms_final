@@ -85,6 +85,7 @@ import '../network/api_client.dart';
 import '../realtime/realtime_service.dart';
 import '../storage/local_prefs_service.dart';
 import '../storage/secure_storage_service.dart';
+import '../../features/dashboard/presentation/providers/shortcut_usage.dart';
 
 /// The single composition root (docs/architecture.md §5). Every repository
 /// and every feature provider is constructed exactly once, here — nothing
@@ -105,13 +106,12 @@ Future<void> setupServiceLocator(EnvConfig env) async {
   final sharedPrefs = await SharedPreferences.getInstance();
   sl.registerSingleton<SharedPreferences>(sharedPrefs);
   sl.registerLazySingleton<LocalPrefsService>(() => LocalPrefsService(sl()));
+  sl.registerLazySingleton<ShortcutUsage>(() => ShortcutUsage(sl()));
 
   sl.registerLazySingleton<FlutterSecureStorage>(() => const FlutterSecureStorage());
   sl.registerLazySingleton<SecureStorageService>(() => SecureStorageService(sl()));
 
-  sl.registerLazySingleton<ApiClient>(
-    () => ApiClient(env: sl(), secureStorage: sl()),
-  );
+  sl.registerLazySingleton<ApiClient>(() => ApiClient(env: sl(), secureStorage: sl()));
 
   sl.registerLazySingleton<RealtimeService>(() => SocketIoRealtimeService(sl()));
 

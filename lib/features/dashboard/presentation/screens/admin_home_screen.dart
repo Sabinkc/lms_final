@@ -19,6 +19,7 @@ import '../../../../shared/widgets/pull_to_refresh.dart';
 import '../../../../shared/widgets/collapsing_hero_header.dart';
 import '../../../../shared/widgets/count_up_text.dart';
 import '../../data/models/admin_dashboard_overview.dart';
+import '../providers/shortcut_usage.dart';
 
 /// Admin-only Home dashboard — restyled 2026-09-28 to match a real-photo
 /// reference design the user supplied (`LMS UI/WhatsApp Image ... 3.24.26
@@ -66,6 +67,16 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Most-used shortcuts first; at most {ShortcutUsage.limit} tiles with More last.
+    final shortcuts = context.read<ShortcutUsage?>();
+    final tiles =
+        shortcuts?.pick(
+          role: 'admin',
+          all: _AdminQuickTile.all,
+          idOf: (t) => t.route,
+          isMore: (t) => t.label == 'More',
+        ) ??
+        _AdminQuickTile.all;
     final user = context.watch<AuthProvider>().user;
     final firstName = (user?.fullName.trim().isNotEmpty ?? false) ? user!.fullName.trim().split(' ').first : 'Admin';
     final unreadCount = context.watch<NotificationProvider>().unreadCount;
@@ -105,7 +116,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                             ),
                           ),
                           Text(
-                            '${_AdminQuickTile.all.length} shortcuts',
+                            tiles.length < _AdminQuickTile.all.length ? 'Most used' : '${tiles.length} shortcuts',
                             style: Theme.of(context).textTheme.labelMedium?.copyWith(
                               color: context.readable(AppColors.primary),
                               fontWeight: FontWeight.w600,
@@ -122,12 +133,15 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                         crossAxisSpacing: AppSpacing.sm,
                         childAspectRatio: 0.78,
                         children: [
-                          for (final tile in _AdminQuickTile.all)
+                          for (final tile in tiles)
                             ColorfulActionTile(
                               icon: tile.icon,
                               label: tile.label,
                               color: tile.color,
-                              onTap: () => context.push(tile.route),
+                              onTap: () {
+                                shortcuts?.record('admin', tile.route);
+                                context.push(tile.route);
+                              },
                             ),
                         ],
                       ),

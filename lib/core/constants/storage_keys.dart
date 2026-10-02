@@ -13,4 +13,5 @@ class StorageKeys {
   static const String themeMode = 'prefs.theme_mode';
   static const String lastSelectedChildId = 'prefs.last_selected_child_id';
   static const String cachedUser = 'prefs.cached_user';
+  static const String shortcutUsage = 'prefs.shortcut_usage'; // + '.<role>'
 }

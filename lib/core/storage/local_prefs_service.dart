@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/storage_keys.dart';
@@ -25,8 +27,7 @@ class LocalPrefsService {
 
   String? get lastSelectedChildId => _prefs.getString(StorageKeys.lastSelectedChildId);
 
-  Future<void> setLastSelectedChildId(String childId) =>
-      _prefs.setString(StorageKeys.lastSelectedChildId, childId);
+  Future<void> setLastSelectedChildId(String childId) => _prefs.setString(StorageKeys.lastSelectedChildId, childId);
 
   Future<void> clearLastSelectedChildId() => _prefs.remove(StorageKeys.lastSelectedChildId);
 
@@ -35,4 +36,19 @@ class LocalPrefsService {
   Future<void> setCachedUserJson(String json) => _prefs.setString(StorageKeys.cachedUser, json);
 
   Future<void> clearCachedUser() => _prefs.remove(StorageKeys.cachedUser);
+
+  /// How often each Home shortcut (by route) was opened, per role — used to
+  /// put a person's most-used shortcuts first. Never leaves the device.
+  Map<String, int> shortcutUsage(String role) {
+    final raw = _prefs.getString('${StorageKeys.shortcutUsage}.$role');
+    if (raw == null) return {};
+    try {
+      return (jsonDecode(raw) as Map<String, dynamic>).map((k, v) => MapEntry(k, (v as num).toInt()));
+    } catch (_) {
+      return {};
+    }
+  }
+
+  Future<void> setShortcutUsage(String role, Map<String, int> counts) =>
+      _prefs.setString('${StorageKeys.shortcutUsage}.$role', jsonEncode(counts));
 }
