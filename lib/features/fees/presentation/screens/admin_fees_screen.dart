@@ -24,6 +24,7 @@ import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
+import '../../../../shared/utils/capitalize.dart';
 
 const _statusFilterOptions = <String?>[null, 'pending', 'partial', 'paid'];
 
@@ -775,7 +776,7 @@ class _FeeTile extends StatelessWidget {
             runSpacing: 4,
             children: [
               Text('${fee.className ?? ''} ${fee.section ?? ''} · ${formatRs(fee.totalAmount)}'),
-              AppStatusChip(label: fee.status[0].toUpperCase() + fee.status.substring(1), color: statusColor),
+              AppStatusChip(label: capitalize(fee.status), color: statusColor),
             ],
           ),
         ),

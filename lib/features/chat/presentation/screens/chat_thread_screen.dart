@@ -384,7 +384,18 @@ class _MessageBubble extends StatelessWidget {
               child: message.attachment!.type == 'image'
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: Image.network(message.attachment!.url, width: 220, fit: BoxFit.cover),
+                      child: Image.network(
+                        message.attachment!.url,
+                        width: 220,
+                        fit: BoxFit.cover,
+                        // Decode at display size, not the photo's full resolution.
+                        cacheWidth: (220 * MediaQuery.devicePixelRatioOf(context)).round(),
+                        errorBuilder: (_, _, _) => const SizedBox(
+                          width: 220,
+                          height: 120,
+                          child: Center(child: Icon(Icons.broken_image_outlined)),
+                        ),
+                      ),
                     )
                   : Text(
                       '📎 ${message.attachment!.type} attachment',

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'app.dart';
@@ -23,6 +24,19 @@ Future<void> bootstrap(EnvConfig env) async {
         FlutterError.presentError(details);
         AppLogger.error('Flutter framework error', details.exception, details.stack);
       };
+      // In release builds a widget that fails to build would otherwise show
+      // as a blank grey box; show a short, friendly note instead.
+      if (kReleaseMode) {
+        ErrorWidget.builder = (_) => const Material(
+          color: Colors.transparent,
+          child: Padding(
+            padding: EdgeInsets.all(16),
+            child: Center(
+              child: Text('Something went wrong showing this. Pull down to refresh or go back.', textAlign: TextAlign.center),
+            ),
+          ),
+        );
+      }
 
       await setupServiceLocator(env);
 

@@ -56,8 +56,8 @@ class AppBackgroundPainter extends CustomPainter {
           Offset.zero,
           Offset(w * 0.4, h),
           _dark
-              ? const [Color(0xFF0F172A), Color(0xFF0E1C24), Color(0xFF0F172A)]
-              : const [Color(0xFFF2FAF6), Color(0xFFFFFFFF), Color(0xFFF1F6FD)],
+              ? const [AppColors.darkBase, AppColors.darkElevated1, AppColors.darkBase]
+              : const [AppColors.paper, Color(0xFFFFFFFF), AppColors.paper],
           const [0.0, 0.55, 1.0],
         ),
     );
@@ -75,8 +75,8 @@ class AppBackgroundPainter extends CustomPainter {
 
     final k = _dark ? 1.6 : 1.0;
     glow(Offset(w * 1.02, h * 0.02), w * 0.55, AppColors.primary, 0.13 * k);
-    glow(Offset(-w * 0.12, h * 0.40), w * 0.48, const Color(0xFF2F80FF), 0.08 * k);
-    glow(Offset(w * 0.95, h * 0.72), w * 0.42, const Color(0xFF14B8A6), 0.09 * k);
+    glow(Offset(-w * 0.12, h * 0.40), w * 0.48, AppColors.slate, 0.08 * k);
+    glow(Offset(w * 0.95, h * 0.72), w * 0.42, AppColors.teal, 0.09 * k);
     glow(Offset(w * 0.15, h * 1.02), w * 0.50, AppColors.primary, 0.08 * k);
 
     // 3. Wave bands — top-right and bottom.
@@ -98,7 +98,7 @@ class AppBackgroundPainter extends CustomPainter {
       return p;
     }
 
-    final waveColor = _dark ? const Color(0xFF34D399) : AppColors.primary;
+    final waveColor = _dark ? AppColors.primaryLight : AppColors.primary;
     canvas.drawPath(
       wave(h * 0.13, h * 0.025, 0.6, fromTop: true),
       Paint()
@@ -123,7 +123,7 @@ class AppBackgroundPainter extends CustomPainter {
         ..shader = ui.Gradient.linear(
           Offset(w, h),
           Offset(0, h * 0.88),
-          [const Color(0xFF2F80FF).withValues(alpha: _dark ? 0.10 : 0.06), const Color(0x002F80FF)],
+          [AppColors.slate.withValues(alpha: _dark ? 0.10 : 0.06), const Color(0x002F80FF)],
         ),
     );
 

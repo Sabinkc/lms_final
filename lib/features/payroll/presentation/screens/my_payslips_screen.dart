@@ -126,7 +126,7 @@ class _MyPayslipsScreenState extends State<MyPayslipsScreen> {
                 child: TintedStatTile(
                   label: 'Tax',
                   value: formatRs(sum((p) => p.deductions.tax)),
-                  color: const Color(0xFFEA580C),
+                  color: AppColors.warning,
                 ),
               ),
               const SizedBox(width: 8),
@@ -149,8 +149,8 @@ class _MyPayslipsScreenState extends State<MyPayslipsScreen> {
   }
 }
 
-const _paidGreen = Color(0xFF16A34A);
-const _pendingOrange = Color(0xFFEA580C);
+const _paidGreen = AppColors.success;
+const _pendingOrange = AppColors.warning;
 
 class _LatestPayHighlight extends StatelessWidget {
   final Payroll payslip;
@@ -190,7 +190,7 @@ class _LatestPayHighlight extends StatelessWidget {
               AppStatusPill(
                 label: paid ? 'Disbursed' : 'Pending',
                 icon: paid ? Icons.check_circle_outline : Icons.schedule,
-                color: paid ? const Color(0xFFB9F6CA) : const Color(0xFFFFD180),
+                color: paid ? AppColors.primarySoft : AppColors.accentSoft,
               ),
             ],
           ),
@@ -223,7 +223,7 @@ class _LatestPayHighlight extends StatelessWidget {
                 child: _HeroFigure(
                   label: 'Deductions',
                   value: formatRs(payslip.totalDeductions),
-                  valueColor: const Color(0xFFFFD180),
+                  valueColor: AppColors.accentSoft,
                 ),
               ),
             ],

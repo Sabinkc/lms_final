@@ -56,7 +56,7 @@ class IdBadgePreview extends StatelessWidget {
                 const Expanded(
                   child: Text(
                     'CLOUDSLMS',
-                    style: TextStyle(color: Color(0xFFB9F6CA), fontWeight: FontWeight.w800, letterSpacing: 1.2),
+                    style: TextStyle(color: AppColors.primarySoft, fontWeight: FontWeight.w800, letterSpacing: 1.2),
                   ),
                 ),
                 Column(

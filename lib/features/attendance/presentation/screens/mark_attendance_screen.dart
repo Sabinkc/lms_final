@@ -193,7 +193,7 @@ class _ClassSummaryCard extends StatelessWidget {
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [AppColors.primary.withValues(alpha: 0.08), const Color(0xFF2F80FF).withValues(alpha: 0.06)],
+            colors: [AppColors.primary.withValues(alpha: 0.08), AppColors.slate.withValues(alpha: 0.06)],
           ),
           borderRadius: BorderRadius.circular(AppRadius.xl2),
           border: Border.all(color: AppColors.primary.withValues(alpha: 0.12)),
@@ -527,10 +527,10 @@ class _SubmitBar extends StatelessWidget {
       final scheme = Theme.of(context).colorScheme;
       return Container(
         padding: const EdgeInsets.all(AppSpacing.md),
-        decoration: BoxDecoration(color: Colors.green.withValues(alpha: 0.10), borderRadius: AppRadius.card),
+        decoration: BoxDecoration(color: AppColors.success.withValues(alpha: 0.10), borderRadius: AppRadius.card),
         child: Row(
           children: [
-            Icon(Icons.check_circle, color: Colors.green.shade700),
+            Icon(Icons.check_circle, color: AppColors.success),
             const SizedBox(width: AppSpacing.sm),
             Expanded(
               child: Text(

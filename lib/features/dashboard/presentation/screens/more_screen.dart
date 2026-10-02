@@ -254,19 +254,19 @@ class _AdminStatStrip extends StatelessWidget {
           icon: Icons.groups_rounded,
           value: '${stats.totalStudents}',
           label: 'Students',
-          color: const Color(0xFF2563EB),
+          color: AppColors.info,
         ),
         StatCard(
           icon: Icons.badge_rounded,
           value: '${stats.totalTeachers}',
           label: 'Teachers',
-          color: const Color(0xFFEA580C),
+          color: AppColors.warning,
         ),
         StatCard(
           icon: Icons.receipt_long_rounded,
           value: '${stats.pendingFeesCount}',
           label: 'Pending Fees',
-          color: const Color(0xFFDC2626),
+          color: AppColors.danger,
         ),
       ],
     );

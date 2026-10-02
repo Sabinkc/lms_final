@@ -10,6 +10,7 @@ import '../../../admin_management/presentation/providers/academic_structure_prov
 import '../providers/backup_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/app_colors.dart';
 
 /// Admin: Backup & Data (`docs/production_roadmap.md` Phase L1,
 /// `implementation_backlog.md` E20) — matches the real web app's shape
@@ -56,12 +57,12 @@ class BackupScreen extends StatelessWidget {
                 children: [
                   InfoStrip(icon: Icons.folder_zip_outlined, text: 'Saved to your device as a single .zip file'),
                   SizedBox(height: 8),
-                  InfoStrip(icon: Icons.lock_outline, text: 'Admin-only download', color: Color(0xFF16A34A)),
+                  InfoStrip(icon: Icons.lock_outline, text: 'Admin-only download', color: AppColors.success),
                   SizedBox(height: 8),
                   InfoStrip(
                     icon: Icons.privacy_tip_outlined,
                     text: 'Contains personal student and staff records — store it securely',
-                    color: Color(0xFFEA580C),
+                    color: AppColors.warning,
                   ),
                 ],
               ),

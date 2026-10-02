@@ -60,12 +60,12 @@ _Category _categoryOf(Notice n) => n.isImportant
       };
 
 (String label, IconData icon, Color color) _categoryStyle(_Category c) => switch (c) {
-  _Category.urgent => ('Urgent', Icons.error_rounded, const Color(0xFFE11D48)),
-  _Category.all => ('Everyone', Icons.campaign_rounded, const Color(0xFF2F80FF)),
-  _Category.students => ('Students', Icons.school_rounded, const Color(0xFF7C3AED)),
+  _Category.urgent => ('Urgent', Icons.error_rounded, AppColors.danger),
+  _Category.all => ('Everyone', Icons.campaign_rounded, AppColors.slate),
+  _Category.students => ('Students', Icons.school_rounded, AppColors.plum),
   _Category.teachers => ('Teachers', Icons.co_present_rounded, AppColors.primary),
-  _Category.parents => ('Parents', Icons.family_restroom_rounded, const Color(0xFFF2600C)),
-  _Category.admins => ('Admins', Icons.admin_panel_settings_rounded, const Color(0xFF0EA5B7)),
+  _Category.parents => ('Parents', Icons.family_restroom_rounded, AppColors.clay),
+  _Category.admins => ('Admins', Icons.admin_panel_settings_rounded, AppColors.teal),
 };
 
 class _NoticesListScreenState extends State<NoticesListScreen> {
@@ -150,7 +150,7 @@ class _NoticesListScreenState extends State<NoticesListScreen> {
                           icon: Icons.campaign_rounded,
                           title: 'Stay Informed',
                           subtitle: 'The latest notices, announcements and important updates from your institution.',
-                          color: const Color(0xFF2F80FF),
+                          color: AppColors.slate,
                           figure: '${notices.length}',
                         ),
                         const SizedBox(height: 14),

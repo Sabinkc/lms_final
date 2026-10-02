@@ -157,10 +157,10 @@ class PeriodTimeline extends StatelessWidget {
 }
 
 ({String label, Color color, IconData icon}) _stateStyle(PeriodState state) => switch (state) {
-  PeriodState.done => (label: 'Completed', color: const Color(0xFF64748B), icon: Icons.check_rounded),
+  PeriodState.done => (label: 'Completed', color: AppColors.inkMuted, icon: Icons.check_rounded),
   PeriodState.now => (label: 'In Progress', color: AppColors.info, icon: Icons.play_arrow_rounded),
   PeriodState.next => (label: 'Next', color: AppColors.primary, icon: Icons.schedule_rounded),
-  PeriodState.upcoming => (label: 'Upcoming', color: const Color(0xFF94A3B8), icon: Icons.circle_outlined),
+  PeriodState.upcoming => (label: 'Upcoming', color: AppColors.inkMuted, icon: Icons.circle_outlined),
 };
 
 class _TimelineRow extends StatelessWidget {

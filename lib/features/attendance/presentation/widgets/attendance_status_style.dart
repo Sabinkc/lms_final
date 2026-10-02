@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_radius.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../core/theme/app_colors.dart';
 
 /// The one attendance colour scheme every screen uses — Admin Students,
 /// Student Profile, Mark Attendance, and the student/parent/teacher
 /// history screens — so "Late" is the same purple everywhere.
 abstract final class AttendanceColors {
-  static const Color present = Color(0xFF16A34A);
-  static const Color absent = Color(0xFFDC2626);
-  static const Color late = Color(0xFF7C3AED);
-  static const Color leave = Color(0xFF2F80FF);
-  static const Color halfDay = Color(0xFFF59E0B);
+  static const Color present = AppColors.success;
+  static const Color absent = AppColors.danger;
+  static const Color late = AppColors.plum;
+  static const Color leave = AppColors.slate;
+  static const Color halfDay = AppColors.ochre;
 }
 
 /// Label, icon and colour for a backend status string (`present`, `absent`,

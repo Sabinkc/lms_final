@@ -262,8 +262,8 @@ class _AdminAttendanceOverviewScreenState extends State<AdminAttendanceOverviewS
 
 String _students(int n) => '$n student${n == 1 ? '' : 's'}';
 
-const _presentGreen = Color(0xFF16A34A);
-const _lateOrange = Color(0xFFEA580C);
+const _presentGreen = AppColors.success;
+const _lateOrange = AppColors.warning;
 
 /// Sections below this attended share are flagged for follow-up.
 const _flagThreshold = 0.85;

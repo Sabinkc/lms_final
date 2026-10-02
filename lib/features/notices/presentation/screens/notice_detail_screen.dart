@@ -118,7 +118,7 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
                                   ),
                                   _MetaRow(
                                     icon: Icons.event_outlined,
-                                    color: const Color(0xFFEA580C),
+                                    color: AppColors.warning,
                                     label: 'Published',
                                     value: formatDisplayDate(notice.createdAt),
                                   ),
@@ -151,11 +151,11 @@ class _NoticeDetailScreenState extends State<NoticeDetailScreen> {
 
 /// Same audience labels/colours as the Notices list chips.
 ({String label, IconData icon, Color color}) _audienceStyle(String audience) => switch (audience.toLowerCase()) {
-  'students' => (label: 'Students', icon: Icons.school_rounded, color: const Color(0xFF7C3AED)),
+  'students' => (label: 'Students', icon: Icons.school_rounded, color: AppColors.plum),
   'teachers' => (label: 'Teachers', icon: Icons.co_present_rounded, color: AppColors.primary),
-  'parents' => (label: 'Parents', icon: Icons.family_restroom_rounded, color: const Color(0xFFF2600C)),
-  'admins' => (label: 'Admins', icon: Icons.admin_panel_settings_rounded, color: const Color(0xFF0EA5B7)),
-  _ => (label: 'Everyone', icon: Icons.campaign_rounded, color: const Color(0xFF2F80FF)),
+  'parents' => (label: 'Parents', icon: Icons.family_restroom_rounded, color: AppColors.clay),
+  'admins' => (label: 'Admins', icon: Icons.admin_panel_settings_rounded, color: AppColors.teal),
+  _ => (label: 'Everyone', icon: Icons.campaign_rounded, color: AppColors.slate),
 };
 
 class _MetaRow extends StatelessWidget {

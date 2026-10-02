@@ -121,7 +121,7 @@ class _ExamHeader extends StatelessWidget {
     final (filled, total) = _entryProgress(provider, exam.subjects);
     final progress = total == 0 ? 0.0 : filled / total;
     final ready = total > 0 && filled == total;
-    final readyColor = ready ? const Color(0xFF16A34A) : const Color(0xFFEA580C);
+    final readyColor = ready ? AppColors.success : AppColors.warning;
 
     return Card(
       margin: EdgeInsets.zero,
@@ -423,7 +423,7 @@ class _PublishedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    const green = Color(0xFF16A34A);
+    const green = AppColors.success;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),

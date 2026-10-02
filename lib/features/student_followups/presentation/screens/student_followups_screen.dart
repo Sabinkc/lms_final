@@ -168,9 +168,9 @@ class _StudentFollowupsScreenState extends State<StudentFollowupsScreen> {
 }
 
 ({String label, IconData icon, Color color}) _statusStyle(String status) => switch (status) {
-  'resolved' => (label: 'Resolved', icon: Icons.check_circle_outline, color: const Color(0xFF16A34A)),
-  'in-progress' => (label: 'In Progress', icon: Icons.timelapse, color: const Color(0xFF4F46E5)),
-  _ => (label: 'Pending', icon: Icons.flag_outlined, color: const Color(0xFFEA580C)),
+  'resolved' => (label: 'Resolved', icon: Icons.check_circle_outline, color: AppColors.success),
+  'in-progress' => (label: 'In Progress', icon: Icons.timelapse, color: AppColors.info),
+  _ => (label: 'Pending', icon: Icons.flag_outlined, color: AppColors.warning),
 };
 
 class _SummaryRow extends StatelessWidget {

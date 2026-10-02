@@ -90,11 +90,11 @@ class _ReportsScreenState extends State<ReportsScreen> {
   }
 }
 
-const _green = Color(0xFF16A34A);
-const _orange = Color(0xFFEA580C);
-const _amber = Color(0xFFD97706);
-const _teal = Color(0xFF0891B2);
-const _purple = Color(0xFF7C3AED);
+const _green = AppColors.success;
+const _orange = AppColors.warning;
+const _amber = AppColors.ochre;
+const _teal = AppColors.teal;
+const _purple = AppColors.plum;
 
 /// Green ≥ 85%, amber ≥ 70%, red below — the same thresholds the
 /// attendance overview flags on.

@@ -20,6 +20,7 @@ import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
+import '../../../../shared/utils/capitalize.dart';
 
 /// Admin: pending-payments review queue (`implementation_backlog.md`
 /// E7-F2) plus a read-only full history tab backed by `GET
@@ -84,8 +85,8 @@ class _PaymentReviewScreenState extends State<PaymentReviewScreen> {
   }
 }
 
-const _approvedGreen = Color(0xFF16A34A);
-const _pendingOrange = Color(0xFFEA580C);
+const _approvedGreen = AppColors.success;
+const _pendingOrange = AppColors.warning;
 
 Color _statusColor(BuildContext context, String status) => switch (status) {
   'approved' => _approvedGreen,
@@ -101,10 +102,9 @@ String _methodLabel(String method) => switch (method.toLowerCase()) {
   'connectips' => 'ConnectIPS',
   'imepay' => 'IME Pay',
   'bank' || 'bank_transfer' => 'Bank Transfer',
-  _ => _capitalize(method.replaceAll('_', ' ')),
+  _ => capitalize(method.replaceAll('_', ' ')),
 };
 
-String _capitalize(String s) => s.isEmpty ? s : s[0].toUpperCase() + s.substring(1);
 
 class _PendingQueue extends StatelessWidget {
   final FeeProvider provider;
@@ -232,7 +232,7 @@ class _PaymentCard extends StatelessWidget {
                   ),
                 ),
                 AppStatusPill(
-                  label: payment.status == 'pending' ? 'Pending Review' : _capitalize(payment.status),
+                  label: payment.status == 'pending' ? 'Pending Review' : capitalize(payment.status),
                   color: statusColor,
                 ),
               ],
@@ -375,7 +375,7 @@ class _HistoryListState extends State<_HistoryList> {
                     AppFilterChipBar<String?>(
                       options: [null, ...statuses],
                       selected: status,
-                      labelBuilder: (s) => s == null ? 'All' : _capitalize(s),
+                      labelBuilder: (s) => s == null ? 'All' : capitalize(s),
                       countBuilder: (s) => s == null ? provider.history.length : counts[s]!,
                       onSelected: (s) => setState(() => _status = s),
                     ),

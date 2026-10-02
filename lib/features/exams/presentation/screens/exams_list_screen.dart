@@ -202,10 +202,10 @@ class _ExamsListScreenState extends State<ExamsListScreen> {
 const _statusOrder = ['upcoming', 'ongoing', 'completed', 'published'];
 
 ({String label, IconData icon, Color color}) _statusStyle(String status) => switch (status) {
-  'published' => (label: 'Published', icon: Icons.check_circle_outline, color: const Color(0xFF16A34A)),
-  'ongoing' => (label: 'In Progress', icon: Icons.timelapse, color: const Color(0xFFEA580C)),
-  'completed' => (label: 'Completed', icon: Icons.pending_actions, color: const Color(0xFF0891B2)),
-  _ => (label: 'Upcoming', icon: Icons.schedule, color: const Color(0xFF2F80FF)),
+  'published' => (label: 'Published', icon: Icons.check_circle_outline, color: AppColors.success),
+  'ongoing' => (label: 'In Progress', icon: Icons.timelapse, color: AppColors.warning),
+  'completed' => (label: 'Completed', icon: Icons.pending_actions, color: AppColors.teal),
+  _ => (label: 'Upcoming', icon: Icons.schedule, color: AppColors.slate),
 };
 
 class _ExamCard extends StatelessWidget {

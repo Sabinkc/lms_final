@@ -244,7 +244,7 @@ class _ProfileHeader extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [AppColors.primary.withValues(alpha: 0.10), const Color(0xFF2F80FF).withValues(alpha: 0.06)],
+          colors: [AppColors.primary.withValues(alpha: 0.10), AppColors.slate.withValues(alpha: 0.06)],
         ),
         borderRadius: BorderRadius.circular(AppRadius.xl2),
         border: Border.all(color: AppColors.primary.withValues(alpha: 0.12)),
@@ -276,7 +276,7 @@ class _ProfileHeader extends StatelessWidget {
                       width: 16,
                       height: 16,
                       decoration: BoxDecoration(
-                        color: isActive ? const Color(0xFF22C55E) : theme.colorScheme.outline,
+                        color: isActive ? AppColors.success : theme.colorScheme.outline,
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.white, width: 2.5),
                       ),
@@ -526,7 +526,7 @@ class _ClassInfoCard extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: _ClassCell(label: 'Class', value: student.className, color: const Color(0xFF2F80FF)),
+                child: _ClassCell(label: 'Class', value: student.className, color: AppColors.slate),
               ),
               const VerticalDivider(width: 1),
               Expanded(
@@ -559,7 +559,7 @@ class _ClassInfoCard extends StatelessWidget {
               ),
               const VerticalDivider(width: 1),
               Expanded(
-                child: _ClassCell(label: 'Roll No.', value: student.rollNumber, color: const Color(0xFF7C3AED)),
+                child: _ClassCell(label: 'Roll No.', value: student.rollNumber, color: AppColors.plum),
               ),
             ],
           ),

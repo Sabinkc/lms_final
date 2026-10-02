@@ -58,15 +58,22 @@ class StatCard extends StatelessWidget {
                   decoration: BoxDecoration(color: tint.withValues(alpha: 0.14), borderRadius: AppRadius.card),
                   child: Icon(icon, color: tint, size: 20),
                 ),
-                if (progress != null)
-                  _ProgressRing(progress: progress!, color: tint)
-                else if (trend != null)
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    decoration: BoxDecoration(color: tint.withValues(alpha: 0.14), borderRadius: AppRadius.button),
-                    child: Text(
-                      trend!,
-                      style: textTheme.labelSmall?.copyWith(color: tint, fontWeight: FontWeight.w700),
+                // Shrinks rather than overflowing on narrow (360dp) phones.
+                if (progress != null || trend != null)
+                  Flexible(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerRight,
+                      child: progress != null
+                          ? _ProgressRing(progress: progress!, color: tint)
+                          : Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(color: tint.withValues(alpha: 0.14), borderRadius: AppRadius.button),
+                              child: Text(
+                                trend!,
+                                style: textTheme.labelSmall?.copyWith(color: tint, fontWeight: FontWeight.w700),
+                              ),
+                            ),
                     ),
                   ),
               ],

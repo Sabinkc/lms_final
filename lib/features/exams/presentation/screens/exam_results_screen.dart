@@ -228,13 +228,13 @@ class _AdminClassResultsState extends State<_AdminClassResults> {
   }
 }
 
-const _passGreen = Color(0xFF16A34A);
+const _passGreen = AppColors.success;
 
 /// Gold / silver / bronze for the top three ranks, none otherwise.
 Color? _medalColor(int? rank) => switch (rank) {
-  1 => const Color(0xFFEAB308),
-  2 => const Color(0xFF94A3B8),
-  3 => const Color(0xFFD97706),
+  1 => AppColors.ochre,
+  2 => AppColors.inkMuted,
+  3 => AppColors.ochre,
   _ => null,
 };
 

@@ -15,6 +15,7 @@ import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
+import '../../../../shared/utils/capitalize.dart';
 
 /// docs/screens.md doesn't name this screen explicitly (it predates the
 /// correction-workflow finding) — `implementation_backlog.md` E3-F6-T2:
@@ -69,7 +70,7 @@ class _AttendanceCorrectionsScreenState extends State<AttendanceCorrectionsScree
                           title: 'Review Queue',
                           subtitle:
                               'Teacher requests to change a marked attendance status. Approving updates the record.',
-                          color: const Color(0xFFEA580C),
+                          color: AppColors.warning,
                           figure: '${provider.corrections.length}',
                           figureLabel: 'Pending',
                         ),
@@ -110,12 +111,11 @@ Future<void> _reject(BuildContext context, AdminAttendanceProvider provider, Att
   }
 }
 
-String _capitalize(String s) => s.isEmpty ? s : s[0].toUpperCase() + s.substring(1);
 
 Color _statusColor(String status) => switch (status.toLowerCase()) {
-  'present' => const Color(0xFF16A34A),
+  'present' => AppColors.success,
   'absent' => AppColors.danger,
-  'late' => const Color(0xFFEA580C),
+  'late' => AppColors.warning,
   _ => AppColors.info,
 };
 
@@ -176,7 +176,7 @@ class _CorrectionCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                const AppStatusPill(label: 'Pending', icon: Icons.schedule, color: Color(0xFFEA580C)),
+                const AppStatusPill(label: 'Pending', icon: Icons.schedule, color: AppColors.warning),
               ],
             ),
             const SizedBox(height: 12),
@@ -190,12 +190,12 @@ class _CorrectionCard extends StatelessWidget {
                 children: [
                   Text('STATUS SHIFT', style: theme.textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w700)),
                   const Spacer(),
-                  AppStatusPill(label: _capitalize(correction.oldStatus), color: _statusColor(correction.oldStatus)),
+                  AppStatusPill(label: capitalize(correction.oldStatus), color: _statusColor(correction.oldStatus)),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 6),
                     child: Icon(Icons.arrow_forward_rounded, size: 16),
                   ),
-                  AppStatusPill(label: _capitalize(correction.newStatus), color: _statusColor(correction.newStatus)),
+                  AppStatusPill(label: capitalize(correction.newStatus), color: _statusColor(correction.newStatus)),
                 ],
               ),
             ),

@@ -269,7 +269,7 @@ class _TeacherSubmissions extends StatelessWidget {
                       icon: Icons.task_alt_rounded,
                       label: 'Graded',
                       value: '$graded',
-                      color: const Color(0xFF16A34A),
+                      color: AppColors.success,
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -278,7 +278,7 @@ class _TeacherSubmissions extends StatelessWidget {
                       icon: Icons.pending_actions_rounded,
                       label: 'To grade',
                       value: '${submissions.length - graded}',
-                      color: const Color(0xFFEA580C),
+                      color: AppColors.warning,
                     ),
                   ),
                 ],
@@ -341,9 +341,9 @@ class _SubmissionCard extends StatelessWidget {
                   ),
                 ),
                 if (submission.graded)
-                  const AppStatusPill(label: 'Graded', icon: Icons.check_circle_outline, color: Color(0xFF16A34A))
+                  const AppStatusPill(label: 'Graded', icon: Icons.check_circle_outline, color: AppColors.success)
                 else
-                  const AppStatusPill(label: 'Pending', icon: Icons.schedule, color: Color(0xFFEA580C)),
+                  const AppStatusPill(label: 'Pending', icon: Icons.schedule, color: AppColors.warning),
               ],
             ),
             if (submission.submissionText.isNotEmpty) ...[
@@ -368,7 +368,7 @@ class _SubmissionCard extends StatelessWidget {
               InfoStrip(
                 icon: Icons.grade_outlined,
                 text: 'Marks: ${submission.marks}${submission.remarks.isNotEmpty ? ' — ${submission.remarks}' : ''}',
-                color: const Color(0xFF16A34A),
+                color: AppColors.success,
               )
             else
               FilledButton.icon(
@@ -549,7 +549,7 @@ class _StudentSubmissionState extends State<_StudentSubmission> {
               text: mySubmission.submittedAt.isNotEmpty
                   ? 'Submitted ${formatDisplayDate(mySubmission.submittedAt)} · you can resubmit until graded'
                   : 'Submitted · you can resubmit until graded',
-              color: const Color(0xFF16A34A),
+              color: AppColors.success,
             ),
             const SizedBox(height: 12),
           ],

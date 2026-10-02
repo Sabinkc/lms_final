@@ -14,6 +14,7 @@ import '../providers/self_fee_provider.dart';
 import '../screens/pay_fee_dialog.dart';
 import 'fee_dashboard_widgets.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../shared/utils/capitalize.dart';
 
 /// Shared summary + fee list, used by both Student "My Fees" and Parent
 /// "Child's Fees" — same [SelfFeeProvider] state either way, mirroring
@@ -129,7 +130,17 @@ class _SummaryCard extends StatelessWidget {
                 const SizedBox(height: AppSpacing.md),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: Image.network(paymentQrUrl!, width: 160, height: 160, fit: BoxFit.contain),
+                  child: Image.network(
+                    paymentQrUrl!,
+                    width: 160,
+                    height: 160,
+                    fit: BoxFit.contain,
+                    errorBuilder: (_, _, _) => const SizedBox(
+                      width: 160,
+                      height: 160,
+                      child: Center(child: Text('QR code unavailable', textAlign: TextAlign.center)),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -189,7 +200,7 @@ class _FeeCard extends StatelessWidget {
                   style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                 ),
               ),
-              AppStatusChip(label: fee.status[0].toUpperCase() + fee.status.substring(1), color: statusColor),
+              AppStatusChip(label: capitalize(fee.status), color: statusColor),
             ],
           ),
         ),

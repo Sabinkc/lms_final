@@ -29,16 +29,16 @@ const _unread = 'Unread';
 ({String label, IconData icon, Color color}) _category(String type) => switch (type) {
   'assignment' ||
   'exam' ||
-  'result' => (label: 'Academic', icon: Icons.school_outlined, color: const Color(0xFF4F46E5)),
+  'result' => (label: 'Academic', icon: Icons.school_outlined, color: AppColors.info),
   'attendance' ||
   'attendance_correction' ||
   'attendanceSession' ||
   'attendanceRecord' ||
-  'attendanceCorrection' => (label: 'Attendance', icon: Icons.event_available_outlined, color: const Color(0xFF0B6E4F)),
+  'attendanceCorrection' => (label: 'Attendance', icon: Icons.event_available_outlined, color: AppColors.primary),
   'fee' ||
   'payroll' ||
-  'subscription' => (label: 'Finance', icon: Icons.account_balance_wallet_outlined, color: const Color(0xFFEA580C)),
-  _ => (label: 'General', icon: Icons.campaign_outlined, color: const Color(0xFF0891B2)),
+  'subscription' => (label: 'Finance', icon: Icons.account_balance_wallet_outlined, color: AppColors.warning),
+  _ => (label: 'General', icon: Icons.campaign_outlined, color: AppColors.teal),
 };
 
 /// docs/screens.md / `implementation_backlog.md` E11 — one shared screen

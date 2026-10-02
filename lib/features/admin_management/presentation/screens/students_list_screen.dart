@@ -366,7 +366,7 @@ class _HeaderCard extends StatelessWidget {
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [AppColors.primary.withValues(alpha: 0.08), const Color(0xFF2F80FF).withValues(alpha: 0.06)],
+          colors: [AppColors.primary.withValues(alpha: 0.08), AppColors.slate.withValues(alpha: 0.06)],
         ),
         borderRadius: BorderRadius.circular(AppRadius.xl2),
         border: Border.all(color: AppColors.primary.withValues(alpha: 0.12)),

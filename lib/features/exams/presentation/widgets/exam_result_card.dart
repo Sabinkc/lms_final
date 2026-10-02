@@ -23,7 +23,7 @@ class ExamResultCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final passColor = result.isPassed ? const Color(0xFF16A34A) : AppColors.danger;
+    final passColor = result.isPassed ? AppColors.success : AppColors.danger;
     return ListView(
       padding: const EdgeInsets.fromLTRB(AppSpacing.lg, AppSpacing.sm, AppSpacing.lg, AppSpacing.xl),
       children: [
@@ -102,7 +102,7 @@ class ExamResultCard extends StatelessWidget {
                 icon: Icons.emoji_events_outlined,
                 label: 'Class Rank',
                 value: result.rank != null ? '#${result.rank}' : '—',
-                color: const Color(0xFFD97706),
+                color: AppColors.ochre,
               ),
             ),
             const SizedBox(width: 10),

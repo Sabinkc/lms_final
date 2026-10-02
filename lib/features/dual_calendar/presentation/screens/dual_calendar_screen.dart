@@ -229,7 +229,7 @@ class _DualCalendarScreenState extends State<DualCalendarScreen> {
   ][month - 1];
 }
 
-const _bsAccent = Color(0xFFB45309);
+const _bsAccent = AppColors.ochre;
 
 class _DayCell extends StatelessWidget {
   final DateTime date;

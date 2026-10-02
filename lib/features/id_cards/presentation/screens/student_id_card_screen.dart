@@ -10,6 +10,7 @@ import '../../../admin_management/presentation/providers/academic_structure_prov
 import '../providers/student_id_card_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../core/theme/app_colors.dart';
 
 /// Student: Download Own ID Card (`docs/production_roadmap.md` Phase L6,
 /// `implementation_backlog.md` E21-F2) — one button, same shape as
@@ -58,7 +59,7 @@ class StudentIdCardScreen extends StatelessWidget {
                   InfoStrip(
                     icon: Icons.support_agent_outlined,
                     text: 'Details wrong? Ask the school office to update your record',
-                    color: Color(0xFFEA580C),
+                    color: AppColors.warning,
                   ),
                 ],
               ),

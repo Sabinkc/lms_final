@@ -38,12 +38,12 @@ class PersonCard extends StatelessWidget {
   });
 
   static const _palette = [
-    Color(0xFF0B6E4F),
-    Color(0xFF4F46E5),
-    Color(0xFFEA580C),
-    Color(0xFF0891B2),
-    Color(0xFFDB2777),
-    Color(0xFF7C3AED),
+    AppColors.primary,
+    AppColors.info,
+    AppColors.warning,
+    AppColors.teal,
+    AppColors.rose,
+    AppColors.plum,
   ];
 
   @override
@@ -51,7 +51,7 @@ class PersonCard extends StatelessWidget {
     final theme = Theme.of(context);
     final color = _palette[name.hashCode.abs() % _palette.length];
     final active = status == null || status!.toLowerCase() == 'active';
-    final statusColor = active ? const Color(0xFF16A34A) : theme.colorScheme.onSurfaceVariant;
+    final statusColor = active ? AppColors.success : theme.colorScheme.onSurfaceVariant;
     final hasFooter = (phone != null && phone!.isNotEmpty) || highlight != null;
 
     return Card(

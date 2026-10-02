@@ -151,7 +151,7 @@ class _DepartmentsListState extends State<_DepartmentsList> {
             AppStatusPill(
               label: '${classes.length} class${classes.length == 1 ? '' : 'es'} covered',
               icon: Icons.class_outlined,
-              color: const Color(0xFFEA580C),
+              color: AppColors.warning,
             ),
           ],
         ),

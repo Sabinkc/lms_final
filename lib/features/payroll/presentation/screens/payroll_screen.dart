@@ -149,8 +149,8 @@ class _PayrollScreenState extends State<PayrollScreen> {
   }
 }
 
-const _paidGreen = Color(0xFF16A34A);
-const _pendingOrange = Color(0xFFEA580C);
+const _paidGreen = AppColors.success;
+const _pendingOrange = AppColors.warning;
 
 double _allowancesTotal(PayrollAllowances a) => a.houseRent + a.transport + a.medical + a.other;
 
@@ -417,7 +417,7 @@ class _PayrollHero extends StatelessWidget {
               value: fraction,
               minHeight: 8,
               color: Colors.white,
-              backgroundColor: const Color(0xFFFBBF24).withValues(alpha: 0.6),
+              backgroundColor: AppColors.ochre.withValues(alpha: 0.6),
             ),
           ),
           const SizedBox(height: 8),
@@ -427,7 +427,7 @@ class _PayrollHero extends StatelessWidget {
               const SizedBox(width: 5),
               Text('Paid $paidCount · ${formatRs(paid)}', style: const TextStyle(color: Colors.white, fontSize: 12)),
               const Spacer(),
-              const Icon(Icons.circle, size: 9, color: Color(0xFFFBBF24)),
+              const Icon(Icons.circle, size: 9, color: AppColors.ochre),
               const SizedBox(width: 5),
               Text(
                 'Pending $pendingCount · ${formatRs(summary?.totalPending ?? 0)}',

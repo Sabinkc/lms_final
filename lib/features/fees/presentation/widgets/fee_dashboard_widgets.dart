@@ -16,11 +16,11 @@ export '../../../../shared/utils/format_rs.dart';
 /// everywhere on the screen.
 abstract final class FeeColors {
   static const Color paid = AppColors.primary;
-  static const Color partial = Color(0xFFF59E0B);
-  static const Color pending = Color(0xFFE4572E);
+  static const Color partial = AppColors.ochre;
+  static const Color pending = AppColors.clay;
 
   /// The lighter second series in the collected-vs-pending bar chart.
-  static const Color pendingBar = Color(0xFF8FD3B4);
+  static const Color pendingBar = AppColors.primaryLight;
 }
 
 /// Compact axis label: `85K`, `2.5L`, `1.2Cr`.

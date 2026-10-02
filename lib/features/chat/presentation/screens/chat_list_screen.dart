@@ -180,12 +180,12 @@ class _GroupTile extends StatelessWidget {
 
   /// A stable tint per group so the list isn't one flat color.
   static const _palette = [
-    Color(0xFF0B6E4F),
-    Color(0xFF4F46E5),
-    Color(0xFFEA580C),
-    Color(0xFF0891B2),
-    Color(0xFFDB2777),
-    Color(0xFF7C3AED),
+    AppColors.primary,
+    AppColors.info,
+    AppColors.warning,
+    AppColors.teal,
+    AppColors.rose,
+    AppColors.plum,
   ];
 
   @override

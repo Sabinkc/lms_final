@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/app_radius.dart';
+import '../../../../core/theme/app_colors.dart';
 
 /// Badge gradients cycled by a stable hash of the class name, so a class
 /// keeps its color across reloads and reorderings.
 const _badgeGradients = <List<Color>>[
-  [Color(0xFF2F80FF), Color(0xFF0052D4)],
-  [Color(0xFFFF9A3C), Color(0xFFF2600C)],
-  [Color(0xFF4CC46A), Color(0xFF239B45)],
-  [Color(0xFF9B6BFF), Color(0xFF6D3FE0)],
-  [Color(0xFFFFC23D), Color(0xFFF59E0B)],
-  [Color(0xFF2FD1D1), Color(0xFF0EA5B7)],
-  [Color(0xFFFF6B81), Color(0xFFE63958)],
-  [Color(0xFFC77DFF), Color(0xFF9D4EDD)],
+  [AppColors.slate, AppColors.slateDeep],
+  [AppColors.clay, AppColors.clayDeep],
+  [AppColors.moss, AppColors.mossDeep],
+  [AppColors.plum, AppColors.plumDeep],
+  [AppColors.ochre, AppColors.ochreDeep],
+  [AppColors.teal, AppColors.tealDeep],
+  [AppColors.rose, AppColors.roseDeep],
+  [AppColors.plum, AppColors.plumDeep],
 ];
 
 List<Color> _gradientFor(String name) {

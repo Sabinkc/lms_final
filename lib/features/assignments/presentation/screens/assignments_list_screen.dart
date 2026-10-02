@@ -162,7 +162,7 @@ class _AssignmentsListScreenState extends State<AssignmentsListScreen> {
                 icon: Icons.hourglass_bottom_rounded,
                 label: 'Due in 7 days',
                 value: '$dueSoon',
-                color: const Color(0xFFEA580C),
+                color: AppColors.warning,
               ),
             ),
             const SizedBox(width: 10),

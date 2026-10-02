@@ -224,8 +224,8 @@ class _AdminTimetableScreenState extends State<AdminTimetableScreen> {
                             label: timetableProvider.current != null ? 'Saved timetable' : 'New timetable',
                             icon: timetableProvider.current != null ? Icons.cloud_done_outlined : Icons.edit_note,
                             color: timetableProvider.current != null
-                                ? const Color(0xFF16A34A)
-                                : const Color(0xFFEA580C),
+                                ? AppColors.success
+                                : AppColors.warning,
                           ),
                       ],
                     ),

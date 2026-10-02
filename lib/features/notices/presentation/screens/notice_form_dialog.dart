@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../data/models/notice.dart';
 import '../providers/notice_provider.dart';
+import '../../../../shared/utils/capitalize.dart';
 
 const _audiences = ['all', 'students', 'teachers', 'parents', 'admins'];
 
-String _audienceLabel(String a) => a == 'all' ? 'Everyone' : a[0].toUpperCase() + a.substring(1);
+String _audienceLabel(String a) => a == 'all' ? 'Everyone' : capitalize(a);
 
 /// Admin: Create/Edit Notice.
 Future<void> showNoticeFormDialog(

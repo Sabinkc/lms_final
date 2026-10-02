@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 
+import '../logging/app_logger.dart';
 import 'app_exception.dart';
 
 /// The one place in the app that reads a raw [DioException] / raw response
@@ -21,6 +22,10 @@ class ErrorMapper {
 
     if (error is DioException) return _mapDioException(error);
 
+    // Anything else is a bug on our side (most often a response shape the
+    // parser didn't expect): the user gets a generic message, the log gets
+    // the real cause.
+    AppLogger.error('Unexpected error while handling a response', error, stackTrace);
     return const UnknownException();
   }
 
