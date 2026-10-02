@@ -59,7 +59,9 @@ Future<void> showFeeFormDialog(BuildContext context, FeeProvider provider, {Fee?
                         if (value.text.isEmpty) return provider.studentOptions;
                         final query = value.text.toLowerCase();
                         return provider.studentOptions.where(
-                          (s) => s.fullName.toLowerCase().contains(query) || s.admissionNumber.toLowerCase().contains(query),
+                          (s) =>
+                              s.fullName.toLowerCase().contains(query) ||
+                              s.admissionNumber.toLowerCase().contains(query),
                         );
                       },
                       onSelected: (s) {
@@ -69,7 +71,10 @@ Future<void> showFeeFormDialog(BuildContext context, FeeProvider provider, {Fee?
                       fieldViewBuilder: (context, controller, focusNode, onSubmit) => TextFormField(
                         controller: controller,
                         focusNode: focusNode,
-                        decoration: const InputDecoration(labelText: 'Student', hintText: 'Search by name or admission no.'),
+                        decoration: const InputDecoration(
+                          labelText: 'Student',
+                          hintText: 'Search by name or admission no.',
+                        ),
                         validator: (_) => selectedStudent == null ? 'Pick a student' : null,
                       ),
                     ),
@@ -267,8 +272,9 @@ Future<void> showFeeFormDialog(BuildContext context, FeeProvider provider, {Fee?
                         ? await provider.createFee(
                             studentId: selectedStudent!.id,
                             title: titleController.text.trim(),
-                            description:
-                                descriptionController.text.trim().isEmpty ? null : descriptionController.text.trim(),
+                            description: descriptionController.text.trim().isEmpty
+                                ? null
+                                : descriptionController.text.trim(),
                             totalAmount: double.parse(totalAmountController.text),
                             discountPercent: double.tryParse(discountController.text) ?? 0,
                             dueDate: isInstallment ? null : _formatDate(dueDate),
@@ -277,7 +283,9 @@ Future<void> showFeeFormDialog(BuildContext context, FeeProvider provider, {Fee?
                                 ? [
                                     for (final i in installments)
                                       FeeInstallmentInput(
-                                        title: i.titleController.text.trim().isEmpty ? null : i.titleController.text.trim(),
+                                        title: i.titleController.text.trim().isEmpty
+                                            ? null
+                                            : i.titleController.text.trim(),
                                         amount: double.parse(i.amountController.text),
                                         dueDate: _formatDate(i.dueDate),
                                       ),
@@ -287,8 +295,9 @@ Future<void> showFeeFormDialog(BuildContext context, FeeProvider provider, {Fee?
                         : await provider.updateFee(
                             id: existing.id,
                             title: titleController.text.trim(),
-                            description:
-                                descriptionController.text.trim().isEmpty ? null : descriptionController.text.trim(),
+                            description: descriptionController.text.trim().isEmpty
+                                ? null
+                                : descriptionController.text.trim(),
                             totalAmount: existing.isInstallment ? null : double.parse(totalAmountController.text),
                             dueDate: existing.isInstallment ? null : _formatDate(dueDate),
                           );

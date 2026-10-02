@@ -119,9 +119,13 @@ class _ParentHomeScreenState extends State<ParentHomeScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Quick Actions',
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                          Expanded(
+                            child: Text(
+                              'Quick Actions',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                            ),
                           ),
                           Text(
                             '${_ParentQuickTile.all.length} shortcuts',

@@ -17,9 +17,9 @@ class DayAttendanceRecord {
   });
 
   factory DayAttendanceRecord.fromJson(Map<String, dynamic> json) => DayAttendanceRecord(
-        date: json['date'] as String? ?? '',
-        status: (json['status'] as String? ?? '').toLowerCase(),
-        studentName: json['studentName'] as String? ?? '',
-        className: json['className'] as String? ?? '',
-      );
+    date: json['date'] as String? ?? '',
+    status: (json['status'] as String? ?? '').toLowerCase(),
+    studentName: json['studentName'] as String? ?? '',
+    className: json['className'] as String? ?? '',
+  );
 }

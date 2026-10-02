@@ -7,6 +7,7 @@ import 'package:cloud_lms/features/attendance/data/repositories/attendance_repos
 import 'package:cloud_lms/features/attendance/presentation/providers/self_attendance_provider.dart';
 import 'package:cloud_lms/features/attendance/presentation/screens/my_attendance_screen.dart';
 import 'package:cloud_lms/shared/widgets/loading_view.dart';
+import 'package:cloud_lms/features/attendance/presentation/widgets/attendance_heatmap.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -89,6 +90,9 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('90%'), findsOneWidget);
+    expect(find.byType(AttendanceHeatmap), findsOneWidget);
+    // The records list sits below the heatmap.
+    await tester.scrollUntilVisible(find.text('23 Aug 2026'), 200, scrollable: find.byType(Scrollable).last);
     expect(find.text('23 Aug 2026'), findsOneWidget);
     expect(find.textContaining('General'), findsOneWidget);
   });

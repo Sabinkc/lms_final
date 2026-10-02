@@ -32,15 +32,15 @@ class AttendanceCorrection {
   });
 
   factory AttendanceCorrection.fromJson(Map<String, dynamic> json) => AttendanceCorrection(
-        id: json['_id'] as String? ?? json['id'] as String,
-        targetType: json['targetType'] as String? ?? '',
-        attendanceSessionId: json['attendanceSession'] as String?,
-        studentId: json['student'] as String?,
-        oldStatus: json['oldStatus'] as String? ?? '',
-        newStatus: json['newStatus'] as String? ?? '',
-        reason: json['reason'] as String? ?? '',
-        status: json['status'] as String? ?? 'pending',
-        requestedById: json['requestedBy'] as String? ?? '',
-        reviewNote: json['reviewNote'] as String?,
-      );
+    id: json['_id'] as String? ?? json['id'] as String,
+    targetType: json['targetType'] as String? ?? '',
+    attendanceSessionId: json['attendanceSession'] as String?,
+    studentId: json['student'] as String?,
+    oldStatus: json['oldStatus'] as String? ?? '',
+    newStatus: json['newStatus'] as String? ?? '',
+    reason: json['reason'] as String? ?? '',
+    status: json['status'] as String? ?? 'pending',
+    requestedById: json['requestedBy'] as String? ?? '',
+    reviewNote: json['reviewNote'] as String?,
+  );
 }

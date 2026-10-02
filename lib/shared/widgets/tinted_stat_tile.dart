@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_radius.dart';
 import '../../core/theme/readable_color.dart';
 import 'count_up_text.dart';
+import 'sparkline.dart';
 
 /// Small tinted count tile (icon, label, big value, optional coloured
 /// caption such as a percentage) — the Present/Absent/Late style tiles on
@@ -15,6 +16,9 @@ class TintedStatTile extends StatelessWidget {
   final String? caption;
   final Color color;
 
+  /// Optional trend (oldest first) drawn as a small line under the value.
+  final List<double>? trend;
+
   const TintedStatTile({
     super.key,
     this.icon,
@@ -22,6 +26,7 @@ class TintedStatTile extends StatelessWidget {
     required this.value,
     this.caption,
     required this.color,
+    this.trend,
   });
 
   @override
@@ -48,6 +53,11 @@ class TintedStatTile extends StatelessWidget {
           ),
           if (caption != null && caption!.isNotEmpty)
             Text(caption!, maxLines: 1, style: theme.textTheme.labelSmall?.copyWith(color: fg)),
+          if (trend != null && trend!.length >= 2)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8, 4, 8, 0),
+              child: Sparkline(values: trend!, color: fg),
+            ),
         ],
       ),
     );

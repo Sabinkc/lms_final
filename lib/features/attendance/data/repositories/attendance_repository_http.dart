@@ -128,8 +128,8 @@ class AttendanceRepositoryHttp implements AttendanceRepository {
       final children = await _apiClient.get<List<Student>>(
         '/parents/me',
         parse: (data) {
-          final students = (((data as Map<String, dynamic>)['data'] as Map<String, dynamic>)['students'] as List?) ??
-              const [];
+          final students =
+              (((data as Map<String, dynamic>)['data'] as Map<String, dynamic>)['students'] as List?) ?? const [];
           return students.map((s) => Student.fromJson(s as Map<String, dynamic>)).toList();
         },
       );
@@ -148,10 +148,7 @@ class AttendanceRepositoryHttp implements AttendanceRepository {
     try {
       final history = await _apiClient.get<StudentAttendanceHistory>(
         '/attendance/student/$studentId',
-        queryParameters: {
-          if (month != null) 'month': month,
-          if (year != null) 'year': year,
-        },
+        queryParameters: {if (month != null) 'month': month, if (year != null) 'year': year},
         parse: (data) => StudentAttendanceHistory.fromJson(data as Map<String, dynamic>),
       );
       return Result.success(history);

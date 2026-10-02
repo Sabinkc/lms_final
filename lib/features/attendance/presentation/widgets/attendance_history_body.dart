@@ -12,6 +12,7 @@ import '../../../admin_management/presentation/providers/academic_structure_prov
 import '../../data/models/student_attendance_history.dart';
 import 'attendance_status_style.dart';
 import '../../../../core/theme/readable_color.dart';
+import 'attendance_heatmap.dart';
 
 /// Shared summary card + record list, used by both the Student "My
 /// Attendance" screen and the Parent "Child's Attendance" screen — same
@@ -42,7 +43,9 @@ class AttendanceHistoryBody extends StatelessWidget {
             : ListView(
                 padding: const EdgeInsets.all(AppSpacing.lg),
                 children: [
-                  _SummaryTiles(summary: history!.summary),
+                  _SummaryTiles(summary: history!.summary, trend: attendanceRateSeries(history!.records)),
+                  const SizedBox(height: AppSpacing.md),
+                  AttendanceHeatmap(records: history!.records),
                   const SizedBox(height: AppSpacing.md),
                   _RecordsCard(records: history!.records),
                 ],
@@ -56,7 +59,10 @@ class AttendanceHistoryBody extends StatelessWidget {
 class _SummaryTiles extends StatelessWidget {
   final AttendanceHistorySummary summary;
 
-  const _SummaryTiles({required this.summary});
+  /// Attendance rate after each day, for the trend line under the rate.
+  final List<double> trend;
+
+  const _SummaryTiles({required this.summary, this.trend = const []});
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +77,7 @@ class _SummaryTiles extends StatelessWidget {
                 label: 'Rate',
                 value: '${summary.percentage}%',
                 caption: '${summary.total} ${summary.total == 1 ? 'day' : 'days'}',
+                trend: trend.length >= 3 ? trend : null,
                 color: AppColors.primary,
               ),
             ),

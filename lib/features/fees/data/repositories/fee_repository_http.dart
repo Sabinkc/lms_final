@@ -39,11 +39,7 @@ class FeeRepositoryHttp implements FeeRepository {
           if (installments != null)
             'installments': [
               for (final i in installments)
-                {
-                  if (i.title != null) 'title': i.title,
-                  'amount': i.amount,
-                  'dueDate': i.dueDate,
-                },
+                {if (i.title != null) 'title': i.title, 'amount': i.amount, 'dueDate': i.dueDate},
             ],
         },
         parse: (data) => Fee.fromJson((data as Map<String, dynamic>)['data'] as Map<String, dynamic>),
@@ -60,8 +56,9 @@ class FeeRepositoryHttp implements FeeRepository {
       final fees = await _apiClient.get<List<Fee>>(
         '/fees',
         queryParameters: {if (status != null) 'status': status},
-        parse: (data) =>
-            ((data as Map<String, dynamic>)['data'] as List).map((json) => Fee.fromJson(json as Map<String, dynamic>)).toList(),
+        parse: (data) => ((data as Map<String, dynamic>)['data'] as List)
+            .map((json) => Fee.fromJson(json as Map<String, dynamic>))
+            .toList(),
       );
       return Result.success(fees);
     } on AppException catch (e) {
@@ -157,8 +154,8 @@ class FeeRepositoryHttp implements FeeRepository {
       final children = await _apiClient.get<List<Student>>(
         '/parents/me',
         parse: (data) {
-          final students = (((data as Map<String, dynamic>)['data'] as Map<String, dynamic>)['students'] as List?) ??
-              const [];
+          final students =
+              (((data as Map<String, dynamic>)['data'] as Map<String, dynamic>)['students'] as List?) ?? const [];
           return students.map((s) => Student.fromJson(s as Map<String, dynamic>)).toList();
         },
       );

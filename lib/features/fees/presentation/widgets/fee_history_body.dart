@@ -17,6 +17,7 @@ import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/utils/capitalize.dart';
 import '../../../../shared/widgets/staggered_entrance.dart';
 import '../../../../shared/widgets/press_scale.dart';
+import 'fee_progress_bar.dart';
 
 /// Shared summary + fee list, used by both Student "My Fees" and Parent
 /// "Child's Fees" — same [SelfFeeProvider] state either way, mirroring
@@ -196,18 +197,26 @@ class _FeeCard extends StatelessWidget {
             ),
             subtitle: Padding(
               padding: const EdgeInsets.only(top: 4),
-              child: Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Text(
-                      [
-                        if (fee.dueDate.isNotEmpty) 'Due ${formatDisplayDate(fee.dueDate)}',
-                        if (fee.remainingAmount > 0 && fee.status != 'paid') '${formatRs(fee.remainingAmount)} left',
-                      ].join('  •  '),
-                      style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          [
+                            if (fee.dueDate.isNotEmpty) 'Due ${formatDisplayDate(fee.dueDate)}',
+                            if (fee.remainingAmount > 0 && fee.status != 'paid')
+                              '${formatRs(fee.remainingAmount)} left',
+                          ].join('  •  '),
+                          style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                        ),
+                      ),
+                      AppStatusChip(label: capitalize(fee.status), color: statusColor),
+                    ],
                   ),
-                  AppStatusChip(label: capitalize(fee.status), color: statusColor),
+                  const SizedBox(height: 8),
+                  FeeProgressBar(paid: fee.paidAmount, total: fee.totalAmount, color: statusColor),
                 ],
               ),
             ),

@@ -27,6 +27,7 @@ import '../../../../shared/widgets/pull_to_refresh.dart';
 import '../../../../shared/utils/capitalize.dart';
 import '../../../../shared/widgets/staggered_entrance.dart';
 import '../../../../shared/widgets/press_scale.dart';
+import '../widgets/fee_progress_bar.dart';
 
 const _statusFilterOptions = <String?>[null, 'pending', 'partial', 'paid'];
 
@@ -787,6 +788,10 @@ class _FeeTile extends StatelessWidget {
                 children: [
                   Text('${fee.className ?? ''} ${fee.section ?? ''} · ${formatRs(fee.totalAmount)}'),
                   AppStatusChip(label: capitalize(fee.status), color: statusColor),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6, right: 8),
+                    child: FeeProgressBar(paid: fee.paidAmount, total: fee.totalAmount, color: statusColor),
+                  ),
                 ],
               ),
             ),

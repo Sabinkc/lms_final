@@ -98,9 +98,13 @@ class _TeacherHomeScreenState extends State<TeacherHomeScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Quick Actions',
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                          Expanded(
+                            child: Text(
+                              'Quick Actions',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                            ),
                           ),
                           Text(
                             '${_TeacherQuickTile.all.length} shortcuts',
@@ -130,9 +134,13 @@ class _TeacherHomeScreenState extends State<TeacherHomeScreen> {
                         ],
                       ),
                       const SizedBox(height: AppSpacing.xl),
-                      Text(
-                        "Today's Overview",
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                      Expanded(
+                        child: Text(
+                          "Today's Overview",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                        ),
                       ),
                       const SizedBox(height: AppSpacing.sm),
                       const _TodaysOverview(),

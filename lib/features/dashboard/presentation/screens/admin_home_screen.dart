@@ -10,7 +10,6 @@ import '../../../../shared/utils/time_of_day_greeting.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/brand_home_app_bar.dart';
 import '../../../../shared/widgets/colorful_action_tile.dart';
-import '../../../../shared/widgets/stat_card.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart' show LoadStatus;
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../notifications/presentation/providers/notification_provider.dart';
@@ -18,6 +17,8 @@ import '../providers/admin_dashboard_provider.dart';
 import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
 import '../../../../shared/widgets/collapsing_hero_header.dart';
+import '../../../../shared/widgets/count_up_text.dart';
+import '../../data/models/admin_dashboard_overview.dart';
 
 /// Admin-only Home dashboard — restyled 2026-09-28 to match a real-photo
 /// reference design the user supplied (`LMS UI/WhatsApp Image ... 3.24.26
@@ -95,9 +96,13 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Quick Actions',
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                          Expanded(
+                            child: Text(
+                              'Quick Actions',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                            ),
                           ),
                           Text(
                             '${_AdminQuickTile.all.length} shortcuts',
@@ -130,9 +135,13 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "Today's Overview",
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                          Expanded(
+                            child: Text(
+                              "Today's Overview",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                            ),
                           ),
                           TextButton(
                             onPressed: () => context.push(AppRoutes.adminReports),
@@ -245,47 +254,139 @@ class _TodaysOverview extends StatelessWidget {
       );
     }
 
-    final nextExam = exams.isNotEmpty ? exams.first : null;
+    // Bento: attendance gets the big tile (the number Admin checks most);
+    // students, pending fees and exams sit in a compact column beside it.
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(flex: 5, child: _AttendanceHeroTile(stats: stats)),
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(
+            flex: 4,
+            child: Column(
+              children: [
+                _CompactStat(
+                  icon: Icons.groups_rounded,
+                  value: '${stats?.totalStudents ?? 0}',
+                  label: 'Students',
+                  color: AppColors.info,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                _CompactStat(
+                  icon: Icons.receipt_long_rounded,
+                  value: '${stats?.pendingFeesCount ?? 0}',
+                  label: 'Pending fees',
+                  color: AppColors.danger,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                _CompactStat(icon: Icons.quiz_rounded, value: '${exams.length}', label: 'Exams', color: AppColors.plum),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
-    return GridView.count(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: 2,
-      mainAxisSpacing: AppSpacing.sm,
-      crossAxisSpacing: AppSpacing.sm,
-      childAspectRatio: 1.5,
-      children: [
-        StatCard(
-          icon: Icons.groups_rounded,
-          value: '${stats?.totalStudents ?? 0}',
-          label: 'Total Students',
-          color: AppColors.info,
-          trend: stats == null
-              ? null
-              : '${stats.studentsChangePercent >= 0 ? '+' : ''}${stats.studentsChangePercent.toStringAsFixed(0)}%',
+class _AttendanceHeroTile extends StatelessWidget {
+  final AdminDashboardStats? stats;
+
+  const _AttendanceHeroTile({required this.stats});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final rate = stats?.attendanceRatePercent;
+    final change = stats?.attendanceChangePercent ?? 0;
+    final color = context.readable(AppColors.success);
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Attendance this month', style: theme.textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w700)),
+            const SizedBox(height: 12),
+            Center(
+              child: SizedBox(
+                width: 116,
+                height: 116,
+                child: TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0, end: (rate ?? 0) / 100),
+                  duration: MediaQuery.disableAnimationsOf(context) ? Duration.zero : const Duration(milliseconds: 900),
+                  curve: Curves.easeOutCubic,
+                  builder: (context, value, _) => Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      CircularProgressIndicator(
+                        value: value.clamp(0, 1),
+                        strokeWidth: 12,
+                        strokeCap: StrokeCap.round,
+                        color: color,
+                        backgroundColor: AppColors.success.withValues(alpha: 0.14),
+                      ),
+                      Center(
+                        child: CountUpText(
+                          rate == null ? '—' : '$rate%',
+                          style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const Spacer(),
+            const SizedBox(height: 12),
+            Text(
+              stats == null ? ' ' : '${change >= 0 ? '+' : ''}${change.toStringAsFixed(0)}% vs last month',
+              style: theme.textTheme.bodySmall,
+            ),
+          ],
         ),
-        StatCard(
-          icon: Icons.event_available_rounded,
-          value: stats == null ? '—' : '${stats.attendanceRatePercent}%',
-          label: 'Attendance This Month',
-          color: AppColors.success,
-          progress: stats == null ? null : stats.attendanceRatePercent / 100,
+      ),
+    );
+  }
+}
+
+class _CompactStat extends StatelessWidget {
+  final IconData icon;
+  final String value;
+  final String label;
+  final Color color;
+
+  const _CompactStat({required this.icon, required this.value, required this.label, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(7),
+              decoration: BoxDecoration(color: color.withValues(alpha: 0.14), borderRadius: BorderRadius.circular(10)),
+              child: Icon(icon, size: 18, color: context.readable(color)),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CountUpText(value, style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800)),
+                  Text(label, maxLines: 1, overflow: TextOverflow.ellipsis, style: theme.textTheme.bodySmall),
+                ],
+              ),
+            ),
+          ],
         ),
-        StatCard(
-          icon: Icons.receipt_long_rounded,
-          value: '${stats?.pendingFeesCount ?? 0}',
-          label: 'Pending Fees',
-          color: AppColors.danger,
-          trend: (stats?.pendingFeesCount ?? 0) > 0 ? 'Action needed' : 'All settled',
-        ),
-        StatCard(
-          icon: Icons.quiz_rounded,
-          value: '${exams.length}',
-          label: 'Upcoming Exams',
-          color: AppColors.plum,
-          trend: nextExam != null ? 'Next: ${nextExam.subject}' : null,
-        ),
-      ],
+      ),
     );
   }
 }

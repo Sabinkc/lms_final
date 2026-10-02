@@ -57,14 +57,14 @@ class AttendanceHistorySummary {
   });
 
   factory AttendanceHistorySummary.fromJson(Map<String, dynamic> json) => AttendanceHistorySummary(
-        present: (json['present'] as num?)?.toInt() ?? 0,
-        absent: (json['absent'] as num?)?.toInt() ?? 0,
-        late: (json['late'] as num?)?.toInt() ?? 0,
-        leave: (json['leave'] as num?)?.toInt() ?? 0,
-        halfDay: (json['halfDay'] as num?)?.toInt() ?? 0,
-        total: (json['total'] as num?)?.toInt() ?? 0,
-        percentage: (json['percentage'] as num?)?.toInt() ?? 0,
-      );
+    present: (json['present'] as num?)?.toInt() ?? 0,
+    absent: (json['absent'] as num?)?.toInt() ?? 0,
+    late: (json['late'] as num?)?.toInt() ?? 0,
+    leave: (json['leave'] as num?)?.toInt() ?? 0,
+    halfDay: (json['halfDay'] as num?)?.toInt() ?? 0,
+    total: (json['total'] as num?)?.toInt() ?? 0,
+    percentage: (json['percentage'] as num?)?.toInt() ?? 0,
+  );
 }
 
 class StudentAttendanceHistory {
@@ -75,10 +75,8 @@ class StudentAttendanceHistory {
   const StudentAttendanceHistory({required this.studentName, required this.summary, required this.records});
 
   factory StudentAttendanceHistory.fromJson(Map<String, dynamic> json) => StudentAttendanceHistory(
-        studentName: (json['student'] as Map<String, dynamic>?)?['name'] as String? ?? '',
-        summary: AttendanceHistorySummary.fromJson(json['summary'] as Map<String, dynamic>),
-        records: (json['data'] as List)
-            .map((r) => AttendanceRecordDetail.fromJson(r as Map<String, dynamic>))
-            .toList(),
-      );
+    studentName: (json['student'] as Map<String, dynamic>?)?['name'] as String? ?? '',
+    summary: AttendanceHistorySummary.fromJson(json['summary'] as Map<String, dynamic>),
+    records: (json['data'] as List).map((r) => AttendanceRecordDetail.fromJson(r as Map<String, dynamic>)).toList(),
+  );
 }

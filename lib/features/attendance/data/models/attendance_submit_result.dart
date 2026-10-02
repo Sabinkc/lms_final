@@ -6,10 +6,8 @@ class AttendanceSubmitFailure {
 
   const AttendanceSubmitFailure({required this.studentId, required this.reason});
 
-  factory AttendanceSubmitFailure.fromJson(Map<String, dynamic> json) => AttendanceSubmitFailure(
-        studentId: json['studentId'] as String? ?? '',
-        reason: json['reason'] as String? ?? '',
-      );
+  factory AttendanceSubmitFailure.fromJson(Map<String, dynamic> json) =>
+      AttendanceSubmitFailure(studentId: json['studentId'] as String? ?? '', reason: json['reason'] as String? ?? '');
 }
 
 class AttendanceSubmitResult {
@@ -19,8 +17,7 @@ class AttendanceSubmitResult {
   const AttendanceSubmitResult({required this.savedCount, required this.failed});
 
   factory AttendanceSubmitResult.fromJson(Map<String, dynamic> json) => AttendanceSubmitResult(
-        savedCount: (json['saved'] as List).length,
-        failed:
-            (json['failed'] as List).map((f) => AttendanceSubmitFailure.fromJson(f as Map<String, dynamic>)).toList(),
-      );
+    savedCount: (json['saved'] as List).length,
+    failed: (json['failed'] as List).map((f) => AttendanceSubmitFailure.fromJson(f as Map<String, dynamic>)).toList(),
+  );
 }

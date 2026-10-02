@@ -67,9 +67,8 @@ class Fee {
       remainingAmount: (json['remainingAmount'] as num?)?.toDouble() ?? 0,
       dueDate: json['dueDate'] as String? ?? '',
       isInstallment: json['isInstallment'] as bool? ?? false,
-      installments: (json['installments'] as List?)
-              ?.map((i) => FeeInstallment.fromJson(i as Map<String, dynamic>))
-              .toList() ??
+      installments:
+          (json['installments'] as List?)?.map((i) => FeeInstallment.fromJson(i as Map<String, dynamic>)).toList() ??
           const [],
       status: json['status'] as String? ?? 'pending',
     );
@@ -96,14 +95,14 @@ class FeeInstallment {
   });
 
   factory FeeInstallment.fromJson(Map<String, dynamic> json) => FeeInstallment(
-        id: json['_id'] as String? ?? json['id'] as String? ?? '',
-        installmentNumber: (json['installmentNumber'] as num?)?.toInt() ?? 0,
-        title: json['title'] as String? ?? '',
-        amount: (json['amount'] as num?)?.toDouble() ?? 0,
-        dueDate: json['dueDate'] as String? ?? '',
-        paidAmount: (json['paidAmount'] as num?)?.toDouble() ?? 0,
-        status: json['status'] as String? ?? 'pending',
-      );
+    id: json['_id'] as String? ?? json['id'] as String? ?? '',
+    installmentNumber: (json['installmentNumber'] as num?)?.toInt() ?? 0,
+    title: json['title'] as String? ?? '',
+    amount: (json['amount'] as num?)?.toDouble() ?? 0,
+    dueDate: json['dueDate'] as String? ?? '',
+    paidAmount: (json['paidAmount'] as num?)?.toDouble() ?? 0,
+    status: json['status'] as String? ?? 'pending',
+  );
 }
 
 /// `GET /fees/student/:studentId`'s `summary` block — computed server-side
@@ -124,10 +123,10 @@ class FeesSummary {
   });
 
   factory FeesSummary.fromJson(Map<String, dynamic> json) => FeesSummary(
-        total: (json['total'] as num?)?.toInt() ?? 0,
-        pending: (json['pending'] as num?)?.toInt() ?? 0,
-        partial: (json['partial'] as num?)?.toInt() ?? 0,
-        paid: (json['paid'] as num?)?.toInt() ?? 0,
-        totalDue: (json['totalDue'] as num?)?.toDouble() ?? 0,
-      );
+    total: (json['total'] as num?)?.toInt() ?? 0,
+    pending: (json['pending'] as num?)?.toInt() ?? 0,
+    partial: (json['partial'] as num?)?.toInt() ?? 0,
+    paid: (json['paid'] as num?)?.toInt() ?? 0,
+    totalDue: (json['totalDue'] as num?)?.toDouble() ?? 0,
+  );
 }

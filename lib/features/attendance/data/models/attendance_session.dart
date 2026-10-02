@@ -62,15 +62,15 @@ class AttendanceSessionSummary {
   }
 
   factory AttendanceSessionSummary.fromJson(Map<String, dynamic> json) => AttendanceSessionSummary(
-        id: json['_id'] as String? ?? json['id'] as String,
-        className: json['class'] as String? ?? '',
-        section: json['section'] as String? ?? '',
-        subject: json['subject'] as String? ?? '',
-        date: json['date'] as String? ?? '',
-        presentCount: (json['presentCount'] as num?)?.toInt() ?? 0,
-        absentCount: (json['absentCount'] as num?)?.toInt() ?? 0,
-        lateCount: (json['lateCount'] as num?)?.toInt() ?? 0,
-        totalCount: (json['totalCount'] as num?)?.toInt() ?? 0,
-        locked: json['locked'] as bool? ?? true,
-      );
+    id: json['_id'] as String? ?? json['id'] as String,
+    className: json['class'] as String? ?? '',
+    section: json['section'] as String? ?? '',
+    subject: json['subject'] as String? ?? '',
+    date: json['date'] as String? ?? '',
+    presentCount: (json['presentCount'] as num?)?.toInt() ?? 0,
+    absentCount: (json['absentCount'] as num?)?.toInt() ?? 0,
+    lateCount: (json['lateCount'] as num?)?.toInt() ?? 0,
+    totalCount: (json['totalCount'] as num?)?.toInt() ?? 0,
+    locked: json['locked'] as bool? ?? true,
+  );
 }

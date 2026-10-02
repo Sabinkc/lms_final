@@ -12,12 +12,7 @@ class TeacherSection {
   final String classId;
   final String className;
 
-  const TeacherSection({
-    required this.id,
-    required this.name,
-    required this.classId,
-    required this.className,
-  });
+  const TeacherSection({required this.id, required this.name, required this.classId, required this.className});
 
   factory TeacherSection.fromJson(Map<String, dynamic> json) {
     final classRef = json['classId'];
