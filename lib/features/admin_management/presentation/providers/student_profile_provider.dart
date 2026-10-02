@@ -66,10 +66,11 @@ class StudentProfileProvider extends ChangeNotifier {
     await Future.wait([loadAttendance(), loadFees(), _loadSectionTeachers(student)]);
   }
 
-  Future<void> loadAttendance() async {
+  Future<void> loadAttendance({bool silent = false}) async {
     final id = _studentId;
     if (id == null) return;
-    _attendanceStatus = LoadStatus.loading;
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _attendanceStatus != LoadStatus.success) _attendanceStatus = LoadStatus.loading;
     _attendanceError = null;
     notifyListeners();
 
@@ -88,10 +89,11 @@ class StudentProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadFees() async {
+  Future<void> loadFees({bool silent = false}) async {
     final id = _studentId;
     if (id == null) return;
-    _feesStatus = LoadStatus.loading;
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _feesStatus != LoadStatus.success) _feesStatus = LoadStatus.loading;
     _feesError = null;
     notifyListeners();
 

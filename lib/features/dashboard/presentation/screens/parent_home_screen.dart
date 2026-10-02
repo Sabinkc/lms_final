@@ -19,6 +19,7 @@ import '../../../fees/presentation/providers/self_fee_provider.dart';
 import '../../../notifications/presentation/providers/notification_provider.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 /// Parent Home dashboard — matches [AdminHomeScreen]'s photo-hero restyle.
 ///
@@ -63,6 +64,29 @@ class _ParentHomeScreenState extends State<ParentHomeScreen> {
     });
   }
 
+  Future<void> _refresh() async {
+    final attendance = context.read<SelfAttendanceProvider>();
+    final fees = context.read<SelfFeeProvider>();
+    Future<void> reloadAttendance() async {
+      await attendance.loadChildren(silent: true);
+      final childId = attendance.selectedChildId;
+      if (childId != null) await attendance.selectChild(childId, silent: true);
+    }
+
+    Future<void> reloadFees() async {
+      await fees.loadChildren(silent: true);
+      final childId = fees.selectedChildId;
+      if (childId != null) await fees.selectChild(childId, silent: true);
+    }
+
+    await Future.wait([
+      context.read<ExamProvider>().loadMyExams(silent: true),
+      context.read<NotificationProvider>().loadNotifications(silent: true),
+      reloadAttendance(),
+      reloadFees(),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = context.watch<AuthProvider>().user;
@@ -77,56 +101,59 @@ class _ParentHomeScreenState extends State<ParentHomeScreen> {
           unreadCount: unreadCount,
           moreRoute: AppRoutes.parentMore,
         ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(AppSpacing.lg),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              PhotoHeroBanner(
-                greeting: timeOfDayGreeting(),
-                name: firstName,
-                subtitle: "Here's what's happening today at your child's school.",
-              ),
-              const SizedBox(height: AppSpacing.xl),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Quick Actions',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
-                  ),
-                  Text(
-                    '${_ParentQuickTile.all.length} shortcuts',
-                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                      color: context.readable(AppColors.primary),
-                      fontWeight: FontWeight.w600,
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                PhotoHeroBanner(
+                  greeting: timeOfDayGreeting(),
+                  name: firstName,
+                  subtitle: "Here's what's happening today at your child's school.",
+                ),
+                const SizedBox(height: AppSpacing.xl),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Quick Actions',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: AppSpacing.md),
-              GridView.count(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 4,
-                mainAxisSpacing: AppSpacing.sm,
-                crossAxisSpacing: AppSpacing.sm,
-                childAspectRatio: 0.78,
-                children: [
-                  for (final tile in _ParentQuickTile.all)
-                    ColorfulActionTile(
-                      icon: tile.icon,
-                      label: tile.label,
-                      color: tile.color,
-                      onTap: () => context.push(tile.route),
+                    Text(
+                      '${_ParentQuickTile.all.length} shortcuts',
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: context.readable(AppColors.primary),
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                ],
-              ),
-              const SizedBox(height: AppSpacing.xl),
-              const _OverviewHeading(),
-              const SizedBox(height: AppSpacing.sm),
-              const _TodaysOverview(),
-            ],
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.md),
+                GridView.count(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisCount: 4,
+                  mainAxisSpacing: AppSpacing.sm,
+                  crossAxisSpacing: AppSpacing.sm,
+                  childAspectRatio: 0.78,
+                  children: [
+                    for (final tile in _ParentQuickTile.all)
+                      ColorfulActionTile(
+                        icon: tile.icon,
+                        label: tile.label,
+                        color: tile.color,
+                        onTap: () => context.push(tile.route),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.xl),
+                const _OverviewHeading(),
+                const SizedBox(height: AppSpacing.sm),
+                const _TodaysOverview(),
+              ],
+            ),
           ),
         ),
       ),

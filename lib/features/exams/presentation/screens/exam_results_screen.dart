@@ -21,6 +21,7 @@ import '../widgets/exam_result_card.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 /// docs/screens.md's exam-results view — body adapts by role, same pattern
 /// as `AssignmentDetailScreen`: Admin sees the whole class's ranked results
@@ -56,6 +57,24 @@ class _ExamResultsScreenState extends State<ExamResultsScreen> {
     });
   }
 
+  Future<void> _refresh() async {
+    final provider = context.read<ExamResultProvider>();
+    final role = context.read<AuthProvider>().role;
+    switch (role) {
+      case AppRole.admin:
+        await provider.loadClassResults(widget.examId, silent: true);
+      case AppRole.student:
+        await provider.loadMyResultForExam(widget.examId, silent: true);
+      case AppRole.parent:
+        await provider.loadChildren(silent: true);
+        final childId = provider.selectedChildId;
+        if (childId != null) await provider.selectChild(childId, silent: true);
+      case AppRole.teacher:
+      case null:
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final role = context.watch<AuthProvider>().role;
@@ -64,12 +83,15 @@ class _ExamResultsScreenState extends State<ExamResultsScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: BrandAppBar(title: 'Exam Results'),
-        body: switch (role) {
-          AppRole.admin => _AdminClassResults(examId: widget.examId),
-          AppRole.student => _StudentOwnResult(examId: widget.examId),
-          AppRole.parent => _ParentChildResult(examId: widget.examId),
-          _ => const SizedBox.shrink(),
-        },
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: switch (role) {
+            AppRole.admin => _AdminClassResults(examId: widget.examId),
+            AppRole.student => _StudentOwnResult(examId: widget.examId),
+            AppRole.parent => _ParentChildResult(examId: widget.examId),
+            _ => const SizedBox.shrink(),
+          },
+        ),
       ),
     );
   }
@@ -233,7 +255,9 @@ class _RankedResultCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppRadius.xl),
-        side: medal != null ? BorderSide(color: medal.withValues(alpha: 0.5)) : AppTheme.cardBorderSide(theme.brightness),
+        side: medal != null
+            ? BorderSide(color: medal.withValues(alpha: 0.5))
+            : AppTheme.cardBorderSide(theme.brightness),
       ),
       child: IntrinsicHeight(
         child: Row(

@@ -24,6 +24,7 @@ import '../providers/assignment_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 /// docs/screens.md's Assignment Detail — one screen, body adapts by role:
 /// Teacher sees the submissions list with a grade action, Student sees
@@ -62,6 +63,18 @@ class _AssignmentDetailScreenState extends State<AssignmentDetailScreen> {
     });
   }
 
+  Future<void> _refresh() async {
+    final provider = context.read<AssignmentProvider>();
+    final role = context.read<AuthProvider>().role;
+    await Future.wait([
+      provider.loadAssignmentDetail(widget.assignmentId, silent: true),
+      if (role == AppRole.teacher)
+        provider.loadSubmissionsForAssignment(widget.assignmentId, silent: true)
+      else if (role == AppRole.student)
+        provider.loadMySubmissions(silent: true),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<AssignmentProvider>();
@@ -71,14 +84,17 @@ class _AssignmentDetailScreenState extends State<AssignmentDetailScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: BrandAppBar(title: 'Assignment'),
-        body: switch (provider.detailStatus) {
-          LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading assignment...'),
-          LoadStatus.error => ErrorView(
-            error: provider.detailError!,
-            onRetry: () => provider.loadAssignmentDetail(widget.assignmentId),
-          ),
-          LoadStatus.success => _DetailBody(assignment: provider.currentAssignment!, role: role),
-        },
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: switch (provider.detailStatus) {
+            LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading assignment...'),
+            LoadStatus.error => ErrorView(
+              error: provider.detailError!,
+              onRetry: () => provider.loadAssignmentDetail(widget.assignmentId),
+            ),
+            LoadStatus.success => _DetailBody(assignment: provider.currentAssignment!, role: role),
+          },
+        ),
       ),
     );
   }

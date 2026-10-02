@@ -5,6 +5,7 @@ import '../providers/self_attendance_provider.dart';
 import '../widgets/attendance_history_body.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 /// docs/screens.md "My Attendance" (Student) — own history + summary
 /// percentage. `GET /api/attendance/me` resolves the caller's own
@@ -27,6 +28,10 @@ class _MyAttendanceScreenState extends State<MyAttendanceScreen> {
     Future.microtask(() => provider.loadOwnHistory());
   }
 
+  Future<void> _refresh() async {
+    await context.read<SelfAttendanceProvider>().loadOwnHistory(silent: true);
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<SelfAttendanceProvider>();
@@ -35,11 +40,14 @@ class _MyAttendanceScreenState extends State<MyAttendanceScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: BrandAppBar(title: 'My Attendance'),
-        body: AttendanceHistoryBody(
-          status: provider.historyStatus,
-          history: provider.history,
-          error: provider.historyError,
-          onRetry: () => provider.loadOwnHistory(),
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: AttendanceHistoryBody(
+            status: provider.historyStatus,
+            history: provider.history,
+            error: provider.historyError,
+            onRetry: () => provider.loadOwnHistory(),
+          ),
         ),
       ),
     );

@@ -28,8 +28,9 @@ class ExamProvider extends ChangeNotifier {
   bool get isSaving => _isSaving;
   AppException? get actionError => _actionError;
 
-  Future<void> loadExamsAsAdmin() async {
-    _status = LoadStatus.loading;
+  Future<void> loadExamsAsAdmin({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _status != LoadStatus.success) _status = LoadStatus.loading;
     _error = null;
     notifyListeners();
 
@@ -47,8 +48,9 @@ class ExamProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadMyExams() async {
-    _status = LoadStatus.loading;
+  Future<void> loadMyExams({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _status != LoadStatus.success) _status = LoadStatus.loading;
     _error = null;
     notifyListeners();
 
@@ -85,10 +87,7 @@ class ExamProvider extends ChangeNotifier {
       examDate: examDate,
     );
     final succeeded = result.isSuccess;
-    result.when(
-      success: (created) => _exams = [..._exams, created],
-      failure: (error) => _actionError = error,
-    );
+    result.when(success: (created) => _exams = [..._exams, created], failure: (error) => _actionError = error);
 
     _isSaving = false;
     notifyListeners();

@@ -60,15 +60,13 @@ class PayrollProvider extends ChangeNotifier {
 
   Future<void> loadTeacherOptions() async {
     final result = await _teacherRepository.getTeachers();
-    result.when(
-      success: (teachers) => _teacherOptions = teachers,
-      failure: (_) {},
-    );
+    result.when(success: (teachers) => _teacherOptions = teachers, failure: (_) {});
     notifyListeners();
   }
 
-  Future<void> loadSalaryConfigs() async {
-    _configsStatus = LoadStatus.loading;
+  Future<void> loadSalaryConfigs({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _configsStatus != LoadStatus.success) _configsStatus = LoadStatus.loading;
     _configsError = null;
     notifyListeners();
 
@@ -121,8 +119,9 @@ class PayrollProvider extends ChangeNotifier {
     return succeeded;
   }
 
-  Future<void> loadPayrolls({int? month, int? year, String? status}) async {
-    _payrollsStatus = LoadStatus.loading;
+  Future<void> loadPayrolls({int? month, int? year, String? status, bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _payrollsStatus != LoadStatus.success) _payrollsStatus = LoadStatus.loading;
     _payrollsError = null;
     notifyListeners();
 
@@ -161,10 +160,7 @@ class PayrollProvider extends ChangeNotifier {
       remarks: remarks,
     );
     final succeeded = result.isSuccess;
-    result.when(
-      success: (created) => _payrolls = [created, ..._payrolls],
-      failure: (error) => _generateError = error,
-    );
+    result.when(success: (created) => _payrolls = [created, ..._payrolls], failure: (error) => _generateError = error);
 
     _isGenerating = false;
     notifyListeners();
@@ -179,10 +175,7 @@ class PayrollProvider extends ChangeNotifier {
 
     final result = await _repository.generateBulkPayroll(month: month, year: year);
     final succeeded = result.isSuccess;
-    result.when(
-      success: (counts) => _lastBulkResult = counts,
-      failure: (error) => _generateError = error,
-    );
+    result.when(success: (counts) => _lastBulkResult = counts, failure: (error) => _generateError = error);
 
     _isGenerating = false;
     notifyListeners();
@@ -198,7 +191,10 @@ class PayrollProvider extends ChangeNotifier {
     final result = await _repository.markAsPaid(id, paymentMethod: paymentMethod, remarks: remarks);
     final succeeded = result.isSuccess;
     result.when(
-      success: (updated) => _payrolls = [for (final p in _payrolls) if (p.id == updated.id) updated else p],
+      success: (updated) => _payrolls = [
+        for (final p in _payrolls)
+          if (p.id == updated.id) updated else p,
+      ],
       failure: (error) => _payrollActionError = error,
     );
 

@@ -22,6 +22,7 @@ import 'notice_form_dialog.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 /// docs/screens.md's Notices module. Admin-only creation for v1
 /// (`docs/production_roadmap.md` §4 decision #2 — the backend's
@@ -89,6 +90,13 @@ class _NoticesListScreenState extends State<NoticesListScreen> {
     });
   }
 
+  Future<void> _refresh() async {
+    final provider = context.read<NoticeProvider>();
+    await (context.read<AuthProvider>().role == AppRole.admin
+        ? provider.loadNoticesAsAdmin(silent: true)
+        : provider.loadMyNotices(silent: true));
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<NoticeProvider>();
@@ -119,62 +127,65 @@ class _NoticesListScreenState extends State<NoticesListScreen> {
                 child: const Icon(Icons.add),
               )
             : null,
-        body: switch (provider.status) {
-          LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading notices...'),
-          LoadStatus.error => ErrorView(
-            error: provider.error!,
-            onRetry: () => isAdmin ? provider.loadNoticesAsAdmin() : provider.loadMyNotices(),
-          ),
-          LoadStatus.success =>
-            notices.isEmpty
-                ? EmptyStateView(
-                    message: 'No notices yet',
-                    icon: Icons.campaign_outlined,
-                    actionLabel: isAdmin ? 'Add Notice' : null,
-                    onAction: isAdmin ? () => showNoticeFormDialog(context, provider) : null,
-                  )
-                : ListView(
-                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 88),
-                    children: [
-                      PageHeroCard(
-                        icon: Icons.campaign_rounded,
-                        title: 'Stay Informed',
-                        subtitle: 'The latest notices, announcements and important updates from your institution.',
-                        color: const Color(0xFF2F80FF),
-                        figure: '${notices.length}',
-                      ),
-                      const SizedBox(height: 14),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            AppFilterChip(
-                              label: 'All',
-                              count: notices.length,
-                              selected: filter == null,
-                              onTap: () => setState(() => _filter = null),
-                            ),
-                            for (final c in chips) ...[
-                              const SizedBox(width: 8),
-                              AppFilterChip(
-                                label: _categoryStyle(c).$1,
-                                icon: _categoryStyle(c).$2,
-                                count: counts[c]!,
-                                selected: filter == c,
-                                onTap: () => setState(() => _filter = c),
-                              ),
-                            ],
-                          ],
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: switch (provider.status) {
+            LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading notices...'),
+            LoadStatus.error => ErrorView(
+              error: provider.error!,
+              onRetry: () => isAdmin ? provider.loadNoticesAsAdmin() : provider.loadMyNotices(),
+            ),
+            LoadStatus.success =>
+              notices.isEmpty
+                  ? EmptyStateView(
+                      message: 'No notices yet',
+                      icon: Icons.campaign_outlined,
+                      actionLabel: isAdmin ? 'Add Notice' : null,
+                      onAction: isAdmin ? () => showNoticeFormDialog(context, provider) : null,
+                    )
+                  : ListView(
+                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 88),
+                      children: [
+                        PageHeroCard(
+                          icon: Icons.campaign_rounded,
+                          title: 'Stay Informed',
+                          subtitle: 'The latest notices, announcements and important updates from your institution.',
+                          color: const Color(0xFF2F80FF),
+                          figure: '${notices.length}',
                         ),
-                      ),
-                      const SizedBox(height: 14),
-                      for (final notice in visible) ...[
-                        _NoticeCard(notice: notice, provider: provider, isAdmin: isAdmin),
-                        const SizedBox(height: 10),
+                        const SizedBox(height: 14),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              AppFilterChip(
+                                label: 'All',
+                                count: notices.length,
+                                selected: filter == null,
+                                onTap: () => setState(() => _filter = null),
+                              ),
+                              for (final c in chips) ...[
+                                const SizedBox(width: 8),
+                                AppFilterChip(
+                                  label: _categoryStyle(c).$1,
+                                  icon: _categoryStyle(c).$2,
+                                  count: counts[c]!,
+                                  selected: filter == c,
+                                  onTap: () => setState(() => _filter = c),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                        for (final notice in visible) ...[
+                          _NoticeCard(notice: notice, provider: provider, isAdmin: isAdmin),
+                          const SizedBox(height: 10),
+                        ],
                       ],
-                    ],
-                  ),
-        },
+                    ),
+          },
+        ),
       ),
     );
   }

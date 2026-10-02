@@ -33,8 +33,9 @@ class StudentFollowupProvider extends ChangeNotifier {
   bool get isDownloading => _isDownloading;
   AppException? get downloadError => _downloadError;
 
-  Future<void> loadFollowups({String? status, String? search}) async {
-    _status = LoadStatus.loading;
+  Future<void> loadFollowups({String? status, String? search, bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _status != LoadStatus.success) _status = LoadStatus.loading;
     _error = null;
     notifyListeners();
 
@@ -77,10 +78,7 @@ class StudentFollowupProvider extends ChangeNotifier {
       status: status,
     );
     final succeeded = result.isSuccess;
-    result.when(
-      success: (created) => _followups = [created, ..._followups],
-      failure: (error) => _actionError = error,
-    );
+    result.when(success: (created) => _followups = [created, ..._followups], failure: (error) => _actionError = error);
 
     _isSaving = false;
     notifyListeners();
@@ -115,7 +113,10 @@ class StudentFollowupProvider extends ChangeNotifier {
     );
     final succeeded = result.isSuccess;
     result.when(
-      success: (updated) => _followups = [for (final f in _followups) if (f.id == updated.id) updated else f],
+      success: (updated) => _followups = [
+        for (final f in _followups)
+          if (f.id == updated.id) updated else f,
+      ],
       failure: (error) => _actionError = error,
     );
 
@@ -146,10 +147,7 @@ class StudentFollowupProvider extends ChangeNotifier {
     final result = await _repository.exportFollowups(status: status, search: search);
     _isDownloading = false;
     Uint8List? bytes;
-    result.when(
-      success: (data) => bytes = data,
-      failure: (error) => _downloadError = error,
-    );
+    result.when(success: (data) => bytes = data, failure: (error) => _downloadError = error);
     notifyListeners();
     return bytes;
   }

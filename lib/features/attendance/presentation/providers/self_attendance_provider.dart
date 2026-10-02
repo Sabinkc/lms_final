@@ -40,14 +40,15 @@ class SelfAttendanceProvider extends ChangeNotifier {
   /// `GET /api/attendance/me`, then loads that student's history directly —
   /// no picker needed, a Student only ever has one attendance record set
   /// (their own).
-  Future<void> loadOwnHistory({String? month, String? year}) async {
-    _historyStatus = LoadStatus.loading;
+  Future<void> loadOwnHistory({String? month, String? year, bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _historyStatus != LoadStatus.success) _historyStatus = LoadStatus.loading;
     _historyError = null;
     notifyListeners();
 
     final idResult = await _repository.getMyStudentId();
     await idResult.when(
-      success: (id) => _loadHistoryFor(id, month: month, year: year),
+      success: (id) => _loadHistoryFor(id, month: month, year: year, silent: silent),
       failure: (error) async {
         _historyError = error;
         _historyStatus = LoadStatus.error;
@@ -60,8 +61,9 @@ class SelfAttendanceProvider extends ChangeNotifier {
   /// and loads history immediately when there's exactly one child — the
   /// common case — so a Parent with one child doesn't have to make a
   /// pointless selection.
-  Future<void> loadChildren() async {
-    _childrenStatus = LoadStatus.loading;
+  Future<void> loadChildren({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _childrenStatus != LoadStatus.success) _childrenStatus = LoadStatus.loading;
     _childrenError = null;
     notifyListeners();
 
@@ -81,13 +83,14 @@ class SelfAttendanceProvider extends ChangeNotifier {
     );
   }
 
-  Future<void> selectChild(String studentId, {String? month, String? year}) async {
+  Future<void> selectChild(String studentId, {String? month, String? year, bool silent = false}) async {
     _selectedChildId = studentId;
-    await _loadHistoryFor(studentId, month: month, year: year);
+    await _loadHistoryFor(studentId, month: month, year: year, silent: silent);
   }
 
-  Future<void> _loadHistoryFor(String studentId, {String? month, String? year}) async {
-    _historyStatus = LoadStatus.loading;
+  Future<void> _loadHistoryFor(String studentId, {String? month, String? year, bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _historyStatus != LoadStatus.success) _historyStatus = LoadStatus.loading;
     _historyError = null;
     notifyListeners();
 

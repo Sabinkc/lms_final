@@ -19,6 +19,7 @@ import '../providers/fee_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 /// Admin: pending-payments review queue (`implementation_backlog.md`
 /// E7-F2) plus a read-only full history tab backed by `GET
@@ -42,6 +43,11 @@ class _PaymentReviewScreenState extends State<PaymentReviewScreen> {
     Future.microtask(() => provider.loadPendingPayments());
   }
 
+  Future<void> _refresh() async {
+    final provider = context.read<FeeProvider>();
+    await (_showHistory ? provider.loadHistory(silent: true) : provider.loadPendingPayments(silent: true));
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<FeeProvider>();
@@ -50,25 +56,28 @@ class _PaymentReviewScreenState extends State<PaymentReviewScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: BrandAppBar(title: 'Payment Review'),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-              child: PillTabs<bool>(
-                values: const [false, true],
-                labelOf: (history) => history ? 'History' : 'Pending',
-                iconOf: (history) => history ? Icons.history_rounded : Icons.pending_actions_rounded,
-                selected: _showHistory,
-                onSelected: (history) {
-                  setState(() => _showHistory = history);
-                  if (history && provider.historyStatus == LoadStatus.initial) provider.loadHistory();
-                },
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                child: PillTabs<bool>(
+                  values: const [false, true],
+                  labelOf: (history) => history ? 'History' : 'Pending',
+                  iconOf: (history) => history ? Icons.history_rounded : Icons.pending_actions_rounded,
+                  selected: _showHistory,
+                  onSelected: (history) {
+                    setState(() => _showHistory = history);
+                    if (history && provider.historyStatus == LoadStatus.initial) provider.loadHistory();
+                  },
+                ),
               ),
-            ),
-            Expanded(
-              child: _showHistory ? _HistoryList(provider: provider) : _PendingQueue(provider: provider),
-            ),
-          ],
+              Expanded(
+                child: _showHistory ? _HistoryList(provider: provider) : _PendingQueue(provider: provider),
+              ),
+            ],
+          ),
         ),
       ),
     );

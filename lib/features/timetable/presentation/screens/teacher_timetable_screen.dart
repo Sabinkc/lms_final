@@ -11,6 +11,7 @@ import '../providers/teacher_timetable_provider.dart';
 import '../widgets/day_timeline.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 /// Teacher: View Own Timetable (`docs/production_roadmap.md` Phase L4,
 /// `implementation_backlog.md` E16-F2) — read-only, one entry per
@@ -32,6 +33,10 @@ class _TeacherTimetableScreenState extends State<TeacherTimetableScreen> {
     Future.microtask(() => provider.loadMySchedule());
   }
 
+  Future<void> _refresh() async {
+    await context.read<TeacherTimetableProvider>().loadMySchedule(silent: true);
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<TeacherTimetableProvider>();
@@ -40,14 +45,17 @@ class _TeacherTimetableScreenState extends State<TeacherTimetableScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: BrandAppBar(title: 'My Timetable'),
-        body: switch (provider.status) {
-          LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading timetable...'),
-          LoadStatus.error => ErrorView(error: provider.error!, onRetry: () => provider.loadMySchedule()),
-          LoadStatus.success =>
-            provider.entries.isEmpty
-                ? const EmptyStateView(message: 'No periods scheduled for you yet', icon: Icons.schedule_outlined)
-                : _buildSchedule(context, provider.entries),
-        },
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: switch (provider.status) {
+            LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading timetable...'),
+            LoadStatus.error => ErrorView(error: provider.error!, onRetry: () => provider.loadMySchedule()),
+            LoadStatus.success =>
+              provider.entries.isEmpty
+                  ? const EmptyStateView(message: 'No periods scheduled for you yet', icon: Icons.schedule_outlined)
+                  : _buildSchedule(context, provider.entries),
+          },
+        ),
       ),
     );
   }

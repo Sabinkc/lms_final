@@ -40,10 +40,11 @@ class StudentDayAttendanceProvider extends ChangeNotifier {
   static String _iso(DateTime d) =>
       '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
 
-  Future<void> load({DateTime? date}) async {
+  Future<void> load({DateTime? date, bool silent = false}) async {
     if (date != null) _date = DateTime(date.year, date.month, date.day);
     final requested = _date;
-    _status = LoadStatus.loading;
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _status != LoadStatus.success) _status = LoadStatus.loading;
     _error = null;
     notifyListeners();
 

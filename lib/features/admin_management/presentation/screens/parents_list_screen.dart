@@ -13,6 +13,7 @@ import '../providers/academic_structure_provider.dart' show LoadStatus;
 import '../providers/parent_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 /// docs/screens.md "Manage Parents — List / Add-Edit". No separate detail
 /// screen — same P0-only scope decision as the rest of Phase B. Linkage is
@@ -46,6 +47,10 @@ class _ParentsListScreenState extends State<ParentsListScreen> {
     super.dispose();
   }
 
+  Future<void> _refresh() async {
+    await context.read<ParentProvider>().loadParents(silent: true);
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<ParentProvider>();
@@ -59,26 +64,29 @@ class _ParentsListScreenState extends State<ParentsListScreen> {
           tooltip: 'Add Parent',
           child: const Icon(Icons.add),
         ),
-        body: switch (provider.status) {
-          LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading parents...'),
-          LoadStatus.error => ErrorView(error: provider.error!, onRetry: () => provider.loadParents()),
-          LoadStatus.success =>
-            provider.parents.isEmpty
-                ? EmptyStateView(
-                    message: 'No parents added yet',
-                    icon: Icons.family_restroom_outlined,
-                    actionLabel: 'Add Parent',
-                    onAction: () => _showParentFormDialog(context, provider),
-                  )
-                : _ParentsList(
-                    searchController: _searchController,
-                    parents: provider.parents
-                        .where((p) => _query.isEmpty || p.fullName.toLowerCase().contains(_query))
-                        .toList(),
-                    onEdit: (parent) => _showParentFormDialog(context, provider, existing: parent),
-                    onDelete: (parent) => _confirmDeleteParent(context, provider, parent),
-                  ),
-        },
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: switch (provider.status) {
+            LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading parents...'),
+            LoadStatus.error => ErrorView(error: provider.error!, onRetry: () => provider.loadParents()),
+            LoadStatus.success =>
+              provider.parents.isEmpty
+                  ? EmptyStateView(
+                      message: 'No parents added yet',
+                      icon: Icons.family_restroom_outlined,
+                      actionLabel: 'Add Parent',
+                      onAction: () => _showParentFormDialog(context, provider),
+                    )
+                  : _ParentsList(
+                      searchController: _searchController,
+                      parents: provider.parents
+                          .where((p) => _query.isEmpty || p.fullName.toLowerCase().contains(_query))
+                          .toList(),
+                      onEdit: (parent) => _showParentFormDialog(context, provider, existing: parent),
+                      onDelete: (parent) => _confirmDeleteParent(context, provider, parent),
+                    ),
+          },
+        ),
       ),
     );
   }

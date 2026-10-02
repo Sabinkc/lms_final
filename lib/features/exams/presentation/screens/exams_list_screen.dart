@@ -22,6 +22,7 @@ import '../../data/models/exam.dart';
 import '../providers/exam_provider.dart';
 import 'exam_form_dialog.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 /// docs/screens.md's Exam & Academic Schedule module. One list for every
 /// role (`GET /exams` Admin-only, `GET /exams/my` everyone else, role read
@@ -64,6 +65,13 @@ class _ExamsListScreenState extends State<ExamsListScreen> {
     super.dispose();
   }
 
+  Future<void> _refresh() async {
+    final provider = context.read<ExamProvider>();
+    await (context.read<AuthProvider>().role == AppRole.admin
+        ? provider.loadExamsAsAdmin(silent: true)
+        : provider.loadMyExams(silent: true));
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<ExamProvider>();
@@ -81,22 +89,25 @@ class _ExamsListScreenState extends State<ExamsListScreen> {
                 child: const Icon(Icons.add),
               )
             : null,
-        body: switch (provider.status) {
-          LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading exams...'),
-          LoadStatus.error => ErrorView(
-            error: provider.error!,
-            onRetry: () => isAdmin ? provider.loadExamsAsAdmin() : provider.loadMyExams(),
-          ),
-          LoadStatus.success =>
-            provider.exams.isEmpty
-                ? EmptyStateView(
-                    message: 'No exams scheduled yet',
-                    icon: Icons.school_outlined,
-                    actionLabel: isAdmin ? 'Add Exam' : null,
-                    onAction: isAdmin ? () => showExamFormDialog(context, provider) : null,
-                  )
-                : _buildList(context, provider.exams, role, isAdmin),
-        },
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: switch (provider.status) {
+            LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading exams...'),
+            LoadStatus.error => ErrorView(
+              error: provider.error!,
+              onRetry: () => isAdmin ? provider.loadExamsAsAdmin() : provider.loadMyExams(),
+            ),
+            LoadStatus.success =>
+              provider.exams.isEmpty
+                  ? EmptyStateView(
+                      message: 'No exams scheduled yet',
+                      icon: Icons.school_outlined,
+                      actionLabel: isAdmin ? 'Add Exam' : null,
+                      onAction: isAdmin ? () => showExamFormDialog(context, provider) : null,
+                    )
+                  : _buildList(context, provider.exams, role, isAdmin),
+          },
+        ),
       ),
     );
   }

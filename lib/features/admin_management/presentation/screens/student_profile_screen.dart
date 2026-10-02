@@ -24,6 +24,7 @@ import '../providers/teacher_provider.dart';
 import 'students_list_screen.dart' show confirmDeleteStudent, showStudentFormDialog;
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 enum _Tab { overview, academic, attendance, fees }
 
@@ -66,6 +67,17 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
     });
   }
 
+  Future<void> _refresh() async {
+    final students = context.read<StudentProvider>();
+    final profile = context.read<StudentProfileProvider>();
+    await Future.wait([
+      students.loadStudents(className: students.classFilter, silent: true),
+      context.read<TeacherProvider>().loadTeachers(silent: true),
+      profile.loadAttendance(silent: true),
+      profile.loadFees(silent: true),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     final studentProvider = context.watch<StudentProvider>();
@@ -77,15 +89,18 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: const BrandAppBar(title: 'Student Profile'),
-          body: switch (studentProvider.status) {
-            LoadStatus.error => ErrorView(error: studentProvider.error!, onRetry: studentProvider.loadStudents),
-            LoadStatus.success when studentProvider.classFilter == null => const EmptyStateView(
-              message: 'This student no longer exists',
-              icon: Icons.person_off_outlined,
-            ),
-            LoadStatus.success => const _ReloadAll(),
-            _ => const LoadingView(message: 'Loading student...'),
-          },
+          body: PullToRefresh(
+            onRefresh: _refresh,
+            child: switch (studentProvider.status) {
+              LoadStatus.error => ErrorView(error: studentProvider.error!, onRetry: studentProvider.loadStudents),
+              LoadStatus.success when studentProvider.classFilter == null => const EmptyStateView(
+                message: 'This student no longer exists',
+                icon: Icons.person_off_outlined,
+              ),
+              LoadStatus.success => const _ReloadAll(),
+              _ => const LoadingView(message: 'Loading student...'),
+            },
+          ),
         ),
       );
     }
@@ -114,49 +129,52 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
             ),
           ],
         ),
-        body: ListView(
-          padding: const EdgeInsets.all(AppSpacing.lg),
-          children: [
-            _ProfileHeader(
-              student: student,
-              onEdit: () => showStudentFormDialog(context, studentProvider, existing: student),
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            PillTabs<_Tab>(
-              values: _Tab.values,
-              labelOf: (tab) => switch (tab) {
-                _Tab.overview => 'Overview',
-                _Tab.academic => 'Academic',
-                _Tab.attendance => 'Attendance',
-                _Tab.fees => 'Fees',
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: ListView(
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            children: [
+              _ProfileHeader(
+                student: student,
+                onEdit: () => showStudentFormDialog(context, studentProvider, existing: student),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              PillTabs<_Tab>(
+                values: _Tab.values,
+                labelOf: (tab) => switch (tab) {
+                  _Tab.overview => 'Overview',
+                  _Tab.academic => 'Academic',
+                  _Tab.attendance => 'Attendance',
+                  _Tab.fees => 'Fees',
+                },
+                iconOf: (tab) => switch (tab) {
+                  _Tab.overview => Icons.description_outlined,
+                  _Tab.academic => Icons.school_outlined,
+                  _Tab.attendance => Icons.event_available_outlined,
+                  _Tab.fees => Icons.payments_outlined,
+                },
+                selected: _tab,
+                onSelected: (tab) => setState(() => _tab = tab),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              ...switch (_tab) {
+                _Tab.overview => [
+                  _PersonalInfoCard(student: student),
+                  const SizedBox(height: AppSpacing.md),
+                  _GuardianCard(student: student),
+                  const SizedBox(height: AppSpacing.md),
+                  _ClassInfoCard(student: student, teacherNames: _sectionTeacherNames(context, profile)),
+                ],
+                _Tab.academic => [
+                  _ClassInfoCard(student: student, teacherNames: _sectionTeacherNames(context, profile)),
+                  const SizedBox(height: AppSpacing.md),
+                  _AdditionalDetailsCard(student: student),
+                ],
+                _Tab.attendance => [_AttendanceTab(profile: profile)],
+                _Tab.fees => [_FeesTab(profile: profile)],
               },
-              iconOf: (tab) => switch (tab) {
-                _Tab.overview => Icons.description_outlined,
-                _Tab.academic => Icons.school_outlined,
-                _Tab.attendance => Icons.event_available_outlined,
-                _Tab.fees => Icons.payments_outlined,
-              },
-              selected: _tab,
-              onSelected: (tab) => setState(() => _tab = tab),
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            ...switch (_tab) {
-              _Tab.overview => [
-                _PersonalInfoCard(student: student),
-                const SizedBox(height: AppSpacing.md),
-                _GuardianCard(student: student),
-                const SizedBox(height: AppSpacing.md),
-                _ClassInfoCard(student: student, teacherNames: _sectionTeacherNames(context, profile)),
-              ],
-              _Tab.academic => [
-                _ClassInfoCard(student: student, teacherNames: _sectionTeacherNames(context, profile)),
-                const SizedBox(height: AppSpacing.md),
-                _AdditionalDetailsCard(student: student),
-              ],
-              _Tab.attendance => [_AttendanceTab(profile: profile)],
-              _Tab.fees => [_FeesTab(profile: profile)],
-            },
-          ],
+            ],
+          ),
         ),
       ),
     );

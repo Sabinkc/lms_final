@@ -29,12 +29,13 @@ class AdminDashboardProvider extends ChangeNotifier {
   List<UpcomingExamSummary> get upcomingExams => _upcomingExams;
   AppException? get examsError => _examsError;
 
-  Future<void> loadOverview() async {
-    await Future.wait([_loadStats(), _loadUpcomingExams()]);
+  Future<void> loadOverview({bool silent = false}) async {
+    await Future.wait([_loadStats(silent: silent), _loadUpcomingExams(silent: silent)]);
   }
 
-  Future<void> _loadStats() async {
-    _statsStatus = LoadStatus.loading;
+  Future<void> _loadStats({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _statsStatus != LoadStatus.success) _statsStatus = LoadStatus.loading;
     _statsError = null;
     notifyListeners();
 
@@ -52,8 +53,9 @@ class AdminDashboardProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> _loadUpcomingExams() async {
-    _examsStatus = LoadStatus.loading;
+  Future<void> _loadUpcomingExams({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _examsStatus != LoadStatus.success) _examsStatus = LoadStatus.loading;
     _examsError = null;
     notifyListeners();
 

@@ -25,6 +25,7 @@ import 'sections_list_screen.dart' show SectionsPanel, showSectionFormDialog;
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/section_card.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 enum _Tab { overview, students, teachers, sections }
 
@@ -69,6 +70,16 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
     });
   }
 
+  Future<void> _refresh() async {
+    final academic = context.read<AcademicStructureProvider>();
+    await Future.wait([
+      academic.loadClasses(silent: true),
+      academic.loadSections(widget.classId, silent: true),
+      context.read<StudentProvider>().loadStudents(silent: true),
+      context.read<TeacherProvider>().loadTeachers(silent: true),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     final academic = context.watch<AcademicStructureProvider>();
@@ -83,14 +94,17 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: const BrandAppBar(title: 'Class Details'),
-          body: switch (academic.classesStatus) {
-            LoadStatus.error => ErrorView(error: academic.classesError!, onRetry: academic.loadClasses),
-            LoadStatus.success => const EmptyStateView(
-              message: 'This class no longer exists',
-              icon: Icons.school_outlined,
-            ),
-            _ => const LoadingView(message: 'Loading class...'),
-          },
+          body: PullToRefresh(
+            onRefresh: _refresh,
+            child: switch (academic.classesStatus) {
+              LoadStatus.error => ErrorView(error: academic.classesError!, onRetry: academic.loadClasses),
+              LoadStatus.success => const EmptyStateView(
+                message: 'This class no longer exists',
+                icon: Icons.school_outlined,
+              ),
+              _ => const LoadingView(message: 'Loading class...'),
+            },
+          ),
         ),
       );
     }
@@ -154,51 +168,54 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
             ),
           ),
         ),
-        body: ListView(
-          padding: const EdgeInsets.all(AppSpacing.lg),
-          children: [
-            _HeaderCard(academicClass: academicClass, studentCount: students?.length, sectionCount: sectionCount),
-            const SizedBox(height: AppSpacing.lg),
-            PillTabs<_Tab>(
-              values: _Tab.values,
-              labelOf: (tab) => switch (tab) {
-                _Tab.overview => 'Overview',
-                _Tab.students => 'Students',
-                _Tab.teachers => 'Teachers',
-                _Tab.sections => 'Sections',
-              },
-              selected: _tab,
-              onSelected: (tab) => setState(() => _tab = tab),
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            ...switch (_tab) {
-              _Tab.overview => [
-                _OverviewStats(students: students?.length, sections: sectionCount, teachers: teachers?.length),
-                const SizedBox(height: AppSpacing.md),
-                _TeachersCard(
-                  teachers: teachers,
-                  className: academicClass.name,
-                  preview: true,
-                  onViewAll: () => setState(() => _tab = _Tab.teachers),
-                ),
-                const SizedBox(height: AppSpacing.md),
-                _StudentsPreviewCard(students: students, onViewAll: () => setState(() => _tab = _Tab.students)),
-              ],
-              _Tab.students => [_StudentsList(students: students)],
-              _Tab.teachers => [_TeachersCard(teachers: teachers, className: academicClass.name, preview: false)],
-              _Tab.sections => [
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton.icon(
-                    onPressed: () => showSectionFormDialog(context, academic, classId: widget.classId),
-                    icon: const Icon(Icons.add_circle),
-                    label: const Text('Add Section'),
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: ListView(
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            children: [
+              _HeaderCard(academicClass: academicClass, studentCount: students?.length, sectionCount: sectionCount),
+              const SizedBox(height: AppSpacing.lg),
+              PillTabs<_Tab>(
+                values: _Tab.values,
+                labelOf: (tab) => switch (tab) {
+                  _Tab.overview => 'Overview',
+                  _Tab.students => 'Students',
+                  _Tab.teachers => 'Teachers',
+                  _Tab.sections => 'Sections',
+                },
+                selected: _tab,
+                onSelected: (tab) => setState(() => _tab = tab),
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              ...switch (_tab) {
+                _Tab.overview => [
+                  _OverviewStats(students: students?.length, sections: sectionCount, teachers: teachers?.length),
+                  const SizedBox(height: AppSpacing.md),
+                  _TeachersCard(
+                    teachers: teachers,
+                    className: academicClass.name,
+                    preview: true,
+                    onViewAll: () => setState(() => _tab = _Tab.teachers),
                   ),
-                ),
-                SectionsPanel(classId: widget.classId, embedded: true),
-              ],
-            },
-          ],
+                  const SizedBox(height: AppSpacing.md),
+                  _StudentsPreviewCard(students: students, onViewAll: () => setState(() => _tab = _Tab.students)),
+                ],
+                _Tab.students => [_StudentsList(students: students)],
+                _Tab.teachers => [_TeachersCard(teachers: teachers, className: academicClass.name, preview: false)],
+                _Tab.sections => [
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton.icon(
+                      onPressed: () => showSectionFormDialog(context, academic, classId: widget.classId),
+                      icon: const Icon(Icons.add_circle),
+                      label: const Text('Add Section'),
+                    ),
+                  ),
+                  SectionsPanel(classId: widget.classId, embedded: true),
+                ],
+              },
+            ],
+          ),
         ),
       ),
     );

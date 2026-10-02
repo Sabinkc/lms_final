@@ -88,8 +88,9 @@ class ChatProvider extends ChangeNotifier {
 
   void disconnectRealtime() => _realtimeService.disconnect();
 
-  Future<void> loadGroups() async {
-    _groupsStatus = LoadStatus.loading;
+  Future<void> loadGroups({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _groupsStatus != LoadStatus.success) _groupsStatus = LoadStatus.loading;
     _groupsError = null;
     notifyListeners();
 
@@ -109,8 +110,9 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadEligibleTargets() async {
-    _targetsStatus = LoadStatus.loading;
+  Future<void> loadEligibleTargets({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _targetsStatus != LoadStatus.success) _targetsStatus = LoadStatus.loading;
     notifyListeners();
 
     final result = await _repository.getEligibleTargets();
@@ -126,10 +128,7 @@ class ChatProvider extends ChangeNotifier {
 
   Future<void> loadRosterPreview({required String classId, String? sectionId}) async {
     final result = await _repository.previewRoster(classId: classId, sectionId: sectionId);
-    result.when(
-      success: (students) => _rosterPreview = students,
-      failure: (_) => _rosterPreview = const [],
-    );
+    result.when(success: (students) => _rosterPreview = students, failure: (_) => _rosterPreview = const []);
     notifyListeners();
   }
 
@@ -140,10 +139,7 @@ class ChatProvider extends ChangeNotifier {
 
     final result = await _repository.createGroup(classId: classId, sectionId: sectionId, name: name);
     final succeeded = result.isSuccess;
-    result.when(
-      success: (created) => _groups = [created, ..._groups],
-      failure: (error) => _actionError = error,
-    );
+    result.when(success: (created) => _groups = [created, ..._groups], failure: (error) => _actionError = error);
 
     _isSaving = false;
     notifyListeners();
@@ -152,24 +148,26 @@ class ChatProvider extends ChangeNotifier {
 
   Future<void> loadGroupMembers(String conversationId) async {
     final result = await _repository.getGroupById(conversationId);
-    result.when(
-      success: (data) => _groupMembers = data.$2,
-      failure: (_) => _groupMembers = const [],
-    );
+    result.when(success: (data) => _groupMembers = data.$2, failure: (_) => _groupMembers = const []);
     notifyListeners();
   }
 
-  Future<bool> updateMembers(String conversationId, {List<String>? addStudentIds, List<String>? removeStudentIds}) async {
+  Future<bool> updateMembers(
+    String conversationId, {
+    List<String>? addStudentIds,
+    List<String>? removeStudentIds,
+  }) async {
     _isSaving = true;
     _actionError = null;
     notifyListeners();
 
-    final result = await _repository.updateMembers(conversationId, addStudentIds: addStudentIds, removeStudentIds: removeStudentIds);
-    final succeeded = result.isSuccess;
-    result.when(
-      success: (_) {},
-      failure: (error) => _actionError = error,
+    final result = await _repository.updateMembers(
+      conversationId,
+      addStudentIds: addStudentIds,
+      removeStudentIds: removeStudentIds,
     );
+    final succeeded = result.isSuccess;
+    result.when(success: (_) {}, failure: (error) => _actionError = error);
 
     _isSaving = false;
     if (succeeded) await loadGroupMembers(conversationId);
@@ -306,7 +304,12 @@ class ChatProvider extends ChangeNotifier {
     _sendError = null;
     notifyListeners();
 
-    final result = await _repository.sendMessage(id, text: text, attachmentBytes: attachmentBytes, attachmentFilename: attachmentFilename);
+    final result = await _repository.sendMessage(
+      id,
+      text: text,
+      attachmentBytes: attachmentBytes,
+      attachmentFilename: attachmentFilename,
+    );
     final succeeded = result.isSuccess;
     result.when(
       success: (message) {

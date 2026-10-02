@@ -19,6 +19,7 @@ import '../providers/student_followup_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 String _formatDate(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
@@ -60,6 +61,15 @@ class _StudentFollowupsScreenState extends State<StudentFollowupsScreen> {
     );
   }
 
+  Future<void> _refresh() async {
+    final search = _searchController.text.trim();
+    await context.read<StudentFollowupProvider>().loadFollowups(
+      status: _statusFilter,
+      search: search.isEmpty ? null : search,
+      silent: true,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<StudentFollowupProvider>();
@@ -84,70 +94,73 @@ class _StudentFollowupsScreenState extends State<StudentFollowupsScreen> {
           tooltip: 'Add Follow-up',
           child: const Icon(Icons.add),
         ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-              child: TextField(
-                controller: _searchController,
-                textInputAction: TextInputAction.search,
-                decoration: InputDecoration(
-                  hintText: 'Search by name, email, or phone',
-                  prefixIcon: const Icon(Icons.search),
-                  filled: true,
-                  fillColor: Theme.of(context).colorScheme.surfaceContainerLow,
-                  border: OutlineInputBorder(borderRadius: AppRadius.button, borderSide: BorderSide.none),
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                child: TextField(
+                  controller: _searchController,
+                  textInputAction: TextInputAction.search,
+                  decoration: InputDecoration(
+                    hintText: 'Search by name, email, or phone',
+                    prefixIcon: const Icon(Icons.search),
+                    filled: true,
+                    fillColor: Theme.of(context).colorScheme.surfaceContainerLow,
+                    border: OutlineInputBorder(borderRadius: AppRadius.button, borderSide: BorderSide.none),
+                  ),
+                  onSubmitted: (_) => _reload(),
                 ),
-                onSubmitted: (_) => _reload(),
               ),
-            ),
-            const SizedBox(height: 12),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: AppFilterChipBar<String?>(
-                options: _statusLabels.keys.toList(),
-                selected: _statusFilter,
-                labelBuilder: (key) => _statusLabels[key]!,
-                iconBuilder: (key) => key == null ? null : _statusStyle(key).icon,
-                onSelected: (key) {
-                  setState(() => _statusFilter = key);
-                  _reload();
+              const SizedBox(height: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: AppFilterChipBar<String?>(
+                  options: _statusLabels.keys.toList(),
+                  selected: _statusFilter,
+                  labelBuilder: (key) => _statusLabels[key]!,
+                  iconBuilder: (key) => key == null ? null : _statusStyle(key).icon,
+                  onSelected: (key) {
+                    setState(() => _statusFilter = key);
+                    _reload();
+                  },
+                ),
+              ),
+              const SizedBox(height: 8),
+              Expanded(
+                child: switch (provider.status) {
+                  LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading follow-ups...'),
+                  LoadStatus.error => ErrorView(error: provider.error!, onRetry: _reload),
+                  LoadStatus.success =>
+                    provider.followups.isEmpty
+                        ? EmptyStateView(
+                            message: 'No follow-ups logged yet',
+                            icon: Icons.support_agent_outlined,
+                            actionLabel: 'Add Follow-up',
+                            onAction: () => _showFollowupFormDialog(context, provider),
+                          )
+                        : ListView(
+                            padding: const EdgeInsets.fromLTRB(16, 4, 16, 96),
+                            children: [
+                              if (_statusFilter == null) ...[
+                                _SummaryRow(followups: provider.followups),
+                                const SizedBox(height: 12),
+                              ],
+                              for (final followup in provider.followups) ...[
+                                _FollowupTile(
+                                  followup: followup,
+                                  onEdit: () => _showFollowupFormDialog(context, provider, existing: followup),
+                                  onDelete: () => _confirmDelete(context, provider, followup),
+                                ),
+                                const SizedBox(height: 10),
+                              ],
+                            ],
+                          ),
                 },
               ),
-            ),
-            const SizedBox(height: 8),
-            Expanded(
-              child: switch (provider.status) {
-                LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading follow-ups...'),
-                LoadStatus.error => ErrorView(error: provider.error!, onRetry: _reload),
-                LoadStatus.success =>
-                  provider.followups.isEmpty
-                      ? EmptyStateView(
-                          message: 'No follow-ups logged yet',
-                          icon: Icons.support_agent_outlined,
-                          actionLabel: 'Add Follow-up',
-                          onAction: () => _showFollowupFormDialog(context, provider),
-                        )
-                      : ListView(
-                          padding: const EdgeInsets.fromLTRB(16, 4, 16, 96),
-                          children: [
-                            if (_statusFilter == null) ...[
-                              _SummaryRow(followups: provider.followups),
-                              const SizedBox(height: 12),
-                            ],
-                            for (final followup in provider.followups) ...[
-                              _FollowupTile(
-                                followup: followup,
-                                onEdit: () => _showFollowupFormDialog(context, provider, existing: followup),
-                                onDelete: () => _confirmDelete(context, provider, followup),
-                              ),
-                              const SizedBox(height: 10),
-                            ],
-                          ],
-                        ),
-              },
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

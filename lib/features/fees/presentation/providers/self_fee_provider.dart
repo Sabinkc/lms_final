@@ -62,10 +62,10 @@ class SelfFeeProvider extends ChangeNotifier {
   }
 
   /// Student role entry point.
-  Future<void> loadOwnFees() async {
+  Future<void> loadOwnFees({bool silent = false}) async {
     final profileResult = await _studentRepository.getMyProfile();
     await profileResult.when(
-      success: (student) => _loadFeesFor(student.id),
+      success: (student) => _loadFeesFor(student.id, silent: silent),
       failure: (error) async {
         _feesStatus = LoadStatus.error;
         _feesError = error;
@@ -75,8 +75,9 @@ class SelfFeeProvider extends ChangeNotifier {
   }
 
   /// Parent role entry point — auto-selects when there's exactly one child.
-  Future<void> loadChildren() async {
-    _childrenStatus = LoadStatus.loading;
+  Future<void> loadChildren({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _childrenStatus != LoadStatus.success) _childrenStatus = LoadStatus.loading;
     _childrenError = null;
     notifyListeners();
 
@@ -96,13 +97,14 @@ class SelfFeeProvider extends ChangeNotifier {
     );
   }
 
-  Future<void> selectChild(String studentId) async {
+  Future<void> selectChild(String studentId, {bool silent = false}) async {
     _selectedChildId = studentId;
-    await _loadFeesFor(studentId);
+    await _loadFeesFor(studentId, silent: silent);
   }
 
-  Future<void> _loadFeesFor(String studentId) async {
-    _feesStatus = LoadStatus.loading;
+  Future<void> _loadFeesFor(String studentId, {bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _feesStatus != LoadStatus.success) _feesStatus = LoadStatus.loading;
     _feesError = null;
     notifyListeners();
 
@@ -127,10 +129,7 @@ class SelfFeeProvider extends ChangeNotifier {
 
   Future<void> _loadMyPayments() async {
     final result = await _paymentRepository.getMyPayments();
-    result.when(
-      success: (payments) => _myPayments = payments,
-      failure: (_) {},
-    );
+    result.when(success: (payments) => _myPayments = payments, failure: (_) {});
     notifyListeners();
   }
 

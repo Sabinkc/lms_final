@@ -60,8 +60,9 @@ class AssignmentProvider extends ChangeNotifier {
   bool isGrading(String submissionId) => _gradingIds.contains(submissionId);
   AppException? get gradeError => _gradeError;
 
-  Future<void> loadAssignments() async {
-    _status = LoadStatus.loading;
+  Future<void> loadAssignments({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _status != LoadStatus.success) _status = LoadStatus.loading;
     _error = null;
     notifyListeners();
 
@@ -79,8 +80,9 @@ class AssignmentProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadAssignmentDetail(String id) async {
-    _detailStatus = LoadStatus.loading;
+  Future<void> loadAssignmentDetail(String id, {bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _detailStatus != LoadStatus.success) _detailStatus = LoadStatus.loading;
     _detailError = null;
     notifyListeners();
 
@@ -152,7 +154,10 @@ class AssignmentProvider extends ChangeNotifier {
     final succeeded = result.isSuccess;
     result.when(
       success: (updated) {
-        _assignments = [for (final a in _assignments) if (a.id == updated.id) updated else a];
+        _assignments = [
+          for (final a in _assignments)
+            if (a.id == updated.id) updated else a,
+        ];
         if (_currentAssignment?.id == updated.id) _currentAssignment = updated;
       },
       failure: (error) => _actionError = error,
@@ -195,18 +200,16 @@ class AssignmentProvider extends ChangeNotifier {
       files: files,
     );
     final succeeded = result.isSuccess;
-    result.when(
-      success: (_) {},
-      failure: (error) => _submitError = error,
-    );
+    result.when(success: (_) {}, failure: (error) => _submitError = error);
 
     _isSubmitting = false;
     notifyListeners();
     return succeeded;
   }
 
-  Future<void> loadMySubmissions() async {
-    _submissionsStatus = LoadStatus.loading;
+  Future<void> loadMySubmissions({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _submissionsStatus != LoadStatus.success) _submissionsStatus = LoadStatus.loading;
     _submissionsError = null;
     notifyListeners();
 
@@ -224,8 +227,9 @@ class AssignmentProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadSubmissionsForAssignment(String assignmentId) async {
-    _submissionsStatus = LoadStatus.loading;
+  Future<void> loadSubmissionsForAssignment(String assignmentId, {bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _submissionsStatus != LoadStatus.success) _submissionsStatus = LoadStatus.loading;
     _submissionsError = null;
     notifyListeners();
 
@@ -251,8 +255,10 @@ class AssignmentProvider extends ChangeNotifier {
     final result = await _repository.gradeSubmission(submissionId: submissionId, marks: marks, remarks: remarks);
     final succeeded = result.isSuccess;
     result.when(
-      success: (updated) =>
-          _submissions = [for (final s in _submissions) if (s.id == updated.id) s.mergeGraded(updated) else s],
+      success: (updated) => _submissions = [
+        for (final s in _submissions)
+          if (s.id == updated.id) s.mergeGraded(updated) else s,
+      ],
       failure: (error) => _gradeError = error,
     );
 

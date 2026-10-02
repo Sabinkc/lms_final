@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_lms/core/error/app_exception.dart';
 import 'package:cloud_lms/core/error/result.dart';
 import 'package:cloud_lms/features/admin_management/data/models/academic_class.dart';
@@ -57,6 +59,35 @@ void main() {
     teacherRepository = _MockTeacherRepository();
     classRepository = _MockClassRepository();
     provider = DepartmentProvider(departmentRepository, teacherRepository, classRepository);
+  });
+
+  test('loadDepartments(silent: true) keeps the loaded list on screen while reloading', () async {
+    when(() => departmentRepository.getDepartments()).thenAnswer((_) async => const Result.success([_department1]));
+    await provider.loadDepartments();
+
+    final pending = Completer<Result<List<Department>>>();
+    when(() => departmentRepository.getDepartments()).thenAnswer((_) => pending.future);
+    final reload = provider.loadDepartments(silent: true);
+
+    expect(provider.status, LoadStatus.success);
+    expect(provider.departments, [_department1]);
+
+    pending.complete(const Result.success([]));
+    await reload;
+    expect(provider.departments, isEmpty);
+  });
+
+  test('loadDepartments() without silent shows loading again', () async {
+    when(() => departmentRepository.getDepartments()).thenAnswer((_) async => const Result.success([_department1]));
+    await provider.loadDepartments();
+
+    final pending = Completer<Result<List<Department>>>();
+    when(() => departmentRepository.getDepartments()).thenAnswer((_) => pending.future);
+    final reload = provider.loadDepartments();
+
+    expect(provider.status, LoadStatus.loading);
+    pending.complete(const Result.success([_department1]));
+    await reload;
   });
 
   test('loadDepartments(): success populates departments and sets status', () async {

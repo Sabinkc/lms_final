@@ -30,8 +30,9 @@ class AdminTimetableProvider extends ChangeNotifier {
   bool get isSaving => _isSaving;
   AppException? get actionError => _actionError;
 
-  Future<void> loadTimetable(String className, String section) async {
-    _status = LoadStatus.loading;
+  Future<void> loadTimetable(String className, String section, {bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _status != LoadStatus.success) _status = LoadStatus.loading;
     _error = null;
     _current = null;
     notifyListeners();
@@ -61,10 +62,7 @@ class AdminTimetableProvider extends ChangeNotifier {
 
     final result = await _repository.saveTimetable(className: className, section: section, schedule: schedule);
     final succeeded = result.isSuccess;
-    result.when(
-      success: (saved) => _current = saved,
-      failure: (error) => _actionError = error,
-    );
+    result.when(success: (saved) => _current = saved, failure: (error) => _actionError = error);
 
     _isSaving = false;
     notifyListeners();
@@ -76,10 +74,7 @@ class AdminTimetableProvider extends ChangeNotifier {
 
     final result = await _repository.deleteTimetable(id);
     final succeeded = result.isSuccess;
-    result.when(
-      success: (_) => _current = null,
-      failure: (error) => _actionError = error,
-    );
+    result.when(success: (_) => _current = null, failure: (error) => _actionError = error);
 
     notifyListeners();
     return succeeded;

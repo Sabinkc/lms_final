@@ -23,6 +23,7 @@ import 'fee_form_dialog.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 const _statusFilterOptions = <String?>[null, 'pending', 'partial', 'paid'];
 
@@ -138,6 +139,11 @@ class _AdminFeesScreenState extends State<AdminFeesScreen> {
     super.dispose();
   }
 
+  Future<void> _refresh() async {
+    final provider = context.read<FeeProvider>();
+    await Future.wait([provider.loadFees(silent: true), provider.loadHistory(silent: true)]);
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<FeeProvider>();
@@ -158,73 +164,76 @@ class _AdminFeesScreenState extends State<AdminFeesScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: BrandAppBar(title: 'Fees'),
-        body: switch (provider.status) {
-          LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading fees...'),
-          LoadStatus.error => ErrorView(error: provider.error!, onRetry: provider.loadFees),
-          LoadStatus.success => ListView(
-            controller: _scrollController,
-            padding: const EdgeInsets.all(AppSpacing.lg),
-            children: [
-              const _FeesHeader(),
-              const SizedBox(height: AppSpacing.lg),
-              if (provider.fees.isNotEmpty) ...[
-                _FeesSummary(fees: provider.fees, history: provider.history),
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: switch (provider.status) {
+            LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading fees...'),
+            LoadStatus.error => ErrorView(error: provider.error!, onRetry: provider.loadFees),
+            LoadStatus.success => ListView(
+              controller: _scrollController,
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              children: [
+                const _FeesHeader(),
                 const SizedBox(height: AppSpacing.lg),
-              ],
-              _QuickActions(
-                isDownloading: provider.isDownloading,
-                onAddFee: () => showFeeFormDialog(context, provider),
-                onViewDue: _showDueStudents,
-                onReviewPayments: () => context.push(AppRoutes.adminFeePayments),
-                onExport: () => _downloadExport(context, provider, _statusFilter),
-              ),
-              if (provider.fees.isNotEmpty) ...[
-                const SizedBox(height: AppSpacing.lg),
-                _MonthlyChart(fees: provider.fees),
-                const SizedBox(height: AppSpacing.lg),
-                _FeeStatusCard(fees: provider.fees),
-              ],
-              if (provider.history.isNotEmpty) ...[
-                const SizedBox(height: AppSpacing.lg),
-                _RecentCollections(payments: provider.history, fees: provider.fees),
-              ],
-              const SizedBox(height: AppSpacing.lg),
-              Text(
-                'Fee Structure',
-                key: _feeListKey,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
-              ),
-              const SizedBox(height: AppSpacing.md),
-              AppFilterChipBar<String?>(
-                options: _statusFilterOptions,
-                selected: _statusFilter,
-                labelBuilder: _statusFilterLabel,
-                countBuilder: (status) =>
-                    status == null ? provider.fees.length : provider.fees.where((f) => f.status == status).length,
-                onSelected: (status) => setState(() => _statusFilter = status),
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              TextField(
-                controller: _searchController,
-                onChanged: (value) => setState(() => _query = value),
-                decoration: const InputDecoration(
-                  hintText: 'Search by name, class or roll no...',
-                  prefixIcon: Icon(Icons.search),
+                if (provider.fees.isNotEmpty) ...[
+                  _FeesSummary(fees: provider.fees, history: provider.history),
+                  const SizedBox(height: AppSpacing.lg),
+                ],
+                _QuickActions(
+                  isDownloading: provider.isDownloading,
+                  onAddFee: () => showFeeFormDialog(context, provider),
+                  onViewDue: _showDueStudents,
+                  onReviewPayments: () => context.push(AppRoutes.adminFeePayments),
+                  onExport: () => _downloadExport(context, provider, _statusFilter),
                 ),
-              ),
-              const SizedBox(height: AppSpacing.md),
-              if (visibleFees.isEmpty)
-                EmptyStateView(
-                  message: provider.fees.isEmpty ? 'No fees set up yet' : 'No fees match this filter',
-                  icon: Icons.receipt_long_outlined,
-                  actionLabel: provider.fees.isEmpty ? 'Add Fee' : null,
-                  onAction: provider.fees.isEmpty ? () => showFeeFormDialog(context, provider) : null,
-                )
-              else
-                for (final fee in visibleFees) ...[_FeeTile(fee: fee, provider: provider), const SizedBox(height: 8)],
-            ],
-          ),
-        },
+                if (provider.fees.isNotEmpty) ...[
+                  const SizedBox(height: AppSpacing.lg),
+                  _MonthlyChart(fees: provider.fees),
+                  const SizedBox(height: AppSpacing.lg),
+                  _FeeStatusCard(fees: provider.fees),
+                ],
+                if (provider.history.isNotEmpty) ...[
+                  const SizedBox(height: AppSpacing.lg),
+                  _RecentCollections(payments: provider.history, fees: provider.fees),
+                ],
+                const SizedBox(height: AppSpacing.lg),
+                Text(
+                  'Fee Structure',
+                  key: _feeListKey,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                AppFilterChipBar<String?>(
+                  options: _statusFilterOptions,
+                  selected: _statusFilter,
+                  labelBuilder: _statusFilterLabel,
+                  countBuilder: (status) =>
+                      status == null ? provider.fees.length : provider.fees.where((f) => f.status == status).length,
+                  onSelected: (status) => setState(() => _statusFilter = status),
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                TextField(
+                  controller: _searchController,
+                  onChanged: (value) => setState(() => _query = value),
+                  decoration: const InputDecoration(
+                    hintText: 'Search by name, class or roll no...',
+                    prefixIcon: Icon(Icons.search),
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                if (visibleFees.isEmpty)
+                  EmptyStateView(
+                    message: provider.fees.isEmpty ? 'No fees set up yet' : 'No fees match this filter',
+                    icon: Icons.receipt_long_outlined,
+                    actionLabel: provider.fees.isEmpty ? 'Add Fee' : null,
+                    onAction: provider.fees.isEmpty ? () => showFeeFormDialog(context, provider) : null,
+                  )
+                else
+                  for (final fee in visibleFees) ...[_FeeTile(fee: fee, provider: provider), const SizedBox(height: 8)],
+              ],
+            ),
+          },
+        ),
       ),
     );
   }

@@ -38,8 +38,9 @@ class ExamResultProvider extends ChangeNotifier {
   AppException? get publishError => _publishError;
   bool get published => _published;
 
-  Future<void> loadRosterForExam(Exam exam) async {
-    _rosterStatus = LoadStatus.loading;
+  Future<void> loadRosterForExam(Exam exam, {bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _rosterStatus != LoadStatus.success) _rosterStatus = LoadStatus.loading;
     _rosterError = null;
     _marks.clear();
     _remarks.clear();
@@ -96,10 +97,7 @@ class ExamResultProvider extends ChangeNotifier {
 
     final result = await _repository.publishResults(examId: exam.id, results: results);
     final succeeded = result.isSuccess;
-    result.when(
-      success: (_) => _published = true,
-      failure: (error) => _publishError = error,
-    );
+    result.when(success: (_) => _published = true, failure: (error) => _publishError = error);
 
     _isPublishing = false;
     notifyListeners();
@@ -117,8 +115,9 @@ class ExamResultProvider extends ChangeNotifier {
   List<ExamResult> get classResults => _classResults;
   AppException? get classResultsError => _classResultsError;
 
-  Future<void> loadClassResults(String examId) async {
-    _classResultsStatus = LoadStatus.loading;
+  Future<void> loadClassResults(String examId, {bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _classResultsStatus != LoadStatus.success) _classResultsStatus = LoadStatus.loading;
     _classResultsError = null;
     notifyListeners();
 
@@ -148,8 +147,9 @@ class ExamResultProvider extends ChangeNotifier {
   List<ExamResult> get myResults => _myResults;
   AppException? get myResultsError => _myResultsError;
 
-  Future<void> loadMyResults() async {
-    _myResultsStatus = LoadStatus.loading;
+  Future<void> loadMyResults({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _myResultsStatus != LoadStatus.success) _myResultsStatus = LoadStatus.loading;
     _myResultsError = null;
     notifyListeners();
 
@@ -179,8 +179,9 @@ class ExamResultProvider extends ChangeNotifier {
   ExamResult? get myExamResult => _myExamResult;
   AppException? get myExamResultError => _myExamResultError;
 
-  Future<void> loadMyResultForExam(String examId) async {
-    _myExamResultStatus = LoadStatus.loading;
+  Future<void> loadMyResultForExam(String examId, {bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _myExamResultStatus != LoadStatus.success) _myExamResultStatus = LoadStatus.loading;
     _myExamResultError = null;
     notifyListeners();
 
@@ -207,8 +208,9 @@ class ExamResultProvider extends ChangeNotifier {
   ReportCard? get reportCard => _reportCard;
   AppException? get reportCardError => _reportCardError;
 
-  Future<void> loadReportCard({required String examId, required String studentId}) async {
-    _reportCardStatus = LoadStatus.loading;
+  Future<void> loadReportCard({required String examId, required String studentId, bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _reportCardStatus != LoadStatus.success) _reportCardStatus = LoadStatus.loading;
     _reportCardError = null;
     notifyListeners();
 
@@ -247,8 +249,9 @@ class ExamResultProvider extends ChangeNotifier {
   List<ExamResult> get childResults => _childResults;
   AppException? get childResultsError => _childResultsError;
 
-  Future<void> loadChildren() async {
-    _childrenStatus = LoadStatus.loading;
+  Future<void> loadChildren({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _childrenStatus != LoadStatus.success) _childrenStatus = LoadStatus.loading;
     _childrenError = null;
     notifyListeners();
 
@@ -268,9 +271,10 @@ class ExamResultProvider extends ChangeNotifier {
     );
   }
 
-  Future<void> selectChild(String studentId) async {
+  Future<void> selectChild(String studentId, {bool silent = false}) async {
     _selectedChildId = studentId;
-    _childResultsStatus = LoadStatus.loading;
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _childResultsStatus != LoadStatus.success) _childResultsStatus = LoadStatus.loading;
     _childResultsError = null;
     notifyListeners();
 

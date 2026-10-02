@@ -11,6 +11,7 @@ import '../providers/student_timetable_provider.dart';
 import '../widgets/day_timeline.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 /// Student: View Own Timetable (`docs/production_roadmap.md` Phase L4,
 /// `implementation_backlog.md` E16-F2) — today's schedule up top (the
@@ -34,6 +35,10 @@ class _StudentTimetableScreenState extends State<StudentTimetableScreen> {
     Future.microtask(() => provider.loadMyTimetable());
   }
 
+  Future<void> _refresh() async {
+    await context.read<StudentTimetableProvider>().loadMyTimetable(silent: true);
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<StudentTimetableProvider>();
@@ -42,11 +47,14 @@ class _StudentTimetableScreenState extends State<StudentTimetableScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: BrandAppBar(title: 'My Timetable'),
-        body: switch (provider.status) {
-          LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading timetable...'),
-          LoadStatus.error => ErrorView(error: provider.error!, onRetry: () => provider.loadMyTimetable()),
-          LoadStatus.success => _buildContent(context, provider.timetable!),
-        },
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: switch (provider.status) {
+            LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading timetable...'),
+            LoadStatus.error => ErrorView(error: provider.error!, onRetry: () => provider.loadMyTimetable()),
+            LoadStatus.success => _buildContent(context, provider.timetable!),
+          },
+        ),
       ),
     );
   }

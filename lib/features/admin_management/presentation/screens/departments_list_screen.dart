@@ -17,6 +17,7 @@ import '../providers/department_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 /// Admin: Manage Departments (`docs/production_roadmap.md` Phase L2,
 /// `implementation_backlog.md` E17) — same list/create/edit/delete shape as
@@ -40,6 +41,10 @@ class _DepartmentsListScreenState extends State<DepartmentsListScreen> {
     });
   }
 
+  Future<void> _refresh() async {
+    await context.read<DepartmentProvider>().loadDepartments(silent: true);
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<DepartmentProvider>();
@@ -53,23 +58,26 @@ class _DepartmentsListScreenState extends State<DepartmentsListScreen> {
           tooltip: 'Add Department',
           child: const Icon(Icons.add),
         ),
-        body: switch (provider.status) {
-          LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading departments...'),
-          LoadStatus.error => ErrorView(error: provider.error!, onRetry: () => provider.loadDepartments()),
-          LoadStatus.success =>
-            provider.departments.isEmpty
-                ? EmptyStateView(
-                    message: 'No departments set up yet',
-                    icon: Icons.apartment_outlined,
-                    actionLabel: 'Add Department',
-                    onAction: () => _showDepartmentFormDialog(context, provider),
-                  )
-                : _DepartmentsList(
-                    departments: provider.departments,
-                    onEdit: (department) => _showDepartmentFormDialog(context, provider, existing: department),
-                    onDelete: (department) => _confirmDeleteDepartment(context, provider, department),
-                  ),
-        },
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: switch (provider.status) {
+            LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading departments...'),
+            LoadStatus.error => ErrorView(error: provider.error!, onRetry: () => provider.loadDepartments()),
+            LoadStatus.success =>
+              provider.departments.isEmpty
+                  ? EmptyStateView(
+                      message: 'No departments set up yet',
+                      icon: Icons.apartment_outlined,
+                      actionLabel: 'Add Department',
+                      onAction: () => _showDepartmentFormDialog(context, provider),
+                    )
+                  : _DepartmentsList(
+                      departments: provider.departments,
+                      onEdit: (department) => _showDepartmentFormDialog(context, provider, existing: department),
+                      onDelete: (department) => _confirmDeleteDepartment(context, provider, department),
+                    ),
+          },
+        ),
       ),
     );
   }

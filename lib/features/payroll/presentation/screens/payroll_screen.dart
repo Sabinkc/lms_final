@@ -24,6 +24,7 @@ import 'salary_config_dialog.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 const _monthNames = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
@@ -104,6 +105,11 @@ class _PayrollScreenState extends State<PayrollScreen> {
     );
   }
 
+  Future<void> _refresh() async {
+    final provider = context.read<PayrollProvider>();
+    await Future.wait([provider.loadSalaryConfigs(silent: true), provider.loadPayrolls(silent: true)]);
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<PayrollProvider>();
@@ -116,24 +122,27 @@ class _PayrollScreenState extends State<PayrollScreen> {
           onPressed: () => _showActions(context, provider),
           child: const Icon(Icons.add),
         ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
-              child: PillTabs<int>(
-                values: const [0, 1],
-                labelOf: (i) => i == 0 ? 'Salary Config' : 'Payroll Runs',
-                iconOf: (i) => i == 0 ? Icons.tune_rounded : Icons.receipt_long_rounded,
-                selected: _tab,
-                onSelected: (i) => setState(() => _tab = i),
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+                child: PillTabs<int>(
+                  values: const [0, 1],
+                  labelOf: (i) => i == 0 ? 'Salary Config' : 'Payroll Runs',
+                  iconOf: (i) => i == 0 ? Icons.tune_rounded : Icons.receipt_long_rounded,
+                  selected: _tab,
+                  onSelected: (i) => setState(() => _tab = i),
+                ),
               ),
-            ),
-            Expanded(
-              child: _tab == 0
-                  ? _SalaryConfigTab(provider: provider)
-                  : _PayrollTab(provider: provider, onGenerate: () => showGeneratePayrollDialog(context, provider)),
-            ),
-          ],
+              Expanded(
+                child: _tab == 0
+                    ? _SalaryConfigTab(provider: provider)
+                    : _PayrollTab(provider: provider, onGenerate: () => showGeneratePayrollDialog(context, provider)),
+              ),
+            ],
+          ),
         ),
       ),
     );

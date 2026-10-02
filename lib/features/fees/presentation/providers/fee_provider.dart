@@ -66,8 +66,9 @@ class FeeProvider extends ChangeNotifier {
   bool isProcessingPayment(String id) => _processingPaymentIds.contains(id);
   AppException? get paymentActionError => _paymentActionError;
 
-  Future<void> loadFees({String? status}) async {
-    _status = LoadStatus.loading;
+  Future<void> loadFees({String? status, bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _status != LoadStatus.success) _status = LoadStatus.loading;
     _error = null;
     notifyListeners();
 
@@ -87,10 +88,7 @@ class FeeProvider extends ChangeNotifier {
 
   Future<void> loadStudentOptions() async {
     final result = await _studentRepository.getStudents();
-    result.when(
-      success: (students) => _studentOptions = students,
-      failure: (_) {},
-    );
+    result.when(success: (students) => _studentOptions = students, failure: (_) {});
     notifyListeners();
   }
 
@@ -119,10 +117,7 @@ class FeeProvider extends ChangeNotifier {
       installments: installments,
     );
     final succeeded = result.isSuccess;
-    result.when(
-      success: (created) => _fees = [created, ..._fees],
-      failure: (error) => _actionError = error,
-    );
+    result.when(success: (created) => _fees = [created, ..._fees], failure: (error) => _actionError = error);
 
     _isSaving = false;
     notifyListeners();
@@ -140,11 +135,19 @@ class FeeProvider extends ChangeNotifier {
     _actionError = null;
     notifyListeners();
 
-    final result =
-        await _feeRepository.updateFee(id: id, title: title, description: description, totalAmount: totalAmount, dueDate: dueDate);
+    final result = await _feeRepository.updateFee(
+      id: id,
+      title: title,
+      description: description,
+      totalAmount: totalAmount,
+      dueDate: dueDate,
+    );
     final succeeded = result.isSuccess;
     result.when(
-      success: (updated) => _fees = [for (final f in _fees) if (f.id == updated.id) updated else f],
+      success: (updated) => _fees = [
+        for (final f in _fees)
+          if (f.id == updated.id) updated else f,
+      ],
       failure: (error) => _actionError = error,
     );
 
@@ -167,8 +170,9 @@ class FeeProvider extends ChangeNotifier {
     return succeeded;
   }
 
-  Future<void> loadPendingPayments() async {
-    _pendingStatus = LoadStatus.loading;
+  Future<void> loadPendingPayments({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _pendingStatus != LoadStatus.success) _pendingStatus = LoadStatus.loading;
     _pendingError = null;
     notifyListeners();
 
@@ -186,8 +190,9 @@ class FeeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadHistory() async {
-    _historyStatus = LoadStatus.loading;
+  Future<void> loadHistory({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _historyStatus != LoadStatus.success) _historyStatus = LoadStatus.loading;
     _historyError = null;
     notifyListeners();
 
@@ -249,10 +254,7 @@ class FeeProvider extends ChangeNotifier {
     final result = await _feeRepository.exportFees(status: status);
     _isDownloading = false;
     Uint8List? bytes;
-    result.when(
-      success: (data) => bytes = data,
-      failure: (error) => _downloadError = error,
-    );
+    result.when(success: (data) => bytes = data, failure: (error) => _downloadError = error);
     notifyListeners();
     return bytes;
   }

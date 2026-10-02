@@ -5,6 +5,7 @@ import '../providers/self_fee_provider.dart';
 import '../widgets/fee_history_body.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 /// docs/screens.md "My Fees" (Student) — own fee list + summary + a "Pay"
 /// action per unpaid fee/installment. Mirrors `MyAttendanceScreen`, except
@@ -25,6 +26,10 @@ class _MyFeesScreenState extends State<MyFeesScreen> {
     Future.microtask(() => provider.loadOwnFees());
   }
 
+  Future<void> _refresh() async {
+    await context.read<SelfFeeProvider>().loadOwnFees(silent: true);
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<SelfFeeProvider>();
@@ -33,7 +38,10 @@ class _MyFeesScreenState extends State<MyFeesScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: BrandAppBar(title: 'My Fees'),
-        body: FeeHistoryBody(provider: provider),
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: FeeHistoryBody(provider: provider),
+        ),
       ),
     );
   }

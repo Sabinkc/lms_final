@@ -41,8 +41,9 @@ class DepartmentProvider extends ChangeNotifier {
   List<Teacher> get teacherOptions => _teacherOptions;
   List<AcademicClass> get classOptions => _classOptions;
 
-  Future<void> loadDepartments() async {
-    _status = LoadStatus.loading;
+  Future<void> loadDepartments({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _status != LoadStatus.success) _status = LoadStatus.loading;
     _error = null;
     notifyListeners();
 
@@ -119,7 +120,10 @@ class DepartmentProvider extends ChangeNotifier {
     );
     final succeeded = result.isSuccess;
     result.when(
-      success: (updated) => _departments = [for (final d in _departments) if (d.id == updated.id) updated else d],
+      success: (updated) => _departments = [
+        for (final d in _departments)
+          if (d.id == updated.id) updated else d,
+      ],
       failure: (error) => _actionError = error,
     );
 

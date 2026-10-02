@@ -24,6 +24,7 @@ import '../widgets/class_badge.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 /// docs/screens.md "Manage Students — List / Add-Edit / Detail". Tapping a
 /// student opens `StudentProfileScreen`. See [_StudentsBody] for the
@@ -72,6 +73,14 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
     if (picked != null) attendance.load(date: picked);
   }
 
+  Future<void> _refresh() async {
+    final provider = context.read<StudentProvider>();
+    await Future.wait([
+      provider.loadStudents(className: provider.classFilter, silent: true),
+      context.read<StudentDayAttendanceProvider>().load(silent: true),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<StudentProvider>();
@@ -100,48 +109,53 @@ class _StudentsListScreenState extends State<StudentsListScreen> {
           tooltip: 'Add Student',
           child: const Icon(Icons.add),
         ),
-        body: Column(
-          children: [
-            _ClassFilterBar(
-              classOptions: provider.classOptions,
-              selected: provider.classFilter,
-              onChanged: (className) => provider.loadStudents(className: className),
-            ),
-            Expanded(
-              child: switch (provider.status) {
-                LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading students...'),
-                LoadStatus.error => ErrorView(
-                  error: provider.error!,
-                  onRetry: () => provider.loadStudents(className: provider.classFilter),
-                ),
-                LoadStatus.success =>
-                  provider.students.isEmpty
-                      ? EmptyStateView(
-                          message: 'No students added yet',
-                          icon: Icons.school_outlined,
-                          actionLabel: 'Add Student',
-                          onAction: () => showStudentFormDialog(context, provider),
-                        )
-                      : _StudentsBody(
-                          searchController: _searchController,
-                          allStudents: provider.students,
-                          students: provider.students.where((s) {
-                            if (_statusFilter != null && attendance.statusFor(s) != _statusFilter) return false;
-                            return _query.isEmpty ||
-                                s.fullName.toLowerCase().contains(_query) ||
-                                s.admissionNumber.toLowerCase().contains(_query);
-                          }).toList(),
-                          selectedClass: provider.classOptions.where((c) => c.name == provider.classFilter).firstOrNull,
-                          attendance: attendance,
-                          statusFilter: _statusFilter,
-                          onStatusFilter: (status) => setState(() => _statusFilter = status),
-                          onPickDate: () => _pickDate(attendance),
-                          onEdit: (student) => showStudentFormDialog(context, provider, existing: student),
-                          onDelete: (student) => confirmDeleteStudent(context, provider, student),
-                        ),
-              },
-            ),
-          ],
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: Column(
+            children: [
+              _ClassFilterBar(
+                classOptions: provider.classOptions,
+                selected: provider.classFilter,
+                onChanged: (className) => provider.loadStudents(className: className),
+              ),
+              Expanded(
+                child: switch (provider.status) {
+                  LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading students...'),
+                  LoadStatus.error => ErrorView(
+                    error: provider.error!,
+                    onRetry: () => provider.loadStudents(className: provider.classFilter),
+                  ),
+                  LoadStatus.success =>
+                    provider.students.isEmpty
+                        ? EmptyStateView(
+                            message: 'No students added yet',
+                            icon: Icons.school_outlined,
+                            actionLabel: 'Add Student',
+                            onAction: () => showStudentFormDialog(context, provider),
+                          )
+                        : _StudentsBody(
+                            searchController: _searchController,
+                            allStudents: provider.students,
+                            students: provider.students.where((s) {
+                              if (_statusFilter != null && attendance.statusFor(s) != _statusFilter) return false;
+                              return _query.isEmpty ||
+                                  s.fullName.toLowerCase().contains(_query) ||
+                                  s.admissionNumber.toLowerCase().contains(_query);
+                            }).toList(),
+                            selectedClass: provider.classOptions
+                                .where((c) => c.name == provider.classFilter)
+                                .firstOrNull,
+                            attendance: attendance,
+                            statusFilter: _statusFilter,
+                            onStatusFilter: (status) => setState(() => _statusFilter = status),
+                            onPickDate: () => _pickDate(attendance),
+                            onEdit: (student) => showStudentFormDialog(context, provider, existing: student),
+                            onDelete: (student) => confirmDeleteStudent(context, provider, student),
+                          ),
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -40,8 +40,9 @@ class AdminAttendanceProvider extends ChangeNotifier {
   bool isProcessingCorrection(String id) => _processingCorrectionIds.contains(id);
   AppException? get correctionActionError => _correctionActionError;
 
-  Future<void> loadOverview({required String date, String? className, String? section}) async {
-    _overviewStatus = LoadStatus.loading;
+  Future<void> loadOverview({required String date, String? className, String? section, bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _overviewStatus != LoadStatus.success) _overviewStatus = LoadStatus.loading;
     _overviewError = null;
     notifyListeners();
 
@@ -59,8 +60,9 @@ class AdminAttendanceProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadCorrections({String status = 'pending'}) async {
-    _correctionsStatus = LoadStatus.loading;
+  Future<void> loadCorrections({String status = 'pending', bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _correctionsStatus != LoadStatus.success) _correctionsStatus = LoadStatus.loading;
     _correctionsError = null;
     notifyListeners();
 

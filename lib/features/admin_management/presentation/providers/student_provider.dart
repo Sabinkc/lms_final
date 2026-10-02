@@ -59,9 +59,10 @@ class StudentProvider extends ChangeNotifier {
   bool get isDownloading => _isDownloading;
   AppException? get downloadError => _downloadError;
 
-  Future<void> loadStudents({String? className}) async {
+  Future<void> loadStudents({String? className, bool silent = false}) async {
     _classFilter = className;
-    _status = LoadStatus.loading;
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _status != LoadStatus.success) _status = LoadStatus.loading;
     _error = null;
     notifyListeners();
 
@@ -81,19 +82,13 @@ class StudentProvider extends ChangeNotifier {
 
   Future<void> loadClassOptions() async {
     final result = await _classRepository.getClasses();
-    result.when(
-      success: (classes) => _classOptions = classes,
-      failure: (_) {},
-    );
+    result.when(success: (classes) => _classOptions = classes, failure: (_) {});
     notifyListeners();
   }
 
   Future<void> loadSectionOptions(String classId) async {
     final result = await _sectionRepository.getSections(classId);
-    result.when(
-      success: (sections) => _sectionOptions = sections,
-      failure: (_) => _sectionOptions = const [],
-    );
+    result.when(success: (sections) => _sectionOptions = sections, failure: (_) => _sectionOptions = const []);
     notifyListeners();
   }
 
@@ -126,10 +121,7 @@ class StudentProvider extends ChangeNotifier {
       phone: phone,
     );
     final succeeded = result.isSuccess;
-    result.when(
-      success: (created) => _students = [..._students, created],
-      failure: (error) => _actionError = error,
-    );
+    result.when(success: (created) => _students = [..._students, created], failure: (error) => _actionError = error);
 
     _isSaving = false;
     notifyListeners();
@@ -164,7 +156,10 @@ class StudentProvider extends ChangeNotifier {
     );
     final succeeded = result.isSuccess;
     result.when(
-      success: (updated) => _students = [for (final s in _students) if (s.id == updated.id) updated else s],
+      success: (updated) => _students = [
+        for (final s in _students)
+          if (s.id == updated.id) updated else s,
+      ],
       failure: (error) => _actionError = error,
     );
 
@@ -220,10 +215,7 @@ class StudentProvider extends ChangeNotifier {
     final result = await _studentRepository.downloadImportTemplate();
     _isDownloading = false;
     Uint8List? bytes;
-    result.when(
-      success: (data) => bytes = data,
-      failure: (error) => _downloadError = error,
-    );
+    result.when(success: (data) => bytes = data, failure: (error) => _downloadError = error);
     notifyListeners();
     return bytes;
   }
@@ -236,10 +228,7 @@ class StudentProvider extends ChangeNotifier {
     final result = await _studentRepository.exportStudents(className: _classFilter);
     _isDownloading = false;
     Uint8List? bytes;
-    result.when(
-      success: (data) => bytes = data,
-      failure: (error) => _downloadError = error,
-    );
+    result.when(success: (data) => bytes = data, failure: (error) => _downloadError = error);
     notifyListeners();
     return bytes;
   }

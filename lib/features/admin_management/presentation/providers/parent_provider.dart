@@ -36,8 +36,9 @@ class ParentProvider extends ChangeNotifier {
 
   List<Student> get studentOptions => _studentOptions;
 
-  Future<void> loadParents() async {
-    _status = LoadStatus.loading;
+  Future<void> loadParents({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _status != LoadStatus.success) _status = LoadStatus.loading;
     _error = null;
     notifyListeners();
 
@@ -57,10 +58,7 @@ class ParentProvider extends ChangeNotifier {
 
   Future<void> loadStudentOptions() async {
     final result = await _studentRepository.getStudents();
-    result.when(
-      success: (students) => _studentOptions = students,
-      failure: (_) {},
-    );
+    result.when(success: (students) => _studentOptions = students, failure: (_) {});
     notifyListeners();
   }
 
@@ -87,10 +85,7 @@ class ParentProvider extends ChangeNotifier {
       studentIds: studentIds,
     );
     final succeeded = result.isSuccess;
-    result.when(
-      success: (created) => _parents = [..._parents, created],
-      failure: (error) => _actionError = error,
-    );
+    result.when(success: (created) => _parents = [..._parents, created], failure: (error) => _actionError = error);
 
     _isSaving = false;
     notifyListeners();
@@ -119,7 +114,10 @@ class ParentProvider extends ChangeNotifier {
     );
     final succeeded = result.isSuccess;
     result.when(
-      success: (updated) => _parents = [for (final p in _parents) if (p.id == updated.id) updated else p],
+      success: (updated) => _parents = [
+        for (final p in _parents)
+          if (p.id == updated.id) updated else p,
+      ],
       failure: (error) => _actionError = error,
     );
 

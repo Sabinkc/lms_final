@@ -13,6 +13,7 @@ import '../providers/academic_structure_provider.dart' show LoadStatus;
 import '../providers/teacher_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 /// docs/screens.md "Manage Teachers — List / Add-Edit / Detail". No separate
 /// detail screen — same P0-only scope decision as Classes/Sections; the P1
@@ -46,6 +47,10 @@ class _TeachersListScreenState extends State<TeachersListScreen> {
     super.dispose();
   }
 
+  Future<void> _refresh() async {
+    await context.read<TeacherProvider>().loadTeachers(silent: true);
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<TeacherProvider>();
@@ -59,31 +64,34 @@ class _TeachersListScreenState extends State<TeachersListScreen> {
           tooltip: 'Add Teacher',
           child: const Icon(Icons.add),
         ),
-        body: switch (provider.status) {
-          LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading teachers...'),
-          LoadStatus.error => ErrorView(error: provider.error!, onRetry: () => provider.loadTeachers()),
-          LoadStatus.success =>
-            provider.teachers.isEmpty
-                ? EmptyStateView(
-                    message: 'No teachers added yet',
-                    icon: Icons.person_outline,
-                    actionLabel: 'Add Teacher',
-                    onAction: () => _showTeacherFormDialog(context, provider),
-                  )
-                : _TeachersList(
-                    searchController: _searchController,
-                    teachers: provider.teachers
-                        .where(
-                          (t) =>
-                              _query.isEmpty ||
-                              t.fullName.toLowerCase().contains(_query) ||
-                              t.department.toLowerCase().contains(_query),
-                        )
-                        .toList(),
-                    onEdit: (teacher) => _showTeacherFormDialog(context, provider, existing: teacher),
-                    onDelete: (teacher) => _confirmDeleteTeacher(context, provider, teacher),
-                  ),
-        },
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: switch (provider.status) {
+            LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading teachers...'),
+            LoadStatus.error => ErrorView(error: provider.error!, onRetry: () => provider.loadTeachers()),
+            LoadStatus.success =>
+              provider.teachers.isEmpty
+                  ? EmptyStateView(
+                      message: 'No teachers added yet',
+                      icon: Icons.person_outline,
+                      actionLabel: 'Add Teacher',
+                      onAction: () => _showTeacherFormDialog(context, provider),
+                    )
+                  : _TeachersList(
+                      searchController: _searchController,
+                      teachers: provider.teachers
+                          .where(
+                            (t) =>
+                                _query.isEmpty ||
+                                t.fullName.toLowerCase().contains(_query) ||
+                                t.department.toLowerCase().contains(_query),
+                          )
+                          .toList(),
+                      onEdit: (teacher) => _showTeacherFormDialog(context, provider, existing: teacher),
+                      onDelete: (teacher) => _confirmDeleteTeacher(context, provider, teacher),
+                    ),
+          },
+        ),
       ),
     );
   }

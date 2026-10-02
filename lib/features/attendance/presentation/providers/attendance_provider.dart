@@ -54,8 +54,9 @@ class AttendanceProvider extends ChangeNotifier {
   List<AttendanceSessionSummary> get historySessions => _historySessions;
   AppException? get historyError => _historyError;
 
-  Future<void> loadMySections() async {
-    _sectionsStatus = LoadStatus.loading;
+  Future<void> loadMySections({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _sectionsStatus != LoadStatus.success) _sectionsStatus = LoadStatus.loading;
     _sectionsError = null;
     notifyListeners();
 
@@ -73,8 +74,9 @@ class AttendanceProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadRoster(String sectionId) async {
-    _rosterStatus = LoadStatus.loading;
+  Future<void> loadRoster(String sectionId, {bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _rosterStatus != LoadStatus.success) _rosterStatus = LoadStatus.loading;
     _rosterError = null;
     _statuses.clear();
     _remarks.clear();
@@ -116,26 +118,20 @@ class AttendanceProvider extends ChangeNotifier {
       subject: subject,
       records: [
         for (final student in _roster)
-          AttendanceRecordInput(
-            studentId: student.id,
-            status: statusFor(student.id),
-            remarks: _remarks[student.id],
-          ),
+          AttendanceRecordInput(studentId: student.id, status: statusFor(student.id), remarks: _remarks[student.id]),
       ],
     );
     final succeeded = result.isSuccess;
-    result.when(
-      success: (submitResult) => _lastSubmitResult = submitResult,
-      failure: (error) => _submitError = error,
-    );
+    result.when(success: (submitResult) => _lastSubmitResult = submitResult, failure: (error) => _submitError = error);
 
     _isSubmitting = false;
     notifyListeners();
     return succeeded;
   }
 
-  Future<void> loadHistory(String date) async {
-    _historyStatus = LoadStatus.loading;
+  Future<void> loadHistory(String date, {bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _historyStatus != LoadStatus.success) _historyStatus = LoadStatus.loading;
     _historyError = null;
     notifyListeners();
 

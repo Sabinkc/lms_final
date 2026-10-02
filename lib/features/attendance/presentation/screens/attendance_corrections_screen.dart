@@ -14,6 +14,7 @@ import '../providers/admin_attendance_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 /// docs/screens.md doesn't name this screen explicitly (it predates the
 /// correction-workflow finding) — `implementation_backlog.md` E3-F6-T2:
@@ -40,6 +41,10 @@ class _AttendanceCorrectionsScreenState extends State<AttendanceCorrectionsScree
     Future.microtask(() => provider.loadCorrections());
   }
 
+  Future<void> _refresh() async {
+    await context.read<AdminAttendanceProvider>().loadCorrections(silent: true);
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<AdminAttendanceProvider>();
@@ -48,37 +53,40 @@ class _AttendanceCorrectionsScreenState extends State<AttendanceCorrectionsScree
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: BrandAppBar(title: 'Attendance Corrections'),
-        body: switch (provider.correctionsStatus) {
-          LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading correction requests...'),
-          LoadStatus.error => ErrorView(error: provider.correctionsError!, onRetry: () => provider.loadCorrections()),
-          LoadStatus.success =>
-            provider.corrections.isEmpty
-                ? const EmptyStateView(message: 'No pending correction requests', icon: Icons.task_alt_outlined)
-                : ListView(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-                    children: [
-                      PageHeroCard(
-                        icon: Icons.rule_rounded,
-                        title: 'Review Queue',
-                        subtitle:
-                            'Teacher requests to change a marked attendance status. Approving updates the record.',
-                        color: const Color(0xFFEA580C),
-                        figure: '${provider.corrections.length}',
-                        figureLabel: 'Pending',
-                      ),
-                      const SizedBox(height: 14),
-                      for (final correction in provider.corrections) ...[
-                        _CorrectionCard(
-                          correction: correction,
-                          processing: provider.isProcessingCorrection(correction.id),
-                          onApprove: () => _approve(context, provider, correction),
-                          onReject: () => _reject(context, provider, correction),
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: switch (provider.correctionsStatus) {
+            LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading correction requests...'),
+            LoadStatus.error => ErrorView(error: provider.correctionsError!, onRetry: () => provider.loadCorrections()),
+            LoadStatus.success =>
+              provider.corrections.isEmpty
+                  ? const EmptyStateView(message: 'No pending correction requests', icon: Icons.task_alt_outlined)
+                  : ListView(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                      children: [
+                        PageHeroCard(
+                          icon: Icons.rule_rounded,
+                          title: 'Review Queue',
+                          subtitle:
+                              'Teacher requests to change a marked attendance status. Approving updates the record.',
+                          color: const Color(0xFFEA580C),
+                          figure: '${provider.corrections.length}',
+                          figureLabel: 'Pending',
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 14),
+                        for (final correction in provider.corrections) ...[
+                          _CorrectionCard(
+                            correction: correction,
+                            processing: provider.isProcessingCorrection(correction.id),
+                            onApprove: () => _approve(context, provider, correction),
+                            onReject: () => _reject(context, provider, correction),
+                          ),
+                          const SizedBox(height: 12),
+                        ],
                       ],
-                    ],
-                  ),
-        },
+                    ),
+          },
+        ),
       ),
     );
   }

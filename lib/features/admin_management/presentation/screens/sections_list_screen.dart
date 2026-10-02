@@ -13,6 +13,7 @@ import '../../data/models/class_section.dart';
 import '../providers/academic_structure_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 /// docs/screens.md "Manage Classes / Sections / Subjects" — the Sections
 /// half, scoped to one [classId] (reached by tapping a class in
@@ -37,6 +38,10 @@ class _SectionsListScreenState extends State<SectionsListScreen> {
     Future.microtask(() => provider.loadSections(widget.classId));
   }
 
+  Future<void> _refresh() async {
+    await context.read<AcademicStructureProvider>().loadSections(widget.classId, silent: true);
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<AcademicStructureProvider>();
@@ -52,7 +57,10 @@ class _SectionsListScreenState extends State<SectionsListScreen> {
           tooltip: 'Add Section',
           child: const Icon(Icons.add),
         ),
-        body: SectionsPanel(classId: widget.classId),
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: SectionsPanel(classId: widget.classId),
+        ),
       ),
     );
   }

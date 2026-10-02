@@ -37,8 +37,9 @@ class NoticeProvider extends ChangeNotifier {
   bool get isSaving => _isSaving;
   AppException? get actionError => _actionError;
 
-  Future<void> loadNoticesAsAdmin() async {
-    _status = LoadStatus.loading;
+  Future<void> loadNoticesAsAdmin({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _status != LoadStatus.success) _status = LoadStatus.loading;
     _error = null;
     notifyListeners();
 
@@ -56,8 +57,9 @@ class NoticeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadMyNotices() async {
-    _status = LoadStatus.loading;
+  Future<void> loadMyNotices({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _status != LoadStatus.success) _status = LoadStatus.loading;
     _error = null;
     notifyListeners();
 
@@ -75,8 +77,9 @@ class NoticeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadNoticeDetail(String id) async {
-    _detailStatus = LoadStatus.loading;
+  Future<void> loadNoticeDetail(String id, {bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _detailStatus != LoadStatus.success) _detailStatus = LoadStatus.loading;
     _detailError = null;
     notifyListeners();
 
@@ -113,10 +116,7 @@ class NoticeProvider extends ChangeNotifier {
       expiryDate: expiryDate,
     );
     final succeeded = result.isSuccess;
-    result.when(
-      success: (created) => _notices = [created, ..._notices],
-      failure: (error) => _actionError = error,
-    );
+    result.when(success: (created) => _notices = [created, ..._notices], failure: (error) => _actionError = error);
 
     _isSaving = false;
     notifyListeners();
@@ -146,7 +146,10 @@ class NoticeProvider extends ChangeNotifier {
     final succeeded = result.isSuccess;
     result.when(
       success: (updated) {
-        _notices = [for (final n in _notices) if (n.id == updated.id) updated else n];
+        _notices = [
+          for (final n in _notices)
+            if (n.id == updated.id) updated else n,
+        ];
         if (_currentNotice?.id == updated.id) _currentNotice = updated;
       },
       failure: (error) => _actionError = error,

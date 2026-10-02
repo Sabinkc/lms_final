@@ -14,6 +14,7 @@ import '../providers/admin_attendance_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 String _formatDate(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
@@ -70,6 +71,14 @@ class _AdminAttendanceOverviewScreenState extends State<AdminAttendanceOverviewS
     _reload(provider);
   }
 
+  Future<void> _refresh() async {
+    await context.read<AdminAttendanceProvider>().loadOverview(
+      date: _formatDate(_date),
+      className: _classController.text.trim(),
+      silent: true,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<AdminAttendanceProvider>();
@@ -81,96 +90,99 @@ class _AdminAttendanceOverviewScreenState extends State<AdminAttendanceOverviewS
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: BrandAppBar(title: 'Attendance Overview'),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-              child: Column(
-                children: [
-                  Card(
-                    margin: EdgeInsets.zero,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-                      child: Row(
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.chevron_left),
-                            tooltip: 'Previous day',
-                            onPressed: () => _shiftDay(provider, -1),
-                          ),
-                          Expanded(
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(AppRadius.lg),
-                              onTap: () => _pickDate(provider),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 6),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.calendar_today_outlined,
-                                          size: 16,
-                                          color: context.readable(AppColors.primary),
-                                        ),
-                                        const SizedBox(width: 6),
-                                        Text(
-                                          _prettyDate(_date),
-                                          style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                      isToday ? 'Today · school-wide' : 'School-wide',
-                                      style: theme.textTheme.bodySmall?.copyWith(
-                                        color: theme.colorScheme.onSurfaceVariant,
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                child: Column(
+                  children: [
+                    Card(
+                      margin: EdgeInsets.zero,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                        child: Row(
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.chevron_left),
+                              tooltip: 'Previous day',
+                              onPressed: () => _shiftDay(provider, -1),
+                            ),
+                            Expanded(
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(AppRadius.lg),
+                                onTap: () => _pickDate(provider),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 6),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.calendar_today_outlined,
+                                            size: 16,
+                                            color: context.readable(AppColors.primary),
+                                          ),
+                                          const SizedBox(width: 6),
+                                          Text(
+                                            _prettyDate(_date),
+                                            style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w800),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                  ],
+                                      Text(
+                                        isToday ? 'Today · school-wide' : 'School-wide',
+                                        style: theme.textTheme.bodySmall?.copyWith(
+                                          color: theme.colorScheme.onSurfaceVariant,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.chevron_right),
-                            tooltip: 'Next day',
-                            onPressed: isToday ? null : () => _shiftDay(provider, 1),
-                          ),
-                        ],
+                            IconButton(
+                              icon: const Icon(Icons.chevron_right),
+                              tooltip: 'Next day',
+                              onPressed: isToday ? null : () => _shiftDay(provider, 1),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: _classController,
-                    textInputAction: TextInputAction.search,
-                    decoration: InputDecoration(
-                      hintText: 'Filter by class name',
-                      prefixIcon: const Icon(Icons.search),
-                      filled: true,
-                      fillColor: theme.colorScheme.surfaceContainerLow,
-                      border: OutlineInputBorder(borderRadius: AppRadius.button, borderSide: BorderSide.none),
+                    const SizedBox(height: 10),
+                    TextField(
+                      controller: _classController,
+                      textInputAction: TextInputAction.search,
+                      decoration: InputDecoration(
+                        hintText: 'Filter by class name',
+                        prefixIcon: const Icon(Icons.search),
+                        filled: true,
+                        fillColor: theme.colorScheme.surfaceContainerLow,
+                        border: OutlineInputBorder(borderRadius: AppRadius.button, borderSide: BorderSide.none),
+                      ),
+                      onSubmitted: (_) => _reload(provider),
                     ),
-                    onSubmitted: (_) => _reload(provider),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Expanded(
-              child: switch (provider.overviewStatus) {
-                LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading attendance...'),
-                LoadStatus.error => ErrorView(error: provider.overviewError!, onRetry: () => _reload(provider)),
-                LoadStatus.success =>
-                  provider.overviewSessions.isEmpty
-                      ? const EmptyStateView(
-                          message: 'No attendance submitted on this date',
-                          icon: Icons.event_busy_outlined,
-                        )
-                      : _buildSessions(context, provider.overviewSessions),
-              },
-            ),
-          ],
+              Expanded(
+                child: switch (provider.overviewStatus) {
+                  LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading attendance...'),
+                  LoadStatus.error => ErrorView(error: provider.overviewError!, onRetry: () => _reload(provider)),
+                  LoadStatus.success =>
+                    provider.overviewSessions.isEmpty
+                        ? const EmptyStateView(
+                            message: 'No attendance submitted on this date',
+                            icon: Icons.event_busy_outlined,
+                          )
+                        : _buildSessions(context, provider.overviewSessions),
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

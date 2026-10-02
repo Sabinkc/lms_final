@@ -20,6 +20,7 @@ import 'create_group_dialog.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 /// docs/production_roadmap.md Phase H — one shared list for Teacher and
 /// Student (`GET /group-chats` is role-scoped server-side: a Teacher's own
@@ -71,6 +72,10 @@ class _ChatListScreenState extends State<ChatListScreen> {
     super.dispose();
   }
 
+  Future<void> _refresh() async {
+    await context.read<ChatProvider>().loadGroups(silent: true);
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<ChatProvider>();
@@ -100,19 +105,22 @@ class _ChatListScreenState extends State<ChatListScreen> {
               ),
           ],
         ),
-        body: switch (provider.groupsStatus) {
-          LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading conversations...'),
-          LoadStatus.error => ErrorView(error: provider.groupsError!, onRetry: () => provider.loadGroups()),
-          LoadStatus.success =>
-            provider.groups.isEmpty
-                ? EmptyStateView(
-                    message: isTeacher ? 'No groups yet — create one for your class' : 'No group conversations yet',
-                    icon: Icons.chat_bubble_outline,
-                    actionLabel: isTeacher ? 'New Group' : null,
-                    onAction: isTeacher ? () => showCreateGroupDialog(context, provider) : null,
-                  )
-                : _buildList(context, provider, filtered),
-        },
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: switch (provider.groupsStatus) {
+            LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading conversations...'),
+            LoadStatus.error => ErrorView(error: provider.groupsError!, onRetry: () => provider.loadGroups()),
+            LoadStatus.success =>
+              provider.groups.isEmpty
+                  ? EmptyStateView(
+                      message: isTeacher ? 'No groups yet — create one for your class' : 'No group conversations yet',
+                      icon: Icons.chat_bubble_outline,
+                      actionLabel: isTeacher ? 'New Group' : null,
+                      onAction: isTeacher ? () => showCreateGroupDialog(context, provider) : null,
+                    )
+                  : _buildList(context, provider, filtered),
+          },
+        ),
       ),
     );
   }

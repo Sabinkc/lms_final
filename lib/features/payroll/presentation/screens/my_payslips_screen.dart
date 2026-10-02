@@ -18,6 +18,7 @@ import '../providers/my_payslips_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 const _monthNames = [
   '',
@@ -54,6 +55,10 @@ class _MyPayslipsScreenState extends State<MyPayslipsScreen> {
     Future.microtask(() => provider.loadMyPayslips());
   }
 
+  Future<void> _refresh() async {
+    await context.read<MyPayslipsProvider>().loadMyPayslips(silent: true);
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<MyPayslipsProvider>();
@@ -62,14 +67,17 @@ class _MyPayslipsScreenState extends State<MyPayslipsScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: BrandAppBar(title: 'My Payslips'),
-        body: switch (provider.status) {
-          LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading payslips...'),
-          LoadStatus.error => ErrorView(error: provider.error!, onRetry: () => provider.loadMyPayslips()),
-          LoadStatus.success =>
-            provider.payslips.isEmpty
-                ? const EmptyStateView(message: 'No payslips generated yet', icon: Icons.receipt_outlined)
-                : _buildBody(context, provider.payslips),
-        },
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: switch (provider.status) {
+            LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading payslips...'),
+            LoadStatus.error => ErrorView(error: provider.error!, onRetry: () => provider.loadMyPayslips()),
+            LoadStatus.success =>
+              provider.payslips.isEmpty
+                  ? const EmptyStateView(message: 'No payslips generated yet', icon: Icons.receipt_outlined)
+                  : _buildBody(context, provider.payslips),
+          },
+        ),
       ),
     );
   }

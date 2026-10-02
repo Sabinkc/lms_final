@@ -22,8 +22,9 @@ class TeacherProvider extends ChangeNotifier {
   bool get isSaving => _isSaving;
   AppException? get actionError => _actionError;
 
-  Future<void> loadTeachers() async {
-    _status = LoadStatus.loading;
+  Future<void> loadTeachers({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _status != LoadStatus.success) _status = LoadStatus.loading;
     _error = null;
     notifyListeners();
 
@@ -76,10 +77,7 @@ class TeacherProvider extends ChangeNotifier {
       bankAccountNumber: bankAccountNumber,
     );
     final succeeded = result.isSuccess;
-    result.when(
-      success: (created) => _teachers = [..._teachers, created],
-      failure: (error) => _actionError = error,
-    );
+    result.when(success: (created) => _teachers = [..._teachers, created], failure: (error) => _actionError = error);
 
     _isSaving = false;
     notifyListeners();
@@ -120,7 +118,10 @@ class TeacherProvider extends ChangeNotifier {
     );
     final succeeded = result.isSuccess;
     result.when(
-      success: (updated) => _teachers = [for (final t in _teachers) if (t.id == updated.id) updated else t],
+      success: (updated) => _teachers = [
+        for (final t in _teachers)
+          if (t.id == updated.id) updated else t,
+      ],
       failure: (error) => _actionError = error,
     );
 

@@ -17,6 +17,7 @@ import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../notifications/presentation/providers/notification_provider.dart';
 import '../providers/admin_dashboard_provider.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 /// Admin-only Home dashboard — restyled 2026-09-28 to match a real-photo
 /// reference design the user supplied (`LMS UI/WhatsApp Image ... 3.24.26
@@ -55,6 +56,13 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     });
   }
 
+  Future<void> _refresh() async {
+    await Future.wait([
+      context.read<AdminDashboardProvider>().loadOverview(silent: true),
+      context.read<NotificationProvider>().loadNotifications(silent: true),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = context.watch<AuthProvider>().user;
@@ -69,65 +77,68 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
           unreadCount: unreadCount,
           moreRoute: AppRoutes.adminMore,
         ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(AppSpacing.lg),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              PhotoHeroBanner(
-                greeting: timeOfDayGreeting(),
-                name: firstName,
-                subtitle: "Here's what's happening today at your school.",
-              ),
-              const SizedBox(height: AppSpacing.xl),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Quick Actions',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
-                  ),
-                  Text(
-                    '${_AdminQuickTile.all.length} shortcuts',
-                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                      color: context.readable(AppColors.primary),
-                      fontWeight: FontWeight.w600,
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                PhotoHeroBanner(
+                  greeting: timeOfDayGreeting(),
+                  name: firstName,
+                  subtitle: "Here's what's happening today at your school.",
+                ),
+                const SizedBox(height: AppSpacing.xl),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Quick Actions',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: AppSpacing.md),
-              GridView.count(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 4,
-                mainAxisSpacing: AppSpacing.sm,
-                crossAxisSpacing: AppSpacing.sm,
-                childAspectRatio: 0.78,
-                children: [
-                  for (final tile in _AdminQuickTile.all)
-                    ColorfulActionTile(
-                      icon: tile.icon,
-                      label: tile.label,
-                      color: tile.color,
-                      onTap: () => context.push(tile.route),
+                    Text(
+                      '${_AdminQuickTile.all.length} shortcuts',
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: context.readable(AppColors.primary),
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                ],
-              ),
-              const SizedBox(height: AppSpacing.xl),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Today's Overview",
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
-                  ),
-                  TextButton(onPressed: () => context.push(AppRoutes.adminReports), child: const Text('View All')),
-                ],
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              const _TodaysOverview(),
-            ],
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.md),
+                GridView.count(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  crossAxisCount: 4,
+                  mainAxisSpacing: AppSpacing.sm,
+                  crossAxisSpacing: AppSpacing.sm,
+                  childAspectRatio: 0.78,
+                  children: [
+                    for (final tile in _AdminQuickTile.all)
+                      ColorfulActionTile(
+                        icon: tile.icon,
+                        label: tile.label,
+                        color: tile.color,
+                        onTap: () => context.push(tile.route),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.xl),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Today's Overview",
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                    ),
+                    TextButton(onPressed: () => context.push(AppRoutes.adminReports), child: const Text('View All')),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                const _TodaysOverview(),
+              ],
+            ),
           ),
         ),
       ),

@@ -54,8 +54,9 @@ class ReportsProvider extends ChangeNotifier {
   SystemReport? get system => _system;
   AppException? get systemError => _systemError;
 
-  Future<void> loadAcademic() async {
-    _academicStatus = LoadStatus.loading;
+  Future<void> loadAcademic({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _academicStatus != LoadStatus.success) _academicStatus = LoadStatus.loading;
     _academicError = null;
     notifyListeners();
 
@@ -73,8 +74,9 @@ class ReportsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadFinancial() async {
-    _financialStatus = LoadStatus.loading;
+  Future<void> loadFinancial({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _financialStatus != LoadStatus.success) _financialStatus = LoadStatus.loading;
     _financialError = null;
     notifyListeners();
 
@@ -92,8 +94,9 @@ class ReportsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadAttendance({DateTime? startDate, DateTime? endDate}) async {
-    _attendanceStatus = LoadStatus.loading;
+  Future<void> loadAttendance({DateTime? startDate, DateTime? endDate, bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _attendanceStatus != LoadStatus.success) _attendanceStatus = LoadStatus.loading;
     _attendanceError = null;
     _attendanceStartDate = startDate;
     _attendanceEndDate = endDate;
@@ -113,8 +116,9 @@ class ReportsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadSystem() async {
-    _systemStatus = LoadStatus.loading;
+  Future<void> loadSystem({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _systemStatus != LoadStatus.success) _systemStatus = LoadStatus.loading;
     _systemError = null;
     notifyListeners();
 

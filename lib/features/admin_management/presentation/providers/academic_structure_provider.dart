@@ -45,8 +45,9 @@ class AcademicStructureProvider extends ChangeNotifier {
   bool get isSavingSection => _isSavingSection;
   AppException? get sectionActionError => _sectionActionError;
 
-  Future<void> loadClasses() async {
-    _classesStatus = LoadStatus.loading;
+  Future<void> loadClasses({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _classesStatus != LoadStatus.success) _classesStatus = LoadStatus.loading;
     _classesError = null;
     notifyListeners();
 
@@ -93,7 +94,7 @@ class AcademicStructureProvider extends ChangeNotifier {
       // The update response doesn't embed `sections` — keep the known count.
       success: (updated) => _classes = [
         for (final c in _classes)
-          if (c.id == updated.id) updated.withSectionCount(updated.sectionCount ?? c.sectionCount) else c
+          if (c.id == updated.id) updated.withSectionCount(updated.sectionCount ?? c.sectionCount) else c,
       ],
       failure: (error) => _classActionError = error,
     );
@@ -125,9 +126,10 @@ class AcademicStructureProvider extends ChangeNotifier {
     _classes = [for (final c in _classes) c.id == classId ? c.withSectionCount(_sections.length) : c];
   }
 
-  Future<void> loadSections(String classId) async {
+  Future<void> loadSections(String classId, {bool silent = false}) async {
     _selectedClassId = classId;
-    _sectionsStatus = LoadStatus.loading;
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _sectionsStatus != LoadStatus.success) _sectionsStatus = LoadStatus.loading;
     _sectionsError = null;
     notifyListeners();
 
@@ -174,7 +176,10 @@ class AcademicStructureProvider extends ChangeNotifier {
     final result = await _sectionRepository.updateSection(id: id, name: name, status: status);
     final succeeded = result.isSuccess;
     result.when(
-      success: (updated) => _sections = [for (final s in _sections) if (s.id == updated.id) updated else s],
+      success: (updated) => _sections = [
+        for (final s in _sections)
+          if (s.id == updated.id) updated else s,
+      ],
       failure: (error) => _sectionActionError = error,
     );
 

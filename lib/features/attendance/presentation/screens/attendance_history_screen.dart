@@ -17,6 +17,7 @@ import '../widgets/attendance_status_style.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 String _formatDate(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
@@ -41,6 +42,10 @@ class _AttendanceHistoryScreenState extends State<AttendanceHistoryScreen> {
     super.initState();
     final provider = context.read<AttendanceProvider>();
     Future.microtask(() => provider.loadHistory(_formatDate(_date)));
+  }
+
+  Future<void> _refresh() async {
+    await context.read<AttendanceProvider>().loadHistory(_formatDate(_date), silent: true);
   }
 
   @override
@@ -84,11 +89,14 @@ class _AttendanceHistoryScreenState extends State<AttendanceHistoryScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: const BrandAppBar(title: 'Attendance History'),
-        body: Column(
-          children: [
-            datePill,
-            Expanded(child: _body(provider)),
-          ],
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: Column(
+            children: [
+              datePill,
+              Expanded(child: _body(provider)),
+            ],
+          ),
         ),
       ),
     );

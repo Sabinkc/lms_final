@@ -23,8 +23,9 @@ class MyPayslipsProvider extends ChangeNotifier {
   List<Payroll> get payslips => _payslips;
   AppException? get error => _error;
 
-  Future<void> loadMyPayslips() async {
-    _status = LoadStatus.loading;
+  Future<void> loadMyPayslips({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _status != LoadStatus.success) _status = LoadStatus.loading;
     _error = null;
     notifyListeners();
 

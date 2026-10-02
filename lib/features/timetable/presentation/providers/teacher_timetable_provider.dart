@@ -20,8 +20,9 @@ class TeacherTimetableProvider extends ChangeNotifier {
   List<TeacherScheduleEntry> get entries => _entries;
   AppException? get error => _error;
 
-  Future<void> loadMySchedule() async {
-    _status = LoadStatus.loading;
+  Future<void> loadMySchedule({bool silent = false}) async {
+    // A silent reload (pull-to-refresh) keeps the current data on screen.
+    if (!silent || _status != LoadStatus.success) _status = LoadStatus.loading;
     _error = null;
     notifyListeners();
 

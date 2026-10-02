@@ -15,6 +15,7 @@ import '../providers/student_provider.dart';
 import '../widgets/class_badge.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
+import '../../../../shared/widgets/pull_to_refresh.dart';
 
 /// docs/screens.md "Manage Classes / Sections / Subjects" — the Classes
 /// half; tapping a class drills into [SectionsListScreen] for its Sections.
@@ -64,6 +65,13 @@ class _ClassesListScreenState extends State<ClassesListScreen> {
     super.dispose();
   }
 
+  Future<void> _refresh() async {
+    await Future.wait([
+      context.read<AcademicStructureProvider>().loadClasses(silent: true),
+      context.read<StudentProvider>().loadStudents(silent: true),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<AcademicStructureProvider>();
@@ -91,28 +99,31 @@ class _ClassesListScreenState extends State<ClassesListScreen> {
             ),
           ],
         ),
-        body: switch (provider.classesStatus) {
-          LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading classes...'),
-          LoadStatus.error => ErrorView(error: provider.classesError!, onRetry: () => provider.loadClasses()),
-          LoadStatus.success =>
-            provider.classes.isEmpty
-                ? EmptyStateView(
-                    message: 'No classes set up yet',
-                    icon: Icons.school_outlined,
-                    actionLabel: 'Add Class',
-                    onAction: () => showClassFormDialog(context, provider),
-                  )
-                : _ClassesList(
-                    searchController: _searchController,
-                    classes: provider.classes
-                        .where((c) => _query.isEmpty || c.name.toLowerCase().contains(_query))
-                        .toList(),
-                    studentCounts: studentCounts,
-                    onTap: (academicClass) => context.push(AppRoutes.adminClassDetail(academicClass.id)),
-                    onEdit: (academicClass) => showClassFormDialog(context, provider, existing: academicClass),
-                    onDelete: (academicClass) => confirmDeleteClass(context, provider, academicClass),
-                  ),
-        },
+        body: PullToRefresh(
+          onRefresh: _refresh,
+          child: switch (provider.classesStatus) {
+            LoadStatus.initial || LoadStatus.loading => const LoadingView(message: 'Loading classes...'),
+            LoadStatus.error => ErrorView(error: provider.classesError!, onRetry: () => provider.loadClasses()),
+            LoadStatus.success =>
+              provider.classes.isEmpty
+                  ? EmptyStateView(
+                      message: 'No classes set up yet',
+                      icon: Icons.school_outlined,
+                      actionLabel: 'Add Class',
+                      onAction: () => showClassFormDialog(context, provider),
+                    )
+                  : _ClassesList(
+                      searchController: _searchController,
+                      classes: provider.classes
+                          .where((c) => _query.isEmpty || c.name.toLowerCase().contains(_query))
+                          .toList(),
+                      studentCounts: studentCounts,
+                      onTap: (academicClass) => context.push(AppRoutes.adminClassDetail(academicClass.id)),
+                      onEdit: (academicClass) => showClassFormDialog(context, provider, existing: academicClass),
+                      onDelete: (academicClass) => confirmDeleteClass(context, provider, academicClass),
+                    ),
+          },
+        ),
       ),
     );
   }
