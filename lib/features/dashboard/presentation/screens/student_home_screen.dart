@@ -146,13 +146,11 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                         ],
                       ),
                       const SizedBox(height: AppSpacing.xl),
-                      Expanded(
-                        child: Text(
-                          "Today's Overview",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
-                        ),
+                      Text(
+                        "Today's Overview",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
                       ),
                       const SizedBox(height: AppSpacing.sm),
                       const _TodaysOverview(),
