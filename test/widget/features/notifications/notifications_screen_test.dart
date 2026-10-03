@@ -69,7 +69,7 @@ void main() {
   });
 
   testWidgets('loading state shows the skeleton loading view', (tester) async {
-    when(() => repository.getNotifications()).thenAnswer((_) => Completer<Result<(int, List<AppNotification>)>>().future);
+    when(() => repository.getNotifications(limit: any(named: 'limit'))).thenAnswer((_) => Completer<Result<(int, List<AppNotification>)>>().future);
     final provider = NotificationProvider(repository);
     final authProvider = _authAs(authRepository, AppRole.student);
 
@@ -80,7 +80,7 @@ void main() {
   });
 
   testWidgets('empty state shows a message', (tester) async {
-    when(() => repository.getNotifications()).thenAnswer((_) async => const Result.success((0, [])));
+    when(() => repository.getNotifications(limit: any(named: 'limit'))).thenAnswer((_) async => const Result.success((0, [])));
     final provider = NotificationProvider(repository);
     final authProvider = _authAs(authRepository, AppRole.student);
 
@@ -102,7 +102,7 @@ void main() {
       refModel: null,
       createdAt: '2026-08-20T00:00:00.000Z',
     );
-    when(() => repository.getNotifications()).thenAnswer((_) async => const Result.success((0, [readOnly])));
+    when(() => repository.getNotifications(limit: any(named: 'limit'))).thenAnswer((_) async => const Result.success((0, [readOnly])));
     final provider = NotificationProvider(repository);
     final authProvider = _authAs(authRepository, AppRole.student);
 
@@ -114,7 +114,7 @@ void main() {
   });
 
   testWidgets('tapping an unread notification marks it read and deep-links to its assignment', (tester) async {
-    when(() => repository.getNotifications()).thenAnswer((_) async => const Result.success((1, [_n1])));
+    when(() => repository.getNotifications(limit: any(named: 'limit'))).thenAnswer((_) async => const Result.success((1, [_n1])));
     when(() => repository.markRead(any())).thenAnswer((_) async => const Result.success(null));
     final provider = NotificationProvider(repository);
     final authProvider = _authAs(authRepository, AppRole.student);
@@ -132,7 +132,7 @@ void main() {
   });
 
   testWidgets('Mark all read button calls markAllRead and clears the unread count', (tester) async {
-    when(() => repository.getNotifications()).thenAnswer((_) async => const Result.success((1, [_n1])));
+    when(() => repository.getNotifications(limit: any(named: 'limit'))).thenAnswer((_) async => const Result.success((1, [_n1])));
     when(() => repository.markAllRead()).thenAnswer((_) async => const Result.success(null));
     final provider = NotificationProvider(repository);
     final authProvider = _authAs(authRepository, AppRole.student);

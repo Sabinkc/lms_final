@@ -65,6 +65,19 @@ class Exam {
         subjects:
             (json['subjects'] as List? ?? const []).map((s) => ExamSubject.fromJson(s as Map<String, dynamic>)).toList(),
         examDate: json['examDate'] as String? ?? '',
-        status: json['status'] as String? ?? 'upcoming',
+        status: _effectiveStatus(json['status'] as String? ?? 'upcoming', json['examDate'] as String?),
       );
+
+  /// The server never moves an exam on from "upcoming" once its date passes,
+  /// so a past "upcoming" exam is shown as completed (on the exam day itself
+  /// it still counts as upcoming).
+  static String _effectiveStatus(String status, String? examDate) {
+    if (status != 'upcoming') return status;
+    final date = DateTime.tryParse(examDate ?? '')?.toLocal();
+    if (date == null) return status;
+    final now = DateTime.now();
+    return DateTime(date.year, date.month, date.day).isBefore(DateTime(now.year, now.month, now.day))
+        ? 'completed'
+        : status;
+  }
 }

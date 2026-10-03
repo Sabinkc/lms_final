@@ -10,6 +10,7 @@ import '../../../../shared/utils/initials.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/error_view.dart';
+import '../../../../shared/widgets/info_strip.dart';
 import '../../../../shared/widgets/loading_view.dart';
 import '../../../../shared/widgets/pill_tabs.dart';
 import '../../../../shared/widgets/status_chip.dart';
@@ -120,6 +121,10 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
         ? teacherProvider.teachers.where((t) => teacherIds.contains(t.id)).toList()
         : null;
     final sectionCount = sectionsReady ? academic.sections.length : academicClass.sectionCount;
+    // Without this a failed load leaves the cards below spinning with no explanation.
+    final loadFailed = academic.sectionsStatus == LoadStatus.error ||
+        studentProvider.status == LoadStatus.error ||
+        teacherProvider.status == LoadStatus.error;
 
     return AppBackground(
       child: Scaffold(
@@ -175,6 +180,21 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
             children: [
               _HeaderCard(academicClass: academicClass, studentCount: students?.length, sectionCount: sectionCount),
               const SizedBox(height: AppSpacing.lg),
+              if (loadFailed) ...[
+                Row(
+                  children: [
+                    const Expanded(
+                      child: InfoStrip(
+                        icon: Icons.cloud_off_rounded,
+                        text: "Some details couldn't load.",
+                        color: AppColors.danger,
+                      ),
+                    ),
+                    TextButton(onPressed: _refresh, child: const Text('Retry')),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.md),
+              ],
               PillTabs<_Tab>(
                 values: _Tab.values,
                 labelOf: (tab) => switch (tab) {

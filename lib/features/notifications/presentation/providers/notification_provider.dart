@@ -26,7 +26,8 @@ class NotificationProvider extends ChangeNotifier {
     _error = null;
     notifyListeners();
 
-    final result = await _repository.getNotifications();
+    // The server returns only 20 by default, fewer than the unread count it reports.
+    final result = await _repository.getNotifications(limit: 100);
     result.when(
       success: (data) {
         final (unreadCount, notifications) = data;

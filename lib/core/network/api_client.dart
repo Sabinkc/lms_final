@@ -6,6 +6,7 @@ import '../error/error_mapper.dart';
 import '../storage/secure_storage_service.dart';
 import 'interceptors/auth_interceptor.dart';
 import 'interceptors/logging_interceptor.dart';
+import 'interceptors/retry_interceptor.dart';
 import 'interceptors/token_refresh_interceptor.dart';
 
 /// The single shared HTTP client. No `*_repository_http.dart` should ever
@@ -47,6 +48,7 @@ class ApiClient {
 
     _dio.interceptors.add(AuthInterceptor(secureStorage));
     _dio.interceptors.add(TokenRefreshInterceptor(dio: _dio, secureStorage: secureStorage));
+    _dio.interceptors.add(RetryInterceptor(_dio));
     if (env.enableLogging) {
       _dio.interceptors.add(LoggingInterceptor());
     }

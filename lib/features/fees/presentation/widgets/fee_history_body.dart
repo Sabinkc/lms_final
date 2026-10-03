@@ -242,8 +242,9 @@ class _FeeCard extends StatelessWidget {
                 _PayableRow(
                   feeId: fee.id,
                   installmentId: null,
-                  title: 'Full amount',
-                  amount: fee.remainingAmount,
+                  // A paid fee shows what was paid (remaining is 0); otherwise what's left to pay.
+                  title: fee.status != 'paid' && fee.paidAmount > 0 ? 'Remaining' : 'Full amount',
+                  amount: fee.status == 'paid' ? fee.paidAmount : fee.remainingAmount,
                   dueDate: fee.dueDate,
                   itemStatus: fee.status,
                   provider: provider,

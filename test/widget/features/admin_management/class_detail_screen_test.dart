@@ -1,3 +1,4 @@
+import 'package:cloud_lms/core/error/app_exception.dart';
 import 'package:cloud_lms/core/error/result.dart';
 import 'package:cloud_lms/features/admin_management/data/models/academic_class.dart';
 import 'package:cloud_lms/features/admin_management/data/models/class_section.dart';
@@ -122,6 +123,41 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Add Section'), findsOneWidget);
     expect(find.text('B'), findsOneWidget);
+  });
+
+  testWidgets('a failed teachers load shows a retry notice instead of spinning forever', (tester) async {
+    final classRepository = _MockClassRepository();
+    final sectionRepository = _MockSectionRepository();
+    final studentRepository = _MockStudentRepository();
+    final teacherRepository = _MockTeacherRepository();
+
+    when(() => classRepository.getClasses()).thenAnswer((_) async => const Result.success([
+          AcademicClass(id: 'c1', name: 'Class 10', description: '', status: 'active', sectionCount: 1),
+        ]));
+    when(() => sectionRepository.getSections('c1')).thenAnswer((_) async => const Result.success([
+          ClassSection(id: 'sa', name: 'A', classId: 'c1', status: 'active', teacherIds: ['t1']),
+        ]));
+    when(() => studentRepository.getStudents(className: any(named: 'className'), section: any(named: 'section')))
+        .thenAnswer((_) async => const Result.success([]));
+    when(() => teacherRepository.getTeachers()).thenAnswer((_) async => const Result.failure(NetworkException()));
+
+    await tester.binding.setSurfaceSize(const Size(420, 1600));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    await tester.pumpWidget(MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(value: AcademicStructureProvider(classRepository, sectionRepository)),
+        ChangeNotifierProvider.value(value: StudentProvider(studentRepository, classRepository, sectionRepository)),
+        ChangeNotifierProvider.value(value: TeacherProvider(teacherRepository)),
+      ],
+      child: MaterialApp.router(
+        routerConfig: GoRouter(routes: [GoRoute(path: '/', builder: (_, _) => const ClassDetailScreen(classId: 'c1'))]),
+      ),
+    ));
+    await tester.pump(const Duration(seconds: 1));
+
+    expect(find.text("Some details couldn't load."), findsOneWidget);
+    expect(find.text('Retry'), findsOneWidget);
   });
 
   test('ClassSection reads teacher ids from populated objects and bare strings', () {

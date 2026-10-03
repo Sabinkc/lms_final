@@ -41,7 +41,7 @@ void main() {
   });
 
   test('loadNotifications(): success populates the list and unread count', () async {
-    when(() => repository.getNotifications()).thenAnswer((_) async => const Result.success((2, [_n1, _n2])));
+    when(() => repository.getNotifications(limit: any(named: 'limit'))).thenAnswer((_) async => const Result.success((2, [_n1, _n2])));
 
     await provider.loadNotifications();
 
@@ -51,7 +51,7 @@ void main() {
   });
 
   test('loadNotifications(): failure sets error status', () async {
-    when(() => repository.getNotifications()).thenAnswer((_) async => const Result.failure(NetworkException()));
+    when(() => repository.getNotifications(limit: any(named: 'limit'))).thenAnswer((_) async => const Result.failure(NetworkException()));
 
     await provider.loadNotifications();
 
@@ -59,7 +59,7 @@ void main() {
   });
 
   test('markRead(): optimistically flips isRead and decrements the unread count before the request resolves', () async {
-    when(() => repository.getNotifications()).thenAnswer((_) async => const Result.success((2, [_n1, _n2])));
+    when(() => repository.getNotifications(limit: any(named: 'limit'))).thenAnswer((_) async => const Result.success((2, [_n1, _n2])));
     await provider.loadNotifications();
     when(() => repository.markRead(any())).thenAnswer((_) async => const Result.success(null));
 
@@ -81,7 +81,7 @@ void main() {
       refModel: null,
       createdAt: '2026-08-20T00:00:00.000Z',
     );
-    when(() => repository.getNotifications()).thenAnswer((_) async => const Result.success((0, [readNotification])));
+    when(() => repository.getNotifications(limit: any(named: 'limit'))).thenAnswer((_) async => const Result.success((0, [readNotification])));
     await provider.loadNotifications();
 
     await provider.markRead('n3');
@@ -90,7 +90,7 @@ void main() {
   });
 
   test('markAllRead(): flips every notification to read and zeroes the unread count', () async {
-    when(() => repository.getNotifications()).thenAnswer((_) async => const Result.success((2, [_n1, _n2])));
+    when(() => repository.getNotifications(limit: any(named: 'limit'))).thenAnswer((_) async => const Result.success((2, [_n1, _n2])));
     await provider.loadNotifications();
     when(() => repository.markAllRead()).thenAnswer((_) async => const Result.success(null));
 
