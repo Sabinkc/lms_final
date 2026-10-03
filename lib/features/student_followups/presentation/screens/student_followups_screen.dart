@@ -22,6 +22,7 @@ import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
 import '../../../../shared/widgets/staggered_entrance.dart';
 import '../../../../shared/widgets/press_scale.dart';
+import '../../../../shared/widgets/form_sheet.dart';
 
 String _formatDate(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
@@ -362,10 +363,10 @@ Future<void> _showFollowupFormDialog(
       : DateTime.now();
   String status = existing?.status ?? 'pending';
 
-  await showDialog<void>(
+  await showFormSheet<void>(
     context: context,
     builder: (dialogContext) => StatefulBuilder(
-      builder: (dialogContext, setDialogState) => AlertDialog(
+      builder: (dialogContext, setDialogState) => FormSheet(
         title: Text(existing == null ? 'Add Follow-up' : 'Edit Follow-up'),
         content: SizedBox(
           width: 480,

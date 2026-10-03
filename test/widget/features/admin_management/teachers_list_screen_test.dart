@@ -6,6 +6,7 @@ import 'package:cloud_lms/features/admin_management/data/models/teacher.dart';
 import 'package:cloud_lms/features/admin_management/data/repositories/teacher_repository.dart';
 import 'package:cloud_lms/features/admin_management/presentation/providers/teacher_provider.dart';
 import 'package:cloud_lms/features/admin_management/presentation/screens/teachers_list_screen.dart';
+import 'package:cloud_lms/shared/widgets/form_sheet.dart';
 import 'package:cloud_lms/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -140,7 +141,7 @@ void main() {
 
     await tester.tap(find.byType(FloatingActionButton));
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(AlertDialog, 'Add Teacher'), findsOneWidget);
+    expect(find.widgetWithText(FormSheet, 'Add Teacher'), findsOneWidget);
 
     await tester.enterText(find.widgetWithText(TextFormField, 'Full name'), 'Jane Teacher');
     await tester.enterText(find.widgetWithText(TextFormField, 'Email'), 'jane@school.test');
@@ -164,6 +165,6 @@ void main() {
           phone: any(named: 'phone'),
           bankAccountNumber: any(named: 'bankAccountNumber'),
         )).called(1);
-    expect(find.byType(AlertDialog), findsNothing);
+    expect(find.byType(FormSheet), findsNothing);
   });
 }

@@ -14,6 +14,7 @@ import '../providers/academic_structure_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
+import '../../../../shared/widgets/form_sheet.dart';
 
 /// docs/screens.md "Manage Classes / Sections / Subjects" — the Sections
 /// half, scoped to one [classId] (reached by tapping a class in
@@ -189,10 +190,10 @@ Future<void> showSectionFormDialog(
   final nameController = TextEditingController(text: existing?.name);
   final formKey = GlobalKey<FormState>();
 
-  await showDialog<void>(
+  await showFormSheet<void>(
     context: context,
     builder: (dialogContext) => StatefulBuilder(
-      builder: (dialogContext, setDialogState) => AlertDialog(
+      builder: (dialogContext, setDialogState) => FormSheet(
         title: Text(existing == null ? 'Add Section' : 'Edit Section'),
         content: Form(
           key: formKey,

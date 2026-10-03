@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../data/models/eligible_target.dart';
 import '../providers/chat_provider.dart';
+import '../../../../shared/widgets/form_sheet.dart';
 
 /// Teacher: create a group conversation for a class/section they're
 /// actually assigned to (`GET /group-chats/eligible-targets` — the one
@@ -20,10 +21,10 @@ Future<void> showCreateGroupDialog(BuildContext context, ChatProvider provider) 
   EligibleTarget? selectedClass;
   EligibleSection? selectedSection;
 
-  await showDialog<void>(
+  await showFormSheet<void>(
     context: context,
     builder: (dialogContext) => StatefulBuilder(
-      builder: (dialogContext, setDialogState) => AlertDialog(
+      builder: (dialogContext, setDialogState) => FormSheet(
         title: const Text('New Group'),
         content: SizedBox(
           width: 420,

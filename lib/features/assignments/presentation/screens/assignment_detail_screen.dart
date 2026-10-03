@@ -28,6 +28,7 @@ import '../../../../shared/widgets/pull_to_refresh.dart';
 import '../../../../shared/widgets/staggered_entrance.dart';
 import '../../../../shared/widgets/success_overlay.dart';
 import '../../../../shared/widgets/press_scale.dart';
+import '../../../../shared/widgets/form_sheet.dart';
 
 /// docs/screens.md's Assignment Detail — one screen, body adapts by role:
 /// Teacher sees the submissions list with a grade action, Student sees
@@ -402,9 +403,9 @@ Future<void> _showGradeDialog(
   final remarksController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  await showDialog<void>(
+  await showFormSheet<void>(
     context: context,
-    builder: (dialogContext) => AlertDialog(
+    builder: (dialogContext) => FormSheet(
       title: const Text('Grade submission'),
       content: Form(
         key: formKey,

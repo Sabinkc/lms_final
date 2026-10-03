@@ -9,6 +9,7 @@ import 'package:cloud_lms/features/fees/data/repositories/fee_repository.dart';
 import 'package:cloud_lms/features/fees/data/repositories/payment_repository.dart';
 import 'package:cloud_lms/features/fees/presentation/providers/fee_provider.dart';
 import 'package:cloud_lms/features/fees/presentation/screens/admin_fees_screen.dart';
+import 'package:cloud_lms/shared/widgets/form_sheet.dart';
 import 'package:cloud_lms/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -166,7 +167,7 @@ void main() {
     // first in the widget tree, so `.first` is the tile.
     await tester.tap(find.text('Add Fee').first);
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(AlertDialog, 'Add Fee'), findsOneWidget);
+    expect(find.widgetWithText(FormSheet, 'Add Fee'), findsOneWidget);
 
     await tester.enterText(find.widgetWithText(TextFormField, 'Student'), 'Sam');
     await tester.pumpAndSettle();
@@ -188,7 +189,7 @@ void main() {
           isInstallment: false,
           installments: any(named: 'installments'),
         )).called(1);
-    expect(find.byType(AlertDialog), findsNothing);
+    expect(find.byType(FormSheet), findsNothing);
   });
 
   testWidgets('a failed export shows the error message in a snackbar', (tester) async {

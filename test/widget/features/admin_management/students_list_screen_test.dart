@@ -14,6 +14,7 @@ import 'package:cloud_lms/features/attendance/data/models/day_attendance_record.
 import 'package:cloud_lms/features/attendance/data/repositories/attendance_repository.dart';
 import 'package:cloud_lms/features/admin_management/presentation/screens/students_list_screen.dart';
 import 'package:cloud_lms/shared/widgets/filter_chip_bar.dart';
+import 'package:cloud_lms/shared/widgets/form_sheet.dart';
 import 'package:cloud_lms/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -193,7 +194,7 @@ void main() {
 
     await tester.tap(find.byType(FloatingActionButton));
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(AlertDialog, 'Add Student'), findsOneWidget);
+    expect(find.widgetWithText(FormSheet, 'Add Student'), findsOneWidget);
 
     await tester.enterText(find.widgetWithText(TextFormField, 'Full name'), 'Sam Student');
     await tester.enterText(find.widgetWithText(TextFormField, 'Email'), 'sam@school.test');
@@ -225,7 +226,7 @@ void main() {
           address: any(named: 'address'),
           phone: any(named: 'phone'),
         )).called(1);
-    expect(find.byType(AlertDialog), findsNothing);
+    expect(find.byType(FormSheet), findsNothing);
   });
 
   testWidgets('each student shows that day\'s attendance, matched by name and class', (tester) async {

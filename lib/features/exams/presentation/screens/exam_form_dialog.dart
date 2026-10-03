@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../admin_management/presentation/providers/academic_structure_provider.dart';
 import '../../data/models/exam.dart';
 import '../providers/exam_provider.dart';
+import '../../../../shared/widgets/form_sheet.dart';
 
 String _formatDate(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
@@ -36,10 +37,10 @@ Future<void> showExamFormDialog(BuildContext context, ExamProvider provider) asy
   DateTime examDate = DateTime.now().add(const Duration(days: 7));
   final subjects = <_SubjectDraft>[_SubjectDraft()];
 
-  await showDialog<void>(
+  await showFormSheet<void>(
     context: context,
     builder: (dialogContext) => StatefulBuilder(
-      builder: (dialogContext, setDialogState) => AlertDialog(
+      builder: (dialogContext, setDialogState) => FormSheet(
         title: const Text('Add Exam'),
         content: SizedBox(
           width: 480,

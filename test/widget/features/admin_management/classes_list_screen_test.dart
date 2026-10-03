@@ -10,6 +10,7 @@ import 'package:cloud_lms/features/admin_management/data/repositories/student_re
 import 'package:cloud_lms/features/admin_management/presentation/providers/academic_structure_provider.dart';
 import 'package:cloud_lms/features/admin_management/presentation/providers/student_provider.dart';
 import 'package:cloud_lms/features/admin_management/presentation/screens/classes_list_screen.dart';
+import 'package:cloud_lms/shared/widgets/form_sheet.dart';
 import 'package:cloud_lms/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -162,13 +163,13 @@ void main() {
     // First match is the app-bar button (the empty state has its own below).
     await tester.tap(find.text('Add Class').first);
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(AlertDialog, 'Add Class'), findsOneWidget);
+    expect(find.widgetWithText(FormSheet, 'Add Class'), findsOneWidget);
 
     await tester.enterText(find.widgetWithText(TextFormField, 'Name'), 'Class 10');
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
 
     verify(() => classRepository.createClass(name: 'Class 10', description: '')).called(1);
-    expect(find.byType(AlertDialog), findsNothing);
+    expect(find.byType(FormSheet), findsNothing);
   });
 }

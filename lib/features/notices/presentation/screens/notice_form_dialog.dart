@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../data/models/notice.dart';
 import '../providers/notice_provider.dart';
 import '../../../../shared/utils/capitalize.dart';
+import '../../../../shared/widgets/form_sheet.dart';
 
 const _audiences = ['all', 'students', 'teachers', 'parents', 'admins'];
 
@@ -21,10 +22,10 @@ Future<void> showNoticeFormDialog(
   String audience = existing?.audience ?? 'all';
   bool isImportant = existing?.isImportant ?? false;
 
-  await showDialog<void>(
+  await showFormSheet<void>(
     context: context,
     builder: (dialogContext) => StatefulBuilder(
-      builder: (dialogContext, setDialogState) => AlertDialog(
+      builder: (dialogContext, setDialogState) => FormSheet(
         title: Text(existing == null ? 'Add Notice' : 'Edit Notice'),
         content: SizedBox(
           width: 400,

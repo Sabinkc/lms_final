@@ -7,6 +7,7 @@ import 'package:cloud_lms/features/assignments/presentation/providers/assignment
 import 'package:cloud_lms/features/assignments/presentation/screens/assignment_form_dialog.dart';
 import 'package:cloud_lms/features/attendance/data/models/teacher_section.dart';
 import 'package:cloud_lms/features/attendance/data/repositories/attendance_repository.dart';
+import 'package:cloud_lms/shared/widgets/form_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -79,7 +80,7 @@ void main() {
 
     await tester.tap(find.text('Open'));
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(AlertDialog, 'Add Assignment'), findsOneWidget);
+    expect(find.widgetWithText(FormSheet, 'Add Assignment'), findsOneWidget);
 
     await tester.enterText(find.widgetWithText(TextFormField, 'Title'), 'Algebra Homework');
     await tester.enterText(find.widgetWithText(TextFormField, 'Description'), 'Chapter 4 exercises');
@@ -106,7 +107,7 @@ void main() {
           subject: 'Math',
           dueDate: any(named: 'dueDate'),
         )).called(1);
-    expect(find.byType(AlertDialog), findsNothing);
+    expect(find.byType(FormSheet), findsNothing);
   });
 
   testWidgets('a failed section load shows an inline error instead of a silently empty dropdown', (tester) async {
@@ -184,7 +185,7 @@ void main() {
 
     await tester.tap(find.text('Open'));
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(AlertDialog, 'Edit Assignment'), findsOneWidget);
+    expect(find.widgetWithText(FormSheet, 'Edit Assignment'), findsOneWidget);
     expect(find.text('Class Class 10 · Section A'), findsOneWidget);
     expect(find.byType(DropdownButtonFormField<String>), findsNothing);
     verifyNever(() => attendanceRepository.getMySections());

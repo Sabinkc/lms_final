@@ -5,6 +5,7 @@ import '../../../attendance/data/models/teacher_section.dart';
 import '../../../attendance/data/repositories/attendance_repository.dart';
 import '../../data/models/assignment.dart';
 import '../providers/assignment_provider.dart';
+import '../../../../shared/widgets/form_sheet.dart';
 
 String _formatDate(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
@@ -53,10 +54,10 @@ Future<void> showAssignmentFormDialog(
       ? DateTime.tryParse(existing.dueDate) ?? DateTime.now().add(const Duration(days: 7))
       : DateTime.now().add(const Duration(days: 7));
 
-  await showDialog<void>(
+  await showFormSheet<void>(
     context: context,
     builder: (dialogContext) => StatefulBuilder(
-      builder: (dialogContext, setDialogState) => AlertDialog(
+      builder: (dialogContext, setDialogState) => FormSheet(
         title: Text(existing == null ? 'Add Assignment' : 'Edit Assignment'),
         content: SizedBox(
           width: 400,

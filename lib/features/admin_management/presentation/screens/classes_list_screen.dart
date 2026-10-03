@@ -18,6 +18,7 @@ import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
 import '../../../../shared/widgets/staggered_entrance.dart';
 import '../../../../shared/widgets/press_scale.dart';
+import '../../../../shared/widgets/form_sheet.dart';
 
 /// docs/screens.md "Manage Classes / Sections / Subjects" — the Classes
 /// half; tapping a class drills into [SectionsListScreen] for its Sections.
@@ -322,10 +323,10 @@ Future<void> showClassFormDialog(
   final descriptionController = TextEditingController(text: existing?.description);
   final formKey = GlobalKey<FormState>();
 
-  await showDialog<void>(
+  await showFormSheet<void>(
     context: context,
     builder: (dialogContext) => StatefulBuilder(
-      builder: (dialogContext, setDialogState) => AlertDialog(
+      builder: (dialogContext, setDialogState) => FormSheet(
         title: Text(existing == null ? 'Add Class' : 'Edit Class'),
         content: Form(
           key: formKey,

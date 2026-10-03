@@ -4,6 +4,7 @@ import '../../../admin_management/data/models/teacher.dart';
 import '../../data/models/payroll.dart';
 import '../../data/models/staff_salary_config.dart';
 import '../providers/payroll_provider.dart';
+import '../../../../shared/widgets/form_sheet.dart';
 
 /// Admin: set/update a Teacher's salary config — must exist before a
 /// payroll can be generated for them (`generatePayroll` 404s otherwise,
@@ -28,10 +29,10 @@ Future<void> showSalaryConfigDialog(BuildContext context, PayrollProvider provid
 
   Teacher? selectedTeacher;
 
-  await showDialog<void>(
+  await showFormSheet<void>(
     context: context,
     builder: (dialogContext) => StatefulBuilder(
-      builder: (dialogContext, setDialogState) => AlertDialog(
+      builder: (dialogContext, setDialogState) => FormSheet(
         title: Text(existing == null ? 'Set Salary Config' : 'Update Salary Config'),
         content: SizedBox(
           width: 420,

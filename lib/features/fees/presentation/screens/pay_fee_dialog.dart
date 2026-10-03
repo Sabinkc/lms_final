@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../providers/self_fee_provider.dart';
 import '../../../../shared/widgets/success_overlay.dart';
+import '../../../../shared/widgets/form_sheet.dart';
 
 /// Student/Parent: submit a fee payment for manual verification
 /// (`implementation_backlog.md` E7-F4). **No payment-method selector** —
@@ -25,10 +26,10 @@ Future<void> showPayFeeDialog(
   final pinController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  await showDialog<void>(
+  await showFormSheet<void>(
     context: context,
     builder: (dialogContext) => StatefulBuilder(
-      builder: (dialogContext, setDialogState) => AlertDialog(
+      builder: (dialogContext, setDialogState) => FormSheet(
         title: const Text('Submit Payment'),
         content: Form(
           key: formKey,

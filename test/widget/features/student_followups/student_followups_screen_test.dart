@@ -6,6 +6,7 @@ import 'package:cloud_lms/features/student_followups/data/models/student_followu
 import 'package:cloud_lms/features/student_followups/data/repositories/student_followup_repository.dart';
 import 'package:cloud_lms/features/student_followups/presentation/providers/student_followup_provider.dart';
 import 'package:cloud_lms/features/student_followups/presentation/screens/student_followups_screen.dart';
+import 'package:cloud_lms/shared/widgets/form_sheet.dart';
 import 'package:cloud_lms/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -116,7 +117,7 @@ void main() {
 
     await tester.tap(find.byType(FloatingActionButton));
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(AlertDialog, 'Add Follow-up'), findsOneWidget);
+    expect(find.widgetWithText(FormSheet, 'Add Follow-up'), findsOneWidget);
 
     await tester.enterText(find.widgetWithText(TextFormField, 'Student Name'), 'Sam Prospect');
     await tester.enterText(find.widgetWithText(TextFormField, 'Faculty'), 'Science');
@@ -140,7 +141,7 @@ void main() {
         status: 'pending',
       ),
     ).called(1);
-    expect(find.byType(AlertDialog), findsNothing);
+    expect(find.byType(FormSheet), findsNothing);
   });
 
   testWidgets('a failed export shows the error message in a snackbar', (tester) async {

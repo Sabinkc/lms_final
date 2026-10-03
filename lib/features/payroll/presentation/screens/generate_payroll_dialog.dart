@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../data/models/staff_salary_config.dart';
 import '../providers/payroll_provider.dart';
+import '../../../../shared/widgets/form_sheet.dart';
 
 const _monthNames = [
   '',
@@ -43,10 +44,10 @@ Future<void> showGeneratePayrollDialog(BuildContext context, PayrollProvider pro
   int month = now.month;
   int year = now.year;
 
-  await showDialog<void>(
+  await showFormSheet<void>(
     context: context,
     builder: (dialogContext) => StatefulBuilder(
-      builder: (dialogContext, setDialogState) => AlertDialog(
+      builder: (dialogContext, setDialogState) => FormSheet(
         title: const Text('Generate Payroll'),
         content: Form(
           key: formKey,

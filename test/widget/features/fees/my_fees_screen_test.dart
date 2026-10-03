@@ -7,6 +7,7 @@ import 'package:cloud_lms/features/fees/data/repositories/fee_repository.dart';
 import 'package:cloud_lms/features/fees/data/repositories/payment_repository.dart';
 import 'package:cloud_lms/features/fees/presentation/providers/self_fee_provider.dart';
 import 'package:cloud_lms/features/fees/presentation/screens/my_fees_screen.dart';
+import 'package:cloud_lms/shared/widgets/form_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -126,7 +127,7 @@ void main() {
 
     await tester.tap(find.text('Pay'));
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(AlertDialog, 'Submit Payment'), findsOneWidget);
+    expect(find.widgetWithText(FormSheet, 'Submit Payment'), findsOneWidget);
 
     await tester.enterText(find.widgetWithText(TextFormField, 'Phone number'), '9800000000');
     await tester.enterText(find.widgetWithText(TextFormField, 'Transaction PIN / reference code'), 'ABC123');
@@ -139,6 +140,6 @@ void main() {
           phoneNumber: '9800000000',
           transactionPin: 'ABC123',
         )).called(1);
-    expect(find.byType(AlertDialog), findsNothing);
+    expect(find.byType(FormSheet), findsNothing);
   });
 }

@@ -4,6 +4,7 @@ import '../../../admin_management/data/models/student.dart';
 import '../../data/models/fee.dart';
 import '../../data/repositories/fee_repository.dart';
 import '../providers/fee_provider.dart';
+import '../../../../shared/widgets/form_sheet.dart';
 
 String _formatDate(DateTime date) =>
     '${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
@@ -39,10 +40,10 @@ Future<void> showFeeFormDialog(BuildContext context, FeeProvider provider, {Fee?
   DateTime dueDate = DateTime.now().add(const Duration(days: 30));
   final installments = <_InstallmentDraft>[_InstallmentDraft()];
 
-  await showDialog<void>(
+  await showFormSheet<void>(
     context: context,
     builder: (dialogContext) => StatefulBuilder(
-      builder: (dialogContext, setDialogState) => AlertDialog(
+      builder: (dialogContext, setDialogState) => FormSheet(
         title: Text(existing == null ? 'Add Fee' : 'Edit Fee'),
         content: SizedBox(
           width: 460,

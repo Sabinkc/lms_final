@@ -27,6 +27,7 @@ import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
 import '../../../../shared/widgets/staggered_entrance.dart';
 import '../../../../shared/widgets/press_scale.dart';
+import '../../../../shared/widgets/form_sheet.dart';
 
 /// docs/screens.md "Manage Students — List / Add-Edit / Detail". Tapping a
 /// student opens `StudentProfileScreen`. See [_StudentsBody] for the
@@ -561,10 +562,10 @@ Future<void> showStudentFormDialog(BuildContext context, StudentProvider provide
   }
   if (!context.mounted) return;
 
-  await showDialog<void>(
+  await showFormSheet<void>(
     context: context,
     builder: (dialogContext) => StatefulBuilder(
-      builder: (dialogContext, setDialogState) => AlertDialog(
+      builder: (dialogContext, setDialogState) => FormSheet(
         title: Text(existing == null ? 'Add Student' : 'Edit Student'),
         content: SingleChildScrollView(
           child: Form(

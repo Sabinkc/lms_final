@@ -11,6 +11,7 @@ import 'package:cloud_lms/features/notices/data/models/notice.dart';
 import 'package:cloud_lms/features/notices/data/repositories/notice_repository.dart';
 import 'package:cloud_lms/features/notices/presentation/providers/notice_provider.dart';
 import 'package:cloud_lms/features/notices/presentation/screens/notices_list_screen.dart';
+import 'package:cloud_lms/shared/widgets/form_sheet.dart';
 import 'package:cloud_lms/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -157,7 +158,7 @@ void main() {
 
     await tester.tap(find.byType(FloatingActionButton));
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(AlertDialog, 'Add Notice'), findsOneWidget);
+    expect(find.widgetWithText(FormSheet, 'Add Notice'), findsOneWidget);
 
     await tester.enterText(find.widgetWithText(TextFormField, 'Title'), 'School Holiday');
     await tester.enterText(find.widgetWithText(TextFormField, 'Description'), 'School closed on Friday');
@@ -171,7 +172,7 @@ void main() {
           isImportant: false,
           expiryDate: any(named: 'expiryDate'),
         )).called(1);
-    expect(find.byType(AlertDialog), findsNothing);
+    expect(find.byType(FormSheet), findsNothing);
   });
 
   testWidgets('category chips come from real fields (important -> Urgent, audience) and filter the list', (tester) async {

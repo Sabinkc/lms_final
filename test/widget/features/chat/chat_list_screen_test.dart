@@ -13,6 +13,7 @@ import 'package:cloud_lms/features/chat/data/models/group_conversation.dart';
 import 'package:cloud_lms/features/chat/data/repositories/chat_repository.dart';
 import 'package:cloud_lms/features/chat/presentation/providers/chat_provider.dart';
 import 'package:cloud_lms/features/chat/presentation/screens/chat_list_screen.dart';
+import 'package:cloud_lms/shared/widgets/form_sheet.dart';
 import 'package:cloud_lms/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -153,7 +154,7 @@ void main() {
 
     await tester.tap(find.byKey(const Key('newGroupAppBarButton')));
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(AlertDialog, 'New Group'), findsOneWidget);
+    expect(find.widgetWithText(FormSheet, 'New Group'), findsOneWidget);
 
     await tester.tap(find.widgetWithText(DropdownButtonFormField<EligibleTarget>, 'Class'));
     await tester.pumpAndSettle();
@@ -165,7 +166,7 @@ void main() {
 
     verify(() => chatRepository.createGroup(classId: 'c1', sectionId: null, name: null, extraMemberIds: any(named: 'extraMemberIds')))
         .called(1);
-    expect(find.byType(AlertDialog), findsNothing);
+    expect(find.byType(FormSheet), findsNothing);
   });
 
   testWidgets('tapping a group navigates to its thread', (tester) async {

@@ -20,6 +20,7 @@ import '../../../../core/theme/readable_color.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
 import '../../../../shared/widgets/staggered_entrance.dart';
 import '../../../../shared/widgets/press_scale.dart';
+import '../../../../shared/widgets/form_sheet.dart';
 
 /// Admin: Manage Departments (`docs/production_roadmap.md` Phase L2,
 /// `implementation_backlog.md` E17) — same list/create/edit/delete shape as
@@ -297,10 +298,10 @@ Future<void> _showDepartmentFormDialog(
   }
   final selectedClasses = {...?existing?.classes};
 
-  await showDialog<void>(
+  await showFormSheet<void>(
     context: context,
     builder: (dialogContext) => StatefulBuilder(
-      builder: (dialogContext, setDialogState) => AlertDialog(
+      builder: (dialogContext, setDialogState) => FormSheet(
         title: Text(existing == null ? 'Add Department' : 'Edit Department'),
         content: SingleChildScrollView(
           child: Form(

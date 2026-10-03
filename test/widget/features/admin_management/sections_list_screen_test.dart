@@ -7,6 +7,7 @@ import 'package:cloud_lms/features/admin_management/data/repositories/class_repo
 import 'package:cloud_lms/features/admin_management/data/repositories/section_repository.dart';
 import 'package:cloud_lms/features/admin_management/presentation/providers/academic_structure_provider.dart';
 import 'package:cloud_lms/features/admin_management/presentation/screens/sections_list_screen.dart';
+import 'package:cloud_lms/shared/widgets/form_sheet.dart';
 import 'package:cloud_lms/shared/widgets/loading_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -99,13 +100,13 @@ void main() {
 
     await tester.tap(find.byType(FloatingActionButton));
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(AlertDialog, 'Add Section'), findsOneWidget);
+    expect(find.widgetWithText(FormSheet, 'Add Section'), findsOneWidget);
 
     await tester.enterText(find.widgetWithText(TextFormField, 'Name'), 'A');
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
 
     verify(() => sectionRepository.createSection(classId: 'c1', name: 'A')).called(1);
-    expect(find.byType(AlertDialog), findsNothing);
+    expect(find.byType(FormSheet), findsNothing);
   });
 }

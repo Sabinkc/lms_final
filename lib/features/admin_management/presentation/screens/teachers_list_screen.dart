@@ -14,6 +14,7 @@ import '../providers/teacher_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
+import '../../../../shared/widgets/form_sheet.dart';
 
 /// docs/screens.md "Manage Teachers — List / Add-Edit / Detail". No separate
 /// detail screen — same P0-only scope decision as Classes/Sections; the P1
@@ -198,10 +199,10 @@ Future<void> _showTeacherFormDialog(BuildContext context, TeacherProvider provid
   final phoneController = TextEditingController(text: existing?.phone);
   final formKey = GlobalKey<FormState>();
 
-  await showDialog<void>(
+  await showFormSheet<void>(
     context: context,
     builder: (dialogContext) => StatefulBuilder(
-      builder: (dialogContext, setDialogState) => AlertDialog(
+      builder: (dialogContext, setDialogState) => FormSheet(
         title: Text(existing == null ? 'Add Teacher' : 'Edit Teacher'),
         content: SingleChildScrollView(
           child: Form(

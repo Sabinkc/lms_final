@@ -8,6 +8,7 @@ import 'package:cloud_lms/features/exams/data/models/exam.dart';
 import 'package:cloud_lms/features/exams/data/repositories/exam_repository.dart';
 import 'package:cloud_lms/features/exams/presentation/providers/exam_provider.dart';
 import 'package:cloud_lms/features/exams/presentation/screens/exam_form_dialog.dart';
+import 'package:cloud_lms/shared/widgets/form_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -82,7 +83,7 @@ void main() {
 
     await tester.tap(find.text('Open'));
     await tester.pumpAndSettle();
-    expect(find.widgetWithText(AlertDialog, 'Add Exam'), findsOneWidget);
+    expect(find.widgetWithText(FormSheet, 'Add Exam'), findsOneWidget);
 
     await tester.enterText(find.widgetWithText(TextFormField, 'Title'), 'Mid Term');
 
@@ -114,7 +115,7 @@ void main() {
     expect(subjects.single.name, 'Math');
     expect(subjects.single.fullMarks, 100);
     expect(subjects.single.passMarks, 40);
-    expect(find.byType(AlertDialog), findsNothing);
+    expect(find.byType(FormSheet), findsNothing);
   });
 
   testWidgets('Add subject appends a second subject row', (tester) async {

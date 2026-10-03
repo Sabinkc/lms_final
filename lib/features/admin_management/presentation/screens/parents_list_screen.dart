@@ -14,6 +14,7 @@ import '../providers/parent_provider.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../shared/widgets/pull_to_refresh.dart';
+import '../../../../shared/widgets/form_sheet.dart';
 
 /// docs/screens.md "Manage Parents — List / Add-Edit". No separate detail
 /// screen — same P0-only scope decision as the rest of Phase B. Linkage is
@@ -166,10 +167,10 @@ Future<void> _showParentFormDialog(BuildContext context, ParentProvider provider
 
   final selectedStudentIds = <String>{for (final c in existing?.children ?? const <Student>[]) c.id};
 
-  await showDialog<void>(
+  await showFormSheet<void>(
     context: context,
     builder: (dialogContext) => StatefulBuilder(
-      builder: (dialogContext, setDialogState) => AlertDialog(
+      builder: (dialogContext, setDialogState) => FormSheet(
         title: Text(existing == null ? 'Add Parent' : 'Edit Parent'),
         content: SizedBox(
           width: 400,
