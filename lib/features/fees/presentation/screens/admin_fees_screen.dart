@@ -466,7 +466,7 @@ class _ActionTile extends StatelessWidget {
                     color: filled ? Colors.white.withValues(alpha: 0.2) : AppColors.primary.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(icon, size: 20, color: filled ? Colors.white : AppColors.primary),
+                  child: Icon(icon, size: 20, color: filled ? Colors.white : context.readable(AppColors.primary)),
                 ),
                 const SizedBox(width: AppSpacing.sm),
                 Expanded(

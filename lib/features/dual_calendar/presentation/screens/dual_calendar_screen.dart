@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nepali_utils/nepali_utils.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/readable_color.dart';
 import '../../../../core/theme/app_radius.dart';
 import '../../../../shared/widgets/status_chip.dart';
 import '../../../../shared/widgets/brand_app_bar.dart';
@@ -115,7 +116,7 @@ class _DualCalendarScreenState extends State<DualCalendarScreen> {
                           Text(
                             bsRangeNepali,
                             style: theme.textTheme.bodyMedium?.copyWith(
-                              color: _bsAccent,
+                              color: context.readable(_bsAccent),
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -203,10 +204,7 @@ class _DualCalendarScreenState extends State<DualCalendarScreen> {
                 ),
               ),
             ),
-            if (selected != null) ...[
-              const SizedBox(height: 12),
-              _SelectedDayCard(date: selected),
-            ],
+            if (selected != null) ...[const SizedBox(height: 12), _SelectedDayCard(date: selected)],
           ],
         ),
       ),
@@ -266,14 +264,17 @@ class _DayCell extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('${date.day}', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15, color: fg)),
+            Text(
+              '${date.day}',
+              style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15, color: fg),
+            ),
             FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
                 bsLabel,
                 style: theme.textTheme.labelSmall?.copyWith(
                   fontSize: 10,
-                  color: isToday ? Colors.white70 : _bsAccent.withValues(alpha: 0.9),
+                  color: isToday ? Colors.white70 : context.readable(_bsAccent).withValues(alpha: 0.9),
                 ),
               ),
             ),
@@ -295,7 +296,11 @@ class _Legend extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(width: 10, height: 10, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+        Container(
+          width: 10,
+          height: 10,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        ),
         const SizedBox(width: 6),
         Text(label, style: Theme.of(context).textTheme.labelSmall),
       ],
@@ -356,7 +361,10 @@ class _SelectedDayCard extends StatelessWidget {
                   ),
                   Text(
                     NepaliDateFormat('EEE, d MMMM yyyy', Language.nepali).format(bs),
-                    style: theme.textTheme.bodyMedium?.copyWith(color: _bsAccent, fontWeight: FontWeight.w600),
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: context.readable(_bsAccent),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ],
               ),

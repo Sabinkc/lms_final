@@ -250,7 +250,7 @@ class _NotificationTile extends StatelessWidget {
                               Text(
                                 'Open',
                                 style: theme.textTheme.labelMedium?.copyWith(
-                                  color: AppColors.primary,
+                                  color: context.readable(AppColors.primary),
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),

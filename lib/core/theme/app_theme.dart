@@ -7,9 +7,8 @@ import 'app_typography.dart';
 
 /// Confirmed light/dark theme support (docs/design_system.md §1;
 /// docs/api_spec.md gives no reason to change this). [ThemeMode.system] is
-/// the default at the `MaterialApp` level (see `lib/app.dart`), with a
-/// manual override persisted via `LocalPrefsService` — the override toggle
-/// itself is Profile **feature** work, not foundation.
+/// the default; the person can pick Light/Dark/System on the More screen
+/// (`ThemeController`, saved via `LocalPrefsService`).
 class AppTheme {
   AppTheme._();
 
@@ -29,6 +28,14 @@ class AppTheme {
       seedColor: AppColors.primary,
       brightness: brightness,
       error: AppColors.danger,
+      // Deep teal leads, emerald seconds it, orange is the accent.
+      primary: isDark ? const Color(0xFF5FC4D1) : AppColors.primary,
+      onPrimary: isDark ? AppColors.darkBase : Colors.white,
+      secondary: isDark ? const Color(0xFF34D399) : AppColors.success,
+      onSecondary: isDark ? AppColors.darkBase : Colors.white,
+      tertiary: isDark ? const Color(0xFFFB9A4B) : AppColors.accent,
+      onTertiary: isDark ? AppColors.darkBase : Colors.white,
+      surface: isDark ? AppColors.darkElevated1 : Colors.white,
     );
 
     final base = ThemeData(
@@ -39,9 +46,9 @@ class AppTheme {
     );
 
     return base.copyWith(
-      textTheme: AppTypography.textTheme(base.textTheme).copyWith(
-        titleLarge: AppTypography.textTheme(base.textTheme).titleLarge?.copyWith(fontWeight: FontWeight.w800),
-      ),
+      textTheme: AppTypography.textTheme(
+        base.textTheme,
+      ).copyWith(titleLarge: AppTypography.textTheme(base.textTheme).titleLarge?.copyWith(fontWeight: FontWeight.w800)),
       appBarTheme: AppBarTheme(
         elevation: 0,
         scrolledUnderElevation: 0,
@@ -125,14 +132,14 @@ class AppTheme {
         filled: false,
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: AppColors.accent,
+        foregroundColor: Colors.white,
         elevation: 4,
         highlightElevation: 6,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.xl3)),
       ),
       bottomSheetTheme: BottomSheetThemeData(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xl2)),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xl2))),
       ),
       navigationBarTheme: NavigationBarThemeData(
         height: 64,

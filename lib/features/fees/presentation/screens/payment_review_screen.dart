@@ -258,7 +258,7 @@ class _PaymentCard extends StatelessWidget {
                             formatRs(payment.amount),
                             style: theme.textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.w800,
-                              color: AppColors.primary,
+                              color: context.readable(AppColors.primary),
                             ),
                           ),
                         ],

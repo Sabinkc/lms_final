@@ -162,10 +162,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             onPressed: authProvider.isSubmitting ? null : _submit,
                             icon: authProvider.isSubmitting
-                                ? const SizedBox(
+                                ? SizedBox(
                                     height: 16,
                                     width: 16,
-                                    child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                    // The button is disabled (pale) while submitting.
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Theme.of(context).colorScheme.primary,
+                                    ),
                                   )
                                 : const Icon(Icons.login),
                             label: Text(authProvider.isSubmitting ? 'Logging in...' : 'Log In'),

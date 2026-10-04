@@ -469,7 +469,7 @@ class _MessageBubble extends StatelessWidget {
                         Text(
                           message.senderName,
                           style: theme.textTheme.labelMedium?.copyWith(
-                            color: AppColors.primary,
+                            color: context.readable(AppColors.primary),
                             fontWeight: FontWeight.w700,
                           ),
                         ),

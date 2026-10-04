@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_radius.dart';
+import '../../core/theme/readable_color.dart';
 import 'press_scale.dart';
 
 /// A tappable icon+label card — the building block for the role Home
@@ -37,7 +38,7 @@ class QuickActionCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(color: tint.withValues(alpha: 0.14), shape: BoxShape.circle),
-                  child: Icon(icon, color: tint, size: 22),
+                  child: Icon(icon, color: context.readable(tint), size: 22),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -85,7 +86,7 @@ class QuickActionTile extends StatelessWidget {
         leading: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(color: tint.withValues(alpha: 0.14), borderRadius: AppRadius.card),
-          child: Icon(icon, color: tint, size: 20),
+          child: Icon(icon, color: context.readable(tint), size: 20),
         ),
         // maxLines+ellipsis on both — the More screen's paired 2-column
         // groups only give each tile ~150-170dp of width, where a full

@@ -59,7 +59,7 @@ class FeeStatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final textColor = emphasize ? color : theme.colorScheme.onSurface;
+    final textColor = emphasize ? context.readable(color) : theme.colorScheme.onSurface;
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(

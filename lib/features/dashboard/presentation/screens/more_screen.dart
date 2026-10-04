@@ -18,6 +18,7 @@ import '../../../notifications/presentation/providers/notification_provider.dart
 import '../providers/admin_dashboard_provider.dart';
 import '../../../../shared/widgets/app_background.dart';
 import '../../../../core/theme/readable_color.dart';
+import '../../../../core/theme/theme_controller.dart';
 
 /// The catch-all destination list for whatever isn't a bottom-nav tab —
 /// the modernized, exhaustive replacement for the old dashboards' flat
@@ -161,6 +162,8 @@ class _MoreScreenState extends State<MoreScreen> {
               _GroupSection(title: grouped[i].$1, items: grouped[i].$2, accent: accent),
             ],
             const SizedBox(height: AppSpacing.lg),
+            const _AppearanceCard(),
+            const SizedBox(height: AppSpacing.lg),
             OutlinedButton.icon(
               onPressed: () => runWithProgress(context, context.read<AuthProvider>().logout, message: 'Logging out…'),
               icon: const Icon(Icons.logout_outlined),
@@ -250,12 +253,7 @@ class _AdminStatStrip extends StatelessWidget {
 
     return StatCardRow(
       cards: [
-        StatCard(
-          icon: Icons.groups_rounded,
-          value: '${stats.totalStudents}',
-          label: 'Students',
-          color: AppColors.info,
-        ),
+        StatCard(icon: Icons.groups_rounded, value: '${stats.totalStudents}', label: 'Students', color: AppColors.info),
         StatCard(
           icon: Icons.badge_rounded,
           value: '${stats.totalTeachers}',
@@ -330,6 +328,53 @@ class _ProfileCard extends StatelessWidget {
                     ),
                   ),
                 ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Light / Dark / System switch. Applies instantly and is remembered.
+class _AppearanceCard extends StatelessWidget {
+  const _AppearanceCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final controller = context.watch<ThemeController>();
+    return Card(
+      margin: EdgeInsets.zero,
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.palette_outlined, color: theme.colorScheme.primary, size: 20),
+                const SizedBox(width: AppSpacing.xs),
+                Text('Appearance', style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700)),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.sm),
+            SizedBox(
+              width: double.infinity,
+              child: SegmentedButton<ThemeMode>(
+                showSelectedIcon: false,
+                segments: const [
+                  ButtonSegment(value: ThemeMode.light, icon: Icon(Icons.light_mode_outlined), label: Text('Light')),
+                  ButtonSegment(value: ThemeMode.dark, icon: Icon(Icons.dark_mode_outlined), label: Text('Dark')),
+                  ButtonSegment(
+                    value: ThemeMode.system,
+                    icon: Icon(Icons.brightness_auto_outlined),
+                    label: Text('System'),
+                  ),
+                ],
+                selected: {controller.mode},
+                onSelectionChanged: (s) => controller.setMode(s.first),
               ),
             ),
           ],

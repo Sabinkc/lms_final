@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import 'core/di/service_locator.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
+import 'core/theme/theme_controller.dart';
+import 'core/storage/local_prefs_service.dart';
 import 'features/admin_management/presentation/providers/academic_structure_provider.dart';
 import 'features/admin_management/presentation/providers/department_provider.dart';
 import 'features/admin_management/presentation/providers/parent_provider.dart';
@@ -48,6 +51,7 @@ class CloudsLmsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<ThemeController>(create: (_) => ThemeController(sl<LocalPrefsService>())),
         ChangeNotifierProvider<AuthProvider>.value(value: sl<AuthProvider>()),
         Provider<ShortcutUsage>.value(value: sl<ShortcutUsage>()),
         ChangeNotifierProvider<AcademicStructureProvider>(create: (_) => sl<AcademicStructureProvider>()),
@@ -80,19 +84,38 @@ class CloudsLmsApp extends StatelessWidget {
         ChangeNotifierProvider<AdminIdCardProvider>(create: (_) => sl<AdminIdCardProvider>()),
         ChangeNotifierProvider<StudentIdCardProvider>(create: (_) => sl<StudentIdCardProvider>()),
       ],
-      child: Builder(
-        builder: (context) {
-          final router = buildAppRouter(context.read<AuthProvider>());
-          return MaterialApp.router(
-            title: 'CloudsLMS',
-            debugShowCheckedModeBanner: false,
-            themeMode: ThemeMode.system,
-            theme: AppTheme.light,
-            darkTheme: AppTheme.dark,
-            routerConfig: router,
-          );
-        },
-      ),
+      child: const _AppView(),
+    );
+  }
+}
+
+/// Holds the router for the app's lifetime, so switching light/dark only
+/// repaints — it never rebuilds the router and loses the open screen.
+class _AppView extends StatefulWidget {
+  const _AppView();
+
+  @override
+  State<_AppView> createState() => _AppViewState();
+}
+
+class _AppViewState extends State<_AppView> {
+  late final GoRouter _router = buildAppRouter(context.read<AuthProvider>());
+
+  @override
+  void dispose() {
+    _router.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      title: 'CloudsLMS',
+      debugShowCheckedModeBanner: false,
+      themeMode: context.watch<ThemeController>().mode,
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      routerConfig: _router,
     );
   }
 }

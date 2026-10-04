@@ -102,7 +102,7 @@ class IdBadgePreview extends StatelessWidget {
                       Text(
                         'ADM: ${student.admissionNumber}',
                         style: theme.textTheme.labelSmall?.copyWith(
-                          color: AppColors.primary,
+                          color: context.readable(AppColors.primary),
                           fontWeight: FontWeight.w700,
                         ),
                       ),
@@ -118,7 +118,7 @@ class IdBadgePreview extends StatelessWidget {
                       Text(
                         '${student.className}${student.section.isNotEmpty ? ' · Section ${student.section}' : ''}',
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: AppColors.primary,
+                          color: context.readable(AppColors.primary),
                           fontWeight: FontWeight.w600,
                         ),
                       ),

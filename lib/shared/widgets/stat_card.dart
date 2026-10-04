@@ -57,7 +57,7 @@ class StatCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(color: tint.withValues(alpha: 0.14), borderRadius: AppRadius.card),
-                  child: Icon(icon, color: tint, size: 20),
+                  child: Icon(icon, color: context.readable(tint), size: 20),
                 ),
                 // Shrinks rather than overflowing on narrow (360dp) phones.
                 if (progress != null || trend != null)

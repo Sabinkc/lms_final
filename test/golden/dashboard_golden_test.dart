@@ -1,5 +1,7 @@
 import 'package:cloud_lms/core/router/role_shell.dart';
+import 'package:cloud_lms/core/storage/local_prefs_service.dart';
 import 'package:cloud_lms/core/theme/app_theme.dart';
+import 'package:cloud_lms/core/theme/theme_controller.dart';
 import 'package:cloud_lms/features/auth/data/models/app_role.dart';
 import 'package:cloud_lms/features/auth/data/models/app_user.dart';
 import 'package:cloud_lms/features/auth/data/models/auth_session.dart';
@@ -18,6 +20,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class _MockAuthRepository extends Mock implements AuthRepository {}
 
@@ -96,9 +99,13 @@ Future<void> _pumpDashboard(
     ],
   );
 
+  SharedPreferences.setMockInitialValues({});
+  final prefs = LocalPrefsService(await SharedPreferences.getInstance());
+
   await tester.pumpWidget(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider<ThemeController>(create: (_) => ThemeController(prefs)),
         ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
         ChangeNotifierProvider<AdminDashboardProvider>(create: (_) => AdminDashboardProvider(dashboardRepository)),
         ChangeNotifierProvider<NotificationProvider>(create: (_) => NotificationProvider(notificationRepository)),

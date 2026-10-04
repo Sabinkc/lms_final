@@ -15,9 +15,12 @@ Color readableColor(Color color, Brightness brightness) {
   // Dark surfaces in this app sit around luminance 0.01–0.02; 0.25 keeps
   // ≥ 4.5:1 against them.
   const target = 0.25;
+  // Raise lightness rather than mixing in white, so the hue stays vivid
+  // (teal stays teal instead of turning grey-blue).
+  final hsl = HSLColor.fromColor(color);
   var c = color;
-  for (var t = 0.1; c.computeLuminance() < target && t <= 1.0; t += 0.1) {
-    c = Color.lerp(color, Colors.white, t)!;
+  for (var l = hsl.lightness; c.computeLuminance() < target && l < 1.0; l += 0.04) {
+    c = hsl.withLightness(l.clamp(0.0, 1.0)).toColor();
   }
   return c;
 }
