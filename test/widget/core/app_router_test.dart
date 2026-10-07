@@ -11,6 +11,7 @@ import 'package:cloud_lms/features/dashboard/data/models/admin_dashboard_overvie
 import 'package:cloud_lms/features/dashboard/presentation/screens/admin_home_screen.dart';
 import 'package:cloud_lms/features/dashboard/data/repositories/admin_dashboard_repository.dart';
 import 'package:cloud_lms/features/dashboard/presentation/providers/admin_dashboard_provider.dart';
+import 'package:cloud_lms/features/dashboard/presentation/screens/more_screen.dart';
 import 'package:cloud_lms/features/notifications/data/models/app_notification.dart';
 import 'package:cloud_lms/features/notifications/data/repositories/notification_repository.dart';
 import 'package:cloud_lms/features/notifications/presentation/providers/notification_provider.dart';
@@ -56,21 +57,18 @@ Widget _appWith(
   AuthProvider authProvider, {
   AdminDashboardRepository? dashboardRepository,
   NotificationRepository? notificationRepository,
-}) =>
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
-        ChangeNotifierProvider<AdminDashboardProvider>(
-          create: (_) => AdminDashboardProvider(dashboardRepository ?? _MockAdminDashboardRepository()),
-        ),
-        ChangeNotifierProvider<NotificationProvider>(
-          create: (_) => NotificationProvider(notificationRepository ?? _MockNotificationRepository()),
-        ),
-      ],
-      child: Builder(
-        builder: (context) => MaterialApp.router(routerConfig: buildAppRouter(context.read<AuthProvider>())),
-      ),
-    );
+}) => MultiProvider(
+  providers: [
+    ChangeNotifierProvider<AuthProvider>.value(value: authProvider),
+    ChangeNotifierProvider<AdminDashboardProvider>(
+      create: (_) => AdminDashboardProvider(dashboardRepository ?? _MockAdminDashboardRepository()),
+    ),
+    ChangeNotifierProvider<NotificationProvider>(
+      create: (_) => NotificationProvider(notificationRepository ?? _MockNotificationRepository()),
+    ),
+  ],
+  child: Builder(builder: (context) => MaterialApp.router(routerConfig: buildAppRouter(context.read<AuthProvider>()))),
+);
 
 void main() {
   late _MockAuthRepository repository;
@@ -85,12 +83,17 @@ void main() {
     // (unmocked) call throws inside a microtask `pumpAndSettle` can't see.
     dashboardRepository = _MockAdminDashboardRepository();
     when(() => dashboardRepository.getStats()).thenAnswer((_) async => const Result.success(_emptyStats));
-    when(() => dashboardRepository.getUpcomingExams(limit: any(named: 'limit')))
-        .thenAnswer((_) async => const Result.success(<UpcomingExamSummary>[]));
+    when(
+      () => dashboardRepository.getUpcomingExams(limit: any(named: 'limit')),
+    ).thenAnswer((_) async => const Result.success(<UpcomingExamSummary>[]));
 
     notificationRepository = _MockNotificationRepository();
-    when(() => notificationRepository.getNotifications(limit: any(named: 'limit'), unreadOnly: any(named: 'unreadOnly')))
-        .thenAnswer((_) async => const Result.success((0, <AppNotification>[])));
+    when(
+      () => notificationRepository.getNotifications(
+        limit: any(named: 'limit'),
+        unreadOnly: any(named: 'unreadOnly'),
+      ),
+    ).thenAnswer((_) async => const Result.success((0, <AppNotification>[])));
   });
 
   /// Regression test for the bug this exact scenario surfaced live (real
@@ -98,12 +101,15 @@ void main() {
   /// bundled into the same "already a valid resting place" check as login
   /// for `AuthStatus.unauthenticated`, so a freshly restored, logged-out
   /// session never left the splash/loading screen at all.
-  testWidgets('a fresh unauthenticated session (restoreSession -> null) leaves splash and lands on login',
-      (tester) async {
+  testWidgets('a fresh unauthenticated session (restoreSession -> null) leaves splash and lands on login', (
+    tester,
+  ) async {
     when(() => repository.restoreSession()).thenAnswer((_) async => null);
     final authProvider = AuthProvider(repository);
 
-    await tester.pumpWidget(_appWith(authProvider, dashboardRepository: dashboardRepository, notificationRepository: notificationRepository));
+    await tester.pumpWidget(
+      _appWith(authProvider, dashboardRepository: dashboardRepository, notificationRepository: notificationRepository),
+    );
     // Let restoreSession()'s Future resolve and the router react to it.
     await tester.pumpAndSettle();
 
@@ -115,7 +121,9 @@ void main() {
     when(() => repository.restoreSession()).thenAnswer((_) async => _adminSession);
     final authProvider = AuthProvider(repository);
 
-    await tester.pumpWidget(_appWith(authProvider, dashboardRepository: dashboardRepository, notificationRepository: notificationRepository));
+    await tester.pumpWidget(
+      _appWith(authProvider, dashboardRepository: dashboardRepository, notificationRepository: notificationRepository),
+    );
     await tester.pumpAndSettle();
 
     expect(find.byType(SplashScreen), findsNothing);
@@ -124,11 +132,17 @@ void main() {
 
   testWidgets('login() success navigates from the login screen to that role\'s home', (tester) async {
     when(() => repository.restoreSession()).thenAnswer((_) async => null);
-    when(() => repository.login(email: any(named: 'email'), password: any(named: 'password')))
-        .thenAnswer((_) async => const Result.success(_adminSession));
+    when(
+      () => repository.login(
+        email: any(named: 'email'),
+        password: any(named: 'password'),
+      ),
+    ).thenAnswer((_) async => const Result.success(_adminSession));
     final authProvider = AuthProvider(repository);
 
-    await tester.pumpWidget(_appWith(authProvider, dashboardRepository: dashboardRepository, notificationRepository: notificationRepository));
+    await tester.pumpWidget(
+      _appWith(authProvider, dashboardRepository: dashboardRepository, notificationRepository: notificationRepository),
+    );
     await tester.pumpAndSettle();
     expect(find.byType(LoginScreen), findsOneWidget);
 
@@ -143,7 +157,9 @@ void main() {
     when(() => repository.logout(any())).thenAnswer((_) async => const Result.success(null));
     final authProvider = AuthProvider(repository);
 
-    await tester.pumpWidget(_appWith(authProvider, dashboardRepository: dashboardRepository, notificationRepository: notificationRepository));
+    await tester.pumpWidget(
+      _appWith(authProvider, dashboardRepository: dashboardRepository, notificationRepository: notificationRepository),
+    );
     await tester.pumpAndSettle();
     expect(find.byType(AdminHomeScreen), findsOneWidget);
 
@@ -155,5 +171,38 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(LoginScreen), findsOneWidget);
+  });
+
+  /// Regression: Home's More shortcuts used `context.push`, which stacked a
+  /// bar-less More screen over the shell with no way back to Home. They must
+  /// switch to the More tab instead, keeping the bottom nav bar. (Home has no
+  /// hamburger menu button any more — removed 2026-10-07.)
+  testWidgets('the Home More tile opens the More tab with the bottom nav bar still shown', (tester) async {
+    // Phone-sized window so the Quick Actions grid is on screen.
+    tester.view.physicalSize = const Size(1080, 2400);
+    tester.view.devicePixelRatio = 2.5;
+    addTearDown(tester.view.reset);
+    when(() => repository.restoreSession()).thenAnswer((_) async => _adminSession);
+    final authProvider = AuthProvider(repository);
+
+    await tester.pumpWidget(
+      _appWith(authProvider, dashboardRepository: dashboardRepository, notificationRepository: notificationRepository),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byType(AdminHomeScreen), findsOneWidget);
+
+    expect(find.byIcon(Icons.menu), findsNothing);
+
+    await tester.tap(find.descendant(of: find.byType(AdminHomeScreen), matching: find.text('More')));
+    await tester.pumpAndSettle();
+    expect(find.byType(MoreScreen), findsOneWidget);
+    expect(find.byType(NavigationBar), findsOneWidget);
+
+    // A pushed More would sit inside the Home tab, so tapping Home would
+    // leave it on screen — the "can't get back to Home" bug.
+    await tester.tap(find.descendant(of: find.byType(NavigationBar), matching: find.text('Home')));
+    await tester.pumpAndSettle();
+    expect(find.byType(AdminHomeScreen), findsOneWidget);
+    expect(find.byType(MoreScreen), findsNothing);
   });
 }

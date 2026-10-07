@@ -114,7 +114,6 @@ Future<void> showManageGroupDialog(BuildContext context, ChatProvider provider, 
               },
               child: const Text('Delete'),
             ),
-            const Spacer(),
             TextButton(onPressed: () => Navigator.of(dialogContext).pop(), child: const Text('Close')),
             if (toAdd.isNotEmpty)
               FilledButton(

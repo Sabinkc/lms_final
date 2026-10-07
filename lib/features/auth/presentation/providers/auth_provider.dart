@@ -64,6 +64,16 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Called after the user saves My Profile, so the header initials and the
+  /// More screen's profile card pick up a new name/email straight away.
+  Future<void> updateIdentity({required String fullName, required String email}) async {
+    final current = _user;
+    if (current == null) return;
+    _user = AppUser(id: current.id, fullName: fullName, email: email, role: current.role);
+    notifyListeners();
+    await _repository.cacheUser(_user!);
+  }
+
   Future<void> logout() async {
     final session = await _repository.restoreSession();
     await _repository.logout(session?.refreshToken ?? '');

@@ -10,26 +10,16 @@ class AppUser {
   final String email;
   final AppRole role;
 
-  const AppUser({
-    required this.id,
-    required this.fullName,
-    required this.email,
-    required this.role,
-  });
+  const AppUser({required this.id, required this.fullName, required this.email, required this.role});
 
   factory AppUser.fromJson(Map<String, dynamic> json) => AppUser(
-        id: json['_id'] as String? ?? json['id'] as String,
-        fullName: json['fullName'] as String? ?? '',
-        email: json['email'] as String? ?? '',
-        role: AppRole.fromBackendString(json['role'] as String),
-      );
+    id: json['_id'] as String? ?? json['id'] as String,
+    fullName: json['fullName'] as String? ?? '',
+    email: json['email'] as String? ?? '',
+    role: AppRole.fromBackendString(json['role'] as String),
+  );
 
   /// Round-trips with [fromJson] — used to cache the session's user locally
   /// (see `LocalPrefsService.cachedUserJson`), not to talk to the backend.
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'fullName': fullName,
-        'email': email,
-        'role': role.name,
-      };
+  Map<String, dynamic> toJson() => {'id': id, 'fullName': fullName, 'email': email, 'role': role.name};
 }

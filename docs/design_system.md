@@ -8,7 +8,9 @@
 
 ## 1. Colors
 
-> **Current Flutter palette (2026-10-04) — "Deep Teal", chosen by the user from on-device previews.** Supersedes the emerald and "Forest & Clay" palettes noted below for the Flutter app. Source of truth: `lib/core/theme/app_colors.dart`. Primary deep teal `#0E5E6F`; emerald `#059669` for success/positive states; orange `#F07B22` accent (FAB, pending amounts, Admin role colour); near-white background `#F6FAFA` with white cards; teal-tinted dark surfaces (`#0B1517` → `#22383E`). Brand colours used as text/icons go through `context.readable(...)`, which raises lightness (keeping the hue) to ≥ 4.5:1 on dark surfaces.
+> **Update 2026-10-07 — primary changed to forest green `#06623D`** (user request; dark `#044A2E`, light `#4FA382`, soft `#E1F1E9`). Everything else below (emerald, orange, neutrals, dark ladder) is unchanged. Login screen rebuilt to the user's Canva design #1.
+>
+> **Previous Flutter palette (2026-10-04) — "Deep Teal", chosen by the user from on-device previews.** Supersedes the emerald and "Forest & Clay" palettes noted below for the Flutter app. Source of truth: `lib/core/theme/app_colors.dart`. Primary deep teal `#0E5E6F`; emerald `#059669` for success/positive states; orange `#F07B22` accent (FAB, pending amounts, Admin role colour); near-white background `#F6FAFA` with white cards; teal-tinted dark surfaces (`#0B1517` → `#22383E`). Brand colours used as text/icons go through `context.readable(...)`, which raises lightness (keeping the hue) to ≥ 4.5:1 on dark surfaces.
 >
 > **Light/Dark switch (2026-10-04):** More screen → "Appearance" (Light / Dark / System). Defaults to System, saved on the device (`ThemeController` + `LocalPrefsService.themeMode`), applies instantly without leaving the current screen.
 

@@ -37,8 +37,8 @@ class ApiClient {
     required SecureStorageService secureStorage,
     Dio? dio,
     ErrorMapper errorMapper = const ErrorMapper(),
-  })  : _dio = dio ?? Dio(),
-        _errorMapper = errorMapper {
+  }) : _dio = dio ?? Dio(),
+       _errorMapper = errorMapper {
     _dio.options = BaseOptions(
       baseUrl: '${env.baseUrl}${EnvConfig.apiPrefix}',
       connectTimeout: const Duration(seconds: 15),
@@ -64,8 +64,7 @@ class ApiClient {
     Map<String, dynamic>? queryParameters,
     Options? options,
     T Function(dynamic data)? parse,
-  }) =>
-      _request(() => _dio.get(path, queryParameters: queryParameters, options: options), parse);
+  }) => _request(() => _dio.get(path, queryParameters: queryParameters, options: options), parse);
 
   Future<T> post<T>(
     String path, {
@@ -73,11 +72,7 @@ class ApiClient {
     Map<String, dynamic>? queryParameters,
     Options? options,
     T Function(dynamic data)? parse,
-  }) =>
-      _request(
-        () => _dio.post(path, data: data, queryParameters: queryParameters, options: options),
-        parse,
-      );
+  }) => _request(() => _dio.post(path, data: data, queryParameters: queryParameters, options: options), parse);
 
   Future<T> put<T>(
     String path, {
@@ -85,11 +80,7 @@ class ApiClient {
     Map<String, dynamic>? queryParameters,
     Options? options,
     T Function(dynamic data)? parse,
-  }) =>
-      _request(
-        () => _dio.put(path, data: data, queryParameters: queryParameters, options: options),
-        parse,
-      );
+  }) => _request(() => _dio.put(path, data: data, queryParameters: queryParameters, options: options), parse);
 
   Future<T> patch<T>(
     String path, {
@@ -97,11 +88,7 @@ class ApiClient {
     Map<String, dynamic>? queryParameters,
     Options? options,
     T Function(dynamic data)? parse,
-  }) =>
-      _request(
-        () => _dio.patch(path, data: data, queryParameters: queryParameters, options: options),
-        parse,
-      );
+  }) => _request(() => _dio.patch(path, data: data, queryParameters: queryParameters, options: options), parse);
 
   Future<T> delete<T>(
     String path, {
@@ -109,16 +96,9 @@ class ApiClient {
     Map<String, dynamic>? queryParameters,
     Options? options,
     T Function(dynamic data)? parse,
-  }) =>
-      _request(
-        () => _dio.delete(path, data: data, queryParameters: queryParameters, options: options),
-        parse,
-      );
+  }) => _request(() => _dio.delete(path, data: data, queryParameters: queryParameters, options: options), parse);
 
-  Future<T> _request<T>(
-    Future<Response> Function() call,
-    T Function(dynamic data)? parse,
-  ) async {
+  Future<T> _request<T>(Future<Response> Function() call, T Function(dynamic data)? parse) async {
     try {
       final response = await call();
       final data = response.data;

@@ -59,10 +59,10 @@ class ErrorMapper {
       403 => ForbiddenException(message ?? 'You do not have permission to do that.', code),
       404 => NotFoundException(message ?? 'Not found.'),
       400 || 422 => ValidationException(
-          message ?? 'Please check your input and try again.',
-          fieldErrors: _extractFieldErrors(body),
-          code: code,
-        ),
+        message ?? 'Please check your input and try again.',
+        fieldErrors: _extractFieldErrors(body),
+        code: code,
+      ),
       >= 500 => ServerException(message ?? 'Something went wrong on our end. Please try again.', code),
       _ => ServerException(message ?? 'Unexpected response (status $statusCode).', code),
     };

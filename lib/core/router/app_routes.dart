@@ -66,6 +66,10 @@ class AppRoutes {
   static const String chat = '/chat';
   static String chatThread(String conversationId) => '/chat/$conversationId';
 
+  // My Profile (2026-10-07, every role) and the Admin's School Profile.
+  static const String profile = '/profile';
+  static const String adminSchoolProfile = '/admin/school';
+
   // Notifications (docs/production_roadmap.md Phase I, shared by all roles).
   static const String notifications = '/notifications';
 
@@ -89,4 +93,25 @@ class AppRoutes {
 
   // Dual Calendar (docs/production_roadmap.md Phase L7, Parent only).
   static const String parentDualCalendar = '/parent/dual-calendar';
+
+  /// The root of every bottom-nav tab, across all roles. Open these with
+  /// `go` (switch tab, nav bar stays), never `push` — see `openRoute`.
+  static const Set<String> tabRoots = {
+    adminHome,
+    adminAttendanceOverview,
+    adminFees,
+    adminMore,
+    teacherHome,
+    teacherMarkAttendance,
+    teacherTimetable,
+    teacherMore,
+    studentHome,
+    studentMyAttendance,
+    studentTimetable,
+    studentMore,
+    parentHome,
+    parentChildAttendance,
+    parentFees,
+    parentMore,
+  };
 }

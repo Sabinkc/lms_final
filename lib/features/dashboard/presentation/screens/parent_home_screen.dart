@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/router/open_route.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/utils/initials.dart';
@@ -107,11 +107,7 @@ class _ParentHomeScreenState extends State<ParentHomeScreen> {
     return AppBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: BrandHomeAppBar(
-          initials: initialsFor(user?.fullName ?? ''),
-          unreadCount: unreadCount,
-          moreRoute: AppRoutes.parentMore,
-        ),
+        appBar: BrandHomeAppBar(initials: initialsFor(user?.fullName ?? ''), unreadCount: unreadCount),
         body: PullToRefresh(
           onRefresh: _refresh,
           child: CustomScrollView(
@@ -163,7 +159,7 @@ class _ParentHomeScreenState extends State<ParentHomeScreen> {
                               color: tile.color,
                               onTap: () {
                                 shortcuts?.record('parent', tile.route);
-                                context.push(tile.route);
+                                context.openRoute(tile.route);
                               },
                             ),
                         ],

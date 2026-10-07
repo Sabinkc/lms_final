@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../features/auth/data/models/app_role.dart';
 
-/// The app's colour system — palette "Deep Teal": deep teal leads,
-/// emerald green carries success/positive states, orange is the accent,
-/// on clean white neutrals.
+/// The app's colour system — palette "CloudsLMS Green" (2026-10-07):
+/// forest green #06623D leads, emerald carries success/positive states,
+/// orange is the accent, on clean white neutrals.
 ///
-/// Roughly 60% neutral white, 30% teal, 10% orange/emerald. Every colour in
+/// Roughly 60% neutral white, 30% green, 10% orange/emerald. Every colour in
 /// the app comes from here — never hard-code a hex in a screen. Brand
 /// colours are tuned for the light theme; wrap them in `context.readable`
 /// when used as text or icons so they stay legible in dark mode.
@@ -14,10 +14,10 @@ class AppColors {
   AppColors._();
 
   // Brand.
-  static const Color primary = Color(0xFF0E5E6F);
-  static const Color primaryDark = Color(0xFF09434F);
-  static const Color primaryLight = Color(0xFF4FA3B0);
-  static const Color primarySoft = Color(0xFFE1F0F2);
+  static const Color primary = Color(0xFF06623D);
+  static const Color primaryDark = Color(0xFF044A2E);
+  static const Color primaryLight = Color(0xFF4FA382);
+  static const Color primarySoft = Color(0xFFE1F1E9);
   static const Color accent = Color(0xFFF07B22);
   static const Color accentSoft = Color(0xFFFEEADB);
 

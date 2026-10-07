@@ -54,11 +54,7 @@ class SocketIoRealtimeService implements RealtimeService {
 
     final socket = io.io(
       _env.baseUrl,
-      io.OptionBuilder()
-          .setTransports(['websocket'])
-          .setAuth({'token': accessToken})
-          .disableAutoConnect()
-          .build(),
+      io.OptionBuilder().setTransports(['websocket']).setAuth({'token': accessToken}).disableAutoConnect().build(),
     );
 
     socket.onConnect((_) => AppLogger.info('Socket connected'));

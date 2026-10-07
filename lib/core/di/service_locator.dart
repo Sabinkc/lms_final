@@ -86,6 +86,9 @@ import '../realtime/realtime_service.dart';
 import '../storage/local_prefs_service.dart';
 import '../storage/secure_storage_service.dart';
 import '../../features/dashboard/presentation/providers/shortcut_usage.dart';
+import '../../features/profile/data/repositories/profile_repository.dart';
+import '../../features/profile/data/repositories/profile_repository_http.dart';
+import '../../features/profile/presentation/providers/profile_provider.dart';
 
 /// The single composition root (docs/architecture.md §5). Every repository
 /// and every feature provider is constructed exactly once, here — nothing
@@ -210,6 +213,10 @@ Future<void> setupServiceLocator(EnvConfig env) async {
   sl.registerLazySingleton<IdCardRepository>(() => IdCardRepositoryHttp(sl()));
   sl.registerFactory<AdminIdCardProvider>(() => AdminIdCardProvider(sl(), sl()));
   sl.registerFactory<StudentIdCardProvider>(() => StudentIdCardProvider(sl()));
+
+  // ── Feature: My Profile + School Profile (2026-10-07) ────────────────────
+  sl.registerLazySingleton<ProfileRepository>(() => ProfileRepositoryHttp(sl()));
+  sl.registerFactory<ProfileProvider>(() => ProfileProvider(sl()));
 }
 
 /// Test-only: drops every registration so each test file starts from a

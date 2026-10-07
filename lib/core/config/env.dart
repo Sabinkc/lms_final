@@ -38,20 +38,13 @@ class EnvConfig {
   /// `--dart-define=BASE_URL=http://localhost:4000` to hit a local backend.
   factory EnvConfig.fromDartDefine() {
     const envName = String.fromEnvironment('ENV', defaultValue: 'dev');
-    final environment = AppEnvironment.values.firstWhere(
-      (e) => e.name == envName,
-      orElse: () => AppEnvironment.dev,
-    );
+    final environment = AppEnvironment.values.firstWhere((e) => e.name == envName, orElse: () => AppEnvironment.dev);
 
     const baseUrl = String.fromEnvironment('BASE_URL', defaultValue: productionBaseUrl);
 
     const verbose = bool.fromEnvironment('VERBOSE_LOGGING', defaultValue: true);
 
-    return EnvConfig(
-      environment: environment,
-      baseUrl: baseUrl,
-      verboseLogging: verbose,
-    );
+    return EnvConfig(environment: environment, baseUrl: baseUrl, verboseLogging: verbose);
   }
 
   @override

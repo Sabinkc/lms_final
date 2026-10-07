@@ -38,6 +38,7 @@ import 'features/timetable/presentation/providers/admin_timetable_provider.dart'
 import 'features/timetable/presentation/providers/student_timetable_provider.dart';
 import 'features/timetable/presentation/providers/teacher_timetable_provider.dart';
 import 'features/dashboard/presentation/providers/shortcut_usage.dart';
+import 'features/profile/presentation/providers/profile_provider.dart';
 
 /// Root widget. `MultiProvider` here is where every feature's provider
 /// gets exposed to the widget tree — each entry is that feature's own
@@ -83,6 +84,7 @@ class CloudsLmsApp extends StatelessWidget {
         ChangeNotifierProvider<StudentFollowupProvider>(create: (_) => sl<StudentFollowupProvider>()),
         ChangeNotifierProvider<AdminIdCardProvider>(create: (_) => sl<AdminIdCardProvider>()),
         ChangeNotifierProvider<StudentIdCardProvider>(create: (_) => sl<StudentIdCardProvider>()),
+        ChangeNotifierProvider<ProfileProvider>(create: (_) => sl<ProfileProvider>()),
       ],
       child: const _AppView(),
     );

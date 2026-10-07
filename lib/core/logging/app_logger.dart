@@ -40,6 +40,5 @@ class AppLogger {
   static void error(String message, [Object? error, StackTrace? stackTrace]) =>
       _log.e(message, error: error, stackTrace: stackTrace);
 
-  static String _withData(String message, Object? data) =>
-      data == null ? message : '$message | $data';
+  static String _withData(String message, Object? data) => data == null ? message : '$message | $data';
 }

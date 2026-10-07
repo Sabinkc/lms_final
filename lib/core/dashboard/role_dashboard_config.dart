@@ -49,11 +49,11 @@ class RoleDashboardConfig {
   });
 
   static RoleDashboardConfig forRole(AppRole role) => switch (role) {
-        AppRole.admin => admin,
-        AppRole.teacher => teacher,
-        AppRole.student => student,
-        AppRole.parent => parent,
-      };
+    AppRole.admin => admin,
+    AppRole.teacher => teacher,
+    AppRole.student => student,
+    AppRole.parent => parent,
+  };
 
   static const admin = RoleDashboardConfig(
     homeTitle: 'Admin Dashboard',
@@ -76,7 +76,11 @@ class RoleDashboardConfig {
       QuickAction(icon: Icons.badge_outlined, label: 'Manage Teachers', route: AppRoutes.adminTeachers),
       QuickAction(icon: Icons.family_restroom_outlined, label: 'Manage Parents', route: AppRoutes.adminParents),
       QuickAction(icon: Icons.apartment_outlined, label: 'Departments', route: AppRoutes.adminDepartments),
-      QuickAction(icon: Icons.fact_check_outlined, label: 'Attendance Corrections', route: AppRoutes.adminAttendanceCorrections),
+      QuickAction(
+        icon: Icons.fact_check_outlined,
+        label: 'Attendance Corrections',
+        route: AppRoutes.adminAttendanceCorrections,
+      ),
       QuickAction(icon: Icons.assignment_outlined, label: 'Assignments', route: AppRoutes.assignments),
       QuickAction(icon: Icons.campaign_outlined, label: 'Notices', route: AppRoutes.notices),
       QuickAction(icon: Icons.quiz_outlined, label: 'Exams', route: AppRoutes.exams),
@@ -87,6 +91,7 @@ class RoleDashboardConfig {
       QuickAction(icon: Icons.calendar_month_outlined, label: 'Timetable', route: AppRoutes.adminTimetable),
       QuickAction(icon: Icons.flag_outlined, label: 'Student Follow-ups', route: AppRoutes.adminStudentFollowups),
       QuickAction(icon: Icons.credit_card_outlined, label: 'ID Cards', route: AppRoutes.adminIdCards),
+      QuickAction(icon: Icons.apartment_outlined, label: 'School Profile', route: AppRoutes.adminSchoolProfile),
     ],
   );
 

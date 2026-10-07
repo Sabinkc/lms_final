@@ -18,7 +18,7 @@ enum AppRole {
   /// needed, but kept as an explicit factory so a future mismatch throws
   /// here instead of deep inside a JSON parser.
   static AppRole fromBackendString(String value) => AppRole.values.firstWhere(
-        (role) => role.name == value,
-        orElse: () => throw ArgumentError.value(value, 'value', 'Unknown or out-of-scope role'),
-      );
+    (role) => role.name == value,
+    orElse: () => throw ArgumentError.value(value, 'value', 'Unknown or out-of-scope role'),
+  );
 }

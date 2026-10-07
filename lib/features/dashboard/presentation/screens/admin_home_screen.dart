@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/router/app_routes.dart';
+import '../../../../core/router/open_route.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_spacing.dart';
 import '../../../../shared/utils/initials.dart';
@@ -84,11 +85,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     return AppBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: BrandHomeAppBar(
-          initials: initialsFor(user?.fullName ?? ''),
-          unreadCount: unreadCount,
-          moreRoute: AppRoutes.adminMore,
-        ),
+        appBar: BrandHomeAppBar(initials: initialsFor(user?.fullName ?? ''), unreadCount: unreadCount),
         body: PullToRefresh(
           onRefresh: _refresh,
           child: CustomScrollView(
@@ -140,7 +137,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                               color: tile.color,
                               onTap: () {
                                 shortcuts?.record('admin', tile.route);
-                                context.push(tile.route);
+                                context.openRoute(tile.route);
                               },
                             ),
                         ],

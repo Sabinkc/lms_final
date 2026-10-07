@@ -34,10 +34,17 @@ class RoleShell extends StatelessWidget {
     final index = navigationShell.currentIndex;
 
     final destinations = <NavigationDestination>[
-      const NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home_rounded), label: 'Home'),
-      for (final tab in config.navTabs)
-        NavigationDestination(icon: Icon(tab.icon), label: tab.label),
-      const NavigationDestination(icon: Icon(Icons.grid_view_outlined), selectedIcon: Icon(Icons.grid_view_rounded), label: 'More'),
+      const NavigationDestination(
+        icon: Icon(Icons.home_outlined),
+        selectedIcon: Icon(Icons.home_rounded),
+        label: 'Home',
+      ),
+      for (final tab in config.navTabs) NavigationDestination(icon: Icon(tab.icon), label: tab.label),
+      const NavigationDestination(
+        icon: Icon(Icons.grid_view_outlined),
+        selectedIcon: Icon(Icons.grid_view_rounded),
+        label: 'More',
+      ),
     ];
 
     return Scaffold(

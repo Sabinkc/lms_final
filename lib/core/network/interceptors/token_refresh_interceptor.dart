@@ -28,13 +28,11 @@ class TokenRefreshInterceptor extends Interceptor {
   final Dio _refreshDio;
   final SecureStorageService _secureStorage;
 
-  TokenRefreshInterceptor({
-    required Dio dio,
-    required SecureStorageService secureStorage,
-  })  : _dio = dio,
-        _secureStorage = secureStorage,
-        _refreshDio = (Dio(BaseOptions(baseUrl: dio.options.baseUrl, contentType: 'application/json'))
-          ..httpClientAdapter = dio.httpClientAdapter);
+  TokenRefreshInterceptor({required Dio dio, required SecureStorageService secureStorage})
+    : _dio = dio,
+      _secureStorage = secureStorage,
+      _refreshDio = (Dio(BaseOptions(baseUrl: dio.options.baseUrl, contentType: 'application/json'))
+        ..httpClientAdapter = dio.httpClientAdapter);
 
   Future<String>? _inFlightRefresh;
 

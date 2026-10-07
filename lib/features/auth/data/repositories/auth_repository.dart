@@ -1,4 +1,5 @@
 import '../../../../core/error/result.dart';
+import '../models/app_user.dart';
 import '../models/auth_session.dart';
 
 /// Presentation code (specifically `AuthProvider`) depends only on this
@@ -22,4 +23,8 @@ abstract class AuthRepository {
   /// or — for the mock — an in-memory flag) without making a network call.
   /// Used by `SplashScreen` to decide Login vs. a role Dashboard.
   Future<AuthSession?> restoreSession();
+
+  /// Re-saves the locally cached identity after the user edits their own
+  /// name/email (My Profile), so a restored session shows the new values.
+  Future<void> cacheUser(AppUser user);
 }

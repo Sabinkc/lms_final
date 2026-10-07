@@ -17,10 +17,7 @@ sealed class Result<T> {
   /// Pattern-matching helper — prefer this over manual `is` checks so a
   /// future third [Result] subtype (there isn't one planned) would be a
   /// compile error here instead of a silently-skipped case at call sites.
-  R when<R>({
-    required R Function(T data) success,
-    required R Function(AppException error) failure,
-  }) {
+  R when<R>({required R Function(T data) success, required R Function(AppException error) failure}) {
     return switch (this) {
       Success<T>(data: final data) => success(data),
       Failure<T>(error: final error) => failure(error),
@@ -31,9 +28,9 @@ sealed class Result<T> {
   /// wants to display data and let a provider's own error state handle the
   /// failure path instead of branching twice.
   T? get dataOrNull => switch (this) {
-        Success<T>(data: final data) => data,
-        Failure<T>() => null,
-      };
+    Success<T>(data: final data) => data,
+    Failure<T>() => null,
+  };
 }
 
 final class Success<T> extends Result<T> {

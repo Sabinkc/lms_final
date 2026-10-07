@@ -35,20 +35,16 @@ final class NetworkException extends AppException {
 /// silent-logout path. `code` may be absent (routes guarded by
 /// `protectAdmin` return none) — treat absence as "not recoverable, log out".
 final class UnauthorizedException extends AppException {
-  const UnauthorizedException([
-    String message = 'Session expired. Please log in again.',
-    String? code,
-  ]) : super(message, code: code);
+  const UnauthorizedException([String message = 'Session expired. Please log in again.', String? code])
+    : super(message, code: code);
 }
 
 /// 403. Distinct from [UnauthorizedException] — the caller *is*
 /// authenticated but the role/subscription/permission check failed (e.g.
 /// `SCHOOL_DEACTIVATED`, `SUBSCRIPTION_INACTIVE` per docs/api_spec.md §2).
 final class ForbiddenException extends AppException {
-  const ForbiddenException([
-    String message = 'You do not have permission to do that.',
-    String? code,
-  ]) : super(message, code: code);
+  const ForbiddenException([String message = 'You do not have permission to do that.', String? code])
+    : super(message, code: code);
 }
 
 /// 400 / 422 with field-level validation errors.
@@ -64,10 +60,8 @@ final class NotFoundException extends AppException {
 
 /// 5xx, or a 2xx with a response shape that couldn't be parsed at all.
 final class ServerException extends AppException {
-  const ServerException([
-    String message = 'Something went wrong on our end. Please try again.',
-    String? code,
-  ]) : super(message, code: code);
+  const ServerException([String message = 'Something went wrong on our end. Please try again.', String? code])
+    : super(message, code: code);
 }
 
 /// Anything that doesn't fit the above — a genuine catch-all, never the

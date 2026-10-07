@@ -9,15 +9,11 @@ class AuthSession {
   final String accessToken;
   final String refreshToken;
 
-  const AuthSession({
-    required this.user,
-    required this.accessToken,
-    required this.refreshToken,
-  });
+  const AuthSession({required this.user, required this.accessToken, required this.refreshToken});
 
   factory AuthSession.fromJson(Map<String, dynamic> json) => AuthSession(
-        user: AppUser.fromJson(json['data'] as Map<String, dynamic>),
-        accessToken: json['token'] as String,
-        refreshToken: json['refreshToken'] as String,
-      );
+    user: AppUser.fromJson(json['data'] as Map<String, dynamic>),
+    accessToken: json['token'] as String,
+    refreshToken: json['refreshToken'] as String,
+  );
 }

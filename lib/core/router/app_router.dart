@@ -24,6 +24,8 @@ import '../../features/fees/presentation/screens/payment_review_screen.dart';
 import '../../features/notices/presentation/screens/notice_detail_screen.dart';
 import '../../features/notices/presentation/screens/notices_list_screen.dart';
 import '../../features/notifications/presentation/screens/notifications_screen.dart';
+import '../../features/profile/presentation/screens/my_profile_screen.dart';
+import '../../features/profile/presentation/screens/school_profile_screen.dart';
 import '../../features/payroll/presentation/screens/my_payslips_screen.dart';
 import '../../features/payroll/presentation/screens/payroll_screen.dart';
 import '../../features/dual_calendar/presentation/screens/dual_calendar_screen.dart';
@@ -83,14 +85,22 @@ GoRouter buildAppRouter(AuthProvider authProvider) {
           ),
           StatefulShellBranch(
             routes: [
-              GoRoute(path: AppRoutes.adminAttendanceOverview, builder: (context, state) => const AdminAttendanceOverviewScreen()),
+              GoRoute(
+                path: AppRoutes.adminAttendanceOverview,
+                builder: (context, state) => const AdminAttendanceOverviewScreen(),
+              ),
             ],
           ),
           StatefulShellBranch(
             routes: [GoRoute(path: AppRoutes.adminFees, builder: (context, state) => const AdminFeesScreen())],
           ),
           StatefulShellBranch(
-            routes: [GoRoute(path: AppRoutes.adminMore, builder: (context, state) => const MoreScreen(role: AppRole.admin))],
+            routes: [
+              GoRoute(
+                path: AppRoutes.adminMore,
+                builder: (context, state) => const MoreScreen(role: AppRole.admin),
+              ),
+            ],
           ),
         ],
       ),
@@ -108,10 +118,7 @@ GoRouter buildAppRouter(AuthProvider authProvider) {
           ),
         ],
       ),
-      GoRoute(
-        path: AppRoutes.adminTeachers,
-        builder: (context, state) => const TeachersListScreen(),
-      ),
+      GoRoute(path: AppRoutes.adminTeachers, builder: (context, state) => const TeachersListScreen()),
       GoRoute(
         path: AppRoutes.adminStudents,
         builder: (context, state) => const StudentsListScreen(),
@@ -122,96 +129,78 @@ GoRouter buildAppRouter(AuthProvider authProvider) {
           ),
         ],
       ),
-      GoRoute(
-        path: AppRoutes.adminParents,
-        builder: (context, state) => const ParentsListScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.adminDepartments,
-        builder: (context, state) => const DepartmentsListScreen(),
-      ),
+      GoRoute(path: AppRoutes.adminParents, builder: (context, state) => const ParentsListScreen()),
+      GoRoute(path: AppRoutes.adminDepartments, builder: (context, state) => const DepartmentsListScreen()),
       GoRoute(
         path: AppRoutes.adminAttendanceCorrections,
         builder: (context, state) => const AttendanceCorrectionsScreen(),
       ),
-      GoRoute(
-        path: AppRoutes.adminFeePayments,
-        builder: (context, state) => const PaymentReviewScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.adminPayroll,
-        builder: (context, state) => const PayrollScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.adminReports,
-        builder: (context, state) => const ReportsScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.adminBackup,
-        builder: (context, state) => const BackupScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.adminTimetable,
-        builder: (context, state) => const AdminTimetableScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.adminStudentFollowups,
-        builder: (context, state) => const StudentFollowupsScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.adminIdCards,
-        builder: (context, state) => const AdminIdCardScreen(),
-      ),
+      GoRoute(path: AppRoutes.adminFeePayments, builder: (context, state) => const PaymentReviewScreen()),
+      GoRoute(path: AppRoutes.adminPayroll, builder: (context, state) => const PayrollScreen()),
+      GoRoute(path: AppRoutes.adminReports, builder: (context, state) => const ReportsScreen()),
+      GoRoute(path: AppRoutes.adminBackup, builder: (context, state) => const BackupScreen()),
+      GoRoute(path: AppRoutes.adminSchoolProfile, builder: (context, state) => const SchoolProfileScreen()),
+      GoRoute(path: AppRoutes.adminTimetable, builder: (context, state) => const AdminTimetableScreen()),
+      GoRoute(path: AppRoutes.adminStudentFollowups, builder: (context, state) => const StudentFollowupsScreen()),
+      GoRoute(path: AppRoutes.adminIdCards, builder: (context, state) => const AdminIdCardScreen()),
       StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) => RoleShell(role: AppRole.teacher, navigationShell: navigationShell),
+        builder: (context, state, navigationShell) =>
+            RoleShell(role: AppRole.teacher, navigationShell: navigationShell),
         branches: [
           StatefulShellBranch(
             routes: [GoRoute(path: AppRoutes.teacherHome, builder: (context, state) => const TeacherHomeScreen())],
           ),
           StatefulShellBranch(
-            routes: [GoRoute(path: AppRoutes.teacherMarkAttendance, builder: (context, state) => const MarkAttendanceScreen())],
+            routes: [
+              GoRoute(path: AppRoutes.teacherMarkAttendance, builder: (context, state) => const MarkAttendanceScreen()),
+            ],
           ),
           StatefulShellBranch(
-            routes: [GoRoute(path: AppRoutes.teacherTimetable, builder: (context, state) => const TeacherTimetableScreen())],
+            routes: [
+              GoRoute(path: AppRoutes.teacherTimetable, builder: (context, state) => const TeacherTimetableScreen()),
+            ],
           ),
           StatefulShellBranch(
-            routes: [GoRoute(path: AppRoutes.teacherMore, builder: (context, state) => const MoreScreen(role: AppRole.teacher))],
+            routes: [
+              GoRoute(
+                path: AppRoutes.teacherMore,
+                builder: (context, state) => const MoreScreen(role: AppRole.teacher),
+              ),
+            ],
           ),
         ],
       ),
-      GoRoute(
-        path: AppRoutes.teacherAttendanceHistory,
-        builder: (context, state) => const AttendanceHistoryScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.teacherPayroll,
-        builder: (context, state) => const MyPayslipsScreen(),
-      ),
+      GoRoute(path: AppRoutes.teacherAttendanceHistory, builder: (context, state) => const AttendanceHistoryScreen()),
+      GoRoute(path: AppRoutes.teacherPayroll, builder: (context, state) => const MyPayslipsScreen()),
       StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) => RoleShell(role: AppRole.student, navigationShell: navigationShell),
+        builder: (context, state, navigationShell) =>
+            RoleShell(role: AppRole.student, navigationShell: navigationShell),
         branches: [
           StatefulShellBranch(
             routes: [GoRoute(path: AppRoutes.studentHome, builder: (context, state) => const StudentHomeScreen())],
           ),
           StatefulShellBranch(
-            routes: [GoRoute(path: AppRoutes.studentMyAttendance, builder: (context, state) => const MyAttendanceScreen())],
+            routes: [
+              GoRoute(path: AppRoutes.studentMyAttendance, builder: (context, state) => const MyAttendanceScreen()),
+            ],
           ),
           StatefulShellBranch(
-            routes: [GoRoute(path: AppRoutes.studentTimetable, builder: (context, state) => const StudentTimetableScreen())],
+            routes: [
+              GoRoute(path: AppRoutes.studentTimetable, builder: (context, state) => const StudentTimetableScreen()),
+            ],
           ),
           StatefulShellBranch(
-            routes: [GoRoute(path: AppRoutes.studentMore, builder: (context, state) => const MoreScreen(role: AppRole.student))],
+            routes: [
+              GoRoute(
+                path: AppRoutes.studentMore,
+                builder: (context, state) => const MoreScreen(role: AppRole.student),
+              ),
+            ],
           ),
         ],
       ),
-      GoRoute(
-        path: AppRoutes.studentFees,
-        builder: (context, state) => const MyFeesScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.studentIdCard,
-        builder: (context, state) => const StudentIdCardScreen(),
-      ),
+      GoRoute(path: AppRoutes.studentFees, builder: (context, state) => const MyFeesScreen()),
+      GoRoute(path: AppRoutes.studentIdCard, builder: (context, state) => const StudentIdCardScreen()),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) => RoleShell(role: AppRole.parent, navigationShell: navigationShell),
         branches: [
@@ -219,20 +208,27 @@ GoRouter buildAppRouter(AuthProvider authProvider) {
             routes: [GoRoute(path: AppRoutes.parentHome, builder: (context, state) => const ParentHomeScreen())],
           ),
           StatefulShellBranch(
-            routes: [GoRoute(path: AppRoutes.parentChildAttendance, builder: (context, state) => const ChildAttendanceScreen())],
+            routes: [
+              GoRoute(
+                path: AppRoutes.parentChildAttendance,
+                builder: (context, state) => const ChildAttendanceScreen(),
+              ),
+            ],
           ),
           StatefulShellBranch(
             routes: [GoRoute(path: AppRoutes.parentFees, builder: (context, state) => const ChildFeesScreen())],
           ),
           StatefulShellBranch(
-            routes: [GoRoute(path: AppRoutes.parentMore, builder: (context, state) => const MoreScreen(role: AppRole.parent))],
+            routes: [
+              GoRoute(
+                path: AppRoutes.parentMore,
+                builder: (context, state) => const MoreScreen(role: AppRole.parent),
+              ),
+            ],
           ),
         ],
       ),
-      GoRoute(
-        path: AppRoutes.parentDualCalendar,
-        builder: (context, state) => const DualCalendarScreen(),
-      ),
+      GoRoute(path: AppRoutes.parentDualCalendar, builder: (context, state) => const DualCalendarScreen()),
       GoRoute(
         path: AppRoutes.assignments,
         builder: (context, state) => const AssignmentsListScreen(),
@@ -273,23 +269,17 @@ GoRouter buildAppRouter(AuthProvider authProvider) {
         routes: [
           GoRoute(
             path: ':id',
-            builder: (context, state) => ChatThreadScreen(
-              conversationId: state.pathParameters['id']!,
-              group: state.extra as GroupConversation?,
-            ),
+            builder: (context, state) =>
+                ChatThreadScreen(conversationId: state.pathParameters['id']!, group: state.extra as GroupConversation?),
           ),
         ],
       ),
-      GoRoute(
-        path: AppRoutes.notifications,
-        builder: (context, state) => const NotificationsScreen(),
-      ),
+      GoRoute(path: AppRoutes.notifications, builder: (context, state) => const NotificationsScreen()),
+      GoRoute(path: AppRoutes.profile, builder: (context, state) => const MyProfileScreen()),
       GoRoute(
         path: AppRoutes.unauthorized,
-        builder: (context, state) => const PlaceholderScreen(
-          title: 'Not authorized',
-          subtitle: 'Your account role cannot access that screen.',
-        ),
+        builder: (context, state) =>
+            const PlaceholderScreen(title: 'Not authorized', subtitle: 'Your account role cannot access that screen.'),
       ),
     ],
     redirect: (context, state) => _redirect(authProvider, state.matchedLocation),
@@ -330,11 +320,11 @@ String? _redirect(AuthProvider authProvider, String location) {
 }
 
 String _homeFor(AppRole role) => switch (role) {
-      AppRole.admin => AppRoutes.adminHome,
-      AppRole.teacher => AppRoutes.teacherHome,
-      AppRole.student => AppRoutes.studentHome,
-      AppRole.parent => AppRoutes.parentHome,
-    };
+  AppRole.admin => AppRoutes.adminHome,
+  AppRole.teacher => AppRoutes.teacherHome,
+  AppRole.student => AppRoutes.studentHome,
+  AppRole.parent => AppRoutes.parentHome,
+};
 
 /// `null` = no role restriction (splash/login/unauthorized/shared-across-
 /// roles). Prefix-based rather than the exact-match switch this used to

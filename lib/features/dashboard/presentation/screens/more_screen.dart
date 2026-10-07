@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../../../../shared/widgets/progress_overlay.dart';
 
+import '../../../../core/router/app_routes.dart';
+import '../../../../core/router/open_route.dart';
 import '../../../../core/dashboard/role_dashboard_config.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_radius.dart';
@@ -49,6 +51,7 @@ class MoreScreen extends StatefulWidget {
 class _MoreScreenState extends State<MoreScreen> {
   static const Map<AppRole, List<(String title, List<String> labels)>> _groups = {
     AppRole.admin: [
+      ('School', ['School Profile']),
       ('People & Structure', ['Manage Classes', 'Manage Students', 'Manage Teachers', 'Manage Parents', 'Departments']),
       ('Attendance & Schedule', ['Attendance Corrections', 'Timetable']),
       ('Academic', ['Assignments', 'Exams', 'Student Follow-ups']),
@@ -95,6 +98,7 @@ class _MoreScreenState extends State<MoreScreen> {
     'Reports': 'View school reports',
     'Backup & Data': 'Download a school data backup',
     'ID Cards': 'Generate student ID cards',
+    'School Profile': 'School details and logo',
   };
 
   static String _roleLabel(AppRole role) => switch (role) {
@@ -151,7 +155,13 @@ class _MoreScreenState extends State<MoreScreen> {
         body: ListView(
           padding: const EdgeInsets.all(AppSpacing.lg),
           children: [
-            _ProfileCard(name: user?.fullName, email: user?.email, role: role, accent: accent),
+            _ProfileCard(
+              name: user?.fullName,
+              email: user?.email,
+              role: role,
+              accent: accent,
+              onTap: () => context.push(AppRoutes.profile),
+            ),
             if (role == AppRole.admin) ...[const SizedBox(height: AppSpacing.md), const _AdminStatStrip()],
             const SizedBox(height: AppSpacing.lg),
             // Every group full-width, stacked vertically — paired 2-column
@@ -229,7 +239,7 @@ class _GroupSection extends StatelessWidget {
                   label: items[i].label,
                   subtitle: _MoreScreenState._subtitles[items[i].label],
                   color: accent,
-                  onTap: () => context.push(items[i].route),
+                  onTap: () => context.openRoute(items[i].route),
                 ),
               ],
             ],
@@ -280,8 +290,15 @@ class _ProfileCard extends StatelessWidget {
   final String? email;
   final AppRole role;
   final Color accent;
+  final VoidCallback onTap;
 
-  const _ProfileCard({required this.name, required this.email, required this.role, required this.accent});
+  const _ProfileCard({
+    required this.name,
+    required this.email,
+    required this.role,
+    required this.accent,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -290,47 +307,52 @@ class _ProfileCard extends StatelessWidget {
 
     return Card(
       margin: EdgeInsets.zero,
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 28,
-              backgroundColor: accent,
-              child: Text(
-                initialsFor(displayName),
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.md),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 28,
+                backgroundColor: accent,
+                child: Text(
+                  initialsFor(displayName),
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+                ),
               ),
-            ),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    displayName,
-                    style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  if (email != null && email!.isNotEmpty)
-                    Text(email!, style: textTheme.bodySmall, maxLines: 1, overflow: TextOverflow.ellipsis),
-                  const SizedBox(height: AppSpacing.xs),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                    decoration: BoxDecoration(color: accent.withValues(alpha: 0.14), borderRadius: AppRadius.button),
-                    child: Text(
-                      _MoreScreenState._roleLabel(role),
-                      style: textTheme.labelSmall?.copyWith(
-                        color: context.readable(accent),
-                        fontWeight: FontWeight.w700,
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      displayName,
+                      style: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    if (email != null && email!.isNotEmpty)
+                      Text(email!, style: textTheme.bodySmall, maxLines: 1, overflow: TextOverflow.ellipsis),
+                    const SizedBox(height: AppSpacing.xs),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                      decoration: BoxDecoration(color: accent.withValues(alpha: 0.14), borderRadius: AppRadius.button),
+                      child: Text(
+                        _MoreScreenState._roleLabel(role),
+                        style: textTheme.labelSmall?.copyWith(
+                          color: context.readable(accent),
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+              Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.onSurfaceVariant),
+            ],
+          ),
         ),
       ),
     );

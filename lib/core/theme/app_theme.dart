@@ -28,7 +28,7 @@ class AppTheme {
       seedColor: AppColors.primary,
       brightness: brightness,
       error: AppColors.danger,
-      // Deep teal leads, emerald seconds it, orange is the accent.
+      // Forest green leads, emerald seconds it, orange is the accent.
       primary: isDark ? const Color(0xFF5FC4D1) : AppColors.primary,
       onPrimary: isDark ? AppColors.darkBase : Colors.white,
       secondary: isDark ? const Color(0xFF34D399) : AppColors.success,

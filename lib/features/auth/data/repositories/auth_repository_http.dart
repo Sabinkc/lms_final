@@ -92,11 +92,11 @@ class AuthRepositoryHttp implements AuthRepository {
     return AuthSession(user: user, accessToken: token, refreshToken: refresh);
   }
 
+  @override
+  Future<void> cacheUser(AppUser user) => _localPrefs.setCachedUserJson(jsonEncode(user.toJson()));
+
   Future<void> _persistSession(AuthSession session) async {
-    await _secureStorage.saveTokens(
-      accessToken: session.accessToken,
-      refreshToken: session.refreshToken,
-    );
+    await _secureStorage.saveTokens(accessToken: session.accessToken, refreshToken: session.refreshToken);
     await _localPrefs.setCachedUserJson(jsonEncode(session.user.toJson()));
   }
 

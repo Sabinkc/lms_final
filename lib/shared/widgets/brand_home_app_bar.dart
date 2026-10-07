@@ -10,22 +10,15 @@ import '../../core/theme/app_spacing.dart';
 import '../../features/auth/presentation/providers/auth_provider.dart';
 import '../../core/theme/readable_color.dart';
 
-/// The branded Home-screen `AppBar` — logo/wordmark/tagline, a hamburger
-/// that opens that role's More screen, a notification bell with an unread
-/// badge, and an avatar+initials dropdown for Log out. Promoted from
+/// The branded Home-screen `AppBar` — logo/wordmark/tagline, a notification
+/// bell with an unread badge, and an avatar+initials dropdown for Log out. Promoted from
 /// `AdminHomeScreen`'s private `_AdminAppBar` so every role's Home screen
 /// shares one app bar instead of reimplementing it per role.
 class BrandHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String initials;
   final int unreadCount;
 
-  /// The role's More route, opened by the leading hamburger button. Pass
-  /// `null` when this bar is used *on* the More screen itself (nowhere
-  /// further to hamburger into) — the leading button is omitted rather than
-  /// shown disabled or pointing at the current screen.
-  final String? moreRoute;
-
-  const BrandHomeAppBar({super.key, required this.initials, required this.unreadCount, this.moreRoute});
+  const BrandHomeAppBar({super.key, required this.initials, required this.unreadCount});
 
   @override
   Size get preferredSize => const Size.fromHeight(72);
@@ -34,13 +27,9 @@ class BrandHomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       toolbarHeight: 72,
-      // No hamburger on the More screen — fall back to the default gutter so
-      // the logo doesn't sit flush against the screen edge.
-      titleSpacing: moreRoute == null ? NavigationToolbar.kMiddleSpacing : 0,
-      leading: moreRoute == null
-          ? null
-          : IconButton(tooltip: 'More', icon: const Icon(Icons.menu), onPressed: () => context.push(moreRoute!)),
-      automaticallyImplyLeading: moreRoute != null,
+      // No leading menu button (removed 2026-10-07 at the user's request —
+      // More is always one tap away in the bottom nav bar).
+      automaticallyImplyLeading: false,
       title: Row(
         children: [
           ClipRRect(
@@ -140,9 +129,13 @@ class BrandAccountMenu extends StatelessWidget {
     return PopupMenuButton<String>(
       tooltip: 'Account',
       onSelected: (value) {
+        if (value == 'profile') context.push(AppRoutes.profile);
         if (value == 'logout') runWithProgress(context, context.read<AuthProvider>().logout, message: 'Logging out…');
       },
-      itemBuilder: (context) => const [PopupMenuItem(value: 'logout', child: Text('Log out'))],
+      itemBuilder: (context) => const [
+        PopupMenuItem(value: 'profile', child: Text('My Profile')),
+        PopupMenuItem(value: 'logout', child: Text('Log out')),
+      ],
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
         child: Row(

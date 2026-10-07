@@ -41,12 +41,13 @@ class SplashScreen extends StatelessWidget {
               Container(
                 width: 112,
                 height: 112,
+                clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withValues(alpha: 0.12),
+                  color: Colors.white,
                   border: Border.all(color: Colors.white.withValues(alpha: 0.25), width: 2),
                 ),
-                child: const Icon(Icons.school, color: Colors.white, size: 56),
+                child: Image.asset('assets/icon/app_icon.png', fit: BoxFit.cover),
               ),
               const SizedBox(height: 24),
               Text.rich(
@@ -54,17 +55,16 @@ class SplashScreen extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: 'Clouds',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineLarge
-                          ?.copyWith(color: Colors.white, fontWeight: FontWeight.w700),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.headlineLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.w700),
                     ),
                     TextSpan(
                       text: 'LMS',
                       style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                            color: Colors.white.withValues(alpha: 0.75),
-                            fontWeight: FontWeight.w700,
-                          ),
+                        color: Colors.white.withValues(alpha: 0.75),
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ],
                 ),
